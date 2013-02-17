@@ -6,5 +6,6 @@
     <string name="menu_settings">Settings</string>
     <string name="no_items">No items</string>
     <string name="carbs_prefix">Carbohydrates: </string>
+    <string name="search_text_hint">Search</string>
 
 </resources>
