@@ -1,0 +1,27 @@
+Request dataset form:
+http://www.rivm.nl/en/Topics/Topics/D/Dutch_Food_Composition_Database/Access_NEVO_data/Request_dataset
+
+
+NEVO copyright:
+http://www.rivm.nl/en/Topics/Topics/D/Dutch_Food_Composition_Database/Access_NEVO_data/NEVO_online/Copyright_and_disclaimer
+
+Copyright
+The data contained in the NEVO dataset are the copyright of the National Institute for Public Health and the Environment (RIVM)/the Kingdom of the Netherlands. 
+Using the information from NEVO online is only allowed unchanged and stating the source and version number. For this the following reference must be used: 
+NEVO online version 2011/3.0, RIVM, Bilthoven.
+
+
+
+English index:
+
+http://www.rivm.nl/Bibliotheek/Wetenschappelijk/Tabellen_grafieken/Leefstijl_Voeding/NEVO/Engelse_index_NEVO_online_2011?sp=Y3QxPXRhYmxlX2dyYXBoO2t3MT0xNTY2NjI7a3cyPTE1NjY2MztrdzM9MTU3MDY1O2t3ND0xNTcwNjY7c2VhcmNoZXhwcmVzc2lvbj1vYmplY3R0eXBlIEFORCAoY3QxKUFORCAoa3cxIEFORCBrdzIgQU5EIGt3MyBBTkQga3c0KTtxdWVyeT0oU0lURV9MQU5HVUFHRTpubCk7cml2bXE9dHJ1ZTtzZWFyY2hiYXNlPTA7c2VhcmNocmFuZ2U9NTA7b2JqZWN0dHlwZT1MSUJSQVJZREVUQUlMUEFHRTtzb3J0ZmllbGQ9cHVibGlzaGRhdGU7c29ydHJldmVyc2VkPXRydWU7&query=&pagenr=1&result=rivmp%3A56836&kwobject=rivmp:56955
+
+
+
+SQlite browser
+http://sourceforge.net/projects/sqlitebrowser/
+
+
+android-sqlite-asset-helper
+https://github.com/jgilfelt/android-sqlite-asset-helper
+
