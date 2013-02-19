@@ -36,7 +36,7 @@ public class FoodListActivity extends ListActivity {
 		setContentView(R.layout.food_list);
         mDbHelper = new FoodDbAdapter(this);
         mDbHelper.open();
-        fillFoodList();
+        updateFoodList("");
         addSearchTextListener();
 	}
 
@@ -47,18 +47,19 @@ public class FoodListActivity extends ListActivity {
 		return true;
 	}
 
-	private void fillFoodList() {
+	private void updateFoodList(String searchText) {
 		// TODO: use another thread
-        // Get all food info from the database and create the item list
-		Cursor c = mDbHelper.getAllFood();
-        updateFoodList(c);
-    }
-	
-	private void updateFoodList(Cursor c) {
+		Cursor c;
+		if (searchText.isEmpty()) {
+			c = mDbHelper.getAllFood();
+		} else {
+			c = mDbHelper.getFoodWithName(searchText);
+		}
+        
 		// TODO: use non-deprecated API's
         startManagingCursor(c);
 
-        String[] from = new String[] { FoodDbAdapter.KEY_NAME, FoodDbAdapter.KEY_CARBS };
+        String[] from = new String[] { FoodDbAdapter.KEY_ENGLISH_NAME, FoodDbAdapter.KEY_CARBS };
         int[] to = new int[] { R.id.name, R.id.carbs_amount};
         
         // Now create an array adapter and set it to display using our row
@@ -80,8 +81,7 @@ public class FoodListActivity extends ListActivity {
 			}
 
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				Cursor c = mDbHelper.getFoodWithName(searchEditText.getText().toString().trim());
-				updateFoodList(c);
+				updateFoodList(searchEditText.getText().toString().trim());
 			}
 		});
 	}

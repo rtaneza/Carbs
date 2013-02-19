@@ -27,20 +27,21 @@ import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 public class FoodDbAdapter extends SQLiteAssetHelper {
 	
-	public static final String KEY_NAME = "Product_omschrijving";
+	public static final String TABLE_NAME = "Food";
+	public static final String KEY_DUTCH_NAME = "Product_omschrijving";
+	public static final String KEY_ENGLISH_NAME = "EnglishName";
 	public static final String KEY_CARBS = "_05001";
-
-    private static final String DATABASE_NAME = "NevoFood";
+	
+    private static final String DATABASE_NAME = "NevoFoodListWithEnglishNames";
     private static final int DATABASE_VERSION = 1;
     
     private SQLiteDatabase db;
     
     public FoodDbAdapter(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    	//deleteDbIfItAlreadyExists(context);
+    	deleteDbIfItAlreadyExists(context);
     }
     
-    /** For development:
     private void deleteDbIfItAlreadyExists(Context context) {
 		String dbName = "/data/data/" + context.getPackageName() + "/databases/" + DATABASE_NAME;
 		File f = new File(dbName);
@@ -48,7 +49,6 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
 			f.delete();			
 		}
 	}
-    */
     
 	public void open() {
     	db = getReadableDatabase();
@@ -59,7 +59,7 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     }    
     
     public Cursor getFoodWithName(String name) {
-    	String whereClause = KEY_NAME + " like '%" + name + "%'";
+    	String whereClause = KEY_ENGLISH_NAME + " like '%" + name + "%'";
 		return queryDb(whereClause.toString());
 	}
     
@@ -68,12 +68,12 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
 
 		// Cursor requires an "_id" column
 		// todo: find out what "0" really means
-		String [] sqlSelect = {"0 _id", KEY_NAME, KEY_CARBS}; 
-		String sqlTables = "Nutrients";
+		String [] sqlSelect = {"0 _id", KEY_ENGLISH_NAME, KEY_CARBS}; 
+		String sqlTables = TABLE_NAME;
 
 		qb.setTables(sqlTables);
 		Cursor c = qb.query(db, sqlSelect, whereClause, null,
-				null, null, null);
+				null, null, KEY_ENGLISH_NAME);
 
 		if (c != null) {
 			c.moveToFirst();
