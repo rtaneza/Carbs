@@ -31,6 +31,7 @@ Tools and Libraries:
 * [SQLite Database Browser](http://sourceforge.net/projects/sqlitebrowser)
 * [Android SQLite Asset Helper](https://github.com/jgilfelt/android-sqlite-asset-helper)
 * [Fast CSV Reader](http://www.codeproject.com/Articles/9258/A-Fast-CSV-Reader)
+* [CWAC LoaderEx](https://github.com/commonsguy/cwac-loaderex)
 
 License
 -------

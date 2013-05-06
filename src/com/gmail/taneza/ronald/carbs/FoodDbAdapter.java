@@ -54,31 +54,25 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     	db = getReadableDatabase();
     }
 
-    public Cursor getAllFood() {
-    	return queryDb(null);
+    public String getQueryStringAllFood() {
+    	return getQueryString(null);
     }    
     
-    public Cursor getFoodWithName(String name) {
-    	String whereClause = KEY_ENGLISH_NAME + " like '%" + name + "%'";
-		return queryDb(whereClause.toString());
+    public String getQueryStringFoodWithName(String name) {
+    	String whereClause = KEY_DUTCH_NAME + " like '%" + name + "%'";
+		return getQueryString(whereClause.toString());
 	}
     
-    private Cursor queryDb(String whereClause) {
+    public String getQueryString(String whereClause) {
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 
 		// Cursor requires an "_id" column
 		// todo: find out what "0" really means
-		String [] sqlSelect = {"0 _id", KEY_ENGLISH_NAME, KEY_CARBS}; 
+		String [] sqlSelect = {"0 _id", KEY_DUTCH_NAME, KEY_CARBS}; 
 		String sqlTables = TABLE_NAME;
 
 		qb.setTables(sqlTables);
-		Cursor c = qb.query(db, sqlSelect, whereClause, null,
-				null, null, KEY_ENGLISH_NAME);
-
-		if (c != null) {
-			c.moveToFirst();
-		}
-		
-		return c;
-	}    
+		return qb.buildQuery(sqlSelect, whereClause, null,
+				null, KEY_DUTCH_NAME, null);
+    }
 }
