@@ -32,6 +32,7 @@ Tools and Libraries:
 * [Android SQLite Asset Helper](https://github.com/jgilfelt/android-sqlite-asset-helper)
 * [Fast CSV Reader](http://www.codeproject.com/Articles/9258/A-Fast-CSV-Reader)
 * [CWAC LoaderEx](https://github.com/commonsguy/cwac-loaderex)
+* [DroidParts](https://github.com/yanchenko/droidparts)
 
 License
 -------

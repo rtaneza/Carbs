@@ -10,17 +10,20 @@
 
 	<TextView android:id="@+id/name"
 	    xmlns:android="http://schemas.android.com/apk/res/android"
-	    android:layout_width="wrap_content"
+        android:layout_width="0dp"
 	    android:layout_height="wrap_content"
 	    android:textSize="18dp"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/carbs_amount"
 	    />
 		
 	<TextView android:id="@+id/carbs_amount"
 	    xmlns:android="http://schemas.android.com/apk/res/android"
-	    android:layout_width="wrap_content"
+	    android:layout_width="48dp"
 	    android:layout_height="wrap_content"
-	    android:layout_alignParentRight="true"
 	    android:textSize="18dp"
+	    android:layout_alignParentRight="true"
+		android:paddingLeft="8dp"
 	    />
 		
 </RelativeLayout>

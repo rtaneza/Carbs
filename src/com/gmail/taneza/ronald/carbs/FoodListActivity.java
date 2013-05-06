@@ -16,8 +16,6 @@
 
 package com.gmail.taneza.ronald.carbs;
 
-import com.commonsware.cwac.loaderex.SQLiteCursorLoader;
-
 import android.os.Bundle;
 import android.app.ListActivity;
 import android.content.Loader;
@@ -29,11 +27,14 @@ import android.widget.EditText;
 import android.widget.SimpleCursorAdapter;
 import android.app.LoaderManager;
 
+import com.commonsware.cwac.loaderex.SQLiteCursorLoader;
+import org.droidparts.widget.ClearableEditText;
+
 public class FoodListActivity extends ListActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 
 	private FoodDbAdapter mDbHelper;
     private SimpleCursorAdapter mAdapter;
-	private EditText mSearchEditText;
+	private ClearableEditText mSearchEditText;
 
 	private static final int LOADER_ID_ALL_FOOD = 0;
 	private static final int LOADER_ID_SEARCH_TEXT = 1;
@@ -71,7 +72,7 @@ public class FoodListActivity extends ListActivity implements LoaderManager.Load
 	}
 	
 	private void addSearchTextListener() {
-		mSearchEditText = (EditText) findViewById(R.id.search_text);
+		mSearchEditText = (ClearableEditText) findViewById(R.id.search_text);
 		mSearchEditText.addTextChangedListener(new TextWatcher() {
 			public void afterTextChanged(Editable s) {
 				// Abstract Method of TextWatcher Interface.

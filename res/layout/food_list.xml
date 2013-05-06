@@ -5,27 +5,17 @@
     android:orientation="vertical"
     tools:context=".MainActivity" >
 
-    <EditText android:id="@+id/search_text"
+    <org.droidparts.widget.ClearableEditText android:id="@+id/search_text"
     	android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:hint="@string/search_text_hint" 
-	    android:textSize="18dp"
+	    android:textSize="20dp"
 		android:paddingLeft="16dp"
 		android:paddingRight="16dp"
 		android:paddingTop="8dp"
 		android:paddingBottom="8dp"
 	    />
     
-    <!-- 
-    <Button      
-        android:id="@+id/clear_search_text"      
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="10dp"
-        android:layout_gravity="right|center_vertical"
-        />
-     -->
-     
 	<ListView android:id="@id/android:list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
