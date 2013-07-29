@@ -2,16 +2,17 @@ Carbs
 =====
 
 This is an Android app that shows carbohydrate information of various foods. 
-Food names are currently only in Dutch.
+Food names can be switched between Dutch and English.
 I wrote this because I have Type 1 Diabetes and constantly need to count how much carbohydrates I eat.
 
 The food data is taken from the [Nederlands Voedingsstoffenbestand (NEVO)](
 http://www.rivm.nl/Onderwerpen/Onderwerpen/N/Nederlands_Voedingsstoffenbestand), which is the Dutch Food Composition Database.
 
+The latest version is available at [https://github.com/rtaneza/Carbs].
+
 TODO
 ----
 
-- Add English food names
 - Add ability to input food's weight in grams and get the corresponding amount of carbohydrates 
 - Add option to input standard portion sizes
 - Add option to input own foods
@@ -20,8 +21,6 @@ TODO
 
 Credits
 -------
-
-Author: [Ronald Tañeza](https://github.com/rtaneza)
 
 Food database: <br/>
 [Nederlands Voedingsstoffenbestand (NEVO)](http://www.rivm.nl/Onderwerpen/Onderwerpen/N/Nederlands_Voedingsstoffenbestand) <br/>
@@ -34,7 +33,8 @@ Tools and Libraries:
 * [CWAC LoaderEx](https://github.com/commonsguy/cwac-loaderex)
 * [DroidParts](https://github.com/yanchenko/droidparts)
 
+
 License
 -------
 The code in this project is licensed under the [Apache Software License 2.0](http://www.apache.org/licenses/LICENSE-2.0). <br/>
-Copyright (c) 2013 Ronald Tañeza
+Copyright (c) 2013 [Ronald Tañeza](ronald.taneza@gmail.com)
