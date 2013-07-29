@@ -34,9 +34,10 @@ import com.gmail.taneza.ronald.carbs.FoodDbAdapter.Language;
 
 import org.droidparts.widget.ClearableEditText;
 
-// todo: save the language setting
-// todo: show current language setting as icon on action bar (NL / EN)
-// todo: when clicking language setting, show only non-active item
+// TODOS
+// save the language setting
+// show current language setting as icon on action bar (NL / EN)
+// rename activity_main.xml to main_actions.xml
 
 public class FoodListActivity extends ListActivity 
     implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -67,19 +68,26 @@ public class FoodListActivity extends ListActivity
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		Language newLanguage;
+		
 	    // Handle presses on the action bar items
 	    switch (item.getItemId()) {
-	        case R.id.menu_language_english:	        	
-	        	mDbHelper.setLanguage(Language.ENGLISH);
-	        	initListAdapter();
-	            return true;
+	        case R.id.menu_language_english:
+	        	newLanguage = Language.ENGLISH;
+	        	break;
 	        case R.id.menu_language_dutch:
-	        	mDbHelper.setLanguage(Language.DUTCH);
-	        	initListAdapter();
-	            return true;
+	        	newLanguage = Language.DUTCH;
+	        	break;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
+	    
+	    if (mDbHelper.getLanguage() != newLanguage) {
+        	mDbHelper.setLanguage(newLanguage);
+        	initListAdapter();
+	    }
+	    
+        return true;
 	}
 	
 	@Override
@@ -112,10 +120,10 @@ public class FoodListActivity extends ListActivity
         		R.layout.food_row, null, from, to, 0);
         setListAdapter(mAdapter);
         
-        initLoader();
+        restartLoader();
 	}
 	
-	private void initLoader() {
+	private void restartLoader() {
 		getLoaderManager().restartLoader(0, null, this);
 	}
 	
@@ -132,7 +140,7 @@ public class FoodListActivity extends ListActivity
 			}
 
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				initLoader();
+				restartLoader();
 			}
 		});
 	}
