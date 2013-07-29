@@ -8,7 +8,7 @@ I wrote this because I have Type 1 Diabetes and constantly need to count how muc
 The food data is taken from the [Nederlands Voedingsstoffenbestand (NEVO)](
 http://www.rivm.nl/Onderwerpen/Onderwerpen/N/Nederlands_Voedingsstoffenbestand), which is the Dutch Food Composition Database.
 
-The latest version is available at https://github.com/rtaneza/Carbs.
+The latest version is available at <https://github.com/rtaneza/Carbs>.
 
 TODO
 ----
@@ -37,4 +37,4 @@ Tools and Libraries:
 License
 -------
 The code in this project is licensed under the [Apache Software License 2.0](http://www.apache.org/licenses/LICENSE-2.0). <br/>
-Copyright (c) 2013 Ronald Tañeza <ronald.taneza@gmail.com>
+Copyright (c) 2013 Ronald Tañeza &lt;<ronald.taneza@gmail.com>&gt;
