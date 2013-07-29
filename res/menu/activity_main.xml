@@ -1,5 +1,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-
+    
+	<item
+        android:title="@string/menu_language"
+        android:icon="@android:drawable/ic_menu_sort_alphabetically"
+	    android:showAsAction="ifRoom|withText">
+	    <menu>
+	        <item
+	            android:id="@+id/menu_language_english"
+	            android:title="@string/menu_language_english" />
+	        <item
+	            android:id="@+id/menu_language_dutch"
+	            android:title="@string/menu_language_dutch" />
+	    </menu>
+	</item>
+	     
     <item
         android:id="@+id/menu_settings"
         android:orderInCategory="100"

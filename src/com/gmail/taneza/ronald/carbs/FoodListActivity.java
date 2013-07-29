@@ -23,41 +23,39 @@ import android.database.Cursor;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
-import android.widget.EditText;
+import android.view.MenuItem;
 import android.widget.SimpleCursorAdapter;
 import android.app.LoaderManager;
+//todo
+//import android.support.v7.app.ActionBar;
 
 import com.commonsware.cwac.loaderex.SQLiteCursorLoader;
+import com.gmail.taneza.ronald.carbs.FoodDbAdapter.Language;
+
 import org.droidparts.widget.ClearableEditText;
 
-public class FoodListActivity extends ListActivity implements LoaderManager.LoaderCallbacks<Cursor>{
+// todo: save the language setting
+// todo: show current language setting as icon on action bar (NL / EN)
+// todo: when clicking language setting, show only non-active item
+
+public class FoodListActivity extends ListActivity 
+    implements LoaderManager.LoaderCallbacks<Cursor> {
 
 	private FoodDbAdapter mDbHelper;
     private SimpleCursorAdapter mAdapter;
 	private ClearableEditText mSearchEditText;
-
-	private static final int LOADER_ID_ALL_FOOD = 0;
-	private static final int LOADER_ID_SEARCH_TEXT = 1;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.food_list);
 		
-        mDbHelper = new FoodDbAdapter(this);
+        mDbHelper = new FoodDbAdapter(this, FoodDbAdapter.Language.DUTCH);
         mDbHelper.open();
         
         addSearchTextListener();
 
-        String[] from = new String[] { FoodDbAdapter.KEY_DUTCH_NAME, FoodDbAdapter.KEY_CARBS };
-        int[] to = new int[] { R.id.name, R.id.carbs_amount};
-        
-        // Create an empty adapter we will use to display the loaded data.
-        mAdapter = new SimpleCursorAdapter(this,
-        		R.layout.food_row, null, from, to, 0);
-        setListAdapter(mAdapter);
-
-        initLoader(LOADER_ID_ALL_FOOD);
+        initListAdapter();
 	}
 
 	@Override
@@ -66,42 +64,27 @@ public class FoodListActivity extends ListActivity implements LoaderManager.Load
 		getMenuInflater().inflate(R.menu.activity_main, menu);
 		return true;
 	}
-
-	private void initLoader(int id) {
-		getLoaderManager().restartLoader(id, null, this);
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle presses on the action bar items
+	    switch (item.getItemId()) {
+	        case R.id.menu_language_english:	        	
+	        	mDbHelper.setLanguage(Language.ENGLISH);
+	        	initListAdapter();
+	            return true;
+	        case R.id.menu_language_dutch:
+	        	mDbHelper.setLanguage(Language.DUTCH);
+	        	initListAdapter();
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
 	}
 	
-	private void addSearchTextListener() {
-		mSearchEditText = (ClearableEditText) findViewById(R.id.search_text);
-		mSearchEditText.addTextChangedListener(new TextWatcher() {
-			public void afterTextChanged(Editable s) {
-				// Abstract Method of TextWatcher Interface.
-			}
-
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-				// Abstract Method of TextWatcher Interface.
-			}
-
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				initLoader(LOADER_ID_SEARCH_TEXT);
-			}
-		});
-	}
-
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		String queryString = null;
-		
-		switch (id) {
-		case LOADER_ID_ALL_FOOD:
-			queryString = mDbHelper.getQueryStringAllFood();
-			break;
-		case LOADER_ID_SEARCH_TEXT:
-			queryString = mDbHelper.getQueryStringFoodWithName(mSearchEditText.getText().toString().trim());
-			break;
-		}
-		
+		String queryString = mDbHelper.getFoodNameQueryString(mSearchEditText.getText().toString().trim());		
 		return new SQLiteCursorLoader(this, mDbHelper, queryString, null);
 	}
 
@@ -118,5 +101,39 @@ public class FoodListActivity extends ListActivity implements LoaderManager.Load
         // above is about to be closed.  We need to make sure we are no
         // longer using it.
         mAdapter.swapCursor(null);		
+	}
+	
+	private void initListAdapter() {
+        String[] from = mDbHelper.getColumnStringArray();
+        int[] to = new int[] { R.id.name, R.id.carbs_amount};
+        
+        // Create an empty adapter we will use to display the loaded data.
+        mAdapter = new SimpleCursorAdapter(this,
+        		R.layout.food_row, null, from, to, 0);
+        setListAdapter(mAdapter);
+        
+        initLoader();
+	}
+	
+	private void initLoader() {
+		getLoaderManager().restartLoader(0, null, this);
+	}
+	
+	private void addSearchTextListener() {
+		mSearchEditText = (ClearableEditText) findViewById(R.id.search_text);
+		mSearchEditText.addTextChangedListener(new TextWatcher() {
+			public void afterTextChanged(Editable s) {
+				// Abstract Method of TextWatcher Interface.
+			}
+
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// Abstract Method of TextWatcher Interface.
+			}
+
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				initLoader();
+			}
+		});
 	}
 }
