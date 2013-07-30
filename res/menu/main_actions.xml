@@ -1,16 +1,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     
 	<item
-        android:title="@string/menu_language"
-        android:icon="@android:drawable/ic_menu_sort_alphabetically"
+        android:id="@+id/menu_language"
+        android:title="@string/menu_language_dutch"
 	    android:showAsAction="ifRoom|withText">
 	    <menu>
 	        <item
-	            android:id="@+id/menu_language_english"
-	            android:title="@string/menu_language_english" />
+	            android:id="@+id/menu_language_option_english"
+	            android:title="@string/menu_language_option_english" />
 	        <item
-	            android:id="@+id/menu_language_dutch"
-	            android:title="@string/menu_language_dutch" />
+	            android:id="@+id/menu_language_option_dutch"
+	            android:title="@string/menu_language_option_dutch" />
 	    </menu>
 	</item>
 	

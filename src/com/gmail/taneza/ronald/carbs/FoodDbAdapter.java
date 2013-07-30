@@ -39,12 +39,12 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     private static final String DATABASE_NAME = "NevoFoodListWithEnglishNames";
     private static final int DATABASE_VERSION = 1;
     
-    private Language language;
+    private Language mLanguage;
     
-    public FoodDbAdapter(Context context, Language language) {
+    public FoodDbAdapter(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     	deleteDbIfItAlreadyExists(context);
-    	setLanguage(language);
+    	setLanguage(Language.DUTCH);
     }
     
 	public void open() {
@@ -70,11 +70,11 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     }
     
     public void setLanguage(Language language) {
-    	this.language = language;
+    	mLanguage = language;
     }
     
     public Language getLanguage() {
-    	return language;
+    	return mLanguage;
     }
     
     public String[] getColumnStringArray() {
@@ -91,7 +91,7 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     
     private String getLanguageString()
     {
-    	switch (language) {
+    	switch (mLanguage) {
     		case ENGLISH:
     			return COLUMN_ENGLISH_NAME;
     		case DUTCH:

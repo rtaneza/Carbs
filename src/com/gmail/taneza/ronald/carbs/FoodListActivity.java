@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteCursor;
 import android.text.Editable;
@@ -40,13 +41,16 @@ import com.gmail.taneza.ronald.carbs.FoodDbAdapter.Language;
 import org.droidparts.widget.ClearableEditText;
 
 // TODOS
-// save the language setting
-// show current language setting as icon on action bar (NL / EN)
+// create separate activity for menu list
+// create recent food list
+// save last used weight per food
 
 public class FoodListActivity extends ListActivity 
     implements LoaderManager.LoaderCallbacks<Cursor> {
 
 	public final static int DEFAULT_WEIGHT_IN_GRAMS = 100;
+
+	public final static String PREF_LANGUAGE = "PREF_LANGUAGE";
 	
 	public final static String FOOD_ITEM_MESSAGE = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_MESSAGE";
 	public final static String FOOD_ITEM_RESULT = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_RESULT";
@@ -56,6 +60,8 @@ public class FoodListActivity extends ListActivity
 	private ClearableEditText mSearchEditText;
 	private float mTotalCarbsInGrams = 0;
 	private TextView mTotalCarbsTextView;
+	private Menu mMenu;
+	private Language mLanguage;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -64,43 +70,61 @@ public class FoodListActivity extends ListActivity
 
 		mTotalCarbsTextView = (TextView) findViewById(R.id.food_list_total_carbs_text);
 		UpdateTotalCarbs();
-		
-        mDbHelper = new FoodDbAdapter(this, FoodDbAdapter.Language.DUTCH);
+
+        mDbHelper = new FoodDbAdapter(this);
         mDbHelper.open();
+        
+		// Restore preferences
+		SharedPreferences settings = getPreferences(0);
+		mLanguage = Language.values()[settings.getInt(PREF_LANGUAGE, Language.DUTCH.ordinal())];
+        setLanguage();
         
         addSearchTextListener();
 
         initListAdapter();
 	}
+	
+	@Override
+    protected void onStop(){
+       super.onStop();
 
+      // We need an Editor object to make preference changes.
+      // All objects are from android.context.Context
+      SharedPreferences settings = getPreferences(0);
+      SharedPreferences.Editor editor = settings.edit();
+      editor.putInt(PREF_LANGUAGE, mLanguage.ordinal());
+
+      // Commit the edits!
+      editor.commit();
+    }
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
+		mMenu = menu;
 		getMenuInflater().inflate(R.menu.main_actions, menu);
+		setLanguage();
 		return true;
 	}
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		Language newLanguage;
-		
 	    // Handle presses on the action bar items
 	    switch (item.getItemId()) {
-	        case R.id.menu_language_english:
-	        	newLanguage = Language.ENGLISH;
+	        case R.id.menu_language_option_english:
+    			mLanguage = Language.ENGLISH;
 	        	break;
-	        case R.id.menu_language_dutch:
-	        	newLanguage = Language.DUTCH;
+	        case R.id.menu_language_option_dutch:
+    			mLanguage = Language.DUTCH;
 	        	break;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
-	    
-	    if (mDbHelper.getLanguage() != newLanguage) {
-        	mDbHelper.setLanguage(newLanguage);
-        	initListAdapter();
+
+	    if (mDbHelper.getLanguage() != mLanguage) {
+	    	setLanguage();
+	    	initListAdapter();
 	    }
-	    
         return true;
 	}
 	
@@ -156,10 +180,6 @@ public class FoodListActivity extends ListActivity
     	mTotalCarbsInGrams = 0;
 		UpdateTotalCarbs();
     }
-    
-//    @Override 
-//    public void onSaveInstanceState (Bundle outState) {
-//    }
 
 	private void initListAdapter() {
         String[] from = mDbHelper.getColumnStringArray();
@@ -181,18 +201,27 @@ public class FoodListActivity extends ListActivity
 		mSearchEditText = (ClearableEditText) findViewById(R.id.search_text);
 		mSearchEditText.addTextChangedListener(new TextWatcher() {
 			public void afterTextChanged(Editable s) {
-				// Abstract Method of TextWatcher Interface.
 			}
 
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
-				// Abstract Method of TextWatcher Interface.
 			}
 
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				restartLoader();
 			}
 		});
+	}
+	
+	private void setLanguage() {
+    	mDbHelper.setLanguage(mLanguage);
+
+		if (mMenu != null) {
+			int languageId = (mLanguage == Language.ENGLISH) ?
+					R.string.menu_language_english : R.string.menu_language_dutch;
+			MenuItem languageMenuItem = mMenu.findItem(R.id.menu_language);
+	    	languageMenuItem.setTitle(languageId);
+		}
 	}
 	
 	private void UpdateTotalCarbs() {

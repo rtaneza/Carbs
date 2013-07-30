@@ -104,17 +104,40 @@
 	    
     </LinearLayout>
     
-    <Button
-        android:id="@+id/food_details_add_to_meal_button"
-        android:layout_width="match_parent"
+    <!-- buttons -->
+    <LinearLayout android:id="@+id/food_details_buttons_group"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/food_details_carbs_group"
-        android:text="@string/add_to_meal"
-        android:onClick="AddToMeal"
-        android:textSize="18dp"
-        android:paddingBottom="8dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="8dp" />
+		android:orientation="horizontal"
+		android:weightSum="1.0" >
+	    
+	    <Button
+	        android:id="@+id/food_details_cancel_button"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="0.5"
+	        android:text="@string/cancel"
+	        android:onClick="Cancel"
+	        android:textSize="18dp"
+	        android:paddingBottom="8dp"
+	        android:paddingLeft="16dp"
+	        android:paddingRight="16dp"
+	        android:paddingTop="8dp" />
+	    
+	    <Button
+	        android:id="@+id/food_details_add_to_meal_button"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="0.5"
+	        android:text="@string/add_to_meal"
+	        android:onClick="AddToMeal"
+	        android:textSize="18dp"
+	        android:paddingBottom="8dp"
+	        android:paddingLeft="16dp"
+	        android:paddingRight="16dp"
+	        android:paddingTop="8dp" />
     
+    </LinearLayout>
+	    
 </RelativeLayout>

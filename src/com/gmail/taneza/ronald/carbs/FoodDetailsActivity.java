@@ -1,17 +1,13 @@
 package com.gmail.taneza.ronald.carbs;
 
-import org.droidparts.widget.ClearableEditText;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager.LayoutParams;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -26,7 +22,6 @@ public class FoodDetailsActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.food_details);
-		// Show the Up button in the action bar.
 		setupActionBar();
 
 		// Get the message from the intent
@@ -38,9 +33,12 @@ public class FoodDetailsActivity extends ActionBarActivity {
 		
 		mWeightEditText = (EditText) findViewById(R.id.food_details_weight_edit);
 		mWeightEditText.setText(Integer.toString(mFoodItem.mWeightInGrams));
+		// Request focus and show soft keyboard automatically
+		mWeightEditText.requestFocus();
+        getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE); 
 
 		mNumCarbsTextView = (TextView) findViewById(R.id.food_details_carbs_text);
-		mNumCarbsTextView.setText(String.format("%.2f", mFoodItem.getNumCarbsInGrams()));
+		updateCarbsText();
 		
 		addWeightTextListener();
 	}
@@ -49,7 +47,7 @@ public class FoodDetailsActivity extends ActionBarActivity {
 	 * Set up the {@link android.app.ActionBar}, if the API is available.
 	 */
 	private void setupActionBar() {
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 	}
 
 	@Override
@@ -57,23 +55,6 @@ public class FoodDetailsActivity extends ActionBarActivity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.food_details_actions, menu);
 		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			// This ID represents the Home or Up button. In the case of this
-			// activity, the Up button is shown. Use NavUtils to allow users
-			// to navigate up one level in the application structure. For
-			// more details, see the Navigation pattern on Android Design:
-			//
-			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
-			//
-			NavUtils.navigateUpFromSameTask(this);
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
 	}
 
 	private void addWeightTextListener() {
@@ -93,23 +74,28 @@ public class FoodDetailsActivity extends ActionBarActivity {
 					weight = Integer.parseInt(mWeightEditText.getText().toString());
 				}
 				catch (NumberFormatException e) {
-					// ignore invalid weight
+					// ignore invalid weight string
 				}
 
 				mFoodItem.mWeightInGrams = weight;
-				mNumCarbsTextView.setText(String.format("%.2f", mFoodItem.getNumCarbsInGrams()));
+				updateCarbsText();
 			}
 		});
+	}
+
+	public void Cancel(View v) {
+	    setResult(RESULT_CANCELED);
+		finish();
 	}
 	
 	public void AddToMeal(View v) {
 		Intent data = getIntent();
 		data.putExtra(FoodListActivity.FOOD_ITEM_RESULT, mFoodItem);
-		if (getParent() == null) {
-		    setResult(RESULT_OK, data);
-		} else {
-		    getParent().setResult(RESULT_OK, data);
-		}
+	    setResult(RESULT_OK, data);
 		finish();
+	}
+	
+	private void updateCarbsText() {
+		mNumCarbsTextView.setText(String.format("%.2f", mFoodItem.getNumCarbsInGrams()));
 	}
 }
