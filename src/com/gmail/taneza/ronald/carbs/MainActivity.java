@@ -36,7 +36,6 @@ import android.app.LoaderManager;
 //import android.support.v7.app.ActionBar;
 
 import com.commonsware.cwac.loaderex.SQLiteCursorLoader;
-import com.gmail.taneza.ronald.carbs.FoodDbAdapter.Language;
 
 import org.droidparts.widget.ClearableEditText;
 
@@ -51,7 +50,8 @@ public class MainActivity extends ListActivity
 	public final static int DEFAULT_WEIGHT_IN_GRAMS = 100;
 
 	public final static String PREF_LANGUAGE = "PREF_LANGUAGE";
-	
+
+	public final static String LANGUAGE_MESSAGE = "com.gmail.taneza.ronald.carbs.LANGUAGE_MESSAGE";
 	public final static String FOOD_ITEM_MESSAGE = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_MESSAGE";
 	public final static String FOOD_ITEM_RESULT = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_RESULT";
 	
@@ -154,13 +154,14 @@ public class MainActivity extends ListActivity
     	SQLiteCursor cursor = (SQLiteCursor)l.getItemAtPosition(position);
 
     	FoodItem foodItem = new FoodItem(
-    			cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_DUTCH_NAME)),
     			cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_ENGLISH_NAME)),
+    			cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_DUTCH_NAME)),
     			DEFAULT_WEIGHT_IN_GRAMS,
     			cursor.getFloat(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_CARBS)),
     			cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_PRODUCT_CODE)));
     	
     	Intent intent = new Intent(this, FoodDetailsActivity.class);
+    	intent.putExtra(LANGUAGE_MESSAGE, mLanguage);
     	intent.putExtra(FOOD_ITEM_MESSAGE, foodItem);
 
     	startActivityForResult(intent, 0);

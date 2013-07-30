@@ -26,10 +26,16 @@ public class FoodDetailsActivity extends ActionBarActivity {
 
 		// Get the message from the intent
 		Intent intent = getIntent();
+
+    	Language language = (Language) intent.getSerializableExtra(MainActivity.LANGUAGE_MESSAGE);
 		mFoodItem = intent.getParcelableExtra(MainActivity.FOOD_ITEM_MESSAGE);
 		
 		TextView dutchNameTextView = (TextView) findViewById(R.id.food_details_name);
-		dutchNameTextView.setText(mFoodItem.mEnglishName);
+		if (language == Language.ENGLISH) {
+			dutchNameTextView.setText(mFoodItem.mEnglishName);
+		} else {
+			dutchNameTextView.setText(mFoodItem.mDutchName);
+		}
 		
 		mWeightEditText = (EditText) findViewById(R.id.food_details_weight_edit);
 		mWeightEditText.setText(Integer.toString(mFoodItem.mWeightInGrams));

@@ -24,12 +24,6 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 public class FoodDbAdapter extends SQLiteAssetHelper {
-	
-	public enum Language {
-	   ENGLISH,
-	   DUTCH
-	}
-	
 	public static final String TABLE_NAME = "Food";
 	public static final String COLUMN_DUTCH_NAME = "Product_omschrijving";
 	public static final String COLUMN_ENGLISH_NAME = "EnglishName";
