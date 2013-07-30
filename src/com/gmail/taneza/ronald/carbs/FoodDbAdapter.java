@@ -31,9 +31,10 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
 	}
 	
 	public static final String TABLE_NAME = "Food";
-	public static final String KEY_DUTCH_NAME = "Product_omschrijving";
-	public static final String KEY_ENGLISH_NAME = "EnglishName";
-	public static final String KEY_CARBS = "_05001";
+	public static final String COLUMN_DUTCH_NAME = "Product_omschrijving";
+	public static final String COLUMN_ENGLISH_NAME = "EnglishName";
+	public static final String COLUMN_CARBS = "_05001";
+	public static final String COLUMN_PRODUCT_CODE = "Productcode";
 	
     private static final String DATABASE_NAME = "NevoFoodListWithEnglishNames";
     private static final int DATABASE_VERSION = 1;
@@ -60,7 +61,7 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
 
 		// Cursor requires an "_id" column
 		// todo: find out what "0" really means
-		String [] sqlSelect = {"0 _id", getLanguageString(), KEY_CARBS}; 
+		String [] sqlSelect = {"0 _id", COLUMN_DUTCH_NAME, COLUMN_ENGLISH_NAME, COLUMN_CARBS, COLUMN_PRODUCT_CODE}; 
 		String sqlTables = TABLE_NAME;
 
 		qb.setTables(sqlTables);
@@ -77,7 +78,7 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     }
     
     public String[] getColumnStringArray() {
-    	return new String[] { getLanguageString(), FoodDbAdapter.KEY_CARBS };
+    	return new String[] { getLanguageString(), COLUMN_CARBS };
     }
     
     private void deleteDbIfItAlreadyExists(Context context) {
@@ -92,9 +93,9 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     {
     	switch (language) {
     		case ENGLISH:
-    			return KEY_ENGLISH_NAME;
+    			return COLUMN_ENGLISH_NAME;
     		case DUTCH:
-    			return KEY_DUTCH_NAME;
+    			return COLUMN_DUTCH_NAME;
     		default:
     			return null;
     	}

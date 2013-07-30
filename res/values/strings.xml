@@ -2,7 +2,6 @@
 <resources>
 
     <string name="app_name">Carbs</string>
-    <string name="hello_world">Hello world!</string>
     <string name="no_items">No items</string>
     <string name="carbs_prefix">Carbohydrates: </string>
     <string name="search_text_hint">Search</string>
@@ -10,5 +9,7 @@
     <string name="menu_language">Language</string>
     <string name="menu_language_english">English</string>
     <string name="menu_language_dutch">Dutch</string>
+    <string name="title_activity_food_details">Food Details</string>
+    <string name="action_settings">Settings</string>
 
 </resources>
