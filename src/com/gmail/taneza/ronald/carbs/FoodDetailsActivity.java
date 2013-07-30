@@ -1,16 +1,26 @@
 package com.gmail.taneza.ronald.carbs;
 
+import org.droidparts.widget.ClearableEditText;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
 public class FoodDetailsActivity extends ActionBarActivity {
 
+	private FoodItem mFoodItem;
+	private EditText mWeightEditText;
+	private TextView mNumCarbsTextView;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -21,16 +31,18 @@ public class FoodDetailsActivity extends ActionBarActivity {
 
 		// Get the message from the intent
 		Intent intent = getIntent();
-		FoodItem foodItem = intent.getParcelableExtra(FoodListActivity.FOOD_ITEM_MESSAGE);
+		mFoodItem = intent.getParcelableExtra(FoodListActivity.FOOD_ITEM_MESSAGE);
 		
 		TextView dutchNameTextView = (TextView) findViewById(R.id.food_details_name);
-		dutchNameTextView.setText(foodItem.EnglishName);
+		dutchNameTextView.setText(mFoodItem.mEnglishName);
 		
-		EditText weightEditText = (EditText) findViewById(R.id.food_details_weight_edit);
-		weightEditText.setText(Integer.toString(foodItem.WeightInGrams));
+		mWeightEditText = (EditText) findViewById(R.id.food_details_weight_edit);
+		mWeightEditText.setText(Integer.toString(mFoodItem.mWeightInGrams));
 
-		TextView numCarbsTextView = (TextView) findViewById(R.id.food_details_carbs_text);
-		numCarbsTextView.setText(Float.toString(foodItem.NumCarbsInGrams));
+		mNumCarbsTextView = (TextView) findViewById(R.id.food_details_carbs_text);
+		mNumCarbsTextView.setText(String.format("%.2f", mFoodItem.getNumCarbsInGrams()));
+		
+		addWeightTextListener();
 	}
 
 	/**
@@ -64,4 +76,40 @@ public class FoodDetailsActivity extends ActionBarActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	private void addWeightTextListener() {
+		mWeightEditText.addTextChangedListener(new TextWatcher() {
+			public void afterTextChanged(Editable s) {
+				// Abstract Method of TextWatcher Interface.
+			}
+
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// Abstract Method of TextWatcher Interface.
+			}
+
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				Integer weight = 0;
+				try {
+					weight = Integer.parseInt(mWeightEditText.getText().toString());
+				}
+				catch (NumberFormatException e) {
+					// ignore invalid weight
+				}
+
+				mFoodItem.mWeightInGrams = weight;
+				mNumCarbsTextView.setText(String.format("%.2f", mFoodItem.getNumCarbsInGrams()));
+			}
+		});
+	}
+	
+	public void AddToMeal(View v) {
+		Intent data = getIntent();
+		data.putExtra(FoodListActivity.FOOD_ITEM_RESULT, mFoodItem);
+		if (getParent() == null) {
+		    setResult(RESULT_OK, data);
+		} else {
+		    getParent().setResult(RESULT_OK, data);
+		}
+		finish();
+	}
 }

@@ -42,6 +42,8 @@
 	        android:layout_height="wrap_content"
 	        android:layout_weight="0.6"
 	        android:inputType="number"
+	        android:gravity="right"
+	        android:selectAllOnFocus="true"
 		    android:textSize="18dp" 
 	        android:paddingLeft="16dp"
 			android:paddingRight="16dp"
@@ -83,6 +85,7 @@
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
 	        android:layout_weight="0.6"
+			android:gravity="right"
 		    android:textSize="18dp" 
 	        android:paddingLeft="16dp"
 			android:paddingRight="16dp"
@@ -101,14 +104,17 @@
 	    
     </LinearLayout>
     
-    <Button android:id="@+id/food_details_add_to_meal_button"
-        android:text="@string/add_to_meal"
+    <Button
+        android:id="@+id/food_details_add_to_meal_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/food_details_carbs_group"
-	    android:textSize="18dp" 
+        android:text="@string/add_to_meal"
+        android:onClick="AddToMeal"
+        android:textSize="18dp"
+        android:paddingBottom="8dp"
         android:paddingLeft="16dp"
-		android:paddingRight="16dp"
-		android:paddingTop="8dp"
-		android:paddingBottom="8dp"/>
+        android:paddingRight="16dp"
+        android:paddingTop="8dp" />
+    
 </RelativeLayout>

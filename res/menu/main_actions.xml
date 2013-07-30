@@ -13,7 +13,7 @@
 	            android:title="@string/menu_language_dutch" />
 	    </menu>
 	</item>
-	     
+	
     <item
         android:id="@+id/menu_settings"
         android:orderInCategory="100"

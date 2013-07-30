@@ -29,6 +29,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 import android.app.LoaderManager;
 //todo
 //import android.support.v7.app.ActionBar;
@@ -44,22 +45,25 @@ import org.droidparts.widget.ClearableEditText;
 
 public class FoodListActivity extends ListActivity 
     implements LoaderManager.LoaderCallbacks<Cursor> {
+
+	public final static int DEFAULT_WEIGHT_IN_GRAMS = 100;
 	
 	public final static String FOOD_ITEM_MESSAGE = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_MESSAGE";
-	
-//	public final static String DUTCH_NAME_MESSAGE = "com.gmail.taneza.ronald.carbs.DUTCH_NAME_MESSAGE";
-//	public final static String ENGLISH_NAME_MESSAGE = "com.gmail.taneza.ronald.carbs.ENGLISH_NAME_MESSAGE";
-//	public final static String NUM_CARBS = "com.gmail.taneza.ronald.carbs.NUM_CARBS";
-//	public final static String PRODUCT_CODE = "com.gmail.taneza.ronald.carbs.PRODUCT_CODE";
+	public final static String FOOD_ITEM_RESULT = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_RESULT";
 	
 	private FoodDbAdapter mDbHelper;
     private SimpleCursorAdapter mAdapter;
 	private ClearableEditText mSearchEditText;
+	private float mTotalCarbsInGrams = 0;
+	private TextView mTotalCarbsTextView;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.food_list);
+
+		mTotalCarbsTextView = (TextView) findViewById(R.id.food_list_total_carbs_text);
+		UpdateTotalCarbs();
 		
         mDbHelper = new FoodDbAdapter(this, FoodDbAdapter.Language.DUTCH);
         mDbHelper.open();
@@ -128,19 +132,29 @@ public class FoodListActivity extends ListActivity
     	FoodItem foodItem = new FoodItem(
     			cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_DUTCH_NAME)),
     			cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_ENGLISH_NAME)),
-    			100,
+    			DEFAULT_WEIGHT_IN_GRAMS,
     			cursor.getFloat(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_CARBS)),
     			cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_PRODUCT_CODE)));
     	
     	Intent intent = new Intent(this, FoodDetailsActivity.class);
     	intent.putExtra(FOOD_ITEM_MESSAGE, foodItem);
-    	
-//    	intent.putExtra(DUTCH_NAME_MESSAGE, cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_DUTCH_NAME)));
-//    	intent.putExtra(ENGLISH_NAME_MESSAGE, cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_ENGLISH_NAME)));
-//    	intent.putExtra(NUM_CARBS, cursor.getFloat(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_CARBS)));
-//    	intent.putExtra(PRODUCT_CODE, cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_PRODUCT_CODE)));
 
-    	startActivity(intent);
+    	startActivityForResult(intent, 0);
+    }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Make sure the request was successful
+        if (resultCode == RESULT_OK) {
+    		FoodItem foodItem = data.getParcelableExtra(FoodListActivity.FOOD_ITEM_RESULT);
+    		mTotalCarbsInGrams += foodItem.getNumCarbsInGrams();
+    		UpdateTotalCarbs();
+        }
+    }
+    
+    public void ClearTotalCarbs(View v) {
+    	mTotalCarbsInGrams = 0;
+		UpdateTotalCarbs();
     }
     
 //    @Override 
@@ -179,5 +193,9 @@ public class FoodListActivity extends ListActivity
 				restartLoader();
 			}
 		});
+	}
+	
+	private void UpdateTotalCarbs() {
+		mTotalCarbsTextView.setText(String.format("%.2f", mTotalCarbsInGrams));
 	}
 }
