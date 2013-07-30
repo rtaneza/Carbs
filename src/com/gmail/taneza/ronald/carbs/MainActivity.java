@@ -45,7 +45,7 @@ import org.droidparts.widget.ClearableEditText;
 // create recent food list
 // save last used weight per food
 
-public class FoodListActivity extends ListActivity 
+public class MainActivity extends ListActivity 
     implements LoaderManager.LoaderCallbacks<Cursor> {
 
 	public final static int DEFAULT_WEIGHT_IN_GRAMS = 100;
@@ -66,7 +66,7 @@ public class FoodListActivity extends ListActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.food_list);
+		setContentView(R.layout.main_activity);
 
 		mTotalCarbsTextView = (TextView) findViewById(R.id.food_list_total_carbs_text);
 		UpdateTotalCarbs();
@@ -170,7 +170,7 @@ public class FoodListActivity extends ListActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Make sure the request was successful
         if (resultCode == RESULT_OK) {
-    		FoodItem foodItem = data.getParcelableExtra(FoodListActivity.FOOD_ITEM_RESULT);
+    		FoodItem foodItem = data.getParcelableExtra(FOOD_ITEM_RESULT);
     		mTotalCarbsInGrams += foodItem.getNumCarbsInGrams();
     		UpdateTotalCarbs();
         }

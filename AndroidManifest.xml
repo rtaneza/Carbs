@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:theme="@style/Theme.AppCompat.Light.DarkActionBar" >
         <activity
-            android:name="com.gmail.taneza.ronald.carbs.FoodListActivity"
+            android:name="com.gmail.taneza.ronald.carbs.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,7 +25,7 @@
         <activity
             android:name="com.gmail.taneza.ronald.carbs.FoodDetailsActivity"
             android:label="@string/title_activity_food_details"
-            android:parentActivityName="com.gmail.taneza.ronald.carbs.FoodListActivity" >
+            android:parentActivityName="com.gmail.taneza.ronald.carbs.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.gmail.taneza.ronald.carbs.FoodListActivity" />

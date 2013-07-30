@@ -21,12 +21,12 @@ public class FoodDetailsActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.food_details);
+		setContentView(R.layout.food_details_activity);
 		setupActionBar();
 
 		// Get the message from the intent
 		Intent intent = getIntent();
-		mFoodItem = intent.getParcelableExtra(FoodListActivity.FOOD_ITEM_MESSAGE);
+		mFoodItem = intent.getParcelableExtra(MainActivity.FOOD_ITEM_MESSAGE);
 		
 		TextView dutchNameTextView = (TextView) findViewById(R.id.food_details_name);
 		dutchNameTextView.setText(mFoodItem.mEnglishName);
@@ -90,7 +90,7 @@ public class FoodDetailsActivity extends ActionBarActivity {
 	
 	public void AddToMeal(View v) {
 		Intent data = getIntent();
-		data.putExtra(FoodListActivity.FOOD_ITEM_RESULT, mFoodItem);
+		data.putExtra(MainActivity.FOOD_ITEM_RESULT, mFoodItem);
 	    setResult(RESULT_OK, data);
 		finish();
 	}

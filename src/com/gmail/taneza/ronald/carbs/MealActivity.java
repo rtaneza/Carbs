@@ -9,7 +9,7 @@ public class MealActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_meal);
+		setContentView(R.layout.meal_activitiy);
 	}
 
 	@Override
