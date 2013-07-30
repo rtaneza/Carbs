@@ -6,6 +6,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class FoodDetailsActivity extends ActionBarActivity {
@@ -20,12 +21,16 @@ public class FoodDetailsActivity extends ActionBarActivity {
 
 		// Get the message from the intent
 		Intent intent = getIntent();
+		FoodItem foodItem = intent.getParcelableExtra(FoodListActivity.FOOD_ITEM_MESSAGE);
 		
 		TextView dutchNameTextView = (TextView) findViewById(R.id.food_details_name);
-		dutchNameTextView.setText(intent.getStringExtra(FoodListActivity.DUTCH_NAME_MESSAGE));
+		dutchNameTextView.setText(foodItem.EnglishName);
 		
-		TextView numCarbsTextView = (TextView) findViewById(R.id.food_details_num_carbs);
-		numCarbsTextView.setText(Float.toString(intent.getFloatExtra(FoodListActivity.NUM_CARBS, 0)));
+		EditText weightEditText = (EditText) findViewById(R.id.food_details_weight_edit);
+		weightEditText.setText(Integer.toString(foodItem.WeightInGrams));
+
+		TextView numCarbsTextView = (TextView) findViewById(R.id.food_details_carbs_text);
+		numCarbsTextView.setText(Float.toString(foodItem.NumCarbsInGrams));
 	}
 
 	/**

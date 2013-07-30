@@ -45,10 +45,12 @@ import org.droidparts.widget.ClearableEditText;
 public class FoodListActivity extends ListActivity 
     implements LoaderManager.LoaderCallbacks<Cursor> {
 	
-	public final static String DUTCH_NAME_MESSAGE = "com.gmail.taneza.ronald.carbs.DUTCH_NAME_MESSAGE";
-	public final static String ENGLISH_NAME_MESSAGE = "com.gmail.taneza.ronald.carbs.ENGLISH_NAME_MESSAGE";
-	public final static String NUM_CARBS = "com.gmail.taneza.ronald.carbs.NUM_CARBS";
-	public final static String PRODUCT_CODE = "com.gmail.taneza.ronald.carbs.PRODUCT_CODE";
+	public final static String FOOD_ITEM_MESSAGE = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_MESSAGE";
+	
+//	public final static String DUTCH_NAME_MESSAGE = "com.gmail.taneza.ronald.carbs.DUTCH_NAME_MESSAGE";
+//	public final static String ENGLISH_NAME_MESSAGE = "com.gmail.taneza.ronald.carbs.ENGLISH_NAME_MESSAGE";
+//	public final static String NUM_CARBS = "com.gmail.taneza.ronald.carbs.NUM_CARBS";
+//	public final static String PRODUCT_CODE = "com.gmail.taneza.ronald.carbs.PRODUCT_CODE";
 	
 	private FoodDbAdapter mDbHelper;
     private SimpleCursorAdapter mAdapter;
@@ -123,11 +125,20 @@ public class FoodListActivity extends ListActivity
     public void onListItemClick(ListView l, View v, int position, long id) {
     	SQLiteCursor cursor = (SQLiteCursor)l.getItemAtPosition(position);
 
+    	FoodItem foodItem = new FoodItem(
+    			cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_DUTCH_NAME)),
+    			cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_ENGLISH_NAME)),
+    			100,
+    			cursor.getFloat(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_CARBS)),
+    			cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_PRODUCT_CODE)));
+    	
     	Intent intent = new Intent(this, FoodDetailsActivity.class);
-    	intent.putExtra(DUTCH_NAME_MESSAGE, cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_DUTCH_NAME)));
-    	intent.putExtra(ENGLISH_NAME_MESSAGE, cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_ENGLISH_NAME)));
-    	intent.putExtra(NUM_CARBS, cursor.getFloat(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_CARBS)));
-    	intent.putExtra(PRODUCT_CODE, cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_PRODUCT_CODE)));
+    	intent.putExtra(FOOD_ITEM_MESSAGE, foodItem);
+    	
+//    	intent.putExtra(DUTCH_NAME_MESSAGE, cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_DUTCH_NAME)));
+//    	intent.putExtra(ENGLISH_NAME_MESSAGE, cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_ENGLISH_NAME)));
+//    	intent.putExtra(NUM_CARBS, cursor.getFloat(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_CARBS)));
+//    	intent.putExtra(PRODUCT_CODE, cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_PRODUCT_CODE)));
 
     	startActivity(intent);
     }

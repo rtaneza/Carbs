@@ -10,14 +10,105 @@
     android:theme="@style/Theme.AppCompat.Light.DarkActionBar" >
 
     <TextView android:id="@+id/food_details_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-	    android:textSize="18dp" />
-    
-    <TextView android:id="@+id/food_details_num_carbs"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
 	    android:textSize="18dp" 
-        android:layout_below="@+id/food_details_name"/>
+        android:paddingLeft="16dp"
+		android:paddingRight="16dp"
+		android:paddingTop="8dp"
+		android:paddingBottom="8dp"/>
+   
+    <!-- weight -->
+    <LinearLayout android:id="@+id/food_details_weight_group"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/food_details_name"
+		android:orientation="horizontal"
+		android:weightSum="1.0" >
+	    
+	    <TextView android:id="@+id/food_details_weight_label"
+	        android:text="@string/food_details_weight"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="0.4"
+		    android:textSize="18dp" 
+	        android:paddingLeft="16dp"
+			android:paddingRight="16dp"
+			android:paddingTop="8dp"
+			android:paddingBottom="8dp"/>
+	    
+	    <EditText android:id="@+id/food_details_weight_edit"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="0.6"
+	        android:inputType="number"
+		    android:textSize="18dp" 
+	        android:paddingLeft="16dp"
+			android:paddingRight="16dp"
+			android:paddingTop="8dp"
+			android:paddingBottom="8dp"/>
+	    
+	    <TextView android:id="@+id/food_details_weight_grams"
+	        android:text="@string/grams"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+		    android:textSize="18dp" 
+	        android:paddingLeft="16dp"
+			android:paddingRight="16dp"
+			android:paddingTop="8dp"
+			android:paddingBottom="8dp"/>
+	    
+    </LinearLayout>
     
+    <!-- carbs -->
+    <LinearLayout android:id="@+id/food_details_carbs_group"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/food_details_weight_group"
+		android:orientation="horizontal"
+		android:weightSum="1.0" >
+	    
+	    <TextView android:id="@+id/food_details_carbs_label"
+	        android:text="@string/food_details_carbs"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="0.4"
+		    android:textSize="18dp" 
+	        android:paddingLeft="16dp"
+			android:paddingRight="16dp"
+			android:paddingTop="8dp"
+			android:paddingBottom="8dp"/>
+	    
+	    <TextView android:id="@+id/food_details_carbs_text"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="0.6"
+		    android:textSize="18dp" 
+	        android:paddingLeft="16dp"
+			android:paddingRight="16dp"
+			android:paddingTop="8dp"
+			android:paddingBottom="8dp"/>
+	    
+	    <TextView android:id="@+id/food_details_carbs_grams"
+	        android:text="@string/grams"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+		    android:textSize="18dp" 
+	        android:paddingLeft="16dp"
+			android:paddingRight="16dp"
+			android:paddingTop="8dp"
+			android:paddingBottom="8dp"/>
+	    
+    </LinearLayout>
+    
+    <Button android:id="@+id/food_details_add_to_meal_button"
+        android:text="@string/add_to_meal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/food_details_carbs_group"
+	    android:textSize="18dp" 
+        android:paddingLeft="16dp"
+		android:paddingRight="16dp"
+		android:paddingTop="8dp"
+		android:paddingBottom="8dp"/>
 </RelativeLayout>

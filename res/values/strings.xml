@@ -11,5 +11,11 @@
     <string name="menu_language_dutch">Dutch</string>
     <string name="title_activity_food_details">Food Details</string>
     <string name="action_settings">Settings</string>
+    <string name="food_details_weight">Weight:</string>
+    <string name="food_details_carbs">Carbs:</string>
+    <string name="grams">g</string>
+    <string name="add_to_meal">Add to meal</string>
+    <string name="title_activity_meal">Meal</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>
