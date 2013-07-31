@@ -69,7 +69,7 @@ public class MainActivity extends ListActivity
 		setContentView(R.layout.main_activity);
 
 		mTotalCarbsTextView = (TextView) findViewById(R.id.food_list_total_carbs_text);
-		UpdateTotalCarbs();
+		updateTotalCarbs();
 
         mDbHelper = new FoodDbAdapter(this);
         mDbHelper.open();
@@ -173,13 +173,13 @@ public class MainActivity extends ListActivity
         if (resultCode == RESULT_OK) {
     		FoodItem foodItem = data.getParcelableExtra(FOOD_ITEM_RESULT);
     		mTotalCarbsInGrams += foodItem.getNumCarbsInGrams();
-    		UpdateTotalCarbs();
+    		updateTotalCarbs();
         }
     }
     
-    public void ClearTotalCarbs(View v) {
+    public void clearTotalCarbs(View v) {
     	mTotalCarbsInGrams = 0;
-		UpdateTotalCarbs();
+		updateTotalCarbs();
     }
 
 	private void initListAdapter() {
@@ -225,7 +225,7 @@ public class MainActivity extends ListActivity
 		}
 	}
 	
-	private void UpdateTotalCarbs() {
+	private void updateTotalCarbs() {
 		mTotalCarbsTextView.setText(String.format("%.2f", mTotalCarbsInGrams));
 	}
 }

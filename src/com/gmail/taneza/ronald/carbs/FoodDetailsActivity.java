@@ -89,12 +89,12 @@ public class FoodDetailsActivity extends ActionBarActivity {
 		});
 	}
 
-	public void Cancel(View v) {
+	public void cancel(View v) {
 	    setResult(RESULT_CANCELED);
 		finish();
 	}
 	
-	public void AddToMeal(View v) {
+	public void addToMeal(View v) {
 		Intent data = getIntent();
 		data.putExtra(MainActivity.FOOD_ITEM_RESULT, mFoodItem);
 	    setResult(RESULT_OK, data);
