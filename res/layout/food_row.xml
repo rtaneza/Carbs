@@ -3,25 +3,30 @@
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content" 
 	android:orientation="horizontal"
-	android:paddingLeft="16dp"
-	android:paddingRight="16dp"
-	android:paddingTop="8dp"
-	android:paddingBottom="8dp">
+	android:paddingLeft="@dimen/padding_horizontal"
+	android:paddingRight="@dimen/padding_horizontal"
+	android:paddingTop="@dimen/padding_vertical"
+	android:paddingBottom="@dimen/padding_vertical">
 
 	<TextView android:id="@+id/name"
         android:layout_width="0dp"
 	    android:layout_height="wrap_content"
-	    android:textSize="18dp"
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@+id/carbs_amount"
+		android:paddingLeft="0dp"
+		android:paddingRight="0dp"
+		android:paddingTop="0dp"
+		android:paddingBottom="0dp"
 	    />
 		
 	<TextView android:id="@+id/carbs_amount"
 	    android:layout_width="48dp"
 	    android:layout_height="wrap_content"
-	    android:textSize="18dp"
 	    android:layout_alignParentRight="true"
 		android:paddingLeft="8dp"
+		android:paddingRight="0dp"
+		android:paddingTop="0dp"
+		android:paddingBottom="0dp"
 	    />
 </RelativeLayout>
     

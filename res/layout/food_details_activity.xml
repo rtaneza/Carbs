@@ -6,17 +6,11 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".FoodDetailsActivity" 
-    android:theme="@style/Theme.AppCompat.Light.DarkActionBar" >
+    tools:context=".FoodDetailsActivity" >
 
     <TextView android:id="@+id/food_details_name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-	    android:textSize="18dp" 
-        android:paddingLeft="16dp"
-		android:paddingRight="16dp"
-		android:paddingTop="8dp"
-		android:paddingBottom="8dp"/>
+        android:layout_height="wrap_content" />
    
     <!-- weight -->
     <LinearLayout android:id="@+id/food_details_weight_group"
@@ -30,12 +24,7 @@
 	        android:text="@string/food_details_weight"
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
-	        android:layout_weight="0.4"
-		    android:textSize="18dp" 
-	        android:paddingLeft="16dp"
-			android:paddingRight="16dp"
-			android:paddingTop="8dp"
-			android:paddingBottom="8dp"/>
+	        android:layout_weight="0.4" />
 	    
 	    <EditText android:id="@+id/food_details_weight_edit"
 	        android:layout_width="0dp"
@@ -43,22 +32,12 @@
 	        android:layout_weight="0.6"
 	        android:inputType="number"
 	        android:gravity="right"
-	        android:selectAllOnFocus="true"
-		    android:textSize="18dp" 
-	        android:paddingLeft="16dp"
-			android:paddingRight="16dp"
-			android:paddingTop="8dp"
-			android:paddingBottom="8dp"/>
+	        android:selectAllOnFocus="true" />
 	    
 	    <TextView android:id="@+id/food_details_weight_grams"
 	        android:text="@string/grams"
 	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-		    android:textSize="18dp" 
-	        android:paddingLeft="16dp"
-			android:paddingRight="16dp"
-			android:paddingTop="8dp"
-			android:paddingBottom="8dp"/>
+	        android:layout_height="wrap_content" />
 	    
     </LinearLayout>
     
@@ -74,33 +53,18 @@
 	        android:text="@string/food_details_carbs"
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
-	        android:layout_weight="0.4"
-		    android:textSize="18dp" 
-	        android:paddingLeft="16dp"
-			android:paddingRight="16dp"
-			android:paddingTop="8dp"
-			android:paddingBottom="8dp"/>
+	        android:layout_weight="0.4" />
 	    
 	    <TextView android:id="@+id/food_details_carbs_text"
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
 	        android:layout_weight="0.6"
-			android:gravity="right"
-		    android:textSize="18dp" 
-	        android:paddingLeft="16dp"
-			android:paddingRight="16dp"
-			android:paddingTop="8dp"
-			android:paddingBottom="8dp"/>
+			android:gravity="right" />
 	    
 	    <TextView android:id="@+id/food_details_carbs_grams"
 	        android:text="@string/grams"
 	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-		    android:textSize="18dp" 
-	        android:paddingLeft="16dp"
-			android:paddingRight="16dp"
-			android:paddingTop="8dp"
-			android:paddingBottom="8dp"/>
+	        android:layout_height="wrap_content" />
 	    
     </LinearLayout>
     
@@ -117,26 +81,18 @@
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
 	        android:layout_weight="0.5"
+	        android:textAppearance="@android:style/TextAppearance.Medium"
 	        android:text="@string/cancel"
-	        android:onClick="cancel"
-	        android:textSize="18dp"
-	        android:paddingBottom="8dp"
-	        android:paddingLeft="16dp"
-	        android:paddingRight="16dp"
-	        android:paddingTop="8dp" />
+	        android:onClick="cancel" />
 	    
 	    <Button
 	        android:id="@+id/food_details_add_to_meal_button"
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
 	        android:layout_weight="0.5"
+	        android:textAppearance="@android:style/TextAppearance.Medium"
 	        android:text="@string/add_to_meal"
-	        android:onClick="addToMeal"
-	        android:textSize="18dp"
-	        android:paddingBottom="8dp"
-	        android:paddingLeft="16dp"
-	        android:paddingRight="16dp"
-	        android:paddingTop="8dp" />
+	        android:onClick="addToMeal" />
     
     </LinearLayout>
 	    
