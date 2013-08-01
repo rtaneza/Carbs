@@ -39,6 +39,7 @@ public class MainActivity extends ActionBarActivity implements
 	public final static String PREF_LANGUAGE = "PREF_LANGUAGE";
 	
 	public final static int ALL_FOODS_TAB_INDEX = 0;
+	public final static int MEAL_TAB_INDEX = 1;
 
 	private Language mLanguage;
     private ViewPager mViewPager;
@@ -71,6 +72,9 @@ public class MainActivity extends ActionBarActivity implements
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         actionBar.addTab(actionBar.newTab()
                 .setText(R.string.title_all_foods)
+                .setTabListener(this));
+        actionBar.addTab(actionBar.newTab()
+                .setText(R.string.title_meal)
                 .setTabListener(this));
         
         mViewPager.setCurrentItem(ALL_FOODS_TAB_INDEX);
@@ -131,13 +135,15 @@ public class MainActivity extends ActionBarActivity implements
             switch (position) {
                 case ALL_FOODS_TAB_INDEX:
                     return new AllFoodsFragment(mLanguage);
+                case MEAL_TAB_INDEX:
+                	return new MealFragment(mLanguage);
             }
             return null;
         }
 
         @Override
         public int getCount() {
-            return 1;
+            return 2;
         }
     }
 

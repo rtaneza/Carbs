@@ -20,5 +20,6 @@
     <string name="add_to_meal">Add to meal</string>
     <string name="title_activity_meal">Meal</string>
     <string name="title_all_foods">All</string>
+    <string name="title_meal">Meal</string>
 
 </resources>

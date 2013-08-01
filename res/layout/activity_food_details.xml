@@ -14,7 +14,7 @@
    
     <!-- weight -->
     <LinearLayout android:id="@+id/food_details_weight_group"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/food_details_name"
 		android:orientation="horizontal"
@@ -43,7 +43,7 @@
     
     <!-- carbs -->
     <LinearLayout android:id="@+id/food_details_carbs_group"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/food_details_weight_group"
 		android:orientation="horizontal"
@@ -70,7 +70,7 @@
     
     <!-- buttons -->
     <LinearLayout android:id="@+id/food_details_buttons_group"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/food_details_carbs_group"
 		android:orientation="horizontal"

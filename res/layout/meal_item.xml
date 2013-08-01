@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content" 
+	android:orientation="horizontal"
+	android:paddingLeft="@dimen/padding_horizontal"
+	android:paddingRight="@dimen/padding_horizontal"
+	android:paddingTop="@dimen/padding_vertical"
+	android:paddingBottom="@dimen/padding_vertical">
+
+	<TextView android:id="@+id/meal_item_name"
+        android:layout_width="0dp"
+	    android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/meal_item_carbs"
+		android:paddingLeft="0dp"
+		android:paddingRight="0dp"
+		android:paddingTop="0dp"
+		android:paddingBottom="0dp"
+	    />
+		
+	<TextView android:id="@+id/meal_item_carbs"
+	    android:layout_width="64dp"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentRight="true"
+		android:paddingLeft="8dp"
+		android:paddingRight="0dp"
+		android:paddingTop="0dp"
+		android:paddingBottom="0dp"
+	    />
+	
+</RelativeLayout>
+    
