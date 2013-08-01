@@ -1,9 +1,17 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android" 
+      xmlns:carbs="http://schemas.android.com/apk/res-auto">
+      
+    <!--
+    When using the support library v7, the "showAsAction" attribute
+    should use our app's namespace.
+    See: http://developer.android.com/guide/topics/ui/actionbar.html#ActionItems
+     -->
     
 	<item
         android:id="@+id/menu_language"
         android:title="@string/menu_language_dutch"
-	    android:showAsAction="ifRoom|withText">
+        android:orderInCategory="0"
+        carbs:showAsAction="always|withText">
 	    <menu>
 	        <item
 	            android:id="@+id/menu_language_option_english"
@@ -17,7 +25,7 @@
     <item
         android:id="@+id/menu_settings"
         android:orderInCategory="100"
-        android:showAsAction="never"
+        carbs:showAsAction="never"
         android:title="@string/menu_settings"/>
 
 </menu>

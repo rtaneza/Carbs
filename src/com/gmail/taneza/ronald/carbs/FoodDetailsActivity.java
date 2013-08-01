@@ -21,14 +21,14 @@ public class FoodDetailsActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.food_details_activity);
+		setContentView(R.layout.activity_food_details);
 		setupActionBar();
 
 		// Get the message from the intent
 		Intent intent = getIntent();
 
-    	Language language = (Language) intent.getSerializableExtra(MainActivity.LANGUAGE_MESSAGE);
-		mFoodItem = intent.getParcelableExtra(MainActivity.FOOD_ITEM_MESSAGE);
+    	Language language = (Language) intent.getSerializableExtra(AllFoodsFragment.LANGUAGE_MESSAGE);
+		mFoodItem = intent.getParcelableExtra(AllFoodsFragment.FOOD_ITEM_MESSAGE);
 		
 		TextView dutchNameTextView = (TextView) findViewById(R.id.food_details_name);
 		if (language == Language.ENGLISH) {
@@ -59,7 +59,7 @@ public class FoodDetailsActivity extends ActionBarActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.food_details_actions, menu);
+		getMenuInflater().inflate(R.menu.menu_food_details, menu);
 		return true;
 	}
 
@@ -96,7 +96,7 @@ public class FoodDetailsActivity extends ActionBarActivity {
 	
 	public void addToMeal(View v) {
 		Intent data = getIntent();
-		data.putExtra(MainActivity.FOOD_ITEM_RESULT, mFoodItem);
+		data.putExtra(AllFoodsFragment.FOOD_ITEM_RESULT, mFoodItem);
 	    setResult(RESULT_OK, data);
 		finish();
 	}

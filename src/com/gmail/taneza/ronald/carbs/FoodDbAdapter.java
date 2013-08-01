@@ -35,10 +35,10 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     
     private Language mLanguage;
     
-    public FoodDbAdapter(Context context) {
+    public FoodDbAdapter(Context context, Language language) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     	deleteDbIfItAlreadyExists(context);
-    	setLanguage(Language.DUTCH);
+    	mLanguage = language;
     }
     
 	public void open() {
@@ -65,10 +65,6 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     
     public void setLanguage(Language language) {
     	mLanguage = language;
-    }
-    
-    public Language getLanguage() {
-    	return mLanguage;
     }
     
     public String[] getColumnStringArray() {

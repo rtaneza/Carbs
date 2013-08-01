@@ -16,74 +16,68 @@
 
 package com.gmail.taneza.ronald.carbs;
 
-import android.os.Bundle;
-import android.app.ListActivity;
-import android.content.Intent;
-import android.content.Loader;
+import android.annotation.TargetApi;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteCursor;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
-import android.app.LoaderManager;
-//todo
-//import android.support.v7.app.ActionBar;
 
-import com.commonsware.cwac.loaderex.SQLiteCursorLoader;
-
-import org.droidparts.widget.ClearableEditText;
-
-// TODOS
-// create separate activity for menu list
-// create recent food list
-// save last used weight per food
-
-public class MainActivity extends ListActivity 
-    implements LoaderManager.LoaderCallbacks<Cursor> {
-
-	public final static int DEFAULT_WEIGHT_IN_GRAMS = 100;
+public class MainActivity extends ActionBarActivity implements
+        ActionBar.TabListener,
+        ViewPager.OnPageChangeListener {
 
 	public final static String PREF_LANGUAGE = "PREF_LANGUAGE";
-
-	public final static String LANGUAGE_MESSAGE = "com.gmail.taneza.ronald.carbs.LANGUAGE_MESSAGE";
-	public final static String FOOD_ITEM_MESSAGE = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_MESSAGE";
-	public final static String FOOD_ITEM_RESULT = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_RESULT";
 	
-	private FoodDbAdapter mDbHelper;
-    private SimpleCursorAdapter mAdapter;
-	private ClearableEditText mSearchEditText;
-	private float mTotalCarbsInGrams = 0;
-	private TextView mTotalCarbsTextView;
-	private Menu mMenu;
+	public final static int ALL_FOODS_TAB_INDEX = 0;
+
 	private Language mLanguage;
-	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main_activity);
+    private ViewPager mViewPager;
+    private MainPagerAdapter mPagerAdapter;
+    private Menu mOptionsMenu;
 
-		mTotalCarbsTextView = (TextView) findViewById(R.id.food_list_total_carbs_text);
-		updateTotalCarbs();
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+    	Log.i("MainActivity", String.format("onCreate: savedInstanceState = %s", 
+    			savedInstanceState != null ? savedInstanceState.toString() : "null"));
+    	
+        super.onCreate(savedInstanceState);
 
-        mDbHelper = new FoodDbAdapter(this);
-        mDbHelper.open();
+        if (isFinishing()) {
+            return;
+        }
+
+ 		// Restore preferences
+ 		SharedPreferences settings = getPreferences(0);
+ 		mLanguage = Language.values()[settings.getInt(PREF_LANGUAGE, Language.DUTCH.ordinal())];
+ 		
+        setContentView(R.layout.activity_main);
+
+        mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), mLanguage);
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mViewPager.setAdapter(mPagerAdapter);
+        mViewPager.setOnPageChangeListener(this);
+
+        final ActionBar actionBar = getSupportActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        actionBar.addTab(actionBar.newTab()
+                .setText(R.string.title_all_foods)
+                .setTabListener(this));
         
-		// Restore preferences
-		SharedPreferences settings = getPreferences(0);
-		mLanguage = Language.values()[settings.getInt(PREF_LANGUAGE, Language.DUTCH.ordinal())];
-        setLanguage();
+        mViewPager.setCurrentItem(ALL_FOODS_TAB_INDEX);
         
-        addSearchTextListener();
+        actionBar.setHomeButtonEnabled(false);
+    }
 
-        initListAdapter();
-	}
-	
 	@Override
     protected void onStop(){
        super.onStop();
@@ -98,134 +92,107 @@ public class MainActivity extends ListActivity
       editor.commit();
     }
 	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		mMenu = menu;
-		getMenuInflater().inflate(R.menu.main_actions, menu);
-		setLanguage();
-		return true;
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+    @Override
+    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+        mViewPager.setCurrentItem(tab.getPosition());
+    }
+
+    @Override
+    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+    }
+
+    @Override
+    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+    }
+
+    @Override
+    public void onPageScrolled(int i, float v, int i1) {
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        getSupportActionBar().setSelectedNavigationItem(position);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int i) {
+    }
+
+    private class MainPagerAdapter extends FragmentPagerAdapter {
+    	private Language mLanguage;
+    	
+        public MainPagerAdapter(FragmentManager fm, Language language) {
+            super(fm);
+            mLanguage = language;
+        }
+        
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case ALL_FOODS_TAB_INDEX:
+                    return new AllFoodsFragment(mLanguage);
+            }
+            return null;
+        }
+
+        @Override
+        public int getCount() {
+            return 1;
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        mOptionsMenu = menu;
+		getMenuInflater().inflate(R.menu.menu_main, menu);
+		setLanguageInOptionsMenu(mLanguage);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	Language newLanguage;
+    	
 	    // Handle presses on the action bar items
 	    switch (item.getItemId()) {
 	        case R.id.menu_language_option_english:
-    			mLanguage = Language.ENGLISH;
+	        	newLanguage = Language.ENGLISH;
 	        	break;
 	        case R.id.menu_language_option_dutch:
-    			mLanguage = Language.DUTCH;
+	        	newLanguage = Language.DUTCH;
 	        	break;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
 
-	    if (mDbHelper.getLanguage() != mLanguage) {
-	    	setLanguage();
-	    	initListAdapter();
+	    if (newLanguage != mLanguage) {
+			mLanguage = newLanguage;
+	    	setLanguage(mLanguage);
 	    }
+	    
         return true;
-	}
-	
-	@Override
-	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		String queryString = mDbHelper.getFoodNameQueryString(mSearchEditText.getText().toString().trim());		
-		return new SQLiteCursorLoader(this, mDbHelper, queryString, null);
-	}
-
-	@Override
-	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-		// Swap the new cursor in.  (The framework will take care of closing the
-        // old cursor once we return.)
-        mAdapter.swapCursor(data);
-	}
-
-	@Override
-	public void onLoaderReset(Loader<Cursor> loader) {
-		// This is called when the last Cursor provided to onLoadFinished()
-        // above is about to be closed.  We need to make sure we are no
-        // longer using it.
-        mAdapter.swapCursor(null);		
-	}
-	
-    @Override 
-    public void onListItemClick(ListView l, View v, int position, long id) {
-    	SQLiteCursor cursor = (SQLiteCursor)l.getItemAtPosition(position);
-
-    	FoodItem foodItem = new FoodItem(
-    			cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_ENGLISH_NAME)),
-    			cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_DUTCH_NAME)),
-    			DEFAULT_WEIGHT_IN_GRAMS,
-    			cursor.getFloat(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_CARBS)),
-    			cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_PRODUCT_CODE)));
-    	
-    	Intent intent = new Intent(this, FoodDetailsActivity.class);
-    	intent.putExtra(LANGUAGE_MESSAGE, mLanguage);
-    	intent.putExtra(FOOD_ITEM_MESSAGE, foodItem);
-
-    	startActivityForResult(intent, 0);
-    }
-    
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Make sure the request was successful
-        if (resultCode == RESULT_OK) {
-    		FoodItem foodItem = data.getParcelableExtra(FOOD_ITEM_RESULT);
-    		mTotalCarbsInGrams += foodItem.getNumCarbsInGrams();
-    		updateTotalCarbs();
-        }
-    }
-    
-    public void clearTotalCarbs(View v) {
-    	mTotalCarbsInGrams = 0;
-		updateTotalCarbs();
     }
 
-	private void initListAdapter() {
-        String[] from = mDbHelper.getColumnStringArray();
-        int[] to = new int[] { R.id.name, R.id.carbs_amount};
-        
-        // Create an empty adapter we will use to display the loaded data.
-        mAdapter = new SimpleCursorAdapter(this,
-        		R.layout.food_row, null, from, to, 0);
-        setListAdapter(mAdapter);
-        
-        restartLoader();
+	private void setLanguage(Language language) {
+		setLanguageInOptionsMenu(language);
+		
+    	String allFoodsFragmentTag = getFragmentTag(ALL_FOODS_TAB_INDEX);
+    	AllFoodsFragment fragment = (AllFoodsFragment)getSupportFragmentManager().findFragmentByTag(allFoodsFragmentTag);
+    	fragment.setLanguage(language);
 	}
 	
-	private void restartLoader() {
-		getLoaderManager().restartLoader(0, null, this);
+	private void setLanguageInOptionsMenu(Language language) {
+		int languageId = (language == Language.ENGLISH) ?
+				R.string.menu_language_english : R.string.menu_language_dutch;
+		MenuItem languageMenuItem = mOptionsMenu.findItem(R.id.menu_language);
+    	languageMenuItem.setTitle(languageId);
 	}
-	
-	private void addSearchTextListener() {
-		mSearchEditText = (ClearableEditText) findViewById(R.id.search_text);
-		mSearchEditText.addTextChangedListener(new TextWatcher() {
-			public void afterTextChanged(Editable s) {
-			}
 
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-			}
-
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				restartLoader();
-			}
-		});
-	}
-	
-	private void setLanguage() {
-    	mDbHelper.setLanguage(mLanguage);
-
-		if (mMenu != null) {
-			int languageId = (mLanguage == Language.ENGLISH) ?
-					R.string.menu_language_english : R.string.menu_language_dutch;
-			MenuItem languageMenuItem = mMenu.findItem(R.id.menu_language);
-	    	languageMenuItem.setTitle(languageId);
-		}
-	}
-	
-	private void updateTotalCarbs() {
-		mTotalCarbsTextView.setText(String.format("%.2f", mTotalCarbsInGrams));
+	private static String getFragmentTag(int index)
+	{
+		// Reference: http://stackoverflow.com/questions/6976027/reusing-fragments-in-a-fragmentpageradapter
+	    return "android:switcher:" + R.id.pager + ":" + index;
 	}
 }
