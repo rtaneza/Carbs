@@ -3,7 +3,7 @@
 
     <string name="app_name">Carbs</string>
     <string name="no_items">No items found</string>
-    <string name="meal_total_carbs">Total carbs (g):</string>
+    <string name="meal_total_carbs">Total carbs:</string>
     <string name="meal_total_clear">Clear</string>
     <string name="search_text_hint">Search</string>
     <string name="menu_settings">Settings</string>

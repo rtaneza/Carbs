@@ -30,10 +30,11 @@ public class FoodItemArrayAdapter extends ArrayAdapter<FoodItem> {
 	private final ArrayList<FoodItem> mValues;
 	private Language mLanguage;
 	  
-	public FoodItemArrayAdapter(Context context, ArrayList<FoodItem> values) {
+	public FoodItemArrayAdapter(Context context, ArrayList<FoodItem> values, Language language) {
 	    super(context, R.layout.fragment_meal, values);
 	    mContext = context;
 	    mValues = values;
+	    mLanguage = language;
 	}
 	
 	public void setLanguage(Language language) {
@@ -56,7 +57,7 @@ public class FoodItemArrayAdapter extends ArrayAdapter<FoodItem> {
 	    
 	    FoodItem foodItem = mValues.get(position);
 	    TextView nameTextView = (TextView) rowView.findViewById(R.id.meal_item_name);
-	    String foodNameAndWeight = String.format("%s (%dg)", getFoodName(foodItem), foodItem.mWeightInGrams);
+	    String foodNameAndWeight = String.format("%s (%d g)", getFoodName(foodItem), foodItem.mWeightInGrams);
 	    nameTextView.setText(foodNameAndWeight);
 
 	    TextView carbsTextView = (TextView) rowView.findViewById(R.id.meal_item_carbs);

@@ -53,7 +53,7 @@ public class MealFragment extends ListFragment {
 		mRootView = inflater.inflate(R.layout.fragment_meal, container, false);
 	    
 		ArrayList<FoodItem> foodItemList = mMainActivityNotifier.getFoodItemList();
-    	mFoodItemArrayAdapter = new FoodItemArrayAdapter(getActivity(), foodItemList);
+    	mFoodItemArrayAdapter = new FoodItemArrayAdapter(getActivity(), foodItemList, mMainActivityNotifier.getLanguage());
 		setListAdapter(mFoodItemArrayAdapter);
 		
 		return mRootView;

@@ -241,7 +241,7 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	private void updateTotalCarbsText() {
-		mTotalCarbsTextView.setText(String.format("%.2f", mTotalCarbsInGrams));
+		mTotalCarbsTextView.setText(String.format("%.2f g", mTotalCarbsInGrams));
 	}
 	
 	private void updateMealTabText() {

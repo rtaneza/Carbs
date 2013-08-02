@@ -27,8 +27,7 @@ public class MealTotalFragment extends Fragment {
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-		ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_meal_total,
-                container);
+		ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_meal_total, container);
         return rootView;
 	}
 }
