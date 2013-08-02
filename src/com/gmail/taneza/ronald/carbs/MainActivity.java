@@ -48,6 +48,7 @@ public class MainActivity extends ActionBarActivity implements
 	public final static int ALL_FOODS_TAB_INDEX = 0;
 	public final static int MEAL_TAB_INDEX = 1;
 
+	public final static String STATE_FOOD_LIST_KEY = "STATE_FOOD_LIST_KEY";
 	public final static String STATE_TOTAL_CARBS_KEY = "STATE_TOTAL_CARBS_KEY";
 	
 	private Language mLanguage;
@@ -65,11 +66,13 @@ public class MainActivity extends ActionBarActivity implements
 
 		if (savedInstanceState != null) {
 			// This is called after an orientation change.
+			mFoodItemList = savedInstanceState.getParcelableArrayList(STATE_FOOD_LIST_KEY);
 			mTotalCarbsInGrams = savedInstanceState.getFloat(STATE_TOTAL_CARBS_KEY);
+        } else {
+        	mFoodItemList = new ArrayList<FoodItem>();
+        	mTotalCarbsInGrams = 0;
         }
 
-		mFoodItemList = new ArrayList<FoodItem>();
-		
  		// Restore preferences
  		SharedPreferences settings = getPreferences(0);
  		mLanguage = Language.values()[settings.getInt(PREF_LANGUAGE, Language.DUTCH.ordinal())];
@@ -77,11 +80,10 @@ public class MainActivity extends ActionBarActivity implements
         setContentView(R.layout.activity_main);
 
  		mTotalCarbsTextView = (TextView)findViewById(R.id.meal_total_carbs_text);
- 		updateTotalCarbsText();
  		
  		Button clearButton = (Button)findViewById(R.id.meal_total_clear_button);
  		clearButton.setOnClickListener(this);
-         
+
         mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mPagerAdapter);
@@ -97,13 +99,16 @@ public class MainActivity extends ActionBarActivity implements
                 .setTabListener(this));
         
         mViewPager.setCurrentItem(ALL_FOODS_TAB_INDEX);
-        
+
         actionBar.setHomeButtonEnabled(false);
+        
+ 		updateMealAndCarbsText();
     }
     
 	@Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(STATE_FOOD_LIST_KEY, mFoodItemList);
         outState.putFloat(STATE_TOTAL_CARBS_KEY, mTotalCarbsInGrams);
     }
 	
@@ -175,7 +180,7 @@ public class MainActivity extends ActionBarActivity implements
         super.onCreateOptionsMenu(menu);
         mOptionsMenu = menu;
 		getMenuInflater().inflate(R.menu.menu_main, menu);
-		setLanguageInOptionsMenu(mLanguage);
+		setLanguageTextInOptionsMenu(mLanguage);
         return true;
     }
 
@@ -204,14 +209,16 @@ public class MainActivity extends ActionBarActivity implements
     }
 
 	private void setLanguage(Language language) {
-		setLanguageInOptionsMenu(language);
+		setLanguageTextInOptionsMenu(language);
 		
-    	String fragmentTag = getFragmentTag(ALL_FOODS_TAB_INDEX);
-    	AllFoodsFragment fragment = (AllFoodsFragment)getSupportFragmentManager().findFragmentByTag(fragmentTag);
-    	fragment.setLanguage(language);
+    	AllFoodsFragment allFoodsFragment = (AllFoodsFragment)getFragment(ALL_FOODS_TAB_INDEX);
+    	allFoodsFragment.setLanguage(language);
+    	
+    	MealFragment mealFragment = (MealFragment)getFragment(MEAL_TAB_INDEX);
+    	mealFragment.setLanguage(language);
 	}
 	
-	private void setLanguageInOptionsMenu(Language language) {
+	private void setLanguageTextInOptionsMenu(Language language) {
 		int languageId = (language == Language.ENGLISH) ?
 				R.string.menu_language_english : R.string.menu_language_dutch;
 		MenuItem languageMenuItem = mOptionsMenu.findItem(R.id.menu_language);
@@ -237,31 +244,43 @@ public class MainActivity extends ActionBarActivity implements
 		mTotalCarbsTextView.setText(String.format("%.2f", mTotalCarbsInGrams));
 	}
 	
+	private void updateMealTabText() {
+		final ActionBar actionBar = getSupportActionBar();
+        Tab mealTab = actionBar.getTabAt(MEAL_TAB_INDEX);
+        String origTitle = getResources().getString(R.string.title_activity_meal);
+        
+        int numFoodItems = mFoodItemList.size();
+        if (numFoodItems > 0) {
+        	mealTab.setText(String.format("%s (%d)", origTitle, numFoodItems));
+        } else {
+        	mealTab.setText(origTitle);
+        }
+	}
+	
+	private void updateMealAndCarbsText() {
+		updateTotalCarbsText();
+    	updateMealTabText();
+	}
+	
 	private void clearMeal() {
 		mTotalCarbsInGrams = 0;
 		mFoodItemList.clear();
 		
-		updateTotalCarbsText();
+		updateMealAndCarbsText();
 		
-		String fragmentTag = getFragmentTag(MEAL_TAB_INDEX);
-    	MealFragment fragment = (MealFragment)getSupportFragmentManager().findFragmentByTag(fragmentTag);
+    	MealFragment fragment = (MealFragment)getFragment(MEAL_TAB_INDEX);
     	fragment.clearMeal();
-    	
-    	setMealTabTitleSuffix("");
 	}
 	
 	@Override
 	public void addFoodItemToMeal(FoodItem foodItem) {
 		mTotalCarbsInGrams += foodItem.getNumCarbsInGrams();
 		mFoodItemList.add(foodItem);
-		updateTotalCarbsText();
-		
-		String fragmentTag = getFragmentTag(MEAL_TAB_INDEX);
-    	MealFragment fragment = (MealFragment)getSupportFragmentManager().findFragmentByTag(fragmentTag);
-    	//TODO
-    	fragment.addFood(foodItem);
+
+		updateMealAndCarbsText();
     	
-    	setMealTabTitleSuffix(String.format(" (%d)", mFoodItemList.size()));
+    	MealFragment fragment = (MealFragment)getFragment(MEAL_TAB_INDEX);
+    	fragment.addFood(foodItem);
 	}
 
 	@Override
@@ -269,14 +288,13 @@ public class MainActivity extends ActionBarActivity implements
 		return mLanguage;
 	}
 	
-	private void setMealTabTitleSuffix(String suffix) {
-		final ActionBar actionBar = getSupportActionBar();
-        Tab mealTab = actionBar.getTabAt(MEAL_TAB_INDEX);
-        String origTitle = getResources().getString(R.string.title_activity_meal);
-        if (!suffix.isEmpty()) {
-        	mealTab.setText(String.format("%s%s", origTitle, suffix));
-        } else {
-        	mealTab.setText(origTitle);
-        }
+	private Fragment getFragment(int index) {
+		String fragmentTag = getFragmentTag(index);
+    	return getSupportFragmentManager().findFragmentByTag(fragmentTag);
+	}
+
+	@Override
+	public ArrayList<FoodItem> getFoodItemList() {
+		return mFoodItemList;
 	}
 }

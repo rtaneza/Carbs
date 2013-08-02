@@ -35,6 +35,7 @@ public class MealFragment extends ListFragment {
 
 	private MainActivityNotifier mMainActivityNotifier;
 	private View mRootView;
+	//TODO: change to ArrayAdapter<FoodItem>
 	private ArrayAdapter<String> mArrayAdapter;
 
 	@Override
@@ -53,13 +54,44 @@ public class MealFragment extends ListFragment {
              Bundle savedInstanceState) {
 		
 		mRootView = inflater.inflate(R.layout.fragment_meal, container, false);
-        
+
+		ArrayList<FoodItem> foodItemList = mMainActivityNotifier.getFoodItemList();
+		ArrayList<String> foodItemNames = new ArrayList<String>();
+    	for (FoodItem foodItem: foodItemList) {
+    		foodItemNames.add(getFoodName(foodItem));
+    	}
+    	
 		mArrayAdapter = new ArrayAdapter<String>(getActivity(),
-		        R.layout.meal_item, R.id.meal_item_name, new ArrayList<String>());
+		        R.layout.meal_item, R.id.meal_item_name, foodItemNames);
 		setListAdapter(mArrayAdapter);
          
         return mRootView;
 	}
+	
+    private String getFoodName(FoodItem foodItem) {
+    	if (mMainActivityNotifier.getLanguage() == Language.ENGLISH) {
+    		return foodItem.mEnglishName;
+    	} else {
+    		return foodItem.mDutchName;
+    	}
+    }
+	
+	public void addFood(FoodItem foodItem) {
+		mArrayAdapter.add(getFoodName(foodItem));
+	}
+	
+	public void clearMeal() {
+		mArrayAdapter.clear();
+	}
+	
+	public void setLanguage(Language language) {
+		mArrayAdapter.clear();
+		
+		ArrayList<FoodItem> foodItemList = mMainActivityNotifier.getFoodItemList();
+    	for (FoodItem foodItem: foodItemList) {
+    		mArrayAdapter.add(getFoodName(foodItem));
+    	}
+    }
 	
     @Override 
     public void onListItemClick(ListView l, View v, int position, long id) {
@@ -78,13 +110,4 @@ public class MealFragment extends ListFragment {
 //
 //    	startActivityForResult(intent, 0);
     }
-	
-	public void addFood(FoodItem foodItem) {
-		// TODO
-		mArrayAdapter.add(foodItem.mDutchName);
-	}
-	
-	public void clearMeal() {
-		mArrayAdapter.clear();
-	}
 }
