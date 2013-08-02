@@ -63,7 +63,7 @@ public class AllFoodsFragment extends ListFragment
 	    try {
 	    	mMainActivityNotifier = (MainActivityNotifier) activity;
 	    } catch(ClassCastException e) {
-	        throw new ClassCastException(activity.toString() + " must implement MealCounter");
+	        throw new ClassCastException(activity.toString() + " must implement MainActivityNotifier");
 	    }
 	}
 	
@@ -86,7 +86,8 @@ public class AllFoodsFragment extends ListFragment
 	
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		String queryString = mDbAdapter.getFoodNameQueryString(mSearchEditText.getText().toString().trim());		
+		String searchText = mSearchEditText.getText().toString();
+		String queryString = mDbAdapter.getFoodNameQueryString(searchText);		
 		return new SQLiteCursorLoader(getActivity(), mDbAdapter, queryString, null);
 	}
 
@@ -128,7 +129,7 @@ public class AllFoodsFragment extends ListFragment
         // Make sure the request was successful
         if (resultCode == Activity.RESULT_OK) {
     		FoodItem foodItem = data.getParcelableExtra(FOOD_ITEM_RESULT);
-    		mMainActivityNotifier.addCarbsToMeal(foodItem.getNumCarbsInGrams());
+    		mMainActivityNotifier.addFoodItemToMeal(foodItem);
         }
     }
     

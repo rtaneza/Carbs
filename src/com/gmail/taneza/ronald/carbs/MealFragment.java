@@ -17,59 +17,46 @@
 package com.gmail.taneza.ronald.carbs;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteCursor;
 import android.os.Bundle;
-import android.support.v4.content.Loader;
 import android.support.v4.app.ListFragment;
-import android.support.v4.app.LoaderManager;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
-
-import com.commonsware.cwac.loaderex.acl.SQLiteCursorLoader;
 
 public class MealFragment extends ListFragment {
-
-	public final static int DEFAULT_WEIGHT_IN_GRAMS = 100;
 
 	public final static String LANGUAGE_MESSAGE = "com.gmail.taneza.ronald.carbs.LANGUAGE_MESSAGE";
 	public final static String FOOD_ITEM_MESSAGE = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_MESSAGE";
 	public final static String FOOD_ITEM_RESULT = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_RESULT";
-	
+
+	private MainActivityNotifier mMainActivityNotifier;
 	private View mRootView;
-	private TextView mTotalCarbsTextView;
-	
-	private float mTotalCarbsInGrams;
+	private ArrayAdapter<String> mArrayAdapter;
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		
+	    try {
+	    	mMainActivityNotifier = (MainActivityNotifier) activity;
+	    } catch(ClassCastException e) {
+	        throw new ClassCastException(activity.toString() + " must implement MainActivityNotifier");
+	    }
+	}
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
              Bundle savedInstanceState) {
 		
 		mRootView = inflater.inflate(R.layout.fragment_meal, container, false);
-
-// 		mTotalCarbsTextView = (TextView) mRootView.findViewById(R.id.meal_total_carbs_text);
-// 		updateTotalCarbs();
-// 		
-// 		Button clearButton = (Button)mRootView.findViewById(R.id.meal_clear_total_carbs_button);
- 		//clearButton.setOnClickListener(this);
-         
-        initListAdapter();
+        
+		mArrayAdapter = new ArrayAdapter<String>(getActivity(),
+		        R.layout.meal_item, R.id.meal_item_name, new ArrayList<String>());
+		setListAdapter(mArrayAdapter);
          
         return mRootView;
 	}
@@ -91,40 +78,13 @@ public class MealFragment extends ListFragment {
 //
 //    	startActivityForResult(intent, 0);
     }
-    
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Make sure the request was successful
-        if (resultCode == Activity.RESULT_OK) {
-    		FoodItem foodItem = data.getParcelableExtra(FOOD_ITEM_RESULT);
-    		mTotalCarbsInGrams += foodItem.getNumCarbsInGrams();
-    		updateTotalCarbs();
-        }
-    }
-    
-	private void initListAdapter() {
-	    String[] values = new String[] { "Android", "iPhone", "WindowsMobile",
-	        "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
-	        "Linux", "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux",
-	        "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux", "OS/2",
-	        "Android", "iPhone", "WindowsMobile" };
-
-	    final ArrayList<String> list = new ArrayList<String>();
-	    for (int i = 0; i < values.length; ++i) {
-	      list.add(values[i]);
-	    }
-	    final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-	        R.layout.meal_item, R.id.meal_item_name, list);
-	    setListAdapter(adapter);
-        
-        restartLoader();
+	
+	public void addFood(FoodItem foodItem) {
+		// TODO
+		mArrayAdapter.add(foodItem.mDutchName);
 	}
 	
-	private void restartLoader() {
-		//getLoaderManager().restartLoader(0, null, this);
-	}
-	
-	private void updateTotalCarbs() {
-		mTotalCarbsTextView.setText(String.format("%.2f", mTotalCarbsInGrams));
+	public void clearMeal() {
+		mArrayAdapter.clear();
 	}
 }

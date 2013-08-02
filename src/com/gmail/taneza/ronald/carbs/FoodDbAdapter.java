@@ -46,8 +46,11 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     }
 	
     public String getFoodNameQueryString(String foodName) {
+    	// TODO: add setting for this
     	String whereClause = getLanguageString() + " like '%" + foodName + "%'";
-		return getQueryString(whereClause.toString());
+    	// whole word only: does not work in sqlite
+    	//String whereClause = getLanguageString() + " like '%[^a-z]" + foodName + "[^a-z]%'";
+    	return getQueryString(whereClause.toString());
 	}
     
     public String getQueryString(String whereClause) {

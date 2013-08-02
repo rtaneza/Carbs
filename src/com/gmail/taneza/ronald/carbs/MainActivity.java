@@ -16,6 +16,8 @@
 
 package com.gmail.taneza.ronald.carbs;
 
+import java.util.ArrayList;
+
 import android.annotation.TargetApi;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -26,8 +28,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBar.Tab;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -46,8 +48,12 @@ public class MainActivity extends ActionBarActivity implements
 	public final static int ALL_FOODS_TAB_INDEX = 0;
 	public final static int MEAL_TAB_INDEX = 1;
 
+	public final static String STATE_TOTAL_CARBS_KEY = "STATE_TOTAL_CARBS_KEY";
+	
 	private Language mLanguage;
 	private float mTotalCarbsInGrams;
+    private ArrayList<FoodItem> mFoodItemList;
+	
 	private TextView mTotalCarbsTextView;
     private ViewPager mViewPager;
     private MainPagerAdapter mPagerAdapter;
@@ -55,15 +61,15 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-    	Log.i("MainActivity", String.format("onCreate: savedInstanceState = %s", 
-    			savedInstanceState != null ? savedInstanceState.toString() : "null"));
-    	
         super.onCreate(savedInstanceState);
 
-        if (isFinishing()) {
-            return;
+		if (savedInstanceState != null) {
+			// This is called after an orientation change.
+			mTotalCarbsInGrams = savedInstanceState.getFloat(STATE_TOTAL_CARBS_KEY);
         }
 
+		mFoodItemList = new ArrayList<FoodItem>();
+		
  		// Restore preferences
  		SharedPreferences settings = getPreferences(0);
  		mLanguage = Language.values()[settings.getInt(PREF_LANGUAGE, Language.DUTCH.ordinal())];
@@ -94,7 +100,13 @@ public class MainActivity extends ActionBarActivity implements
         
         actionBar.setHomeButtonEnabled(false);
     }
-
+    
+	@Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putFloat(STATE_TOTAL_CARBS_KEY, mTotalCarbsInGrams);
+    }
+	
 	@Override
     protected void onStop(){
        super.onStop();
@@ -194,8 +206,8 @@ public class MainActivity extends ActionBarActivity implements
 	private void setLanguage(Language language) {
 		setLanguageInOptionsMenu(language);
 		
-    	String allFoodsFragmentTag = getFragmentTag(ALL_FOODS_TAB_INDEX);
-    	AllFoodsFragment fragment = (AllFoodsFragment)getSupportFragmentManager().findFragmentByTag(allFoodsFragmentTag);
+    	String fragmentTag = getFragmentTag(ALL_FOODS_TAB_INDEX);
+    	AllFoodsFragment fragment = (AllFoodsFragment)getSupportFragmentManager().findFragmentByTag(fragmentTag);
     	fragment.setLanguage(language);
 	}
 	
@@ -216,8 +228,7 @@ public class MainActivity extends ActionBarActivity implements
 	public void onClick(View view) {
         switch (view.getId()) {
         	case R.id.meal_total_clear_button:
-        		mTotalCarbsInGrams = 0;
-        		updateTotalCarbsText();
+        		clearMeal();
         		break;
         }
 	}
@@ -226,14 +237,46 @@ public class MainActivity extends ActionBarActivity implements
 		mTotalCarbsTextView.setText(String.format("%.2f", mTotalCarbsInGrams));
 	}
 	
-	@Override
-	public void addCarbsToMeal(float numCarbsInGrams) {
-		mTotalCarbsInGrams += numCarbsInGrams;
+	private void clearMeal() {
+		mTotalCarbsInGrams = 0;
+		mFoodItemList.clear();
+		
 		updateTotalCarbsText();
+		
+		String fragmentTag = getFragmentTag(MEAL_TAB_INDEX);
+    	MealFragment fragment = (MealFragment)getSupportFragmentManager().findFragmentByTag(fragmentTag);
+    	fragment.clearMeal();
+    	
+    	setMealTabTitleSuffix("");
+	}
+	
+	@Override
+	public void addFoodItemToMeal(FoodItem foodItem) {
+		mTotalCarbsInGrams += foodItem.getNumCarbsInGrams();
+		mFoodItemList.add(foodItem);
+		updateTotalCarbsText();
+		
+		String fragmentTag = getFragmentTag(MEAL_TAB_INDEX);
+    	MealFragment fragment = (MealFragment)getSupportFragmentManager().findFragmentByTag(fragmentTag);
+    	//TODO
+    	fragment.addFood(foodItem);
+    	
+    	setMealTabTitleSuffix(String.format(" (%d)", mFoodItemList.size()));
 	}
 
 	@Override
 	public Language getLanguage() {
 		return mLanguage;
+	}
+	
+	private void setMealTabTitleSuffix(String suffix) {
+		final ActionBar actionBar = getSupportActionBar();
+        Tab mealTab = actionBar.getTabAt(MEAL_TAB_INDEX);
+        String origTitle = getResources().getString(R.string.title_activity_meal);
+        if (!suffix.isEmpty()) {
+        	mealTab.setText(String.format("%s%s", origTitle, suffix));
+        } else {
+        	mealTab.setText(origTitle);
+        }
 	}
 }
