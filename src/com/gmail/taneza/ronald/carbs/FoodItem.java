@@ -16,11 +16,15 @@
 
 package com.gmail.taneza.ronald.carbs;
 
+import java.io.Serializable;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class FoodItem implements Parcelable {
+public class FoodItem implements Parcelable, Serializable {
 
+	private static final long serialVersionUID = 6139044679990035502L;
+	
 	public String mEnglishName;
 	public String mDutchName;
 	public int mWeightInGrams;

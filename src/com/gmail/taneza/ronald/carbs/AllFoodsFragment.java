@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteCursor;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.content.Loader;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
@@ -45,7 +46,7 @@ import com.commonsware.cwac.loaderex.acl.SQLiteCursorLoader;
 // create recent food list
 // save last used weight per food
 
-public class AllFoodsFragment extends ListFragment 
+public class AllFoodsFragment extends BaseListFragment 
     implements LoaderManager.LoaderCallbacks<Cursor> {
 
 	public final static int DEFAULT_WEIGHT_IN_GRAMS = 100;
@@ -54,21 +55,9 @@ public class AllFoodsFragment extends ListFragment
 	public final static String FOOD_ITEM_MESSAGE = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_MESSAGE";
 	public final static String FOOD_ITEM_RESULT = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_RESULT";
 	
-	private MainActivityNotifier mMainActivityNotifier;
 	private FoodDbAdapter mDbAdapter;
     private SimpleCursorAdapter mAdapter;
 	private ClearableEditText mSearchEditText;
-
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		
-	    try {
-	    	mMainActivityNotifier = (MainActivityNotifier) activity;
-	    } catch(ClassCastException e) {
-	        throw new ClassCastException(activity.toString() + " must implement MainActivityNotifier");
-	    }
-	}
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -122,7 +111,7 @@ public class AllFoodsFragment extends ListFragment
     	
     	Intent intent = new Intent(getActivity(), FoodDetailsActivity.class);
     	intent.putExtra(LANGUAGE_MESSAGE, mMainActivityNotifier.getLanguage());
-    	intent.putExtra(FOOD_ITEM_MESSAGE, foodItem);
+    	intent.putExtra(FOOD_ITEM_MESSAGE, (Parcelable)foodItem);
 
     	startActivityForResult(intent, 0);
     }

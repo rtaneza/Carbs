@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AllFoodsFragment">
+    tools:context=".RecentFoodsFragment">
 	    
 	<LinearLayout
 	    android:layout_width="match_parent"
@@ -17,7 +17,7 @@
 	  	<TextView android:id="@id/android:empty"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:text="@string/meal_no_items"
+	        android:text="@string/recent_foods_no_items"
 			android:enabled="false"/>
 	        
 	</LinearLayout>

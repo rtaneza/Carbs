@@ -16,11 +16,21 @@
 
 package com.gmail.taneza.ronald.carbs;
 
-import java.util.ArrayList;
+import android.app.Activity;
+import android.support.v4.app.ListFragment;
 
-public interface MainActivityNotifier {
-	public Language getLanguage();
-	public void addFoodItemToMeal(FoodItem foodItem);
-	public ArrayList<FoodItem> getFoodItemsList();
-	public ArrayList<FoodItem> getRecentFoodsList();
+public class BaseListFragment extends ListFragment {
+
+	protected MainActivityNotifier mMainActivityNotifier;
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		
+	    try {
+	    	mMainActivityNotifier = (MainActivityNotifier) activity;
+	    } catch(ClassCastException e) {
+	        throw new ClassCastException(activity.toString() + " must implement MainActivityNotifier");
+	    }
+	}
 }

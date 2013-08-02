@@ -23,8 +23,14 @@
 	</item>
 	
     <item
-        android:id="@+id/menu_clear_meal"
+        android:id="@+id/menu_clear_recent_foods"
         android:orderInCategory="1"
+        carbs:showAsAction="never"
+        android:title="@string/menu_clear_recent_foods"/>
+    
+    <item
+        android:id="@+id/menu_clear_meal"
+        android:orderInCategory="2"
         carbs:showAsAction="never"
         android:title="@string/menu_clear_meal"/>
     

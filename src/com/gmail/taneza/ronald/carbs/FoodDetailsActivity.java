@@ -18,6 +18,7 @@ package com.gmail.taneza.ronald.carbs;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -112,12 +113,12 @@ public class FoodDetailsActivity extends ActionBarActivity {
 	
 	public void addToMeal(View v) {
 		Intent data = getIntent();
-		data.putExtra(AllFoodsFragment.FOOD_ITEM_RESULT, mFoodItem);
+		data.putExtra(AllFoodsFragment.FOOD_ITEM_RESULT, (Parcelable)mFoodItem);
 	    setResult(RESULT_OK, data);
 		finish();
 	}
 	
 	private void updateCarbsText() {
-		mNumCarbsTextView.setText(String.format("%.2f", mFoodItem.getNumCarbsInGrams()));
+		mNumCarbsTextView.setText(String.format("%.1f", mFoodItem.getNumCarbsInGrams()));
 	}
 }

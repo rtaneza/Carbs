@@ -26,33 +26,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-public class MealFragment extends ListFragment {
+public class MealFragment extends BaseListFragment {
 
 	public final static String LANGUAGE_MESSAGE = "com.gmail.taneza.ronald.carbs.LANGUAGE_MESSAGE";
 	public final static String FOOD_ITEM_MESSAGE = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_MESSAGE";
 	public final static String FOOD_ITEM_RESULT = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_RESULT";
 
-	private MainActivityNotifier mMainActivityNotifier;
 	private View mRootView;
 	private FoodItemArrayAdapter mFoodItemArrayAdapter;
-
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		
-	    try {
-	    	mMainActivityNotifier = (MainActivityNotifier) activity;
-	    } catch(ClassCastException e) {
-	        throw new ClassCastException(activity.toString() + " must implement MainActivityNotifier");
-	    }
-	}
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
              Bundle savedInstanceState) {
 		mRootView = inflater.inflate(R.layout.fragment_meal, container, false);
 	    
-		ArrayList<FoodItem> foodItemList = mMainActivityNotifier.getFoodItemList();
+		ArrayList<FoodItem> foodItemList = mMainActivityNotifier.getFoodItemsList();
     	mFoodItemArrayAdapter = new FoodItemArrayAdapter(getActivity(), foodItemList, mMainActivityNotifier.getLanguage());
 		setListAdapter(mFoodItemArrayAdapter);
 		

@@ -24,9 +24,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class FoodItemArrayAdapter extends FoodItemBaseArrayAdapter {
-	public FoodItemArrayAdapter(Context context, ArrayList<FoodItem> values, Language language) {
-	    super(context, R.layout.fragment_meal, values, language);
+public class RecentFoodsArrayAdapter extends FoodItemBaseArrayAdapter {
+	public RecentFoodsArrayAdapter(Context context, ArrayList<FoodItem> values, Language language) {
+	    super(context, R.layout.fragment_recent_foods, values, language);
 	}
     
 	@Override

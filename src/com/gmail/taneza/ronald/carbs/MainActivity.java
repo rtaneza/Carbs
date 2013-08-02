@@ -16,7 +16,12 @@
 
 package com.gmail.taneza.ronald.carbs;
 
+import java.io.IOException;
 import java.util.ArrayList;
+
+import org.apache.pig.impl.util.ObjectSerializer;
+
+import com.cedarsoftware.util.DeepEquals;
 
 import android.annotation.TargetApi;
 import android.content.SharedPreferences;
@@ -32,9 +37,6 @@ import android.support.v7.app.ActionBar.Tab;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.TextView;
 
 public class MainActivity extends ActionBarActivity implements
@@ -43,38 +45,53 @@ public class MainActivity extends ActionBarActivity implements
         MainActivityNotifier {
 
 	public final static String PREF_LANGUAGE = "PREF_LANGUAGE";
+	public final static String PREF_RECENT_FOODS_LIST = "PREF_RECENT_FOODS_LIST";
+
+	public final static int RECENT_FOODS_LIST_MAX_SIZE = 30;
 	
 	public final static int ALL_FOODS_TAB_INDEX = 0;
-	public final static int MEAL_TAB_INDEX = 1;
+	public final static int RECENT_FOODS_TAB_INDEX = 1;
+	public final static int MEAL_TAB_INDEX = 2;
 
-	public final static String STATE_FOOD_LIST_KEY = "STATE_FOOD_LIST_KEY";
 	public final static String STATE_TOTAL_CARBS_KEY = "STATE_TOTAL_CARBS_KEY";
+	public final static String STATE_FOOD_ITEMS_LIST_KEY = "STATE_FOOD_ITEMS_LIST_KEY";
 	
 	private Language mLanguage;
 	private float mTotalCarbsInGrams;
-    private ArrayList<FoodItem> mFoodItemList;
+    private ArrayList<FoodItem> mFoodItemsList;
+    private ArrayList<FoodItem> mRecentFoodsList;
 	
 	private TextView mTotalCarbsTextView;
     private ViewPager mViewPager;
     private MainPagerAdapter mPagerAdapter;
     private Menu mOptionsMenu;
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
 		if (savedInstanceState != null) {
 			// This is called after an orientation change.
-			mFoodItemList = savedInstanceState.getParcelableArrayList(STATE_FOOD_LIST_KEY);
 			mTotalCarbsInGrams = savedInstanceState.getFloat(STATE_TOTAL_CARBS_KEY);
+			mFoodItemsList = savedInstanceState.getParcelableArrayList(STATE_FOOD_ITEMS_LIST_KEY);
         } else {
-        	mFoodItemList = new ArrayList<FoodItem>();
         	mTotalCarbsInGrams = 0;
+        	mFoodItemsList = new ArrayList<FoodItem>();
         }
 
  		// Restore preferences
- 		SharedPreferences settings = getPreferences(0);
- 		mLanguage = Language.values()[settings.getInt(PREF_LANGUAGE, Language.DUTCH.ordinal())];
+ 		SharedPreferences prefs = getPreferences(0);
+ 		mLanguage = Language.values()[prefs.getInt(PREF_LANGUAGE, Language.DUTCH.ordinal())];
+ 		
+ 		try {
+ 			mRecentFoodsList = (ArrayList<FoodItem>) ObjectSerializer.deserialize(
+ 					prefs.getString(PREF_RECENT_FOODS_LIST, ObjectSerializer.serialize(new ArrayList<FoodItem>())));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
  		
         setContentView(R.layout.activity_main);
 
@@ -91,6 +108,9 @@ public class MainActivity extends ActionBarActivity implements
                 .setText(R.string.title_all_foods)
                 .setTabListener(this));
         actionBar.addTab(actionBar.newTab()
+                .setText(R.string.title_recent_foods)
+                .setTabListener(this));
+        actionBar.addTab(actionBar.newTab()
                 .setText(R.string.title_meal)
                 .setTabListener(this));
         
@@ -104,8 +124,8 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(STATE_FOOD_LIST_KEY, mFoodItemList);
         outState.putFloat(STATE_TOTAL_CARBS_KEY, mTotalCarbsInGrams);
+        outState.putParcelableArrayList(STATE_FOOD_ITEMS_LIST_KEY, mFoodItemsList);
     }
 	
 	@Override
@@ -114,9 +134,14 @@ public class MainActivity extends ActionBarActivity implements
 
       // We need an Editor object to make preference changes.
       // All objects are from android.context.Context
-      SharedPreferences settings = getPreferences(0);
-      SharedPreferences.Editor editor = settings.edit();
+      SharedPreferences prefs = getPreferences(0);
+      SharedPreferences.Editor editor = prefs.edit();
       editor.putInt(PREF_LANGUAGE, mLanguage.ordinal());
+      try {
+    	  editor.putString(PREF_RECENT_FOODS_LIST, ObjectSerializer.serialize(mRecentFoodsList));
+      } catch (IOException e) {
+    	  e.printStackTrace();
+      }
 
       // Commit the edits!
       editor.commit();
@@ -158,6 +183,8 @@ public class MainActivity extends ActionBarActivity implements
             switch (position) {
                 case ALL_FOODS_TAB_INDEX:
                     return new AllFoodsFragment();
+                case RECENT_FOODS_TAB_INDEX:
+                    return new RecentFoodsFragment();
                 case MEAL_TAB_INDEX:
                 	return new MealFragment();
             }
@@ -166,7 +193,7 @@ public class MainActivity extends ActionBarActivity implements
 
         @Override
         public int getCount() {
-            return 2;
+            return 3;
         }
     }
 
@@ -190,6 +217,9 @@ public class MainActivity extends ActionBarActivity implements
 	        case R.id.menu_language_option_dutch:
 	        	setLanguage(Language.DUTCH);
 	        	break;
+	        case R.id.menu_clear_recent_foods:
+	        	clearRecentFoods();
+	        	break;
 	        case R.id.menu_clear_meal:
         		clearMeal();
 	        	break;
@@ -208,6 +238,9 @@ public class MainActivity extends ActionBarActivity implements
 			
 	    	AllFoodsFragment allFoodsFragment = (AllFoodsFragment)getFragment(ALL_FOODS_TAB_INDEX);
 	    	allFoodsFragment.setLanguage(language);
+
+	    	RecentFoodsFragment recentFoodsFragment = (RecentFoodsFragment)getFragment(RECENT_FOODS_TAB_INDEX);
+	    	recentFoodsFragment.setLanguage(language);
 	    	
 	    	MealFragment mealFragment = (MealFragment)getFragment(MEAL_TAB_INDEX);
 	    	mealFragment.setLanguage(language);
@@ -228,7 +261,7 @@ public class MainActivity extends ActionBarActivity implements
 	}
 	
 	private void updateTotalCarbsText() {
-		mTotalCarbsTextView.setText(String.format("%.2f g", mTotalCarbsInGrams));
+		mTotalCarbsTextView.setText(String.format("%.1f g", mTotalCarbsInGrams));
 	}
 	
 	private void updateMealTabText() {
@@ -236,7 +269,7 @@ public class MainActivity extends ActionBarActivity implements
         Tab mealTab = actionBar.getTabAt(MEAL_TAB_INDEX);
         String origTitle = getResources().getString(R.string.title_activity_meal);
         
-        int numFoodItems = mFoodItemList.size();
+        int numFoodItems = mFoodItemsList.size();
         if (numFoodItems > 0) {
         	mealTab.setText(String.format("%s (%d)", origTitle, numFoodItems));
         } else {
@@ -248,23 +281,55 @@ public class MainActivity extends ActionBarActivity implements
 		updateTotalCarbsText();
     	updateMealTabText();
     	
-    	MealFragment fragment = (MealFragment)getFragment(MEAL_TAB_INDEX);
-    	if (fragment != null) {
-    		fragment.notifyFoodItemListChanged();
+    	RecentFoodsFragment recentFoodsFragment = (RecentFoodsFragment)getFragment(RECENT_FOODS_TAB_INDEX);
+		// During an orientation change, the fragment is still null
+    	if (recentFoodsFragment != null) {
+    		recentFoodsFragment.notifyFoodItemListChanged();
     	}
+    	
+    	MealFragment mealFragment = (MealFragment)getFragment(MEAL_TAB_INDEX);
+		// During an orientation change, the fragment is still null
+    	if (mealFragment != null) {
+    		mealFragment.notifyFoodItemListChanged();
+    	}
+	}
+
+	private void clearRecentFoods() {
+		mRecentFoodsList.clear();
+		updateMealAndCarbsData();
 	}
 	
 	private void clearMeal() {
 		mTotalCarbsInGrams = 0;
-		mFoodItemList.clear();
-		
+		mFoodItemsList.clear();
 		updateMealAndCarbsData();
+	}
+	
+	private void addFoodItemtoRecentFoodsList(FoodItem foodItem) {
+		if (mRecentFoodsList.size() >= RECENT_FOODS_LIST_MAX_SIZE) {
+			return;
+		}
+		
+		boolean duplicate = false;
+		for (FoodItem item : mRecentFoodsList) {
+			if (DeepEquals.deepEquals(item, foodItem)) {
+				duplicate = true;
+				break;
+			}
+		}
+		
+		// insert into the start of the mRecentFoodsList if not yet present
+	    if (!duplicate) {
+	    	mRecentFoodsList.add(0, foodItem);
+	    }
 	}
 	
 	@Override
 	public void addFoodItemToMeal(FoodItem foodItem) {
 		mTotalCarbsInGrams += foodItem.getNumCarbsInGrams();
-		mFoodItemList.add(foodItem);
+		mFoodItemsList.add(foodItem);
+		
+		addFoodItemtoRecentFoodsList(foodItem);
 
 		updateMealAndCarbsData();
 	}
@@ -280,7 +345,12 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	@Override
-	public ArrayList<FoodItem> getFoodItemList() {
-		return mFoodItemList;
+	public ArrayList<FoodItem> getFoodItemsList() {
+		return mFoodItemsList;
+	}
+
+	@Override
+	public ArrayList<FoodItem> getRecentFoodsList() {
+		return mRecentFoodsList;
 	}
 }
