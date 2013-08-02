@@ -28,5 +28,6 @@
 		android:paddingTop="0dp"
 		android:paddingBottom="0dp"
 	    />
+	
 </RelativeLayout>
     

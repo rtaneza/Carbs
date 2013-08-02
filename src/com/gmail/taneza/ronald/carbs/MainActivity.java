@@ -102,7 +102,7 @@ public class MainActivity extends ActionBarActivity implements
 
         actionBar.setHomeButtonEnabled(false);
         
- 		updateMealAndCarbsText();
+ 		updateMealAndCarbsData();
     }
     
 	@Override
@@ -257,19 +257,21 @@ public class MainActivity extends ActionBarActivity implements
         }
 	}
 	
-	private void updateMealAndCarbsText() {
+	private void updateMealAndCarbsData() {
 		updateTotalCarbsText();
     	updateMealTabText();
+    	
+    	MealFragment fragment = (MealFragment)getFragment(MEAL_TAB_INDEX);
+    	if (fragment != null) {
+    		fragment.notifyFoodItemListChanged();
+    	}
 	}
 	
 	private void clearMeal() {
 		mTotalCarbsInGrams = 0;
 		mFoodItemList.clear();
 		
-		updateMealAndCarbsText();
-		
-    	MealFragment fragment = (MealFragment)getFragment(MEAL_TAB_INDEX);
-    	fragment.clearMeal();
+		updateMealAndCarbsData();
 	}
 	
 	@Override
@@ -277,10 +279,7 @@ public class MainActivity extends ActionBarActivity implements
 		mTotalCarbsInGrams += foodItem.getNumCarbsInGrams();
 		mFoodItemList.add(foodItem);
 
-		updateMealAndCarbsText();
-    	
-    	MealFragment fragment = (MealFragment)getFragment(MEAL_TAB_INDEX);
-    	fragment.addFood(foodItem);
+		updateMealAndCarbsData();
 	}
 
 	@Override

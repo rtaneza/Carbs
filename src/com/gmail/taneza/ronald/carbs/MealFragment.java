@@ -24,7 +24,6 @@ import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 public class MealFragment extends ListFragment {
@@ -35,8 +34,7 @@ public class MealFragment extends ListFragment {
 
 	private MainActivityNotifier mMainActivityNotifier;
 	private View mRootView;
-	//TODO: change to ArrayAdapter<FoodItem>
-	private ArrayAdapter<String> mArrayAdapter;
+	private FoodItemArrayAdapter mFoodItemArrayAdapter;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -52,45 +50,28 @@ public class MealFragment extends ListFragment {
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
              Bundle savedInstanceState) {
-		
 		mRootView = inflater.inflate(R.layout.fragment_meal, container, false);
-
+	    
 		ArrayList<FoodItem> foodItemList = mMainActivityNotifier.getFoodItemList();
-		ArrayList<String> foodItemNames = new ArrayList<String>();
-    	for (FoodItem foodItem: foodItemList) {
-    		foodItemNames.add(getFoodName(foodItem));
-    	}
-    	
-		mArrayAdapter = new ArrayAdapter<String>(getActivity(),
-		        R.layout.meal_item, R.id.meal_item_name, foodItemNames);
-		setListAdapter(mArrayAdapter);
-         
-        return mRootView;
+    	mFoodItemArrayAdapter = new FoodItemArrayAdapter(getActivity(), foodItemList);
+		setListAdapter(mFoodItemArrayAdapter);
+		
+		return mRootView;
 	}
 	
-    private String getFoodName(FoodItem foodItem) {
-    	if (mMainActivityNotifier.getLanguage() == Language.ENGLISH) {
-    		return foodItem.mEnglishName;
-    	} else {
-    		return foodItem.mDutchName;
-    	}
-    }
-	
-	public void addFood(FoodItem foodItem) {
-		mArrayAdapter.add(getFoodName(foodItem));
-	}
-	
-	public void clearMeal() {
-		mArrayAdapter.clear();
+	public void notifyFoodItemListChanged() {
+		if (mFoodItemArrayAdapter != null) {
+			// During an orientation change, the MainActivity onCreate() calls notifyFoodItemListChanged()
+			// _before_ onCreateView(), so mFoodItemArrayAdapter is still null
+			mFoodItemArrayAdapter.notifyDataSetChanged();
+		}
 	}
 	
 	public void setLanguage(Language language) {
-		mArrayAdapter.clear();
-		
-		ArrayList<FoodItem> foodItemList = mMainActivityNotifier.getFoodItemList();
-    	for (FoodItem foodItem: foodItemList) {
-    		mArrayAdapter.add(getFoodName(foodItem));
-    	}
+		if (mFoodItemArrayAdapter != null) {
+			mFoodItemArrayAdapter.setLanguage(language);
+			notifyFoodItemListChanged();
+		}
     }
 	
     @Override 

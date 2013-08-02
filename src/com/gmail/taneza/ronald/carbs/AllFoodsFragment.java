@@ -29,11 +29,14 @@ import android.support.v4.app.LoaderManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 import com.commonsware.cwac.loaderex.acl.SQLiteCursorLoader;
 
@@ -156,6 +159,7 @@ public class AllFoodsFragment extends ListFragment
 	
 	private void addSearchTextListener(View rootView) {
 		mSearchEditText = (ClearableEditText) rootView.findViewById(R.id.search_text);
+		
 		mSearchEditText.addTextChangedListener(new TextWatcher() {
 			public void afterTextChanged(Editable s) {
 			}
@@ -166,6 +170,15 @@ public class AllFoodsFragment extends ListFragment
 
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				restartLoader();
+			}
+		});
+		
+		// This listener is called when the Enter key is pressed
+		mSearchEditText.setOnEditorActionListener(new OnEditorActionListener() {
+			@Override
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+				// Ignore the Enter key because we already do the processing every time the text changes
+				return true;
 			}
 		});
 	}
