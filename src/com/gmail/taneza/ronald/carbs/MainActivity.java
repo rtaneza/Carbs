@@ -310,6 +310,7 @@ public class MainActivity extends ActionBarActivity implements
 			return;
 		}
 		
+		//TODO: don't use DeepEquals, implement FoodItem.equals() instead
 		boolean duplicate = false;
 		for (FoodItem item : mRecentFoodsList) {
 			if (DeepEquals.deepEquals(item, foodItem)) {
@@ -330,10 +331,21 @@ public class MainActivity extends ActionBarActivity implements
 		mFoodItemsList.add(foodItem);
 		
 		addFoodItemtoRecentFoodsList(foodItem);
-
 		updateMealAndCarbsData();
 	}
 
+	@Override
+	public void replaceFoodItemInMeal(int index, FoodItem foodItem) {
+		FoodItem oldItem = mFoodItemsList.remove(index);
+		mTotalCarbsInGrams -= oldItem.getNumCarbsInGrams();		
+		
+		mTotalCarbsInGrams += foodItem.getNumCarbsInGrams();
+		mFoodItemsList.add(index, foodItem);
+
+		addFoodItemtoRecentFoodsList(foodItem);
+		updateMealAndCarbsData();
+	}
+	
 	@Override
 	public Language getLanguage() {
 		return mLanguage;

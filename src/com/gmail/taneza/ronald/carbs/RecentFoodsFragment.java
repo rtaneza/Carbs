@@ -18,10 +18,14 @@ package com.gmail.taneza.ronald.carbs;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 public class RecentFoodsFragment extends BaseListFragment {
 
@@ -53,5 +57,25 @@ public class RecentFoodsFragment extends BaseListFragment {
 			mFoodItemArrayAdapter.setLanguage(language);
 			notifyFoodItemListChanged();
 		}
+    }
+
+    @Override 
+    public void onListItemClick(ListView l, View v, int position, long id) {
+    	FoodItem foodItem = (FoodItem)l.getItemAtPosition(position);
+    	
+    	Intent intent = new Intent(getActivity(), FoodDetailsActivity.class);
+    	intent.putExtra(FoodDetailsActivity.LANGUAGE_MESSAGE, mMainActivityNotifier.getLanguage());
+    	intent.putExtra(FoodDetailsActivity.FOOD_ITEM_MESSAGE, (Parcelable)foodItem);
+
+    	startActivityForResult(intent, 0);
+    }
+    
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Make sure the request was successful
+        if (resultCode == Activity.RESULT_OK) {
+    		FoodItem foodItem = data.getParcelableExtra(FoodDetailsActivity.FOOD_ITEM_RESULT);
+    		mMainActivityNotifier.addFoodItemToMeal(foodItem);
+        }
     }
 }

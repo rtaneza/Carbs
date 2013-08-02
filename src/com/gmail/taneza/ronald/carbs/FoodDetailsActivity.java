@@ -29,7 +29,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class FoodDetailsActivity extends ActionBarActivity {
-
+	
+	public final static String LANGUAGE_MESSAGE = "com.gmail.taneza.ronald.carbs.LANGUAGE_MESSAGE";
+	public final static String FOOD_ITEM_MESSAGE = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_MESSAGE";
+	public final static String FOOD_ITEM_RESULT = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_RESULT";
+	
 	private FoodItem mFoodItem;
 	private EditText mWeightEditText;
 	private TextView mNumCarbsTextView;
@@ -44,8 +48,8 @@ public class FoodDetailsActivity extends ActionBarActivity {
 		// Get the message from the intent
 		Intent intent = getIntent();
 
-    	Language language = (Language) intent.getSerializableExtra(AllFoodsFragment.LANGUAGE_MESSAGE);
-		mFoodItem = intent.getParcelableExtra(AllFoodsFragment.FOOD_ITEM_MESSAGE);
+    	Language language = (Language) intent.getSerializableExtra(LANGUAGE_MESSAGE);
+		mFoodItem = intent.getParcelableExtra(FOOD_ITEM_MESSAGE);
 		
 		TextView dutchNameTextView = (TextView) findViewById(R.id.food_details_name);
 		if (language == Language.ENGLISH) {
@@ -113,7 +117,7 @@ public class FoodDetailsActivity extends ActionBarActivity {
 	
 	public void addToMeal(View v) {
 		Intent data = getIntent();
-		data.putExtra(AllFoodsFragment.FOOD_ITEM_RESULT, (Parcelable)mFoodItem);
+		data.putExtra(FOOD_ITEM_RESULT, (Parcelable)mFoodItem);
 	    setResult(RESULT_OK, data);
 		finish();
 	}

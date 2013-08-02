@@ -19,7 +19,9 @@ package com.gmail.taneza.ronald.carbs;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,22 +63,26 @@ public class MealFragment extends BaseListFragment {
 			notifyFoodItemListChanged();
 		}
     }
-	
+
     @Override 
     public void onListItemClick(ListView l, View v, int position, long id) {
-//    	SQLiteCursor cursor = (SQLiteCursor)l.getItemAtPosition(position);
-//
-//    	FoodItem foodItem = new FoodItem(
-//    			cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_ENGLISH_NAME)),
-//    			cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_DUTCH_NAME)),
-//    			DEFAULT_WEIGHT_IN_GRAMS,
-//    			cursor.getFloat(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_CARBS)),
-//    			cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_PRODUCT_CODE)));
-//    	
-//    	Intent intent = new Intent(getActivity(), FoodDetailsActivity.class);
-//    	intent.putExtra(LANGUAGE_MESSAGE, mLanguage);
-//    	intent.putExtra(FOOD_ITEM_MESSAGE, foodItem);
-//
-//    	startActivityForResult(intent, 0);
+    	FoodItem foodItem = (FoodItem)l.getItemAtPosition(position);
+    	
+    	Intent intent = new Intent(getActivity(), FoodDetailsActivity.class);
+    	intent.putExtra(FoodDetailsActivity.LANGUAGE_MESSAGE, mMainActivityNotifier.getLanguage());
+    	intent.putExtra(FoodDetailsActivity.FOOD_ITEM_MESSAGE, (Parcelable)foodItem);
+
+    	// use the requestCode arg for the list position
+    	startActivityForResult(intent, position);
+    }
+    
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Make sure the request was successful
+        if (resultCode == Activity.RESULT_OK) {
+    		FoodItem foodItem = data.getParcelableExtra(FoodDetailsActivity.FOOD_ITEM_RESULT);
+    		int index = requestCode;
+    		mMainActivityNotifier.replaceFoodItemInMeal(index, foodItem);
+        }
     }
 }

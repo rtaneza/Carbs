@@ -51,10 +51,6 @@ public class AllFoodsFragment extends BaseListFragment
 
 	public final static int DEFAULT_WEIGHT_IN_GRAMS = 100;
 
-	public final static String LANGUAGE_MESSAGE = "com.gmail.taneza.ronald.carbs.LANGUAGE_MESSAGE";
-	public final static String FOOD_ITEM_MESSAGE = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_MESSAGE";
-	public final static String FOOD_ITEM_RESULT = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_RESULT";
-	
 	private FoodDbAdapter mDbAdapter;
     private SimpleCursorAdapter mAdapter;
 	private ClearableEditText mSearchEditText;
@@ -110,8 +106,8 @@ public class AllFoodsFragment extends BaseListFragment
     			cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_PRODUCT_CODE)));
     	
     	Intent intent = new Intent(getActivity(), FoodDetailsActivity.class);
-    	intent.putExtra(LANGUAGE_MESSAGE, mMainActivityNotifier.getLanguage());
-    	intent.putExtra(FOOD_ITEM_MESSAGE, (Parcelable)foodItem);
+    	intent.putExtra(FoodDetailsActivity.LANGUAGE_MESSAGE, mMainActivityNotifier.getLanguage());
+    	intent.putExtra(FoodDetailsActivity.FOOD_ITEM_MESSAGE, (Parcelable)foodItem);
 
     	startActivityForResult(intent, 0);
     }
@@ -120,7 +116,7 @@ public class AllFoodsFragment extends BaseListFragment
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Make sure the request was successful
         if (resultCode == Activity.RESULT_OK) {
-    		FoodItem foodItem = data.getParcelableExtra(FOOD_ITEM_RESULT);
+    		FoodItem foodItem = data.getParcelableExtra(FoodDetailsActivity.FOOD_ITEM_RESULT);
     		mMainActivityNotifier.addFoodItemToMeal(foodItem);
         }
     }
