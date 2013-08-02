@@ -40,7 +40,6 @@ import android.widget.TextView;
 public class MainActivity extends ActionBarActivity implements
         ActionBar.TabListener,
         ViewPager.OnPageChangeListener,
-        OnClickListener,
         MainActivityNotifier {
 
 	public final static String PREF_LANGUAGE = "PREF_LANGUAGE";
@@ -81,9 +80,6 @@ public class MainActivity extends ActionBarActivity implements
 
  		mTotalCarbsTextView = (TextView)findViewById(R.id.meal_total_carbs_text);
  		
- 		Button clearButton = (Button)findViewById(R.id.meal_total_clear_button);
- 		clearButton.setOnClickListener(this);
-
         mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mPagerAdapter);
@@ -186,36 +182,36 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-    	Language newLanguage;
-    	
 	    // Handle presses on the action bar items
 	    switch (item.getItemId()) {
 	        case R.id.menu_language_option_english:
-	        	newLanguage = Language.ENGLISH;
+	        	setLanguage(Language.ENGLISH);
 	        	break;
 	        case R.id.menu_language_option_dutch:
-	        	newLanguage = Language.DUTCH;
+	        	setLanguage(Language.DUTCH);
+	        	break;
+	        case R.id.menu_clear_meal:
+        		clearMeal();
 	        	break;
 	        default:
 	            return super.onOptionsItemSelected(item);
-	    }
-
-	    if (newLanguage != mLanguage) {
-			mLanguage = newLanguage;
-	    	setLanguage(mLanguage);
 	    }
 	    
         return true;
     }
 
 	private void setLanguage(Language language) {
-		setLanguageTextInOptionsMenu(language);
-		
-    	AllFoodsFragment allFoodsFragment = (AllFoodsFragment)getFragment(ALL_FOODS_TAB_INDEX);
-    	allFoodsFragment.setLanguage(language);
-    	
-    	MealFragment mealFragment = (MealFragment)getFragment(MEAL_TAB_INDEX);
-    	mealFragment.setLanguage(language);
+	    if (language != mLanguage) {
+	    	mLanguage = language;
+
+	    	setLanguageTextInOptionsMenu(language);
+			
+	    	AllFoodsFragment allFoodsFragment = (AllFoodsFragment)getFragment(ALL_FOODS_TAB_INDEX);
+	    	allFoodsFragment.setLanguage(language);
+	    	
+	    	MealFragment mealFragment = (MealFragment)getFragment(MEAL_TAB_INDEX);
+	    	mealFragment.setLanguage(language);
+	    }
 	}
 	
 	private void setLanguageTextInOptionsMenu(Language language) {
@@ -231,15 +227,6 @@ public class MainActivity extends ActionBarActivity implements
 	    return "android:switcher:" + R.id.pager + ":" + index;
 	}
 	
-	@Override
-	public void onClick(View view) {
-        switch (view.getId()) {
-        	case R.id.meal_total_clear_button:
-        		clearMeal();
-        		break;
-        }
-	}
-
 	private void updateTotalCarbsText() {
 		mTotalCarbsTextView.setText(String.format("%.2f g", mTotalCarbsInGrams));
 	}
