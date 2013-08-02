@@ -31,12 +31,9 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 
 import com.commonsware.cwac.loaderex.acl.SQLiteCursorLoader;
 
@@ -46,7 +43,7 @@ import com.commonsware.cwac.loaderex.acl.SQLiteCursorLoader;
 // save last used weight per food
 
 public class AllFoodsFragment extends ListFragment 
-    implements LoaderManager.LoaderCallbacks<Cursor>, OnClickListener {
+    implements LoaderManager.LoaderCallbacks<Cursor> {
 
 	public final static int DEFAULT_WEIGHT_IN_GRAMS = 100;
 
@@ -54,75 +51,38 @@ public class AllFoodsFragment extends ListFragment
 	public final static String FOOD_ITEM_MESSAGE = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_MESSAGE";
 	public final static String FOOD_ITEM_RESULT = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_RESULT";
 	
-	public final static String STATE_LANGUAGE_KEY = "LANGUAGE";
-	public final static String STATE_TOTAL_CARBS_KEY = "STATE_TOTAL_CARBS_KEY";
-	
+	private MainActivityNotifier mMainActivityNotifier;
 	private FoodDbAdapter mDbAdapter;
     private SimpleCursorAdapter mAdapter;
 	private ClearableEditText mSearchEditText;
-	private TextView mTotalCarbsTextView;
-	
-	private Language mLanguage;
-	private float mTotalCarbsInGrams;
 
-	// This constructor is called from MainActivity.
-	public AllFoodsFragment(Language language) {
-		mLanguage = language;
-		mTotalCarbsInGrams = 0;
-	}
-	
-	// This constructor is called from the Fragment base class during
-	// an orientation change. It needs an empty constructor.
-	// We then restore the state from the savedInstanceState bundle in onCreate().
-	public AllFoodsFragment() {
-		
-	}
-	
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-    	Log.i("AllFoodsFragment", String.format("onCreate: savedInstanceState = %s", 
-    			savedInstanceState != null ? savedInstanceState.toString() : "null"));
-    	
-		super.onCreate(savedInstanceState);
-
-		if (savedInstanceState != null) {
-            // Restore last state
-			// This is called after an orientation change.
-			mLanguage = Language.values()[savedInstanceState.getInt(STATE_LANGUAGE_KEY)];
-			mTotalCarbsInGrams = savedInstanceState.getFloat(STATE_TOTAL_CARBS_KEY);
-        }
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
 		
-    	mDbAdapter = new FoodDbAdapter(getActivity(), mLanguage);
-    	mDbAdapter.open();
+	    try {
+	    	mMainActivityNotifier = (MainActivityNotifier) activity;
+	    } catch(ClassCastException e) {
+	        throw new ClassCastException(activity.toString() + " must implement MealCounter");
+	    }
 	}
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
              Bundle savedInstanceState) {
 		Log.i("AllFoodsFragment", "onCreateView");
-		
+
+    	mDbAdapter = new FoodDbAdapter(getActivity(), mMainActivityNotifier.getLanguage());
+    	mDbAdapter.open();
+    	
 		View rootView = inflater.inflate(R.layout.fragment_all_foods, container, false);
 
- 		mTotalCarbsTextView = (TextView) rootView.findViewById(R.id.food_list_total_carbs_text);
- 		updateTotalCarbs();
- 		
- 		Button clearButton = (Button)rootView.findViewById(R.id.food_list_clear_total_carbs_button);
- 		clearButton.setOnClickListener(this);
-         
         addSearchTextListener(rootView);
 
         initListAdapter();
          
         return rootView;
 	}
-	
-	@Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        
-        outState.putInt(STATE_LANGUAGE_KEY, mLanguage.ordinal());
-        outState.putFloat(STATE_TOTAL_CARBS_KEY, mTotalCarbsInGrams);
-    }
 	
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -157,7 +117,7 @@ public class AllFoodsFragment extends ListFragment
     			cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_PRODUCT_CODE)));
     	
     	Intent intent = new Intent(getActivity(), FoodDetailsActivity.class);
-    	intent.putExtra(LANGUAGE_MESSAGE, mLanguage);
+    	intent.putExtra(LANGUAGE_MESSAGE, mMainActivityNotifier.getLanguage());
     	intent.putExtra(FOOD_ITEM_MESSAGE, foodItem);
 
     	startActivityForResult(intent, 0);
@@ -168,14 +128,12 @@ public class AllFoodsFragment extends ListFragment
         // Make sure the request was successful
         if (resultCode == Activity.RESULT_OK) {
     		FoodItem foodItem = data.getParcelableExtra(FOOD_ITEM_RESULT);
-    		mTotalCarbsInGrams += foodItem.getNumCarbsInGrams();
-    		updateTotalCarbs();
+    		mMainActivityNotifier.addCarbsToMeal(foodItem.getNumCarbsInGrams());
         }
     }
     
     public void setLanguage(Language language) {
-    	mLanguage = language;
-    	mDbAdapter.setLanguage(mLanguage);
+    	mDbAdapter.setLanguage(language);
     	initListAdapter();
     }
     
@@ -209,19 +167,5 @@ public class AllFoodsFragment extends ListFragment
 				restartLoader();
 			}
 		});
-	}
-	
-	private void updateTotalCarbs() {
-		mTotalCarbsTextView.setText(String.format("%.2f", mTotalCarbsInGrams));
-	}
-
-	@Override
-	public void onClick(View view) {
-        switch (view.getId()) {
-        	case R.id.food_list_clear_total_carbs_button:
-        		mTotalCarbsInGrams = 0;
-        		updateTotalCarbs();
-        		break;
-        }
 	}
 }

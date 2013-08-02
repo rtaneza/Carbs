@@ -52,47 +52,14 @@ public class MealFragment extends ListFragment {
 	public final static String FOOD_ITEM_MESSAGE = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_MESSAGE";
 	public final static String FOOD_ITEM_RESULT = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_RESULT";
 	
-	public final static String STATE_LANGUAGE_KEY = "LANGUAGE";
-	public final static String STATE_TOTAL_CARBS_KEY = "STATE_TOTAL_CARBS_KEY";
-	
 	private View mRootView;
 	private TextView mTotalCarbsTextView;
 	
-	private Language mLanguage;
 	private float mTotalCarbsInGrams;
-
-	// This constructor is called from MainActivity.
-	public MealFragment(Language language) {
-		mLanguage = language;
-		mTotalCarbsInGrams = 0;
-	}
-	
-	// This constructor is called from the Fragment base class during
-	// an orientation change. It needs an empty constructor.
-	// We then restore the state from the savedInstanceState bundle in onCreate().
-	public MealFragment() {
-		
-	}
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-    	Log.i("MealFragment", String.format("onCreate: savedInstanceState = %s", 
-    			savedInstanceState != null ? savedInstanceState.toString() : "null"));
-    	
-		super.onCreate(savedInstanceState);
-
-		if (savedInstanceState != null) {
-            // Restore last state
-			// This is called after an orientation change.
-			mLanguage = Language.values()[savedInstanceState.getInt(STATE_LANGUAGE_KEY)];
-			mTotalCarbsInGrams = savedInstanceState.getFloat(STATE_TOTAL_CARBS_KEY);
-        }
-	}
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
              Bundle savedInstanceState) {
-		Log.i("MealFragment", "onCreateView");
 		
 		mRootView = inflater.inflate(R.layout.fragment_meal, container, false);
 
@@ -106,14 +73,6 @@ public class MealFragment extends ListFragment {
          
         return mRootView;
 	}
-	
-	@Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        
-        outState.putInt(STATE_LANGUAGE_KEY, mLanguage.ordinal());
-        outState.putFloat(STATE_TOTAL_CARBS_KEY, mTotalCarbsInGrams);
-    }
 	
     @Override 
     public void onListItemClick(ListView l, View v, int position, long id) {
@@ -143,11 +102,6 @@ public class MealFragment extends ListFragment {
         }
     }
     
-    public void setLanguage(Language language) {
-    	mLanguage = language;
-    	initListAdapter();
-    }
-    
 	private void initListAdapter() {
 	    String[] values = new String[] { "Android", "iPhone", "WindowsMobile",
 	        "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
@@ -173,15 +127,4 @@ public class MealFragment extends ListFragment {
 	private void updateTotalCarbs() {
 		mTotalCarbsTextView.setText(String.format("%.2f", mTotalCarbsInGrams));
 	}
-
-//	@Override
-//	public void onClick(View view) {
-//        switch (view.getId()) {
-//        	case R.id.food_list_clear_total_carbs_button:
-//        		mTotalCarbsInGrams = 0;
-//        		updateTotalCarbs();
-//        		break;
-//        }
-//	}
-	
 }

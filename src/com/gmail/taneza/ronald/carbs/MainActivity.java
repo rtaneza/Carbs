@@ -20,7 +20,6 @@ import android.annotation.TargetApi;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -31,10 +30,16 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.TextView;
 
 public class MainActivity extends ActionBarActivity implements
         ActionBar.TabListener,
-        ViewPager.OnPageChangeListener {
+        ViewPager.OnPageChangeListener,
+        OnClickListener,
+        MainActivityNotifier {
 
 	public final static String PREF_LANGUAGE = "PREF_LANGUAGE";
 	
@@ -42,6 +47,8 @@ public class MainActivity extends ActionBarActivity implements
 	public final static int MEAL_TAB_INDEX = 1;
 
 	private Language mLanguage;
+	private float mTotalCarbsInGrams;
+	private TextView mTotalCarbsTextView;
     private ViewPager mViewPager;
     private MainPagerAdapter mPagerAdapter;
     private Menu mOptionsMenu;
@@ -63,7 +70,13 @@ public class MainActivity extends ActionBarActivity implements
  		
         setContentView(R.layout.activity_main);
 
-        mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), mLanguage);
+ 		mTotalCarbsTextView = (TextView)findViewById(R.id.meal_total_carbs_text);
+ 		updateTotalCarbsText();
+ 		
+ 		Button clearButton = (Button)findViewById(R.id.meal_total_clear_button);
+ 		clearButton.setOnClickListener(this);
+         
+        mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mPagerAdapter);
         mViewPager.setOnPageChangeListener(this);
@@ -123,20 +136,17 @@ public class MainActivity extends ActionBarActivity implements
     }
 
     private class MainPagerAdapter extends FragmentPagerAdapter {
-    	private Language mLanguage;
-    	
-        public MainPagerAdapter(FragmentManager fm, Language language) {
+        public MainPagerAdapter(FragmentManager fm) {
             super(fm);
-            mLanguage = language;
         }
         
         @Override
         public Fragment getItem(int position) {
             switch (position) {
                 case ALL_FOODS_TAB_INDEX:
-                    return new AllFoodsFragment(mLanguage);
+                    return new AllFoodsFragment();
                 case MEAL_TAB_INDEX:
-                	return new MealFragment(mLanguage);
+                	return new MealFragment();
             }
             return null;
         }
@@ -200,5 +210,30 @@ public class MainActivity extends ActionBarActivity implements
 	{
 		// Reference: http://stackoverflow.com/questions/6976027/reusing-fragments-in-a-fragmentpageradapter
 	    return "android:switcher:" + R.id.pager + ":" + index;
+	}
+	
+	@Override
+	public void onClick(View view) {
+        switch (view.getId()) {
+        	case R.id.meal_total_clear_button:
+        		mTotalCarbsInGrams = 0;
+        		updateTotalCarbsText();
+        		break;
+        }
+	}
+
+	private void updateTotalCarbsText() {
+		mTotalCarbsTextView.setText(String.format("%.2f", mTotalCarbsInGrams));
+	}
+	
+	@Override
+	public void addCarbsToMeal(float numCarbsInGrams) {
+		mTotalCarbsInGrams += numCarbsInGrams;
+		updateTotalCarbsText();
+	}
+
+	@Override
+	public Language getLanguage() {
+		return mLanguage;
 	}
 }
