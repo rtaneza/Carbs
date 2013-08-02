@@ -25,3 +25,6 @@ http://sourceforge.net/projects/sqlitebrowser/
 android-sqlite-asset-helper
 https://github.com/jgilfelt/android-sqlite-asset-helper
 
+sqlite query:
+select EnglishName from food where "EnglishName" like '%corn %'
+

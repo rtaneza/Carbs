@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  white rounded shape for textView -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#FFFFFF"/>
+    <corners android:radius="1dp" />
+    <padding android:left="10dp" android:top="10dp"
+        android:right="10dp" android:bottom="10dp" />
+    <stroke android:color="#439CC8" android:width="1dp" />
+</shape>

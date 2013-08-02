@@ -8,16 +8,32 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".FoodDetailsActivity" >
 
-    <TextView android:id="@+id/food_details_name"
+    <!-- name -->
+	<LinearLayout android:id="@+id/food_details_name_group"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-   
+        android:layout_height="wrap_content"
+		android:orientation="vertical"  >
+		
+	    <TextView android:id="@+id/food_details_name"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" 
+    		android:paddingBottom="@dimen/activity_vertical_margin" />
+			
+		<View
+		    android:layout_width="match_parent"
+		    android:layout_height="1dp"
+		    android:visibility="visible"
+		    android:background="@android:color/darker_gray"/>
+	
+	</LinearLayout>
+	
     <!-- weight -->
     <LinearLayout android:id="@+id/food_details_weight_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/food_details_name"
+        android:layout_below="@+id/food_details_name_group"
 		android:orientation="horizontal"
+    	android:paddingTop="@dimen/activity_vertical_margin"
 		android:weightSum="1.0" >
 	    
 	    <TextView android:id="@+id/food_details_weight_label"
@@ -31,6 +47,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_weight="0.6"
 	        android:inputType="number"
+	        android:textSize="@dimen/text_size"
 	        android:gravity="right"
 	        android:selectAllOnFocus="true" />
 	    
@@ -47,6 +64,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/food_details_weight_group"
 		android:orientation="horizontal"
+    	android:paddingBottom="@dimen/activity_vertical_margin"
 		android:weightSum="1.0" >
 	    
 	    <TextView android:id="@+id/food_details_carbs_label"
@@ -81,7 +99,7 @@
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
 	        android:layout_weight="0.5"
-	        android:textAppearance="@android:style/TextAppearance.Medium"
+	        android:textSize="@dimen/text_size"
 	        android:text="@string/cancel"
 	        android:onClick="cancel" />
 	    
@@ -90,7 +108,7 @@
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
 	        android:layout_weight="0.5"
-	        android:textAppearance="@android:style/TextAppearance.Medium"
+	        android:textSize="@dimen/text_size"
 	        android:text="@string/add_to_meal"
 	        android:onClick="addToMeal" />
     
