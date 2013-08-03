@@ -70,7 +70,7 @@ public class MealFragment extends BaseListFragment {
     	Intent intent = new Intent(getActivity(), FoodDetailsActivity.class);
     	intent.putExtra(FoodDetailsActivity.LANGUAGE_MESSAGE, mMainActivityNotifier.getLanguage());
     	intent.putExtra(FoodDetailsActivity.FOOD_ITEM_MESSAGE, (Parcelable)foodItem);
-    	intent.putExtra(FoodDetailsActivity.EDIT_FOOD_MESSAGE, true);
+    	intent.putExtra(FoodDetailsActivity.ACTIVITY_MODE_MESSAGE, FoodDetailsActivity.Mode.EditFoodInMeal.ordinal());
 
     	// use the requestCode arg for the list position
     	startActivityForResult(intent, position);
@@ -78,11 +78,18 @@ public class MealFragment extends BaseListFragment {
     
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Make sure the request was successful
-        if (resultCode == Activity.RESULT_OK) {
-    		FoodItem foodItem = data.getParcelableExtra(FoodDetailsActivity.FOOD_ITEM_RESULT);
-    		int index = requestCode;
-    		mMainActivityNotifier.replaceFoodItemInMeal(index, foodItem);
+    	FoodItem foodItem;
+        switch (resultCode) {
+        	case FoodDetailsActivity.FOOD_DETAILS_RESULT_OK:
+        		foodItem = data.getParcelableExtra(FoodDetailsActivity.FOOD_ITEM_RESULT);
+        		int index = requestCode;
+	    		mMainActivityNotifier.replaceFoodItemInMeal(index, foodItem);
+	    		break;
+	    		
+        	case FoodDetailsActivity.FOOD_DETAILS_RESULT_REMOVE:
+        		foodItem = data.getParcelableExtra(FoodDetailsActivity.FOOD_ITEM_RESULT);
+	    		mMainActivityNotifier.removeFoodItemFromMeal(foodItem);
+	    		break;
         }
     }
 }

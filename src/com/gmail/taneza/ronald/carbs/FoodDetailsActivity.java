@@ -16,7 +16,10 @@
 
 package com.gmail.taneza.ronald.carbs;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.NavUtils;
@@ -33,10 +36,19 @@ import android.widget.TextView;
 
 public class FoodDetailsActivity extends ActionBarActivity {
 
+	public enum Mode {
+		NewFood,
+		RecentFood,
+		EditFoodInMeal
+	}
+
+	public final static int FOOD_DETAILS_RESULT_OK = RESULT_OK;
+	public final static int FOOD_DETAILS_RESULT_REMOVE = RESULT_FIRST_USER;
+	
 	public final static String LANGUAGE_MESSAGE = "com.gmail.taneza.ronald.carbs.LANGUAGE_MESSAGE";
 	public final static String FOOD_ITEM_MESSAGE = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_MESSAGE";
 	public final static String FOOD_ITEM_RESULT = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_RESULT";
-	public final static String EDIT_FOOD_MESSAGE = "com.gmail.taneza.ronald.carbs.EDIT_FOOD_MESSAGE";
+	public final static String ACTIVITY_MODE_MESSAGE = "com.gmail.taneza.ronald.carbs.ACTIVITY_MODE_MESSAGE";
 	
 	private FoodItem mFoodItem;
 	private EditText mWeightEditText;
@@ -54,7 +66,7 @@ public class FoodDetailsActivity extends ActionBarActivity {
 
     	Language language = (Language) intent.getSerializableExtra(LANGUAGE_MESSAGE);
 		mFoodItem = intent.getParcelableExtra(FOOD_ITEM_MESSAGE);
-		boolean editFood = intent.getBooleanExtra(EDIT_FOOD_MESSAGE, false);
+		Mode mode = Mode.values()[intent.getIntExtra(ACTIVITY_MODE_MESSAGE, Mode.NewFood.ordinal())];
 		
 		TextView dutchNameTextView = (TextView) findViewById(R.id.food_details_name);
 		if (language == Language.ENGLISH) {
@@ -72,16 +84,36 @@ public class FoodDetailsActivity extends ActionBarActivity {
 		mNumCarbsTextView = (TextView) findViewById(R.id.food_details_carbs_text);
 		updateCarbsText();
 		
-		if (editFood) {
-			setTitle(R.string.title_activity_food_details_edit);
-
-			Button okButton = (Button)findViewById(R.id.food_details_ok_button);
-			okButton.setText(R.string.save_food_details);
-		}
+		processMode(mode);
 		
 		addWeightTextListener();
 	}
-
+	
+	private void processMode(Mode mode) {
+		boolean makeRemoveButtonVisible = false;
+		
+		switch (mode) {
+			case NewFood:
+				break;
+				
+			case RecentFood:
+				makeRemoveButtonVisible = true;
+				break;
+				
+			case EditFoodInMeal:
+				makeRemoveButtonVisible = true;				
+				setTitle(R.string.title_activity_food_details_edit);
+				Button okButton = (Button) findViewById(R.id.food_details_ok_button);
+				okButton.setText(R.string.save_food_details);
+				break;
+		}
+		
+		if (makeRemoveButtonVisible) {
+			Button removeButton = (Button) findViewById(R.id.food_details_remove_button);
+			removeButton.setVisibility(View.VISIBLE);
+		}
+	}
+	
 	/**
 	 * Set up the {@link android.app.ActionBar}, if the API is available.
 	 */
@@ -139,15 +171,30 @@ public class FoodDetailsActivity extends ActionBarActivity {
 		});
 	}
 
-	public void cancel(View v) {
-	    setResult(RESULT_CANCELED);
-		finish();
+	public void removeItem(View v) {
+		new AlertDialog.Builder(this)
+	    .setMessage(R.string.remove_item_confirmation)
+	    .setPositiveButton(R.string.remove_item_do_remove, new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int which) { 
+	            // continue with remove
+	    		Intent data = getIntent();
+	    		data.putExtra(FOOD_ITEM_RESULT, (Parcelable)mFoodItem);
+	    	    setResult(FOOD_DETAILS_RESULT_REMOVE, data);
+	    		finish();
+	        }
+	     })
+	    .setNegativeButton(R.string.remove_item_cancel, new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int which) { 
+	            // do nothing
+	        }
+	     })
+	    .show();
 	}
 	
 	public void addToMeal(View v) {
 		Intent data = getIntent();
 		data.putExtra(FOOD_ITEM_RESULT, (Parcelable)mFoodItem);
-	    setResult(RESULT_OK, data);
+	    setResult(FOOD_DETAILS_RESULT_OK, data);
 		finish();
 	}
 	

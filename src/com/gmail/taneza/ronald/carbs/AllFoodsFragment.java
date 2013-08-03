@@ -103,14 +103,15 @@ public class AllFoodsFragment extends BaseListFragment
     	Intent intent = new Intent(getActivity(), FoodDetailsActivity.class);
     	intent.putExtra(FoodDetailsActivity.LANGUAGE_MESSAGE, mMainActivityNotifier.getLanguage());
     	intent.putExtra(FoodDetailsActivity.FOOD_ITEM_MESSAGE, (Parcelable)foodItem);
-
+    	intent.putExtra(FoodDetailsActivity.ACTIVITY_MODE_MESSAGE, FoodDetailsActivity.Mode.NewFood.ordinal());
+    	
     	startActivityForResult(intent, 0);
     }
     
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Make sure the request was successful
-        if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == FoodDetailsActivity.FOOD_DETAILS_RESULT_OK) {
     		FoodItem foodItem = data.getParcelableExtra(FoodDetailsActivity.FOOD_ITEM_RESULT);
     		mMainActivityNotifier.addFoodItemToMeal(foodItem);
         }

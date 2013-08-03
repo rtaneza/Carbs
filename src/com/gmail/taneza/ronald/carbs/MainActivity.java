@@ -120,7 +120,7 @@ public class MainActivity extends ActionBarActivity implements
 
         actionBar.setHomeButtonEnabled(false);
         
- 		updateMealAndCarbsData();
+ 		updateRecentFoodsAndMealData();
     }
     
 	@Override
@@ -263,6 +263,10 @@ public class MainActivity extends ActionBarActivity implements
 	}
 	
 	private void updateTotalCarbsText() {
+		// float value may go to just below zero after subtraction
+		if (mTotalCarbsInGrams < 0) {
+			mTotalCarbsInGrams = 0;
+		}
 		mTotalCarbsTextView.setText(String.format("%.1f g", mTotalCarbsInGrams));
 	}
 	
@@ -279,7 +283,7 @@ public class MainActivity extends ActionBarActivity implements
         }
 	}
 	
-	private void updateMealAndCarbsData() {
+	private void updateRecentFoodsAndMealData() {
 		updateTotalCarbsText();
     	updateMealTabText();
     	
@@ -298,13 +302,13 @@ public class MainActivity extends ActionBarActivity implements
 
 	private void clearRecentFoods() {
 		mRecentFoodsList.clear();
-		updateMealAndCarbsData();
+		updateRecentFoodsAndMealData();
 	}
 	
 	private void clearMeal() {
 		mTotalCarbsInGrams = 0;
 		mFoodItemsList.clear();
-		updateMealAndCarbsData();
+		updateRecentFoodsAndMealData();
 	}
 	
 	private void addFoodItemtoRecentFoodsList(FoodItem foodItem) {
@@ -333,7 +337,7 @@ public class MainActivity extends ActionBarActivity implements
 		mFoodItemsList.add(foodItem);
 		
 		addFoodItemtoRecentFoodsList(foodItem);
-		updateMealAndCarbsData();
+		updateRecentFoodsAndMealData();
 	}
 
 	@Override
@@ -345,7 +349,20 @@ public class MainActivity extends ActionBarActivity implements
 		mFoodItemsList.add(index, foodItem);
 
 		addFoodItemtoRecentFoodsList(foodItem);
-		updateMealAndCarbsData();
+		updateRecentFoodsAndMealData();
+	}
+
+	@Override
+	public void removeFoodItemFromMeal(FoodItem foodItem) {
+		mTotalCarbsInGrams -= foodItem.getNumCarbsInGrams();
+		mFoodItemsList.remove(foodItem);
+		updateRecentFoodsAndMealData();
+	}
+
+	@Override
+	public void removeFoodItemFromRecentFoods(FoodItem foodItem) {
+		mRecentFoodsList.remove(foodItem);
+		updateRecentFoodsAndMealData();
 	}
 	
 	@Override
