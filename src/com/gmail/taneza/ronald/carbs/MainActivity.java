@@ -312,12 +312,8 @@ public class MainActivity extends ActionBarActivity implements
 	}
 	
 	private void addFoodItemtoRecentFoodsList(FoodItem foodItem) {
-		if (mRecentFoodsList.size() >= RECENT_FOODS_LIST_MAX_SIZE) {
-			return;
-		}
-		
-		//TODO: don't use DeepEquals, implement FoodItem.equals() instead
 		boolean duplicate = false;
+		
 		for (FoodItem item : mRecentFoodsList) {
 			if (item.equals(foodItem)) {
 				duplicate = true;
@@ -327,6 +323,11 @@ public class MainActivity extends ActionBarActivity implements
 		
 		// insert into the start of the mRecentFoodsList if not yet present
 	    if (!duplicate) {
+
+			if (mRecentFoodsList.size() >= RECENT_FOODS_LIST_MAX_SIZE) {
+				mRecentFoodsList.remove(RECENT_FOODS_LIST_MAX_SIZE - 1);
+			}
+			
 	    	mRecentFoodsList.add(0, foodItem);
 	    }
 	}
