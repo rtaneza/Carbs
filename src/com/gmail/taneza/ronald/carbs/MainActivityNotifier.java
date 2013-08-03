@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 public interface MainActivityNotifier {
 	public Language getLanguage();
+	public FoodDbAdapter getFoodDbAdapter();
 	public void addFoodItemToMeal(FoodItem foodItem);
 	public void replaceFoodItemInMeal(int index, FoodItem foodItem);
 	public ArrayList<FoodItem> getFoodItemsList();

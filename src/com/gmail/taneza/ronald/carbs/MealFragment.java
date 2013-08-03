@@ -22,7 +22,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,6 +70,7 @@ public class MealFragment extends BaseListFragment {
     	Intent intent = new Intent(getActivity(), FoodDetailsActivity.class);
     	intent.putExtra(FoodDetailsActivity.LANGUAGE_MESSAGE, mMainActivityNotifier.getLanguage());
     	intent.putExtra(FoodDetailsActivity.FOOD_ITEM_MESSAGE, (Parcelable)foodItem);
+    	intent.putExtra(FoodDetailsActivity.EDIT_FOOD_MESSAGE, true);
 
     	// use the requestCode arg for the list position
     	startActivityForResult(intent, position);

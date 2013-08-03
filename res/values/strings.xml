@@ -12,7 +12,8 @@
     <string name="menu_language_dutch">NL</string>
     <string name="menu_language_option_english">English</string>
     <string name="menu_language_option_dutch">Nederlands</string>
-    <string name="title_activity_food_details">Food Details</string>
+    <string name="title_activity_food_details">Food details</string>
+    <string name="title_activity_food_details_edit">Edit food details</string>
     <string name="action_settings">Settings</string>
     <string name="food_details_weight">Weight:</string>
     <string name="food_details_carbs">Carbs:</string>

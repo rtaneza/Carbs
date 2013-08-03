@@ -25,11 +25,9 @@ import android.database.sqlite.SQLiteCursor;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.content.Loader;
-import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,17 +49,14 @@ public class AllFoodsFragment extends BaseListFragment
 
 	public final static int DEFAULT_WEIGHT_IN_GRAMS = 100;
 
-	private FoodDbAdapter mDbAdapter;
+	private FoodDbAdapter mFoodDbAdapter;
     private SimpleCursorAdapter mAdapter;
 	private ClearableEditText mSearchEditText;
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
              Bundle savedInstanceState) {
-		Log.i("AllFoodsFragment", "onCreateView");
-
-    	mDbAdapter = new FoodDbAdapter(getActivity(), mMainActivityNotifier.getLanguage());
-    	mDbAdapter.open();
+    	mFoodDbAdapter = mMainActivityNotifier.getFoodDbAdapter();
     	
 		View rootView = inflater.inflate(R.layout.fragment_all_foods, container, false);
 
@@ -75,8 +70,8 @@ public class AllFoodsFragment extends BaseListFragment
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		String searchText = mSearchEditText.getText().toString();
-		String queryString = mDbAdapter.getFoodNameQueryString(searchText);		
-		return new SQLiteCursorLoader(getActivity(), mDbAdapter, queryString, null);
+		String queryString = mFoodDbAdapter.getFoodNameQueryString(searchText);		
+		return new SQLiteCursorLoader(getActivity(), mFoodDbAdapter, queryString, null);
 	}
 
 	@Override
@@ -122,12 +117,12 @@ public class AllFoodsFragment extends BaseListFragment
     }
     
     public void setLanguage(Language language) {
-    	mDbAdapter.setLanguage(language);
+    	mFoodDbAdapter.setLanguage(language);
     	initListAdapter();
     }
     
 	private void initListAdapter() {
-        String[] from = mDbAdapter.getColumnStringArray();
+        String[] from = mFoodDbAdapter.getColumnStringArray();
         int[] to = new int[] { R.id.food_item_name, R.id.food_item_carbs};
         
         // Create an empty adapter we will use to display the loaded data.

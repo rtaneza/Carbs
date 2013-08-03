@@ -21,8 +21,6 @@ import java.util.ArrayList;
 
 import org.apache.pig.impl.util.ObjectSerializer;
 
-import com.cedarsoftware.util.DeepEquals;
-
 import android.annotation.TargetApi;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -57,6 +55,7 @@ public class MainActivity extends ActionBarActivity implements
 	public final static String STATE_FOOD_ITEMS_LIST_KEY = "STATE_FOOD_ITEMS_LIST_KEY";
 	
 	private Language mLanguage;
+	private FoodDbAdapter mFoodDbAdapter;
 	private float mTotalCarbsInGrams;
     private ArrayList<FoodItem> mFoodItemsList;
     private ArrayList<FoodItem> mRecentFoodsList;
@@ -79,7 +78,7 @@ public class MainActivity extends ActionBarActivity implements
         	mTotalCarbsInGrams = 0;
         	mFoodItemsList = new ArrayList<FoodItem>();
         }
-
+		
  		// Restore preferences
  		SharedPreferences prefs = getPreferences(0);
  		mLanguage = Language.values()[prefs.getInt(PREF_LANGUAGE, Language.DUTCH.ordinal())];
@@ -92,7 +91,10 @@ public class MainActivity extends ActionBarActivity implements
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
- 		
+
+		mFoodDbAdapter = new FoodDbAdapter(this, mLanguage);
+		mFoodDbAdapter.open();
+
         setContentView(R.layout.activity_main);
 
  		mTotalCarbsTextView = (TextView)findViewById(R.id.meal_total_carbs_text);
@@ -349,6 +351,11 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
 	public Language getLanguage() {
 		return mLanguage;
+	}
+	
+	@Override
+	public FoodDbAdapter getFoodDbAdapter() {
+		return mFoodDbAdapter;
 	}
 	
 	private Fragment getFragment(int index) {
