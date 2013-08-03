@@ -20,6 +20,7 @@
     <string name="grams">g</string>
     <string name="cancel">Cancel</string>
     <string name="add_to_meal">Add to meal</string>
+    <string name="save_food_details">Save</string>
     <string name="title_activity_meal">Meal</string>
     <string name="title_all_foods">All</string>
     <string name="title_recent_foods">Recent</string>

@@ -19,12 +19,15 @@ package com.gmail.taneza.ronald.carbs;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager.LayoutParams;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -71,6 +74,9 @@ public class FoodDetailsActivity extends ActionBarActivity {
 		
 		if (editFood) {
 			setTitle(R.string.title_activity_food_details_edit);
+
+			Button okButton = (Button)findViewById(R.id.food_details_ok_button);
+			okButton.setText(R.string.save_food_details);
 		}
 		
 		addWeightTextListener();
@@ -80,7 +86,7 @@ public class FoodDetailsActivity extends ActionBarActivity {
 	 * Set up the {@link android.app.ActionBar}, if the API is available.
 	 */
 	private void setupActionBar() {
-		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 	}
 
 	@Override
@@ -89,7 +95,24 @@ public class FoodDetailsActivity extends ActionBarActivity {
 		getMenuInflater().inflate(R.menu.menu_food_details, menu);
 		return true;
 	}
-
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			// This ID represents the Home or Up button. In the case of this
+			// activity, the Up button is shown. Use NavUtils to allow users
+			// to navigate up one level in the application structure. For
+			// more details, see the Navigation pattern on Android Design:
+			//
+			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
+			//
+			NavUtils.navigateUpFromSameTask(this);
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+	
 	private void addWeightTextListener() {
 		mWeightEditText.addTextChangedListener(new TextWatcher() {
 			public void afterTextChanged(Editable s) {
