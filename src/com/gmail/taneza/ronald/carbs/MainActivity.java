@@ -297,24 +297,21 @@ public class MainActivity extends ActionBarActivity implements
 	}
 	
 	private void addFoodItemtoRecentFoodsList(FoodItem foodItem) {
-		boolean duplicate = false;
-		
-		for (FoodItem item : mRecentFoodsList) {
+		// remove any duplicate from the list
+		for (int i = 0; i < mRecentFoodsList.size(); i++) {
+			FoodItem item = mRecentFoodsList.get(i);
 			if (item.equals(foodItem)) {
-				duplicate = true;
+				mRecentFoodsList.remove(i);
 				break;
 			}
 		}
 		
 		// insert into the start of the mRecentFoodsList if not yet present
-	    if (!duplicate) {
-
-			if (mRecentFoodsList.size() >= RECENT_FOODS_LIST_MAX_SIZE) {
-				mRecentFoodsList.remove(RECENT_FOODS_LIST_MAX_SIZE - 1);
-			}
-			
-	    	mRecentFoodsList.add(0, foodItem);
-	    }
+		if (mRecentFoodsList.size() >= RECENT_FOODS_LIST_MAX_SIZE) {
+			mRecentFoodsList.remove(RECENT_FOODS_LIST_MAX_SIZE - 1);
+		}
+		
+    	mRecentFoodsList.add(0, foodItem);
 	}
 	
 	@Override
