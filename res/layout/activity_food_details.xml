@@ -95,14 +95,13 @@
 		android:weightSum="1.0" >
 	    
 	    <Button
-	        android:id="@+id/food_details_remove_button"
+	        android:id="@+id/food_details_cancel_button"
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
 	        android:layout_weight="0.5"
 	        android:textSize="@dimen/text_size"
-	        android:text="@string/food_details_remove_item"
-	        android:visibility="invisible"
-	        android:onClick="removeItem" />
+	        android:text="@string/food_details_cancel"
+	        android:onClick="cancel" />
 	    
 	    <Button
 	        android:id="@+id/food_details_ok_button"

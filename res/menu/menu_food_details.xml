@@ -1,9 +1,17 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android" 
+      xmlns:carbs="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/menu_food_details_remove"
+        android:orderInCategory="0"
+        carbs:showAsAction="always|withText"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:title="@string/menu_food_details_remove"/>
+    
+    <item
+        android:id="@+id/menu_food_details_settings"
         android:orderInCategory="100"
-        android:showAsAction="never"
-        android:title="@string/action_settings"/>
+        carbs:showAsAction="never"
+        android:title="@string/menu_settings"/>
 
 </menu>

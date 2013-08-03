@@ -16,10 +16,12 @@
 
 package com.gmail.taneza.ronald.carbs;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.opengl.Visibility;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.NavUtils;
@@ -43,6 +45,7 @@ public class FoodDetailsActivity extends ActionBarActivity {
 	}
 
 	public final static int FOOD_DETAILS_RESULT_OK = RESULT_OK;
+	public final static int FOOD_DETAILS_RESULT_CANCELED = RESULT_CANCELED;
 	public final static int FOOD_DETAILS_RESULT_REMOVE = RESULT_FIRST_USER;
 	
 	public final static String LANGUAGE_MESSAGE = "com.gmail.taneza.ronald.carbs.LANGUAGE_MESSAGE";
@@ -53,6 +56,7 @@ public class FoodDetailsActivity extends ActionBarActivity {
 	private FoodItem mFoodItem;
 	private EditText mWeightEditText;
 	private TextView mNumCarbsTextView;
+	private Mode mMode;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -84,34 +88,14 @@ public class FoodDetailsActivity extends ActionBarActivity {
 		mNumCarbsTextView = (TextView) findViewById(R.id.food_details_carbs_text);
 		updateCarbsText();
 		
-		processMode(mode);
+		mMode = mode;
+		if (mode == Mode.EditFoodInMeal) {			
+			setTitle(R.string.title_activity_food_details_edit);
+			Button okButton = (Button) findViewById(R.id.food_details_ok_button);
+			okButton.setText(R.string.save_food_details);
+		}
 		
 		addWeightTextListener();
-	}
-	
-	private void processMode(Mode mode) {
-		boolean makeRemoveButtonVisible = false;
-		
-		switch (mode) {
-			case NewFood:
-				break;
-				
-			case RecentFood:
-				makeRemoveButtonVisible = true;
-				break;
-				
-			case EditFoodInMeal:
-				makeRemoveButtonVisible = true;				
-				setTitle(R.string.title_activity_food_details_edit);
-				Button okButton = (Button) findViewById(R.id.food_details_ok_button);
-				okButton.setText(R.string.save_food_details);
-				break;
-		}
-		
-		if (makeRemoveButtonVisible) {
-			Button removeButton = (Button) findViewById(R.id.food_details_remove_button);
-			removeButton.setVisibility(View.VISIBLE);
-		}
 	}
 	
 	/**
@@ -121,16 +105,26 @@ public class FoodDetailsActivity extends ActionBarActivity {
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 	}
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.menu_food_details, menu);
+    	getMenuInflater().inflate(R.menu.menu_food_details, menu);
+
+    	if (mMode == Mode.NewFood) {
+    		MenuItem menuItem = menu.findItem(R.id.menu_food_details_remove);
+    		menuItem.setVisible(false);
+    	}
+    	
 		return true;
 	}
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+		case R.id.menu_food_details_remove:
+			removeItem();
+			return true;
 		case android.R.id.home:
 			// This ID represents the Home or Up button. In the case of this
 			// activity, the Up button is shown. Use NavUtils to allow users
@@ -171,7 +165,7 @@ public class FoodDetailsActivity extends ActionBarActivity {
 		});
 	}
 
-	public void removeItem(View v) {
+	public void removeItem() {
 		new AlertDialog.Builder(this)
 	    .setMessage(R.string.remove_item_confirmation)
 	    .setPositiveButton(R.string.remove_item_do_remove, new DialogInterface.OnClickListener() {
@@ -189,6 +183,11 @@ public class FoodDetailsActivity extends ActionBarActivity {
 	        }
 	     })
 	    .show();
+	}
+
+	public void cancel(View v) {
+	    setResult(FOOD_DETAILS_RESULT_CANCELED);
+		finish();
 	}
 	
 	public void addToMeal(View v) {

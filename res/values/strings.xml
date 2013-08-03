@@ -18,7 +18,7 @@
     <string name="food_details_weight">Weight:</string>
     <string name="food_details_carbs">Carbs:</string>
     <string name="grams">g</string>
-    <string name="food_details_remove_item">Remove</string>
+    <string name="food_details_cancel">Cancel</string>
     <string name="add_to_meal">Add to meal</string>
     <string name="save_food_details">Save</string>
     <string name="title_activity_meal">Meal</string>
@@ -30,5 +30,6 @@
     <string name="remove_item_confirmation">Remove this item?</string>
     <string name="remove_item_do_remove">Remove</string>
     <string name="remove_item_cancel">Cancel</string>
+    <string name="menu_food_details_remove">Remove</string>
     
 </resources>
