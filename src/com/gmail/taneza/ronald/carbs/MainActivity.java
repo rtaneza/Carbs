@@ -313,7 +313,7 @@ public class MainActivity extends ActionBarActivity implements
 		//TODO: don't use DeepEquals, implement FoodItem.equals() instead
 		boolean duplicate = false;
 		for (FoodItem item : mRecentFoodsList) {
-			if (DeepEquals.deepEquals(item, foodItem)) {
+			if (item.equals(foodItem)) {
 				duplicate = true;
 				break;
 			}

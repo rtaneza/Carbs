@@ -99,11 +99,11 @@ public class AllFoodsFragment extends BaseListFragment
     	SQLiteCursor cursor = (SQLiteCursor)l.getItemAtPosition(position);
 
     	FoodItem foodItem = new FoodItem(
+    			cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_PRODUCT_CODE)),
     			cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_ENGLISH_NAME)),
     			cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_DUTCH_NAME)),
     			DEFAULT_WEIGHT_IN_GRAMS,
-    			cursor.getFloat(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_CARBS)),
-    			cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_PRODUCT_CODE)));
+    			cursor.getFloat(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_CARBS)));
     	
     	Intent intent = new Intent(getActivity(), FoodDetailsActivity.class);
     	intent.putExtra(FoodDetailsActivity.LANGUAGE_MESSAGE, mMainActivityNotifier.getLanguage());
