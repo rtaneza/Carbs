@@ -23,8 +23,8 @@ public interface MainActivityNotifier {
 	public FoodDbAdapter getFoodDbAdapter();
 	public void addFoodItemToMeal(FoodItem foodItem);
 	public void replaceFoodItemInMeal(int index, FoodItem foodItem);
-	public void removeFoodItemFromMeal(FoodItem foodItem);
-	public void removeFoodItemFromRecentFoods(FoodItem foodItem);
+	public void removeFoodItemFromMeal(int index);
+	public void removeFoodItemFromRecentFoods(int index);
 	public ArrayList<FoodItem> getFoodItemsList();
 	public ArrayList<FoodItem> getRecentFoodsList();
 }

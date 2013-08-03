@@ -39,11 +39,6 @@ import android.widget.TextView.OnEditorActionListener;
 
 import com.commonsware.cwac.loaderex.acl.SQLiteCursorLoader;
 
-// TODOS
-// create separate activity for menu list
-// create recent food list
-// save last used weight per food
-
 public class AllFoodsFragment extends BaseListFragment 
     implements LoaderManager.LoaderCallbacks<Cursor> {
 

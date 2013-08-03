@@ -44,19 +44,16 @@ public class MainActivity extends ActionBarActivity implements
 
 	public final static String PREF_LANGUAGE = "PREF_LANGUAGE";
 	public final static String PREF_RECENT_FOODS_LIST = "PREF_RECENT_FOODS_LIST";
+	public final static String PREF_FOOD_ITEMS_LIST = "PREF_FOOD_ITEMS_LIST";
 
 	public final static int RECENT_FOODS_LIST_MAX_SIZE = 30;
 	
 	public final static int ALL_FOODS_TAB_INDEX = 0;
 	public final static int RECENT_FOODS_TAB_INDEX = 1;
 	public final static int MEAL_TAB_INDEX = 2;
-
-	public final static String STATE_TOTAL_CARBS_KEY = "STATE_TOTAL_CARBS_KEY";
-	public final static String STATE_FOOD_ITEMS_LIST_KEY = "STATE_FOOD_ITEMS_LIST_KEY";
 	
 	private Language mLanguage;
 	private FoodDbAdapter mFoodDbAdapter;
-	private float mTotalCarbsInGrams;
     private ArrayList<FoodItem> mFoodItemsList;
     private ArrayList<FoodItem> mRecentFoodsList;
 	
@@ -69,21 +66,14 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-		if (savedInstanceState != null) {
-			// This is called after an orientation change.
-			mTotalCarbsInGrams = savedInstanceState.getFloat(STATE_TOTAL_CARBS_KEY);
-			mFoodItemsList = savedInstanceState.getParcelableArrayList(STATE_FOOD_ITEMS_LIST_KEY);
-        } else {
-        	mTotalCarbsInGrams = 0;
-        	mFoodItemsList = new ArrayList<FoodItem>();
-        }
-		
+        
  		// Restore preferences
  		SharedPreferences prefs = getPreferences(0);
  		mLanguage = Language.values()[prefs.getInt(PREF_LANGUAGE, Language.DUTCH.ordinal())];
  		
  		try {
+ 			mFoodItemsList = (ArrayList<FoodItem>) ObjectSerializer.deserialize(
+ 					prefs.getString(PREF_FOOD_ITEMS_LIST, ObjectSerializer.serialize(new ArrayList<FoodItem>())));
  			mRecentFoodsList = (ArrayList<FoodItem>) ObjectSerializer.deserialize(
  					prefs.getString(PREF_RECENT_FOODS_LIST, ObjectSerializer.serialize(new ArrayList<FoodItem>())));
         } catch (IOException e) {
@@ -122,13 +112,6 @@ public class MainActivity extends ActionBarActivity implements
         
  		updateRecentFoodsAndMealData();
     }
-    
-	@Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putFloat(STATE_TOTAL_CARBS_KEY, mTotalCarbsInGrams);
-        outState.putParcelableArrayList(STATE_FOOD_ITEMS_LIST_KEY, mFoodItemsList);
-    }
 	
 	@Override
     protected void onStop(){
@@ -140,6 +123,7 @@ public class MainActivity extends ActionBarActivity implements
       SharedPreferences.Editor editor = prefs.edit();
       editor.putInt(PREF_LANGUAGE, mLanguage.ordinal());
       try {
+    	  editor.putString(PREF_FOOD_ITEMS_LIST, ObjectSerializer.serialize(mFoodItemsList));
     	  editor.putString(PREF_RECENT_FOODS_LIST, ObjectSerializer.serialize(mRecentFoodsList));
       } catch (IOException e) {
     	  e.printStackTrace();
@@ -263,11 +247,13 @@ public class MainActivity extends ActionBarActivity implements
 	}
 	
 	private void updateTotalCarbsText() {
-		// float value may go to just below zero after subtraction
-		if (mTotalCarbsInGrams < 0) {
-			mTotalCarbsInGrams = 0;
+		float totalCarbsInGrams = 0;
+		
+		for (FoodItem item : mFoodItemsList) {
+			totalCarbsInGrams += item.getNumCarbsInGrams();
 		}
-		mTotalCarbsTextView.setText(String.format("%.1f g", mTotalCarbsInGrams));
+		
+		mTotalCarbsTextView.setText(String.format("%.1f g", totalCarbsInGrams));
 	}
 	
 	private void updateMealTabText() {
@@ -306,7 +292,6 @@ public class MainActivity extends ActionBarActivity implements
 	}
 	
 	private void clearMeal() {
-		mTotalCarbsInGrams = 0;
 		mFoodItemsList.clear();
 		updateRecentFoodsAndMealData();
 	}
@@ -334,7 +319,6 @@ public class MainActivity extends ActionBarActivity implements
 	
 	@Override
 	public void addFoodItemToMeal(FoodItem foodItem) {
-		mTotalCarbsInGrams += foodItem.getNumCarbsInGrams();
 		mFoodItemsList.add(foodItem);
 		
 		addFoodItemtoRecentFoodsList(foodItem);
@@ -343,10 +327,7 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public void replaceFoodItemInMeal(int index, FoodItem foodItem) {
-		FoodItem oldItem = mFoodItemsList.remove(index);
-		mTotalCarbsInGrams -= oldItem.getNumCarbsInGrams();		
-		
-		mTotalCarbsInGrams += foodItem.getNumCarbsInGrams();
+		mFoodItemsList.remove(index);
 		mFoodItemsList.add(index, foodItem);
 
 		addFoodItemtoRecentFoodsList(foodItem);
@@ -354,15 +335,14 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	@Override
-	public void removeFoodItemFromMeal(FoodItem foodItem) {
-		mTotalCarbsInGrams -= foodItem.getNumCarbsInGrams();
-		mFoodItemsList.remove(foodItem);
+	public void removeFoodItemFromMeal(int index) {
+		mFoodItemsList.remove(index);
 		updateRecentFoodsAndMealData();
 	}
 
 	@Override
-	public void removeFoodItemFromRecentFoods(FoodItem foodItem) {
-		mRecentFoodsList.remove(foodItem);
+	public void removeFoodItemFromRecentFoods(int index) {
+		mRecentFoodsList.remove(index);
 		updateRecentFoodsAndMealData();
 	}
 	

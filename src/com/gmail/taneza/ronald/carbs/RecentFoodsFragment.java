@@ -68,7 +68,8 @@ public class RecentFoodsFragment extends BaseListFragment {
     	intent.putExtra(FoodDetailsActivity.FOOD_ITEM_MESSAGE, (Parcelable)foodItem);
     	intent.putExtra(FoodDetailsActivity.ACTIVITY_MODE_MESSAGE, FoodDetailsActivity.Mode.RecentFood.ordinal());
 
-    	startActivityForResult(intent, 0);
+    	// use the requestCode arg for the list position
+    	startActivityForResult(intent, position);
     }
     
     @Override
@@ -82,7 +83,8 @@ public class RecentFoodsFragment extends BaseListFragment {
 	    		
         	case FoodDetailsActivity.FOOD_DETAILS_RESULT_REMOVE:
         		foodItem = data.getParcelableExtra(FoodDetailsActivity.FOOD_ITEM_RESULT);
-	    		mMainActivityNotifier.removeFoodItemFromRecentFoods(foodItem);
+        		int index = requestCode;
+	    		mMainActivityNotifier.removeFoodItemFromRecentFoods(index);
 	    		break;
         }
     }

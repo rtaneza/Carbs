@@ -79,16 +79,17 @@ public class MealFragment extends BaseListFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
     	FoodItem foodItem;
+		int index = requestCode;
+		
         switch (resultCode) {
         	case FoodDetailsActivity.FOOD_DETAILS_RESULT_OK:
         		foodItem = data.getParcelableExtra(FoodDetailsActivity.FOOD_ITEM_RESULT);
-        		int index = requestCode;
 	    		mMainActivityNotifier.replaceFoodItemInMeal(index, foodItem);
 	    		break;
 	    		
         	case FoodDetailsActivity.FOOD_DETAILS_RESULT_REMOVE:
         		foodItem = data.getParcelableExtra(FoodDetailsActivity.FOOD_ITEM_RESULT);
-	    		mMainActivityNotifier.removeFoodItemFromMeal(foodItem);
+	    		mMainActivityNotifier.removeFoodItemFromMeal(index);
 	    		break;
         }
     }
