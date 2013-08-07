@@ -64,7 +64,8 @@ public class AllFoodsFragment extends BaseListFragment
 	
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		String searchText = mSearchEditText.getText().toString();
+		//String searchText = mSearchEditText.getText().toString();
+		String searchText = "";
 		String queryString = mFoodDbAdapter.getFoodNameQueryString(searchText);		
 		return new SQLiteCursorLoader(getActivity(), mFoodDbAdapter, queryString, null);
 	}
@@ -134,6 +135,7 @@ public class AllFoodsFragment extends BaseListFragment
 	}
 	
 	private void addSearchTextListener(View rootView) {
+		/*
 		mSearchEditText = (ClearableEditText) rootView.findViewById(R.id.search_text);
 		
 		mSearchEditText.addTextChangedListener(new TextWatcher() {
@@ -157,5 +159,6 @@ public class AllFoodsFragment extends BaseListFragment
 				return true;
 			}
 		});
+	*/
 	}
 }

@@ -22,6 +22,9 @@ import java.util.ArrayList;
 import org.apache.pig.impl.util.ObjectSerializer;
 
 import android.annotation.TargetApi;
+import android.app.SearchManager;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -33,6 +36,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.Tab;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -111,8 +116,24 @@ public class MainActivity extends ActionBarActivity implements
         actionBar.setHomeButtonEnabled(false);
         
  		updateRecentFoodsAndMealData();
+ 		
+ 	    handleIntent(getIntent());
     }
-	
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        setIntent(intent);
+        handleIntent(intent);
+    }
+    
+    private void handleIntent(Intent intent) {
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+          String query = intent.getStringExtra(SearchManager.QUERY);
+          Log.i("Search: ", query);
+          //doMySearch(query);
+        }
+    }
+    
 	@Override
     protected void onStop(){
        super.onStop();
@@ -189,6 +210,15 @@ public class MainActivity extends ActionBarActivity implements
         super.onCreateOptionsMenu(menu);
         mOptionsMenu = menu;
 		getMenuInflater().inflate(R.menu.menu_main, menu);
+		
+		// Associate searchable configuration with the SearchView
+	    SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+	    SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+	    if (searchView != null) {
+	    	searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+	    	searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+	    }
+	    
 		setLanguageTextInOptionsMenu(mLanguage);
         return true;
     }

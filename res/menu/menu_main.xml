@@ -6,11 +6,18 @@
     should use our app's namespace.
     See: http://developer.android.com/guide/topics/ui/actionbar.html#ActionItems
      -->
+     
+    <item android:id="@+id/search"
+          android:title="@string/menu_search"
+          android:orderInCategory="0"
+          android:icon="@android:drawable/ic_search_category_default"
+          carbs:showAsAction="collapseActionView|ifRoom"
+          carbs:actionViewClass="android.support.v7.widget.SearchView" />
     
 	<item
         android:id="@+id/menu_language"
         android:title="@string/menu_language_dutch"
-        android:orderInCategory="0"
+        android:orderInCategory="1"
         carbs:showAsAction="always|withText">
 	    <menu>
 	        <item
@@ -24,13 +31,13 @@
 	
     <item
         android:id="@+id/menu_clear_recent_foods"
-        android:orderInCategory="1"
+        android:orderInCategory="50"
         carbs:showAsAction="never"
         android:title="@string/menu_clear_recent_foods"/>
     
     <item
         android:id="@+id/menu_clear_meal"
-        android:orderInCategory="2"
+        android:orderInCategory="51"
         carbs:showAsAction="never"
         android:title="@string/menu_clear_meal"/>
     
