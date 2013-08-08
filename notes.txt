@@ -26,5 +26,13 @@ android-sqlite-asset-helper
 https://github.com/jgilfelt/android-sqlite-asset-helper
 
 sqlite query:
-select EnglishName from food where "EnglishName" like '%corn %'
+select EnglishName,_05001 from food where "EnglishName" like '%corn %'
+union
+select Name,CarbsGramsPerUnit from MyFoods where "Name" like '%pan%'
+
+select 'Default' as TableName, EnglishName,_05001 from food where "EnglishName" like '%corn %'
+union
+select 'MyFoods' as TableName, Name,CarbsGramsPerUnit from MyFoods where "Name" like '%pan%'
+
+08-08 23:05:16.143: I/Carbs(13689): Query string: SELECT 0 _id, '' AS TableName, Product_omschrijving, EnglishName, _05001, Productcode FROM Food WHERE (EnglishName like '%pans%') UNION ALL SELECT 0 _id, '*' AS TableName, Name, Name, CarbsGramsPerUnit, Id FROM MyFoods WHERE (Name like '%pans%') ORDER BY EnglishName
 

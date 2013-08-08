@@ -119,7 +119,7 @@ public class AllFoodsFragment extends BaseListFragment
     
 	private void initListAdapter() {
         String[] from = mFoodDbAdapter.getColumnStringArray();
-        int[] to = new int[] { R.id.food_item_name, R.id.food_item_carbs};
+        int[] to = new int[] { R.id.food_item_table_name, R.id.food_item_name, R.id.food_item_carbs};
         
         // Create an empty adapter we will use to display the loaded data.
         mAdapter = new SimpleCursorAdapter(getActivity(),

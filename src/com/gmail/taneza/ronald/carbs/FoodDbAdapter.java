@@ -20,24 +20,34 @@ import java.io.File;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteQueryBuilder;
+import android.util.Log;
 
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 public class FoodDbAdapter extends SQLiteAssetHelper {
 	public static final String TABLE_NAME = "Food";
+
+	public static final String COLUMN_TABLE_NAME = "TableName";
+	
 	public static final String COLUMN_DUTCH_NAME = "Product_omschrijving";
 	public static final String COLUMN_ENGLISH_NAME = "EnglishName";
 	public static final String COLUMN_CARBS = "_05001";
 	public static final String COLUMN_PRODUCT_CODE = "Productcode";
+
+	public static final String MYFOODS_TABLE_NAME = "MyFoods";
+	public static final String MYFOODS_COLUMN_NAME = "Name";
+	public static final String MYFOODS_COLUMN_WEIGHT_GRAMS_PER_UNIT = "WeightGramsPerUnit";
+	public static final String MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT = "CarbsGramsPerUnit";
+	public static final String MYFOODS_COLUMN_ID = "Id";
 	
-    private static final String DATABASE_NAME = "NevoFoodListWithEnglishNames";
+    private static final String DATABASE_NAME = "NevoFoodListWithEnglishNamesAndMyFoods";
     private static final int DATABASE_VERSION = 1;
     
     private Language mLanguage;
     
     public FoodDbAdapter(Context context, Language language) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    	deleteDbIfItAlreadyExists(context);
+        deleteDbIfItAlreadyExists(context);
     	mLanguage = language;
     }
     
@@ -46,24 +56,31 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     }
 	
     public String getFoodNameQueryString(String foodName) {
-    	// TODO: add setting for this
-    	String whereClause = getLanguageString() + " like '%" + foodName + "%'";
-    	// whole word only: does not work in sqlite
-    	//String whereClause = getLanguageString() + " like '%[^a-z]" + foodName + "[^a-z]%'";
-    	return getQueryString(whereClause.toString());
-	}
-    
-    public String getQueryString(String whereClause) {
-		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+		SQLiteQueryBuilder foodQb = new SQLiteQueryBuilder();
 
 		// Cursor requires an "_id" column
 		// todo: find out what "0" really means
-		String [] sqlSelect = {"0 _id", COLUMN_DUTCH_NAME, COLUMN_ENGLISH_NAME, COLUMN_CARBS, COLUMN_PRODUCT_CODE}; 
-		String sqlTables = TABLE_NAME;
+		String [] foodSqlSelect = {"0 _id", COLUMN_TABLE_NAME, COLUMN_DUTCH_NAME, COLUMN_ENGLISH_NAME, COLUMN_CARBS, COLUMN_PRODUCT_CODE}; 
+		String foodWhereClause = getLanguageString() + " like '%" + foodName + "%'";
+		
+		foodQb.setTables(TABLE_NAME);
+		String foodSubQuery = foodQb.buildUnionSubQuery(COLUMN_TABLE_NAME, foodSqlSelect, null, foodSqlSelect.length, 
+				" ", foodWhereClause, null, null);
+		
+		SQLiteQueryBuilder myFoodsQb = new SQLiteQueryBuilder();
+		// Both select statements must have the same number of columns, so we repeat the "Name" column here
+		String [] myFoodsSqlSelect = {"0 _id", COLUMN_TABLE_NAME, MYFOODS_COLUMN_NAME, MYFOODS_COLUMN_NAME, MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT, MYFOODS_COLUMN_ID}; 
+		String myFoodsWhereClause = MYFOODS_COLUMN_NAME + " like '%" + foodName + "%'";
+		
+		myFoodsQb.setTables(MYFOODS_TABLE_NAME);
+		String myFoodsSubQuery = myFoodsQb.buildUnionSubQuery(COLUMN_TABLE_NAME, myFoodsSqlSelect, null, myFoodsSqlSelect.length, 
+				"*", myFoodsWhereClause, null, null);
 
-		qb.setTables(sqlTables);
-		return qb.buildQuery(sqlSelect, whereClause, null,
-				null, getLanguageString(), null);
+		SQLiteQueryBuilder unionQb = new SQLiteQueryBuilder();
+		String queryString = unionQb.buildUnionQuery(new String[] { foodSubQuery, myFoodsSubQuery }, getLanguageString(), null);
+		
+		//Log.i("Carbs", "Query string: " + queryString);
+		return queryString;
     }
     
     public void setLanguage(Language language) {
@@ -71,14 +88,14 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     }
     
     public String[] getColumnStringArray() {
-    	return new String[] { getLanguageString(), COLUMN_CARBS };
+    	return new String[] { COLUMN_TABLE_NAME, getLanguageString(), COLUMN_CARBS };
     }
     
     private void deleteDbIfItAlreadyExists(Context context) {
-		String dbName = context.getFilesDir().getPath() + context.getPackageName() + "/databases/" + DATABASE_NAME;
-		File f = new File(dbName);
-		if (f.exists()) {
-			f.delete();			
+		File db = context.getDatabasePath(DATABASE_NAME);
+		if (db.exists()) {
+			Log.i("Carbs", String.format("Deleted db %s", db.toString()));
+			db.delete();			
 		}
 	}
     

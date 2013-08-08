@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="wrap_content"
+	android:layout_width="fill_parent"
 	android:layout_height="wrap_content" 
 	android:orientation="horizontal"
 	android:paddingLeft="@dimen/padding_horizontal"
@@ -8,17 +8,29 @@
 	android:paddingTop="@dimen/padding_vertical"
 	android:paddingBottom="@dimen/padding_vertical">
 
-	<TextView android:id="@+id/food_item_name"
-        android:layout_width="0dp"
+	<TextView android:id="@+id/food_item_table_name"
+        android:layout_width="16dp"
 	    android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+	    android:layout_alignParentLeft="true"
+		android:paddingLeft="0dp"
+		android:paddingRight="8dp"
+		android:paddingTop="0dp"
+		android:paddingBottom="0dp"
+		android:gravity="left"
+	    />
+	
+	<TextView android:id="@+id/food_item_name"
+        android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/food_item_table_name"
         android:layout_toLeftOf="@+id/food_item_carbs"
 		android:paddingLeft="0dp"
 		android:paddingRight="0dp"
 		android:paddingTop="0dp"
 		android:paddingBottom="0dp"
+		android:gravity="left"
 	    />
-		
+	
 	<TextView android:id="@+id/food_item_carbs"
 	    android:layout_width="48dp"
 	    android:layout_height="wrap_content"
@@ -29,6 +41,6 @@
 		android:paddingBottom="0dp"
 		android:gravity="right"
 	    />
-	
+		
 </RelativeLayout>
     
