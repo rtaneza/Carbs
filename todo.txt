@@ -4,7 +4,7 @@ ok // create recent food list
 ok // save last used weight per food
 
 // better handling of remove: remove multiple items at once
-// move meal list to SharedPreferences
+ok // move meal list to SharedPreferences
 // start calculator intent? to be able to add carbs manually
 // add own food list
 // search recent food list
