@@ -9,3 +9,33 @@ ok // move meal list to SharedPreferences
 // add own food list
 // search recent food list
 ok // use index in removeFoodItemFromMeal() because there may be multiple equal foodItems there
+
+My Foods:
+
+< my foods     +
+
+List
+[ search ]
+food 1
+food 2
+
+
+< Add food
+
+Name: ____
+
+Weight per unit: ___ g
+Carbs per unit:  ___ g
+
+[Cancel] [Add]
+
+
+< Edit food   |Del|
+
+Name: ____
+
+Weight per unit: ___ g
+Carbs per unit:  ___ g
+
+[Cancel] [Save]
+

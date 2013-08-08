@@ -223,13 +223,22 @@ public class MainActivity extends ActionBarActivity implements
 	    	setLanguageTextInOptionsMenu(language);
 			
 	    	AllFoodsFragment allFoodsFragment = (AllFoodsFragment)getFragment(ALL_FOODS_TAB_INDEX);
-	    	allFoodsFragment.setLanguage(language);
+	    	if (allFoodsFragment != null)
+	    	{
+	    		allFoodsFragment.setLanguage(language);
+	    	}
 
 	    	RecentFoodsFragment recentFoodsFragment = (RecentFoodsFragment)getFragment(RECENT_FOODS_TAB_INDEX);
-	    	recentFoodsFragment.setLanguage(language);
+	    	if (recentFoodsFragment != null)
+	    	{
+	    		recentFoodsFragment.setLanguage(language);
+	    	}
 	    	
 	    	MealFragment mealFragment = (MealFragment)getFragment(MEAL_TAB_INDEX);
-	    	mealFragment.setLanguage(language);
+	    	if (mealFragment != null)
+	    	{
+	    		mealFragment.setLanguage(language);
+	    	}
 	    }
 	}
 	
