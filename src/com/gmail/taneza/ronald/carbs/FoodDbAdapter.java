@@ -65,7 +65,7 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
 		
 		foodQb.setTables(TABLE_NAME);
 		String foodSubQuery = foodQb.buildUnionSubQuery(COLUMN_TABLE_NAME, foodSqlSelect, null, foodSqlSelect.length, 
-				" ", foodWhereClause, null, null);
+				"", foodWhereClause, null, null);
 		
 		SQLiteQueryBuilder myFoodsQb = new SQLiteQueryBuilder();
 		// Both select statements must have the same number of columns, so we repeat the "Name" column here
