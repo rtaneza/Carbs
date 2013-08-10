@@ -18,7 +18,6 @@ package com.gmail.taneza.ronald.carbs;
 
 import org.droidparts.widget.ClearableEditText;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteCursor;
@@ -34,6 +33,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.SimpleCursorAdapter.ViewBinder;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
@@ -41,8 +41,6 @@ import com.commonsware.cwac.loaderex.acl.SQLiteCursorLoader;
 
 public class AllFoodsFragment extends BaseListFragment 
     implements LoaderManager.LoaderCallbacks<Cursor> {
-
-	public final static int DEFAULT_WEIGHT_IN_GRAMS = 100;
 
 	private FoodDbAdapter mFoodDbAdapter;
     private SimpleCursorAdapter mAdapter;
@@ -92,8 +90,8 @@ public class AllFoodsFragment extends BaseListFragment
     			cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_PRODUCT_CODE)),
     			cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_ENGLISH_NAME)),
     			cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_DUTCH_NAME)),
-    			DEFAULT_WEIGHT_IN_GRAMS,
-    			cursor.getFloat(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_CARBS)));
+    			cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_WEIGHT_PER_UNIT)),
+    			cursor.getFloat(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_CARBS_GRAMS_PER_UNIT)));
     	
     	Intent intent = new Intent(getActivity(), FoodDetailsActivity.class);
     	intent.putExtra(FoodDetailsActivity.LANGUAGE_MESSAGE, mMainActivityNotifier.getLanguage());
@@ -118,12 +116,17 @@ public class AllFoodsFragment extends BaseListFragment
     }
     
 	private void initListAdapter() {
-        String[] from = mFoodDbAdapter.getColumnStringArray();
-        int[] to = new int[] { R.id.food_item_table_name, R.id.food_item_name, R.id.food_item_carbs};
+        //String[] from = mFoodDbAdapter.getColumnStringArray();
+		String[] from = { mFoodDbAdapter.getFoodNameColumnName(), FoodDbAdapter.COLUMN_TABLE_NAME, FoodDbAdapter.COLUMN_CARBS_GRAMS_PER_UNIT };
+        int[] to = new int[] { R.id.food_item_name, R.id.food_item_name_extra, R.id.food_item_carbs };
         
         // Create an empty adapter we will use to display the loaded data.
         mAdapter = new SimpleCursorAdapter(getActivity(),
         		R.layout.food_item, null, from, to, 0);
+        
+        // We set the view binder for the adapter to our own FoodItemViewBinder.
+        mAdapter.setViewBinder(new FoodItemViewBinder());
+        
         setListAdapter(mAdapter);
         
         restartLoader();
@@ -157,5 +160,33 @@ public class AllFoodsFragment extends BaseListFragment
 				return true;
 			}
 		});
+	}
+	
+	private class FoodItemViewBinder implements ViewBinder {
+
+	    @Override
+	    public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
+	        if (columnIndex == cursor.getColumnIndex(FoodDbAdapter.COLUMN_TABLE_NAME)) {
+	        	TextView textView = (TextView)view;
+	        	
+	        	String foodType = "";
+	        	String tableName = cursor.getString(columnIndex);
+	        	if (tableName.equals(FoodDbAdapter.MYFOODS_TABLE_NAME)) {
+	        		foodType = "My Food ";
+	        	}
+	        	
+	        	int weightPerUnit = cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_WEIGHT_PER_UNIT));
+	        	String unitText = cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_UNIT_TEXT));
+	        	
+	        	textView.setText(String.format("%s(%d %s)", foodType, weightPerUnit, unitText));
+	        	
+	        	return true;
+	        }
+	        
+	        // For others, we simply return false so that the default binding
+	        // happens.
+	        return false;
+	    }
+	 
 	}
 }

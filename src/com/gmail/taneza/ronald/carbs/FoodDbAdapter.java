@@ -31,12 +31,15 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
 	
 	public static final String COLUMN_DUTCH_NAME = "Product_omschrijving";
 	public static final String COLUMN_ENGLISH_NAME = "EnglishName";
-	public static final String COLUMN_CARBS = "_05001";
+	public static final String COLUMN_WEIGHT_PER_UNIT = "Hoeveelheid";
+	public static final String COLUMN_UNIT_TEXT = "Meeteenheid";
+	public static final String COLUMN_CARBS_GRAMS_PER_UNIT = "_05001";
 	public static final String COLUMN_PRODUCT_CODE = "Productcode";
 
 	public static final String MYFOODS_TABLE_NAME = "MyFoods";
 	public static final String MYFOODS_COLUMN_NAME = "Name";
-	public static final String MYFOODS_COLUMN_WEIGHT_GRAMS_PER_UNIT = "WeightGramsPerUnit";
+	public static final String MYFOODS_COLUMN_WEIGHT_PER_UNIT = "WeightPerUnit";
+	public static final String MYFOODS_COLUMN_UNIT_TEXT = "UnitText";
 	public static final String MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT = "CarbsGramsPerUnit";
 	public static final String MYFOODS_COLUMN_ID = "Id";
 	
@@ -60,21 +63,23 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
 
 		// Cursor requires an "_id" column
 		// todo: find out what "0" really means
-		String [] foodSqlSelect = {"0 _id", COLUMN_TABLE_NAME, COLUMN_DUTCH_NAME, COLUMN_ENGLISH_NAME, COLUMN_CARBS, COLUMN_PRODUCT_CODE}; 
+		String [] foodSqlSelect = {"0 _id", COLUMN_TABLE_NAME, COLUMN_DUTCH_NAME, COLUMN_ENGLISH_NAME, 
+				COLUMN_WEIGHT_PER_UNIT, COLUMN_UNIT_TEXT, COLUMN_CARBS_GRAMS_PER_UNIT, COLUMN_PRODUCT_CODE}; 
 		String foodWhereClause = getLanguageString() + " like '%" + foodName + "%'";
 		
 		foodQb.setTables(TABLE_NAME);
 		String foodSubQuery = foodQb.buildUnionSubQuery(COLUMN_TABLE_NAME, foodSqlSelect, null, foodSqlSelect.length, 
-				"", foodWhereClause, null, null);
+				TABLE_NAME, foodWhereClause, null, null);
 		
 		SQLiteQueryBuilder myFoodsQb = new SQLiteQueryBuilder();
 		// Both select statements must have the same number of columns, so we repeat the "Name" column here
-		String [] myFoodsSqlSelect = {"0 _id", COLUMN_TABLE_NAME, MYFOODS_COLUMN_NAME, MYFOODS_COLUMN_NAME, MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT, MYFOODS_COLUMN_ID}; 
+		String [] myFoodsSqlSelect = {"0 _id", COLUMN_TABLE_NAME, MYFOODS_COLUMN_NAME, MYFOODS_COLUMN_NAME, 
+				MYFOODS_COLUMN_WEIGHT_PER_UNIT, MYFOODS_COLUMN_UNIT_TEXT, MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT, MYFOODS_COLUMN_ID}; 
 		String myFoodsWhereClause = MYFOODS_COLUMN_NAME + " like '%" + foodName + "%'";
 		
 		myFoodsQb.setTables(MYFOODS_TABLE_NAME);
 		String myFoodsSubQuery = myFoodsQb.buildUnionSubQuery(COLUMN_TABLE_NAME, myFoodsSqlSelect, null, myFoodsSqlSelect.length, 
-				"*", myFoodsWhereClause, null, null);
+				MYFOODS_TABLE_NAME, myFoodsWhereClause, null, null);
 
 		SQLiteQueryBuilder unionQb = new SQLiteQueryBuilder();
 		String queryString = unionQb.buildUnionQuery(new String[] { foodSubQuery, myFoodsSubQuery }, getLanguageString(), null);
@@ -87,8 +92,8 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     	mLanguage = language;
     }
     
-    public String[] getColumnStringArray() {
-    	return new String[] { COLUMN_TABLE_NAME, getLanguageString(), COLUMN_CARBS };
+    public String getFoodNameColumnName() {
+    	return getLanguageString();
     }
     
     private void deleteDbIfItAlreadyExists(Context context) {

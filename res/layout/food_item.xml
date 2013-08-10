@@ -3,26 +3,15 @@
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content" 
 	android:orientation="horizontal"
-	android:paddingLeft="@dimen/padding_horizontal_half"
+	android:paddingLeft="@dimen/padding_horizontal"
 	android:paddingRight="@dimen/padding_horizontal"
 	android:paddingTop="@dimen/padding_vertical"
 	android:paddingBottom="@dimen/padding_vertical">
 
-	<TextView android:id="@+id/food_item_table_name"
-        android:layout_width="@dimen/padding_horizontal"
-	    android:layout_height="wrap_content"
-	    android:layout_alignParentLeft="true"
-		android:paddingLeft="0dp"
-		android:paddingRight="0dp"
-		android:paddingTop="0dp"
-		android:paddingBottom="0dp"
-		android:gravity="center"
-	    />
-	
 	<TextView android:id="@+id/food_item_name"
         android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/food_item_table_name"
+	    android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@+id/food_item_carbs"
 		android:paddingLeft="0dp"
 		android:paddingRight="0dp"
@@ -31,6 +20,20 @@
 		android:gravity="left"
 	    />
 	
+	<TextView android:id="@+id/food_item_name_extra"
+        android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+        android:layout_below="@+id/food_item_name"
+	    android:textSize="@dimen/text_size_small"
+	    android:textColor="@android:color/tertiary_text_dark"
+		android:paddingLeft="0dp"
+		android:paddingRight="0dp"
+		android:paddingTop="0dp"
+		android:paddingBottom="0dp"
+		android:gravity="left"
+	    />
+		
 	<TextView android:id="@+id/food_item_carbs"
 	    android:layout_width="48dp"
 	    android:layout_height="wrap_content"

@@ -26,6 +26,9 @@ android-sqlite-asset-helper
 https://github.com/jgilfelt/android-sqlite-asset-helper
 
 sqlite query:
+
+select Product_omschrijving,_05001 from food where "Product_omschrijving" like '% ml%'
+
 select EnglishName,_05001 from food where "EnglishName" like '%corn %'
 union
 select Name,CarbsGramsPerUnit from MyFoods where "Name" like '%pan%'
@@ -36,3 +39,41 @@ select 'MyFoods' as TableName, Name,CarbsGramsPerUnit from MyFoods where "Name" 
 
 08-08 23:05:16.143: I/Carbs(13689): Query string: SELECT 0 _id, '' AS TableName, Product_omschrijving, EnglishName, _05001, Productcode FROM Food WHERE (EnglishName like '%pans%') UNION ALL SELECT 0 _id, '*' AS TableName, Name, Name, CarbsGramsPerUnit, Id FROM MyFoods WHERE (Name like '%pans%') ORDER BY EnglishName
 
+--------
+My Foods:
+
+< my foods     +
+
+List
+[ search ]
+food 1
+food 2
+
+
+< Add food
+
+Name: ____
+
+Weight per unit: ___ g
+Carbs per unit:  ___ g
+
+[Cancel] [Add]
+
+
+< Edit food   |Del|
+
+Name: ____
+
+Weight per unit: ___ g
+Carbs per unit:  ___ g
+
+[Cancel] [Save]
+
+----
+
+
+Pansit
+My Food (100g)
+
+Brood
+(100g)
