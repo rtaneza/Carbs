@@ -91,7 +91,8 @@ public class AllFoodsFragment extends BaseListFragment
     			cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_ENGLISH_NAME)),
     			cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_DUTCH_NAME)),
     			cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_WEIGHT_PER_UNIT)),
-    			cursor.getFloat(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_CARBS_GRAMS_PER_UNIT)));
+    			cursor.getFloat(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_CARBS_GRAMS_PER_UNIT)),
+    			cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_UNIT_TEXT)));
     	
     	Intent intent = new Intent(getActivity(), FoodDetailsActivity.class);
     	intent.putExtra(FoodDetailsActivity.LANGUAGE_MESSAGE, mMainActivityNotifier.getLanguage());
