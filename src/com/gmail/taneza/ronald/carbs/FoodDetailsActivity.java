@@ -80,7 +80,7 @@ public class FoodDetailsActivity extends ActionBarActivity {
 		}
 		
 		mWeightEditText = (EditText) findViewById(R.id.food_details_weight_edit);
-		mWeightEditText.setText(Integer.toString(mFoodItem.mWeightPerUnit));
+		mWeightEditText.setText(Integer.toString(mFoodItem.mWeight));
 		// Request focus and show soft keyboard automatically
 		mWeightEditText.requestFocus();
         getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE); 
@@ -159,7 +159,7 @@ public class FoodDetailsActivity extends ActionBarActivity {
 					// ignore invalid weight string
 				}
 
-				mFoodItem.mWeightPerUnit = weight;
+				mFoodItem.mWeight = weight;
 				updateCarbsText();
 			}
 		});

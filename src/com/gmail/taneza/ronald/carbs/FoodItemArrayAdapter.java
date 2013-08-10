@@ -37,9 +37,17 @@ public class FoodItemArrayAdapter extends FoodItemBaseArrayAdapter {
 	    
 	    FoodItem foodItem = mValues.get(position);
 	    TextView nameTextView = (TextView) rowView.findViewById(R.id.meal_item_name);
-	    String foodNameAndWeight = String.format("%s (%d g)", getFoodName(foodItem), foodItem.mWeightPerUnit);
-	    nameTextView.setText(foodNameAndWeight);
+	    nameTextView.setText(getFoodName(foodItem));
 
+    	String foodType = "";
+    	if (foodItem.mTableName.equals(FoodDbAdapter.MYFOODS_TABLE_NAME)) {
+    		foodType = String.format("%s ", FoodItem.MY_FOOD_TEXT);
+    	}
+    	
+	    TextView nameExtraTextView = (TextView) rowView.findViewById(R.id.meal_item_name_extra);
+	    String foodTypeAndWeight = String.format("%s(%d %s)", foodType, foodItem.mWeight, foodItem.mUnitText);
+	    nameExtraTextView.setText(foodTypeAndWeight);
+	    
 	    TextView carbsTextView = (TextView) rowView.findViewById(R.id.meal_item_carbs);
 	    carbsTextView.setText(String.format("%.1f", foodItem.getNumCarbsInGrams()));
 

@@ -25,16 +25,15 @@ import android.util.Log;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 public class FoodDbAdapter extends SQLiteAssetHelper {
-	public static final String TABLE_NAME = "Food";
-
 	public static final String COLUMN_TABLE_NAME = "TableName";
-	
-	public static final String COLUMN_DUTCH_NAME = "Product_omschrijving";
-	public static final String COLUMN_ENGLISH_NAME = "EnglishName";
-	public static final String COLUMN_WEIGHT_PER_UNIT = "Hoeveelheid";
-	public static final String COLUMN_UNIT_TEXT = "Meeteenheid";
-	public static final String COLUMN_CARBS_GRAMS_PER_UNIT = "_05001";
-	public static final String COLUMN_PRODUCT_CODE = "Productcode";
+
+	public static final String NEVO_TABLE_NAME = "Food";
+	public static final String NEVO_COLUMN_DUTCH_NAME = "Product_omschrijving";
+	public static final String NEVO_COLUMN_ENGLISH_NAME = "EnglishName";
+	public static final String NEVO_COLUMN_WEIGHT_PER_UNIT = "Hoeveelheid";
+	public static final String NEVO_COLUMN_UNIT_TEXT = "Meeteenheid";
+	public static final String NEVO_COLUMN_CARBS_GRAMS_PER_UNIT = "_05001";
+	public static final String NEVO_COLUMN_PRODUCT_CODE = "Productcode";
 
 	public static final String MYFOODS_TABLE_NAME = "MyFoods";
 	public static final String MYFOODS_COLUMN_NAME = "Name";
@@ -58,23 +57,25 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     	getReadableDatabase();
     }
 	
-    public String getFoodNameQueryString(String foodName) {
+    public String getQueryStringAllFoods(String foodName) {
 		SQLiteQueryBuilder foodQb = new SQLiteQueryBuilder();
 
 		// Cursor requires an "_id" column
 		// todo: find out what "0" really means
-		String [] foodSqlSelect = {"0 _id", COLUMN_TABLE_NAME, COLUMN_DUTCH_NAME, COLUMN_ENGLISH_NAME, 
-				COLUMN_WEIGHT_PER_UNIT, COLUMN_UNIT_TEXT, COLUMN_CARBS_GRAMS_PER_UNIT, COLUMN_PRODUCT_CODE}; 
+		String [] foodSqlSelect = {"0 _id", COLUMN_TABLE_NAME, NEVO_COLUMN_DUTCH_NAME, NEVO_COLUMN_ENGLISH_NAME, 
+				NEVO_COLUMN_WEIGHT_PER_UNIT, NEVO_COLUMN_UNIT_TEXT, 
+				NEVO_COLUMN_CARBS_GRAMS_PER_UNIT, NEVO_COLUMN_PRODUCT_CODE}; 
 		String foodWhereClause = getLanguageString() + " like '%" + foodName + "%'";
 		
-		foodQb.setTables(TABLE_NAME);
+		foodQb.setTables(NEVO_TABLE_NAME);
 		String foodSubQuery = foodQb.buildUnionSubQuery(COLUMN_TABLE_NAME, foodSqlSelect, null, foodSqlSelect.length, 
-				TABLE_NAME, foodWhereClause, null, null);
+				NEVO_TABLE_NAME, foodWhereClause, null, null);
 		
 		SQLiteQueryBuilder myFoodsQb = new SQLiteQueryBuilder();
 		// Both select statements must have the same number of columns, so we repeat the "Name" column here
 		String [] myFoodsSqlSelect = {"0 _id", COLUMN_TABLE_NAME, MYFOODS_COLUMN_NAME, MYFOODS_COLUMN_NAME, 
-				MYFOODS_COLUMN_WEIGHT_PER_UNIT, MYFOODS_COLUMN_UNIT_TEXT, MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT, MYFOODS_COLUMN_ID}; 
+				MYFOODS_COLUMN_WEIGHT_PER_UNIT, MYFOODS_COLUMN_UNIT_TEXT, 
+				MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT, MYFOODS_COLUMN_ID}; 
 		String myFoodsWhereClause = MYFOODS_COLUMN_NAME + " like '%" + foodName + "%'";
 		
 		myFoodsQb.setTables(MYFOODS_TABLE_NAME);
@@ -85,6 +86,20 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
 		String queryString = unionQb.buildUnionQuery(new String[] { foodSubQuery, myFoodsSubQuery }, getLanguageString(), null);
 		
 		//Log.i("Carbs", "Query string: " + queryString);
+		return queryString;
+    }
+
+    public String getQueryStringMyFoods(String foodName) {
+		SQLiteQueryBuilder myFoodsQb = new SQLiteQueryBuilder();
+		String [] myFoodsSqlSelect = {"0 _id", String.format("\"%s\" AS %s", MYFOODS_TABLE_NAME, COLUMN_TABLE_NAME),
+				MYFOODS_COLUMN_NAME, MYFOODS_COLUMN_WEIGHT_PER_UNIT, MYFOODS_COLUMN_UNIT_TEXT, 
+				MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT, MYFOODS_COLUMN_ID}; 
+		String myFoodsWhereClause = MYFOODS_COLUMN_NAME + " like '%" + foodName + "%'";
+		
+		myFoodsQb.setTables(MYFOODS_TABLE_NAME);
+		String queryString = myFoodsQb.buildQuery(myFoodsSqlSelect, myFoodsWhereClause, null, null, MYFOODS_COLUMN_NAME, null);
+		
+		//Log.i("Carbs", "MyFoods query string: " + queryString);
 		return queryString;
     }
     
@@ -108,9 +123,9 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     {
     	switch (mLanguage) {
     		case ENGLISH:
-    			return COLUMN_ENGLISH_NAME;
+    			return NEVO_COLUMN_ENGLISH_NAME;
     		case DUTCH:
-    			return COLUMN_DUTCH_NAME;
+    			return NEVO_COLUMN_DUTCH_NAME;
     		default:
     			return null;
     	}

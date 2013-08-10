@@ -35,6 +35,7 @@ import android.support.v7.app.ActionBar.Tab;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 public class MainActivity extends ActionBarActivity implements
@@ -49,8 +50,9 @@ public class MainActivity extends ActionBarActivity implements
 	public final static int RECENT_FOODS_LIST_MAX_SIZE = 30;
 	
 	public final static int ALL_FOODS_TAB_INDEX = 0;
-	public final static int RECENT_FOODS_TAB_INDEX = 1;
-	public final static int MEAL_TAB_INDEX = 2;
+	public final static int MY_FOODS_TAB_INDEX = 1;
+	public final static int RECENT_FOODS_TAB_INDEX = 2;
+	public final static int MEAL_TAB_INDEX = 3;
 	
 	private Language mLanguage;
 	private FoodDbAdapter mFoodDbAdapter;
@@ -100,6 +102,9 @@ public class MainActivity extends ActionBarActivity implements
                 .setText(R.string.title_all_foods)
                 .setTabListener(this));
         actionBar.addTab(actionBar.newTab()
+                .setText(R.string.title_my_foods)
+                .setTabListener(this));
+        actionBar.addTab(actionBar.newTab()
                 .setText(R.string.title_recent_foods)
                 .setTabListener(this));
         actionBar.addTab(actionBar.newTab()
@@ -136,6 +141,13 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
         mViewPager.setCurrentItem(tab.getPosition());
+
+ 		View searchText = findViewById(R.id.search_text);
+        if (tab.getPosition() == MEAL_TAB_INDEX) {
+        	searchText.setVisibility(View.GONE);
+        } else {
+        	searchText.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -169,6 +181,8 @@ public class MainActivity extends ActionBarActivity implements
             switch (position) {
                 case ALL_FOODS_TAB_INDEX:
                     return new AllFoodsFragment();
+                case MY_FOODS_TAB_INDEX:
+                    return new MyFoodsFragment();
                 case RECENT_FOODS_TAB_INDEX:
                     return new RecentFoodsFragment();
                 case MEAL_TAB_INDEX:
@@ -179,7 +193,7 @@ public class MainActivity extends ActionBarActivity implements
 
         @Override
         public int getCount() {
-            return 3;
+            return 4;
         }
     }
 
@@ -228,6 +242,12 @@ public class MainActivity extends ActionBarActivity implements
 	    		allFoodsFragment.setLanguage(language);
 	    	}
 
+	    	MyFoodsFragment myFoodsFragment = (MyFoodsFragment)getFragment(MY_FOODS_TAB_INDEX);
+	    	if (myFoodsFragment != null)
+	    	{
+	    		myFoodsFragment.setLanguage(language);
+	    	}
+	    	
 	    	RecentFoodsFragment recentFoodsFragment = (RecentFoodsFragment)getFragment(RECENT_FOODS_TAB_INDEX);
 	    	if (recentFoodsFragment != null)
 	    	{

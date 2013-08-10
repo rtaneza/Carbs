@@ -28,6 +28,8 @@ public class FoodItem implements Parcelable, Serializable {
 
 	private static final long serialVersionUID = 6139044679990035502L;
 
+	public static final String MY_FOOD_TEXT = "My Food";
+	
 	/* 
 	 * Do not change, rename, or remove existing fields! 
 	 * New fields may be added without needing to change serialVersionUID.
@@ -38,30 +40,36 @@ public class FoodItem implements Parcelable, Serializable {
 	public int mProductCode;
 	public String mEnglishName;
 	public String mDutchName;
-	public int mWeightPerUnit;
-	public float mNumCarbsInGramsPerUnit;
-	private String mUnitText;
+	public int mWeight; // weight input by the user
+	public int mWeightPerUnit; // e.g. 100 g
+	public float mNumCarbsInGramsPerUnit; // e.g. 30 g
+	public String mUnitText; // e.g. g or ml
+	public String mTableName; // Database table name
 	
-	public float getNumCarbsInGrams() {
-		return (mNumCarbsInGramsPerUnit * mWeightPerUnit) / 100;
-	}
-	
-	public FoodItem(int productCode, String englishName, String dutchName, int weightInUnit, float numCarbsInGramsPerUnit, String unitText) {
+	public FoodItem(int productCode, String englishName, String dutchName, int weight, int weightInUnit, float numCarbsInGramsPerUnit, String unitText, String tableName) {
 		mProductCode = productCode;
 		mEnglishName = englishName;
 		mDutchName = dutchName;
+		mWeight = weight;
 		mWeightPerUnit = weightInUnit;
 		mNumCarbsInGramsPerUnit = numCarbsInGramsPerUnit;
 		mUnitText = unitText;
+		mTableName = tableName;
+	}
+
+	public float getNumCarbsInGrams() {
+		return (mNumCarbsInGramsPerUnit * mWeight) / mWeightPerUnit;
 	}
 	
 	private FoodItem(Parcel parcel) {
 		mProductCode = parcel.readInt();
 		mEnglishName = parcel.readString();
 		mDutchName = parcel.readString();
+		mWeight = parcel.readInt();
 		mWeightPerUnit = parcel.readInt();
 		mNumCarbsInGramsPerUnit = parcel.readFloat();
 		mUnitText = parcel.readString();
+		mTableName = parcel.readString();
     }
 
 	public static final Creator<FoodItem> CREATOR = new Creator<FoodItem>() {
@@ -87,9 +95,11 @@ public class FoodItem implements Parcelable, Serializable {
 		dest.writeInt(mProductCode);
 		dest.writeString(mEnglishName);
 		dest.writeString(mDutchName);
+		dest.writeInt(mWeight);
 		dest.writeInt(mWeightPerUnit);
 		dest.writeFloat(mNumCarbsInGramsPerUnit);
 		dest.writeString(mUnitText);
+		dest.writeString(mTableName);
 	}
 	
 	public boolean equals(Object obj) {
@@ -103,9 +113,11 @@ public class FoodItem implements Parcelable, Serializable {
 		              .append(mProductCode, rhs.mProductCode)
 		              .append(mEnglishName, rhs.mEnglishName)
 		              .append(mDutchName, rhs.mDutchName)
+		              .append(mWeight, rhs.mWeight)
 		              .append(mWeightPerUnit, rhs.mWeightPerUnit)
 		              .append(mNumCarbsInGramsPerUnit, rhs.mNumCarbsInGramsPerUnit)
 		              .append(mUnitText, rhs.mUnitText)
+		              .append(mTableName, rhs.mTableName)
 		              .isEquals();
 	}
 	
@@ -115,9 +127,11 @@ public class FoodItem implements Parcelable, Serializable {
 	     	.append(mProductCode)
 	     	.append(mEnglishName)
 	     	.append(mDutchName)
+	     	.append(mWeight)
 	     	.append(mWeightPerUnit)
 	     	.append(mNumCarbsInGramsPerUnit)
 	     	.append(mUnitText)
+	     	.append(mTableName)
 	        .toHashCode();
 	}
 }
