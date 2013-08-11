@@ -367,8 +367,8 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	@Override
-	public void removeFoodItemFromRecentFoods(int index) {
-		mRecentFoodsList.remove(index);
+	public void removeFoodItemFromRecentFoods(FoodItem foodItem) {
+		mRecentFoodsList.remove(foodItem);
 		updateRecentFoodsAndMealData();
 	}
 	
