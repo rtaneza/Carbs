@@ -35,7 +35,7 @@
 	    />
 		
 	<TextView android:id="@+id/food_item_carbs"
-	    android:layout_width="48dp"
+	    android:layout_width="64dp"
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentRight="true"
 		android:paddingLeft="@dimen/padding_horizontal_half"
