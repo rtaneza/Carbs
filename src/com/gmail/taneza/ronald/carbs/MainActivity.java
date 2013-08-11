@@ -148,6 +148,8 @@ public class MainActivity extends ActionBarActivity implements
         } else {
         	searchText.setVisibility(View.VISIBLE);
         }
+        
+        updateAddMyFoodMenuItemVisibility();
     }
 
     @Override
@@ -201,9 +203,14 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
+        
         mOptionsMenu = menu;
 		getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        updateAddMyFoodMenuItemVisibility();
+        
 		setLanguageTextInOptionsMenu(mLanguage);
+		
         return true;
     }
 
@@ -267,6 +274,17 @@ public class MainActivity extends ActionBarActivity implements
 				R.string.menu_language_english : R.string.menu_language_dutch;
 		MenuItem languageMenuItem = mOptionsMenu.findItem(R.id.menu_language);
     	languageMenuItem.setTitle(languageId);
+	}
+	
+	private void updateAddMyFoodMenuItemVisibility() {
+		if (mOptionsMenu != null) {
+			MenuItem addMyFoodMenuItem = mOptionsMenu.findItem(R.id.menu_add_my_food);
+	        if (mViewPager.getCurrentItem() == MY_FOODS_TAB_INDEX) {
+	        	addMyFoodMenuItem.setVisible(true);
+	        } else {
+	        	addMyFoodMenuItem.setVisible(false);
+	        }
+		}
 	}
 
 	private static String getFragmentTag(int index)

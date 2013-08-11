@@ -8,6 +8,7 @@
     <string name="menu_clear_recent_foods">Clear recent</string>
     <string name="menu_clear_meal">Clear meal</string>
     <string name="menu_settings">Settings</string>
+    <string name="menu_add_my_food">Add my food</string>
     <string name="menu_language_english">EN</string>
     <string name="menu_language_dutch">NL</string>
     <string name="menu_language_option_english">English</string>
@@ -17,8 +18,8 @@
     <string name="action_settings">Settings</string>
     <string name="food_details_weight">Weight:</string>
     <string name="food_details_carbs">Carbs:</string>
-    <string name="grams">g</string>
-    <string name="food_details_cancel">Cancel</string>
+    <string name="unit_grams">g</string>
+    <string name="cancel_food_details">Cancel</string>
     <string name="add_to_meal">Add to meal</string>
     <string name="save_food_details">Save</string>
     <string name="title_activity_meal">Meal</string>
@@ -33,5 +34,7 @@
     <string name="remove_item_do_remove">Remove</string>
     <string name="remove_item_cancel">Cancel</string>
     <string name="menu_food_details_remove">Remove</string>
+    <string name="my_food_weight_per_unit">Weight per unit:</string>
+    <string name="my_food_carbs_per_unit">Carbs per unit:</string>
     
 </resources>

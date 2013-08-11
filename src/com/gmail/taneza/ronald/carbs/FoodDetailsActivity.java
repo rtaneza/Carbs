@@ -85,6 +85,9 @@ public class FoodDetailsActivity extends ActionBarActivity {
 		mWeightEditText.requestFocus();
         getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE); 
 
+		TextView weightUnitTextView = (TextView) findViewById(R.id.food_details_weight_unit);
+		weightUnitTextView.setText(mFoodItem.mUnitText);
+        
 		mNumCarbsTextView = (TextView) findViewById(R.id.food_details_carbs_text);
 		updateCarbsText();
 		

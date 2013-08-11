@@ -6,15 +6,15 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".FoodDetailsActivity" >
+    tools:context=".MyFoodActivity" >
 
     <!-- name -->
-	<LinearLayout android:id="@+id/food_details_name_group"
+	<LinearLayout android:id="@+id/my_food_name_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 		android:orientation="vertical"  >
 		
-	    <TextView android:id="@+id/food_details_name"
+	    <TextView android:id="@+id/my_food_name"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content" 
     		android:paddingBottom="@dimen/activity_vertical_margin" />
@@ -28,21 +28,21 @@
 	</LinearLayout>
 	
     <!-- weight -->
-    <LinearLayout android:id="@+id/food_details_weight_group"
+    <LinearLayout android:id="@+id/my_food_weight_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/food_details_name_group"
+        android:layout_below="@+id/my_food_name_group"
 		android:orientation="horizontal"
     	android:paddingTop="@dimen/activity_vertical_margin"
 		android:weightSum="1.0" >
 	    
-	    <TextView android:id="@+id/food_details_weight_label"
-	        android:text="@string/food_details_weight"
+	    <TextView android:id="@+id/my_food_weight_label"
+	        android:text="@string/my_food_weight_per_unit"
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
 	        android:layout_weight="0.4" />
 	    
-	    <EditText android:id="@+id/food_details_weight_edit"
+	    <EditText android:id="@+id/my_food_weight_edit"
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
 	        android:layout_weight="0.6"
@@ -51,7 +51,7 @@
 	        android:gravity="right"
 	        android:selectAllOnFocus="true" />
 	    
-	    <TextView android:id="@+id/food_details_weight_unit"
+	    <TextView android:id="@+id/my_food_weight_grams"
 	        android:text="@string/unit_grams"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content" />
@@ -59,27 +59,27 @@
     </LinearLayout>
     
     <!-- carbs -->
-    <LinearLayout android:id="@+id/food_details_carbs_group"
+    <LinearLayout android:id="@+id/my_food_carbs_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/food_details_weight_group"
+        android:layout_below="@+id/my_food_weight_group"
 		android:orientation="horizontal"
     	android:paddingBottom="@dimen/activity_vertical_margin"
 		android:weightSum="1.0" >
 	    
-	    <TextView android:id="@+id/food_details_carbs_label"
-	        android:text="@string/food_details_carbs"
+	    <TextView android:id="@+id/my_food_carbs_label"
+	        android:text="@string/my_food_carbs_per_unit"
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
 	        android:layout_weight="0.4" />
 	    
-	    <TextView android:id="@+id/food_details_carbs_text"
+	    <TextView android:id="@+id/my_food_carbs_text"
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
 	        android:layout_weight="0.6"
 			android:gravity="right" />
 	    
-	    <TextView android:id="@+id/food_details_carbs_grams"
+	    <TextView android:id="@+id/my_food_weight_unit"
 	        android:text="@string/unit_grams"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content" />
@@ -87,15 +87,15 @@
     </LinearLayout>
     
     <!-- buttons -->
-    <LinearLayout android:id="@+id/food_details_buttons_group"
+    <LinearLayout android:id="@+id/my_food_buttons_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/food_details_carbs_group"
+        android:layout_below="@+id/my_food_carbs_group"
 		android:orientation="horizontal"
 		android:weightSum="1.0" >
 	    
 	    <Button
-	        android:id="@+id/food_details_cancel_button"
+	        android:id="@+id/my_food_cancel_button"
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
 	        android:layout_weight="0.5"
@@ -104,7 +104,7 @@
 	        android:onClick="cancel" />
 	    
 	    <Button
-	        android:id="@+id/food_details_ok_button"
+	        android:id="@+id/my_food_ok_button"
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
 	        android:layout_weight="0.5"
