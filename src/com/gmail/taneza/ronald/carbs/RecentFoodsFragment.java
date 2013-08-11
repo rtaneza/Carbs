@@ -18,30 +18,51 @@ package com.gmail.taneza.ronald.carbs;
 
 import java.util.ArrayList;
 
-import android.app.Activity;
+import org.droidparts.widget.ClearableEditText;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 public class RecentFoodsFragment extends BaseListFragment {
 
 	private View mRootView;
+	protected ClearableEditText mSearchEditText;
 	private FoodItemArrayAdapter mFoodItemArrayAdapter;
 
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
              Bundle savedInstanceState) {
 		mRootView = inflater.inflate(R.layout.fragment_recent_foods, container, false);
-	    
+		return mRootView;
+	}
+
+	@Override
+	public void onActivityCreated (Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		
+		mSearchEditText = (ClearableEditText) getActivity().findViewById(R.id.search_text);
+        addSearchTextListener(mSearchEditText);
+
 		ArrayList<FoodItem> recentFoodsList = mMainActivityNotifier.getRecentFoodsList();
     	mFoodItemArrayAdapter = new FoodItemArrayAdapter(getActivity(), recentFoodsList, mMainActivityNotifier.getLanguage());
 		setListAdapter(mFoodItemArrayAdapter);
-		
-		return mRootView;
+	}
+	
+	@Override
+	public void onStart() {
+		// This is called when the fragment is visible to the user.
+		super.onStart();		
+		filterListBasedOnSearchText();
 	}
 	
 	public void notifyFoodItemListChanged() {
@@ -87,5 +108,34 @@ public class RecentFoodsFragment extends BaseListFragment {
 	    		mMainActivityNotifier.removeFoodItemFromRecentFoods(index);
 	    		break;
         }
+    }
+
+	private void addSearchTextListener(ClearableEditText searchEditText) {
+		
+		searchEditText.addTextChangedListener(new TextWatcher() {
+			public void afterTextChanged(Editable s) {
+			}
+
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+			}
+
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				filterListBasedOnSearchText();
+			}
+		});
+		
+		// This listener is called when the Enter key is pressed
+		searchEditText.setOnEditorActionListener(new OnEditorActionListener() {
+			@Override
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+				// Ignore the Enter key because we already do the processing every time the text changes
+				return true;
+			}
+		});
+	}
+	
+    private void filterListBasedOnSearchText() {
+		mFoodItemArrayAdapter.getFilter().filter(mSearchEditText.getText().toString());
     }
 }

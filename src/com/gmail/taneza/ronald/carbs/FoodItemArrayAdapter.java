@@ -35,7 +35,12 @@ public class FoodItemArrayAdapter extends FoodItemBaseArrayAdapter {
 	        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	    View rowView = inflater.inflate(R.layout.meal_item, parent, false);
 	    
-	    FoodItem foodItem = mValues.get(position);
+	    //TODO: why does this happen sometimes?
+	    if (position >= mFilteredValues.size()) {
+	    	return rowView;
+	    }
+	    
+	    FoodItem foodItem = mFilteredValues.get(position);
 	    TextView nameTextView = (TextView) rowView.findViewById(R.id.meal_item_name);
 	    nameTextView.setText(getFoodName(foodItem));
 

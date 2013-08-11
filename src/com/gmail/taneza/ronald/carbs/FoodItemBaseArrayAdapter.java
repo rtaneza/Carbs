@@ -20,21 +20,30 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
 
 public class FoodItemBaseArrayAdapter extends ArrayAdapter<FoodItem> {
 	protected final Context mContext;
 	protected final ArrayList<FoodItem> mValues;
+	protected ArrayList<FoodItem> mFilteredValues;
 	protected Language mLanguage;
+	protected Filter mFilter;
 	  
 	public FoodItemBaseArrayAdapter(Context context, int layoutResourceId, ArrayList<FoodItem> values, Language language) {
 	    super(context, layoutResourceId, values);
 	    mContext = context;
 	    mValues = values;
+	    mFilteredValues = new ArrayList<FoodItem>(values);
 	    mLanguage = language;
 	}
 	
 	public void setLanguage(Language language) {
 		mLanguage = language;
+	}
+	
+	public void setFilteredValues(ArrayList<FoodItem> values) {
+		mFilteredValues = values;
+		notifyDataSetChanged();
 	}
 
     protected String getFoodName(FoodItem foodItem) {
@@ -43,5 +52,13 @@ public class FoodItemBaseArrayAdapter extends ArrayAdapter<FoodItem> {
     	} else {
     		return foodItem.mDutchName;
     	}
+    }
+    
+    @Override
+    public Filter getFilter() {
+        if (mFilter == null) {
+            mFilter = new FoodItemFilter(this);
+        }
+        return mFilter;
     }
 }
