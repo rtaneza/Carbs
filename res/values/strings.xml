@@ -33,8 +33,13 @@
     <string name="remove_item_from_recent_foods_confirmation">Remove this item from the history?</string>
     <string name="remove_item_do_remove">Remove</string>
     <string name="remove_item_cancel">Cancel</string>
-    <string name="menu_food_details_remove">Remove</string>
+    <string name="menu_remove">Remove</string>
+    <string name="my_food_name_label">Name:</string>
     <string name="my_food_weight_per_unit">Weight per unit:</string>
     <string name="my_food_carbs_per_unit">Carbs per unit:</string>
+    <string name="my_foods_add">Add to My Foods</string>
+    <string name="title_activity_my_food">Add my food</string>
+    <string name="title_activity_my_food_edit">Edit my food</string>
+    
     
 </resources>

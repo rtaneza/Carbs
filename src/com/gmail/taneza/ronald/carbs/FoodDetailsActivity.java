@@ -72,11 +72,11 @@ public class FoodDetailsActivity extends ActionBarActivity {
 		mFoodItem = intent.getParcelableExtra(FOOD_ITEM_MESSAGE);
 		Mode mode = Mode.values()[intent.getIntExtra(ACTIVITY_MODE_MESSAGE, Mode.NewFood.ordinal())];
 		
-		TextView dutchNameTextView = (TextView) findViewById(R.id.food_details_name);
+		TextView foodNameTextView = (TextView) findViewById(R.id.food_details_name);
 		if (language == Language.ENGLISH) {
-			dutchNameTextView.setText(mFoodItem.mEnglishName);
+			foodNameTextView.setText(mFoodItem.mEnglishName);
 		} else {
-			dutchNameTextView.setText(mFoodItem.mDutchName);
+			foodNameTextView.setText(mFoodItem.mDutchName);
 		}
 		
 		mWeightEditText = (EditText) findViewById(R.id.food_details_weight_edit);

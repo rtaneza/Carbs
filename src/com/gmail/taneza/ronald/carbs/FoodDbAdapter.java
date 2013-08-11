@@ -19,6 +19,7 @@ package com.gmail.taneza.ronald.carbs;
 import java.io.File;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
 
@@ -46,6 +47,7 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     private static final int DATABASE_VERSION = 1;
     
     private Language mLanguage;
+    private SQLiteDatabase mDatabase;
     
     public FoodDbAdapter(Context context, Language language) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -54,7 +56,7 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     }
     
 	public void open() {
-    	getReadableDatabase();
+		mDatabase = getWritableDatabase();
     }
 	
     public String getQueryStringAllFoods(String foodName) {

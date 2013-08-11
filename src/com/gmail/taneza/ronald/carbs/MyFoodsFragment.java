@@ -16,10 +16,14 @@
 
 package com.gmail.taneza.ronald.carbs;
 
+import android.content.Intent;
 import android.database.sqlite.SQLiteCursor;
+import android.os.Parcelable;
 
 public class MyFoodsFragment extends BaseFoodListFragment { 
 
+	public static final String NEW_FOOD_DEFAULT_NAME = "My food"; 
+	
 	public MyFoodsFragment() {
 		mWeightPerUnitColumnName = FoodDbAdapter.MYFOODS_COLUMN_WEIGHT_PER_UNIT;
 		mCarbsColumnName = FoodDbAdapter.MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT;
@@ -47,5 +51,25 @@ public class MyFoodsFragment extends BaseFoodListFragment {
 	@Override
 	protected String getFoodNameColumnName() {
 		return FoodDbAdapter.MYFOODS_COLUMN_NAME;
+	}
+	
+	public void addFood() {
+		//todo: add getNextMyFoodProductId()
+    	FoodItem foodItem = new FoodItem(0, NEW_FOOD_DEFAULT_NAME, NEW_FOOD_DEFAULT_NAME, 100, 100, 0, "g", FoodDbAdapter.MYFOODS_TABLE_NAME);
+    	
+    	Intent intent = new Intent(getActivity(), MyFoodActivity.class);
+    	intent.putExtra(MyFoodActivity.FOOD_ITEM_MESSAGE, (Parcelable)foodItem);
+    	intent.putExtra(MyFoodActivity.ACTIVITY_MODE_MESSAGE, MyFoodActivity.Mode.NewFood.ordinal());
+    	
+    	startActivityForResult(intent, 0);
+    }
+    
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Make sure the request was successful
+        if (resultCode == MyFoodActivity.MY_FOOD_RESULT_OK) {
+    		FoodItem foodItem = data.getParcelableExtra(MyFoodActivity.FOOD_ITEM_RESULT);
+    		//mMainActivityNotifier.addFoodItemToMeal(foodItem);
+        }
 	}
 }

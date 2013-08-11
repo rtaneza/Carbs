@@ -54,7 +54,7 @@ food 2
 
 Name: ____
 
-Weight per unit: ___ g
+Weight per unit: ___ [g/ml]
 Carbs per unit:  ___ g
 
 [Cancel] [Add]

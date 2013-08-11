@@ -218,6 +218,10 @@ public class MainActivity extends ActionBarActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
 	    // Handle presses on the action bar items
 	    switch (item.getItemId()) {
+	        case R.id.menu_add_my_food:
+	        	MyFoodsFragment myFoodsFragment = (MyFoodsFragment)getFragment(MY_FOODS_TAB_INDEX);
+	        	myFoodsFragment.addFood();
+	        	break;
 	        case R.id.menu_language_option_english:
 	        	setLanguage(Language.ENGLISH);
 	        	break;
