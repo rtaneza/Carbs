@@ -24,6 +24,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+// TODO: Currently not used. Add date info and use this from RecentFoodsFragment.
+
 public class RecentFoodsArrayAdapter extends FoodItemBaseArrayAdapter {
 	public RecentFoodsArrayAdapter(Context context, ArrayList<FoodItem> values, Language language) {
 	    super(context, R.layout.fragment_recent_foods, values, language);
@@ -37,7 +39,7 @@ public class RecentFoodsArrayAdapter extends FoodItemBaseArrayAdapter {
 	    
 	    FoodItem foodItem = getItem(position);
 	    TextView nameTextView = (TextView) rowView.findViewById(R.id.meal_item_name);
-	    String foodNameAndWeight = String.format("%s (%d g)", getFoodName(foodItem), foodItem.mWeight);
+	    String foodNameAndWeight = String.format("%s (%d g)", foodItem.getName(), foodItem.getWeight());
 	    nameTextView.setText(foodNameAndWeight);
 
 	    TextView carbsTextView = (TextView) rowView.findViewById(R.id.meal_item_carbs);

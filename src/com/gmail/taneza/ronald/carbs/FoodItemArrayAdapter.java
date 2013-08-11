@@ -19,6 +19,7 @@ package com.gmail.taneza.ronald.carbs;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,15 +38,17 @@ public class FoodItemArrayAdapter extends FoodItemBaseArrayAdapter {
 	    
 	    FoodItem foodItem = getItem(position);
 	    TextView nameTextView = (TextView) rowView.findViewById(R.id.meal_item_name);
-	    nameTextView.setText(getFoodName(foodItem));
+	    nameTextView.setText(foodItem.getName());
 
+	    //Log.i("Carbs", String.format("[%s] %d: %s", foodItem.mTableName, foodItem.mProductCode, getFoodName(foodItem)));
+	    
     	String foodType = "";
-    	if (foodItem.mTableName.equals(FoodDbAdapter.MYFOODS_TABLE_NAME)) {
+    	if (foodItem.getTableName().equals(FoodDbAdapter.MYFOODS_TABLE_NAME)) {
     		foodType = String.format("%s ", FoodItem.MY_FOOD_TEXT);
     	}
     	
 	    TextView nameExtraTextView = (TextView) rowView.findViewById(R.id.meal_item_name_extra);
-	    String foodTypeAndWeight = String.format("%s(%d %s)", foodType, foodItem.mWeight, foodItem.mUnitText);
+	    String foodTypeAndWeight = String.format("%s(%d %s)", foodType, foodItem.getWeight(), foodItem.getUnitText());
 	    nameExtraTextView.setText(foodTypeAndWeight);
 	    
 	    TextView carbsTextView = (TextView) rowView.findViewById(R.id.meal_item_carbs);

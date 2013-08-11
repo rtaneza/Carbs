@@ -47,14 +47,6 @@ public class FoodItemBaseArrayAdapter extends ArrayAdapter<FoodItem> {
 	    clear();
 	    addAll(mFilteredValues);
 	}
-	
-    protected String getFoodName(FoodItem foodItem) {
-    	if (mLanguage == Language.ENGLISH) {
-    		return foodItem.mEnglishName;
-    	} else {
-    		return foodItem.mDutchName;
-    	}
-    }
     
     @Override
     public Filter getFilter() {

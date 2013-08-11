@@ -73,20 +73,16 @@ public class FoodDetailsActivity extends ActionBarActivity {
 		Mode mode = Mode.values()[intent.getIntExtra(ACTIVITY_MODE_MESSAGE, Mode.NewFood.ordinal())];
 		
 		TextView foodNameTextView = (TextView) findViewById(R.id.food_details_name);
-		if (language == Language.ENGLISH) {
-			foodNameTextView.setText(mFoodItem.mEnglishName);
-		} else {
-			foodNameTextView.setText(mFoodItem.mDutchName);
-		}
+		foodNameTextView.setText(mFoodItem.getName());
 		
 		mWeightEditText = (EditText) findViewById(R.id.food_details_weight_edit);
-		mWeightEditText.setText(Integer.toString(mFoodItem.mWeight));
+		mWeightEditText.setText(Integer.toString(mFoodItem.getWeight()));
 		// Request focus and show soft keyboard automatically
 		mWeightEditText.requestFocus();
         getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE); 
 
 		TextView weightUnitTextView = (TextView) findViewById(R.id.food_details_weight_unit);
-		weightUnitTextView.setText(mFoodItem.mUnitText);
+		weightUnitTextView.setText(mFoodItem.getUnitText());
         
 		mNumCarbsTextView = (TextView) findViewById(R.id.food_details_carbs_text);
 		updateCarbsText();
@@ -165,7 +161,7 @@ public class FoodDetailsActivity extends ActionBarActivity {
 					// ignore invalid weight string
 				}
 
-				mFoodItem.mWeight = weight;
+				mFoodItem.setWeight(weight);
 				updateCarbsText();
 			}
 		});

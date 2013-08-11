@@ -38,14 +38,10 @@ public class MyFoodsFragment extends BaseFoodListFragment {
 	@Override
 	protected FoodItem createFoodItemFromCursor(SQLiteCursor cursor) {
 		return new FoodItem(
-			cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_ID)),
-			cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_NAME)),
-			cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_NAME)),
-			cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_WEIGHT_PER_UNIT)),
-			cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_WEIGHT_PER_UNIT)),
-			cursor.getFloat(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT)),
-			cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_UNIT_TEXT)),
-			cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_TABLE_NAME)));
+				mFoodDbAdapter,
+				cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_TABLE_NAME)),
+				cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_ID)),
+				cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_WEIGHT_PER_UNIT)));
 	}
 
 	@Override
@@ -55,13 +51,13 @@ public class MyFoodsFragment extends BaseFoodListFragment {
 	
 	public void addFood() {
 		//todo: add getNextMyFoodProductId()
-    	FoodItem foodItem = new FoodItem(0, NEW_FOOD_DEFAULT_NAME, NEW_FOOD_DEFAULT_NAME, 100, 100, 0, "g", FoodDbAdapter.MYFOODS_TABLE_NAME);
-    	
-    	Intent intent = new Intent(getActivity(), MyFoodActivity.class);
-    	intent.putExtra(MyFoodActivity.FOOD_ITEM_MESSAGE, (Parcelable)foodItem);
-    	intent.putExtra(MyFoodActivity.ACTIVITY_MODE_MESSAGE, MyFoodActivity.Mode.NewFood.ordinal());
-    	
-    	startActivityForResult(intent, 0);
+//    	FoodItem foodItem = new FoodItem(0, NEW_FOOD_DEFAULT_NAME, NEW_FOOD_DEFAULT_NAME, 100, 100, 0, "g", FoodDbAdapter.MYFOODS_TABLE_NAME);
+//    	
+//    	Intent intent = new Intent(getActivity(), MyFoodActivity.class);
+//    	intent.putExtra(MyFoodActivity.FOOD_ITEM_MESSAGE, (Parcelable)foodItem);
+//    	intent.putExtra(MyFoodActivity.ACTIVITY_MODE_MESSAGE, MyFoodActivity.Mode.NewFood.ordinal());
+//    	
+//    	startActivityForResult(intent, 0);
     }
     
     @Override

@@ -70,7 +70,7 @@ public class MyFoodActivity extends ActionBarActivity {
 		Mode mode = Mode.values()[intent.getIntExtra(ACTIVITY_MODE_MESSAGE, Mode.NewFood.ordinal())];
 
 		TextView foodNameTextView = (TextView) findViewById(R.id.my_food_name);
-		foodNameTextView.setText(mFoodItem.mEnglishName); // english and dutch name are the same for MyFoods
+		foodNameTextView.setText(mFoodItem.getName());
 		// Request focus and show soft keyboard automatically
 		foodNameTextView.requestFocus();
         getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE); 

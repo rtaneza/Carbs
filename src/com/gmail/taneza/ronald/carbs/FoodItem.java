@@ -26,7 +26,7 @@ import android.os.Parcelable;
 
 public class FoodItem implements Parcelable, Serializable {
 
-	private static final long serialVersionUID = 6139044679990035502L;
+	private static final long serialVersionUID = 6139044679990035503L;
 
 	public static final String MY_FOOD_TEXT = "My Food";
 	
@@ -37,39 +37,71 @@ public class FoodItem implements Parcelable, Serializable {
 	 * http://macchiato.com/columns/Durable4.html
 	 * http://developer.android.com/reference/java/io/Serializable.html
 	 */
-	public int mProductCode;
-	public String mEnglishName;
-	public String mDutchName;
-	public int mWeight; // weight input by the user
-	public int mWeightPerUnit; // e.g. 100 g
-	public float mNumCarbsInGramsPerUnit; // e.g. 30 g
-	public String mUnitText; // e.g. g or ml
-	public String mTableName; // Database table name
+//	public int mProductCode;
+//	public String mEnglishName;
+//	public String mDutchName;
+//	public int mWeight; // weight input by the user
+//	public int mWeightPerUnit; // e.g. 100 g
+//	public float mNumCarbsInGramsPerUnit; // e.g. 30 g
+//	public String mUnitText; // e.g. g or ml
+//	public String mTableName; // Database table name
 	
-	public FoodItem(int productCode, String englishName, String dutchName, int weight, int weightInUnit, float numCarbsInGramsPerUnit, String unitText, String tableName) {
-		mProductCode = productCode;
-		mEnglishName = englishName;
-		mDutchName = dutchName;
-		mWeight = weight;
-		mWeightPerUnit = weightInUnit;
-		mNumCarbsInGramsPerUnit = numCarbsInGramsPerUnit;
-		mUnitText = unitText;
+	private String mTableName;
+	private int mId;
+	private int mWeight;
+	private FoodDbAdapter mFoodDbAdapter;
+	private FoodDbItem mFoodDbItem;
+	
+	// TODO: 
+	// Rename FoodItem to FoodItemStruct
+	// Rename FoodDbItem to FoodItem -> this is what will be used in lists
+	// new FoodItem(foodItemStruct)
+	
+	public FoodItem(FoodDbAdapter foodDbAdapter, String tableName, int id, int weight) {
+		mFoodDbAdapter = foodDbAdapter;
 		mTableName = tableName;
+		mId = id;
+		mWeight = weight;
+		
+		mFoodDbItem = foodDbAdapter.getFoodDbItem(tableName, id);
 	}
 
+	public String getTableName() {
+		return mTableName;
+	}
+	
+	public int getWeight() {
+		return mWeight;
+	}
+	
+	public void setWeight(int weight) {
+		mWeight = weight;
+	}
+	
+	public String getName() {
+		return mFoodDbItem.getName();
+	}
+
+	public int getWeightPerUnit() {
+		return mFoodDbItem.getWeightPerUnit();
+	}
+
+	public float getNumCarbsInGramsPerUnit() {
+		return mFoodDbItem.getNumCarbsInGramsPerUnit();
+	}
+
+	public String getUnitText() {
+		return mFoodDbItem.getUnitText();
+	}
+	
 	public float getNumCarbsInGrams() {
-		return (mNumCarbsInGramsPerUnit * mWeight) / mWeightPerUnit;
+		return (getNumCarbsInGramsPerUnit() * mWeight) / getWeightPerUnit();
 	}
 	
 	private FoodItem(Parcel parcel) {
-		mProductCode = parcel.readInt();
-		mEnglishName = parcel.readString();
-		mDutchName = parcel.readString();
-		mWeight = parcel.readInt();
-		mWeightPerUnit = parcel.readInt();
-		mNumCarbsInGramsPerUnit = parcel.readFloat();
-		mUnitText = parcel.readString();
 		mTableName = parcel.readString();
+		mId = parcel.readInt();
+		mWeight = parcel.readInt();
     }
 
 	public static final Creator<FoodItem> CREATOR = new Creator<FoodItem>() {
@@ -92,14 +124,9 @@ public class FoodItem implements Parcelable, Serializable {
 	
 	@Override 
 	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeInt(mProductCode);
-		dest.writeString(mEnglishName);
-		dest.writeString(mDutchName);
-		dest.writeInt(mWeight);
-		dest.writeInt(mWeightPerUnit);
-		dest.writeFloat(mNumCarbsInGramsPerUnit);
-		dest.writeString(mUnitText);
 		dest.writeString(mTableName);
+		dest.writeInt(mId);
+		dest.writeInt(mWeight);
 	}
 	
 	public boolean equals(Object obj) {
@@ -110,28 +137,18 @@ public class FoodItem implements Parcelable, Serializable {
 		}
 		FoodItem rhs = (FoodItem) obj;
 		return new EqualsBuilder()
-		              .append(mProductCode, rhs.mProductCode)
-		              .append(mEnglishName, rhs.mEnglishName)
-		              .append(mDutchName, rhs.mDutchName)
-		              .append(mWeight, rhs.mWeight)
-		              .append(mWeightPerUnit, rhs.mWeightPerUnit)
-		              .append(mNumCarbsInGramsPerUnit, rhs.mNumCarbsInGramsPerUnit)
-		              .append(mUnitText, rhs.mUnitText)
-		              .append(mTableName, rhs.mTableName)
-		              .isEquals();
+        	.append(mTableName, rhs.mTableName)
+        	.append(mId, rhs.mId)
+            .append(mWeight, rhs.mWeight)
+            .isEquals();
 	}
 	
 	public int hashCode() {
 	     // random odd number constants
 	     return new HashCodeBuilder(12127, 9847)
-	     	.append(mProductCode)
-	     	.append(mEnglishName)
-	     	.append(mDutchName)
-	     	.append(mWeight)
-	     	.append(mWeightPerUnit)
-	     	.append(mNumCarbsInGramsPerUnit)
-	     	.append(mUnitText)
 	     	.append(mTableName)
+	     	.append(mId)
+	     	.append(mWeight)
 	        .toHashCode();
 	}
 }

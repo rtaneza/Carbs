@@ -6,14 +6,7 @@
     should use our app's namespace.
     See: http://developer.android.com/guide/topics/ui/actionbar.html#ActionItems
      -->
-    
-    <item
-        android:id="@+id/menu_add_my_food"
-        android:orderInCategory="0"
-        carbs:showAsAction="always"
-        android:icon="@android:drawable/ic_input_add"
-        android:title="@string/menu_add_my_food"/>
-    
+     
 	<item
         android:id="@+id/menu_language"
         android:title="@string/menu_language_dutch"

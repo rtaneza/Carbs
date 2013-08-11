@@ -73,16 +73,19 @@ public class MainActivity extends ActionBarActivity implements
  		SharedPreferences prefs = getPreferences(0);
  		mLanguage = Language.values()[prefs.getInt(PREF_LANGUAGE, Language.DUTCH.ordinal())];
  		
- 		try {
- 			mFoodItemsList = (ArrayList<FoodItem>) ObjectSerializer.deserialize(
- 					prefs.getString(PREF_FOOD_ITEMS_LIST, ObjectSerializer.serialize(new ArrayList<FoodItem>())));
- 			mRecentFoodsList = (ArrayList<FoodItem>) ObjectSerializer.deserialize(
- 					prefs.getString(PREF_RECENT_FOODS_LIST, ObjectSerializer.serialize(new ArrayList<FoodItem>())));
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+ 		mFoodItemsList = new ArrayList<FoodItem>();
+ 		mRecentFoodsList = new ArrayList<FoodItem>();
+ 		
+// 		try {
+// 			mFoodItemsList = (ArrayList<FoodItem>) ObjectSerializer.deserialize(
+// 					prefs.getString(PREF_FOOD_ITEMS_LIST, ObjectSerializer.serialize(new ArrayList<FoodItem>())));
+// 			mRecentFoodsList = (ArrayList<FoodItem>) ObjectSerializer.deserialize(
+// 					prefs.getString(PREF_RECENT_FOODS_LIST, ObjectSerializer.serialize(new ArrayList<FoodItem>())));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        }
 
 		mFoodDbAdapter = new FoodDbAdapter(this, mLanguage);
 		mFoodDbAdapter.open();
@@ -127,12 +130,12 @@ public class MainActivity extends ActionBarActivity implements
       SharedPreferences prefs = getPreferences(0);
       SharedPreferences.Editor editor = prefs.edit();
       editor.putInt(PREF_LANGUAGE, mLanguage.ordinal());
-      try {
-    	  editor.putString(PREF_FOOD_ITEMS_LIST, ObjectSerializer.serialize(mFoodItemsList));
-    	  editor.putString(PREF_RECENT_FOODS_LIST, ObjectSerializer.serialize(mRecentFoodsList));
-      } catch (IOException e) {
-    	  e.printStackTrace();
-      }
+//      try {
+//    	  editor.putString(PREF_FOOD_ITEMS_LIST, ObjectSerializer.serialize(mFoodItemsList));
+//    	  editor.putString(PREF_RECENT_FOODS_LIST, ObjectSerializer.serialize(mRecentFoodsList));
+//      } catch (IOException e) {
+//    	  e.printStackTrace();
+//      }
 
       // Commit the edits!
       editor.commit();
@@ -148,8 +151,6 @@ public class MainActivity extends ActionBarActivity implements
         } else {
         	searchText.setVisibility(View.VISIBLE);
         }
-        
-        updateAddMyFoodMenuItemVisibility();
     }
 
     @Override
@@ -207,8 +208,6 @@ public class MainActivity extends ActionBarActivity implements
         mOptionsMenu = menu;
 		getMenuInflater().inflate(R.menu.menu_main, menu);
 
-        updateAddMyFoodMenuItemVisibility();
-        
 		setLanguageTextInOptionsMenu(mLanguage);
 		
         return true;
@@ -218,10 +217,6 @@ public class MainActivity extends ActionBarActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
 	    // Handle presses on the action bar items
 	    switch (item.getItemId()) {
-	        case R.id.menu_add_my_food:
-	        	MyFoodsFragment myFoodsFragment = (MyFoodsFragment)getFragment(MY_FOODS_TAB_INDEX);
-	        	myFoodsFragment.addFood();
-	        	break;
 	        case R.id.menu_language_option_english:
 	        	setLanguage(Language.ENGLISH);
 	        	break;
@@ -280,17 +275,6 @@ public class MainActivity extends ActionBarActivity implements
     	languageMenuItem.setTitle(languageId);
 	}
 	
-	private void updateAddMyFoodMenuItemVisibility() {
-		if (mOptionsMenu != null) {
-			MenuItem addMyFoodMenuItem = mOptionsMenu.findItem(R.id.menu_add_my_food);
-	        if (mViewPager.getCurrentItem() == MY_FOODS_TAB_INDEX) {
-	        	addMyFoodMenuItem.setVisible(true);
-	        } else {
-	        	addMyFoodMenuItem.setVisible(false);
-	        }
-		}
-	}
-
 	private static String getFragmentTag(int index)
 	{
 		// Reference: http://stackoverflow.com/questions/6976027/reusing-fragments-in-a-fragmentpageradapter

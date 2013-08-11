@@ -46,7 +46,7 @@ public class FoodItemFilter extends Filter {
             int count = originalList.size();
             for (int i = 0; i < count; i++) {
                 final FoodItem foodItem = originalList.get(i);
-                if (mAdapter.getFoodName(foodItem).toLowerCase().contains(searchText)) {
+                if (foodItem.getName().toLowerCase().contains(searchText)) {
                 	filteredList.add(foodItem);
                 }
             }

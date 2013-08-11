@@ -34,14 +34,10 @@ public class AllFoodsFragment extends BaseFoodListFragment {
 	@Override
 	protected FoodItem createFoodItemFromCursor(SQLiteCursor cursor) {
 		return new FoodItem(
-			cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.NEVO_COLUMN_PRODUCT_CODE)),
-			cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.NEVO_COLUMN_ENGLISH_NAME)),
-			cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.NEVO_COLUMN_DUTCH_NAME)),
-			cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.NEVO_COLUMN_WEIGHT_PER_UNIT)),
-			cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.NEVO_COLUMN_WEIGHT_PER_UNIT)),
-			cursor.getFloat(cursor.getColumnIndexOrThrow(FoodDbAdapter.NEVO_COLUMN_CARBS_GRAMS_PER_UNIT)),
-			cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.NEVO_COLUMN_UNIT_TEXT)),
-			cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_TABLE_NAME)));
+				mFoodDbAdapter,
+				cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_TABLE_NAME)),
+				cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.NEVO_COLUMN_PRODUCT_CODE)),
+				cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.NEVO_COLUMN_WEIGHT_PER_UNIT)));
 	}
 
 	@Override

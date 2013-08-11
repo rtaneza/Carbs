@@ -14,3 +14,4 @@ ok // use index in removeFoodItemFromMeal() because there may be multiple equal 
 // change meal total background color
 ok // protect access to mFilteredList with mutex -> no need after changing BaseAdaptor
 // add toast msg after removing item
+// replace food list serialization with simpler save/restore of each FoodItem field

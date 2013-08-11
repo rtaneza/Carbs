@@ -17,8 +17,10 @@
 package com.gmail.taneza.ronald.carbs;
 
 import java.io.File;
+import java.security.InvalidParameterException;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
@@ -67,7 +69,7 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
 		String [] foodSqlSelect = {"0 _id", COLUMN_TABLE_NAME, NEVO_COLUMN_DUTCH_NAME, NEVO_COLUMN_ENGLISH_NAME, 
 				NEVO_COLUMN_WEIGHT_PER_UNIT, NEVO_COLUMN_UNIT_TEXT, 
 				NEVO_COLUMN_CARBS_GRAMS_PER_UNIT, NEVO_COLUMN_PRODUCT_CODE}; 
-		String foodWhereClause = getLanguageString() + " like '%" + foodName + "%'";
+		String foodWhereClause = getFoodNameColumnName() + " like '%" + foodName + "%'";
 		
 		foodQb.setTables(NEVO_TABLE_NAME);
 		String foodSubQuery = foodQb.buildUnionSubQuery(COLUMN_TABLE_NAME, foodSqlSelect, null, foodSqlSelect.length, 
@@ -85,7 +87,7 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
 				MYFOODS_TABLE_NAME, myFoodsWhereClause, null, null);
 
 		SQLiteQueryBuilder unionQb = new SQLiteQueryBuilder();
-		String queryString = unionQb.buildUnionQuery(new String[] { foodSubQuery, myFoodsSubQuery }, getLanguageString(), null);
+		String queryString = unionQb.buildUnionQuery(new String[] { foodSubQuery, myFoodsSubQuery }, getFoodNameColumnName(), null);
 		
 		//Log.i("Carbs", "Query string: " + queryString);
 		return queryString;
@@ -110,19 +112,6 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     }
     
     public String getFoodNameColumnName() {
-    	return getLanguageString();
-    }
-    
-    private void deleteDbIfItAlreadyExists(Context context) {
-		File db = context.getDatabasePath(DATABASE_NAME);
-		if (db.exists()) {
-			Log.i("Carbs", String.format("Deleted db %s", db.toString()));
-			db.delete();			
-		}
-	}
-    
-    private String getLanguageString()
-    {
     	switch (mLanguage) {
     		case ENGLISH:
     			return NEVO_COLUMN_ENGLISH_NAME;
@@ -132,4 +121,42 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     			return null;
     	}
     }
+    
+    public FoodDbItem getFoodDbItem(String tableName, int id) {
+    	if (tableName.equals(NEVO_TABLE_NAME)) {
+    		String[] columns = { getFoodNameColumnName(), NEVO_COLUMN_WEIGHT_PER_UNIT, 
+    				NEVO_COLUMN_CARBS_GRAMS_PER_UNIT, NEVO_COLUMN_UNIT_TEXT };
+    		String selection = String.format("%s = %d", NEVO_COLUMN_PRODUCT_CODE, id);
+    		Cursor cursor = mDatabase.query(tableName, columns, selection, null, null, null, getFoodNameColumnName());
+    		cursor.moveToFirst();
+    		return new FoodDbItem(
+    				cursor.getString(cursor.getColumnIndexOrThrow(getFoodNameColumnName())),
+    				cursor.getInt(cursor.getColumnIndexOrThrow(NEVO_COLUMN_WEIGHT_PER_UNIT)),
+    				cursor.getFloat(cursor.getColumnIndexOrThrow(NEVO_COLUMN_CARBS_GRAMS_PER_UNIT)),
+    				cursor.getString(cursor.getColumnIndexOrThrow(NEVO_COLUMN_UNIT_TEXT)));
+    		
+    	} else if (tableName.equals(MYFOODS_TABLE_NAME)) {
+    		String[] columns = { MYFOODS_COLUMN_NAME, MYFOODS_COLUMN_WEIGHT_PER_UNIT, 
+    				MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT, MYFOODS_COLUMN_UNIT_TEXT };
+    		String selection = String.format("%s = %d", MYFOODS_COLUMN_ID, id);
+    		Cursor cursor = mDatabase.query(tableName, columns, selection, null, null, null, MYFOODS_COLUMN_NAME);
+    		cursor.moveToFirst();
+    		return new FoodDbItem(
+    				cursor.getString(cursor.getColumnIndexOrThrow(MYFOODS_COLUMN_NAME)),
+    				cursor.getInt(cursor.getColumnIndexOrThrow(MYFOODS_COLUMN_WEIGHT_PER_UNIT)),
+    				cursor.getFloat(cursor.getColumnIndexOrThrow(MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT)),
+    				cursor.getString(cursor.getColumnIndexOrThrow(MYFOODS_COLUMN_UNIT_TEXT)));
+    		
+    	} else {
+    		throw new InvalidParameterException(String.format("Invalid tableName: %s", tableName));
+    	}
+    }
+    
+    private void deleteDbIfItAlreadyExists(Context context) {
+		File db = context.getDatabasePath(DATABASE_NAME);
+		if (db.exists()) {
+			Log.i("Carbs", String.format("Deleted db %s", db.toString()));
+			db.delete();			
+		}
+	}
 }
