@@ -11,5 +11,5 @@ ok // search recent food list
 ok // use index in removeFoodItemFromMeal() because there may be multiple equal foodItems there
 // confirm with user before clearing recent and meal
 // change meal total background color
-
-
+ok // protect access to mFilteredList with mutex -> no need after changing BaseAdaptor
+// add toast msg after removing item

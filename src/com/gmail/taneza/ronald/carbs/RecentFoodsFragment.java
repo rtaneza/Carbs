@@ -65,18 +65,18 @@ public class RecentFoodsFragment extends BaseListFragment {
 		filterListBasedOnSearchText();
 	}
 	
-	public void notifyFoodItemListChanged() {
+	public void setFoodItemList(ArrayList<FoodItem> foodItemList) {
 		if (mFoodItemArrayAdapter != null) {
-			// During an orientation change, the MainActivity onCreate() calls notifyFoodItemListChanged()
+			// During an orientation change, the MainActivity onCreate() calls setFoodItemList()
 			// _before_ onCreateView(), so mFoodItemArrayAdapter is still null
-			mFoodItemArrayAdapter.notifyDataSetChanged();
+			mFoodItemArrayAdapter.setValues(foodItemList);
 		}
 	}
 	
 	public void setLanguage(Language language) {
 		if (mFoodItemArrayAdapter != null) {
 			mFoodItemArrayAdapter.setLanguage(language);
-			notifyFoodItemListChanged();
+			mFoodItemArrayAdapter.notifyDataSetChanged();
 		}
     }
 

@@ -35,7 +35,7 @@ public class RecentFoodsArrayAdapter extends FoodItemBaseArrayAdapter {
 	        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	    View rowView = inflater.inflate(R.layout.meal_item, parent, false);
 	    
-	    FoodItem foodItem = mValues.get(position);
+	    FoodItem foodItem = getItem(position);
 	    TextView nameTextView = (TextView) rowView.findViewById(R.id.meal_item_name);
 	    String foodNameAndWeight = String.format("%s (%d g)", getFoodName(foodItem), foodItem.mWeight);
 	    nameTextView.setText(foodNameAndWeight);

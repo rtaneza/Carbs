@@ -22,23 +22,25 @@ import android.widget.Filter;
 
 public class FoodItemFilter extends Filter {
 
-	FoodItemBaseArrayAdapter mAdapter;
+	private FoodItemBaseArrayAdapter mAdapter;
+	private ArrayList<FoodItem> mOriginalValues;
 	
-	public FoodItemFilter(FoodItemBaseArrayAdapter adapter) {
+	public FoodItemFilter(FoodItemBaseArrayAdapter adapter, ArrayList<FoodItem> originalValues) {
 		mAdapter = adapter;
+		mOriginalValues = originalValues;
     }
 	 
 	@Override
 	protected FilterResults performFiltering(CharSequence constraint) {
-		FilterResults result = new FilterResults();
+		FilterResults results = new FilterResults();
         String searchText = constraint.toString().toLowerCase();
         
         if (searchText.trim().length() == 0) {
-            result.values = mAdapter.mValues;
-            result.count = mAdapter.mValues.size();
+            results.values = mOriginalValues;
+            results.count = mOriginalValues.size();
             
         } else {
-        	final ArrayList<FoodItem> originalList = new ArrayList<FoodItem>(mAdapter.mValues);
+        	final ArrayList<FoodItem> originalList = new ArrayList<FoodItem>(mOriginalValues);
             final ArrayList<FoodItem> filteredList = new ArrayList<FoodItem>();
             
             int count = originalList.size();
@@ -49,16 +51,16 @@ public class FoodItemFilter extends Filter {
                 }
             }
             
-            result.values = filteredList;
-            result.count = filteredList.size();
+            results.values = filteredList;
+            results.count = filteredList.size();
         }
         
-        return result;
+        return results;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
     protected void publishResults(CharSequence constraint, FilterResults results) {
-    	mAdapter.setFilteredValues((ArrayList<FoodItem>)results.values);
+    	mAdapter.setValues((ArrayList<FoodItem>)results.values);
     }
 }

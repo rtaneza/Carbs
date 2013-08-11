@@ -24,28 +24,30 @@ import android.widget.Filter;
 
 public class FoodItemBaseArrayAdapter extends ArrayAdapter<FoodItem> {
 	protected final Context mContext;
-	protected final ArrayList<FoodItem> mValues;
-	protected ArrayList<FoodItem> mFilteredValues;
-	protected Language mLanguage;
-	protected Filter mFilter;
+	private final ArrayList<FoodItem> mOriginalValues;
+	private ArrayList<FoodItem> mFilteredValues;
+	private Language mLanguage;
+	private Filter mFilter;
 	  
 	public FoodItemBaseArrayAdapter(Context context, int layoutResourceId, ArrayList<FoodItem> values, Language language) {
-	    super(context, layoutResourceId, values);
+	    super(context, layoutResourceId);
 	    mContext = context;
-	    mValues = values;
-	    mFilteredValues = new ArrayList<FoodItem>(values);
+	    mOriginalValues = values;
 	    mLanguage = language;
+	    
+	    setValues(values);
 	}
 	
 	public void setLanguage(Language language) {
 		mLanguage = language;
 	}
 	
-	public void setFilteredValues(ArrayList<FoodItem> values) {
-		mFilteredValues = values;
-		notifyDataSetChanged();
+	public void setValues(ArrayList<FoodItem> values) {
+	    mFilteredValues = new ArrayList<FoodItem>(values);
+	    clear();
+	    addAll(mFilteredValues);
 	}
-
+	
     protected String getFoodName(FoodItem foodItem) {
     	if (mLanguage == Language.ENGLISH) {
     		return foodItem.mEnglishName;
@@ -57,7 +59,7 @@ public class FoodItemBaseArrayAdapter extends ArrayAdapter<FoodItem> {
     @Override
     public Filter getFilter() {
         if (mFilter == null) {
-            mFilter = new FoodItemFilter(this);
+            mFilter = new FoodItemFilter(this, mOriginalValues);
         }
         return mFilter;
     }

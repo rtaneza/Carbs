@@ -56,6 +56,7 @@ public class FoodDetailsActivity extends ActionBarActivity {
 	private EditText mWeightEditText;
 	private TextView mNumCarbsTextView;
 	private Mode mMode;
+	private int mRemoveItemConfirmationStringId;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +93,9 @@ public class FoodDetailsActivity extends ActionBarActivity {
 			setTitle(R.string.title_activity_food_details_edit);
 			Button okButton = (Button) findViewById(R.id.food_details_ok_button);
 			okButton.setText(R.string.save_food_details);
+			mRemoveItemConfirmationStringId = R.string.remove_item_from_meal_confirmation;
+		} else if (mode == Mode.RecentFood) {
+			mRemoveItemConfirmationStringId = R.string.remove_item_from_recent_foods_confirmation;
 		}
 		
 		addWeightTextListener();
@@ -166,7 +170,7 @@ public class FoodDetailsActivity extends ActionBarActivity {
 
 	public void removeItem() {
 		new AlertDialog.Builder(this)
-	    .setMessage(R.string.remove_item_confirmation)
+	    .setMessage(mRemoveItemConfirmationStringId)
 	    .setPositiveButton(R.string.remove_item_do_remove, new DialogInterface.OnClickListener() {
 	        public void onClick(DialogInterface dialog, int which) { 
 	            // continue with remove

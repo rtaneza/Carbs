@@ -305,13 +305,13 @@ public class MainActivity extends ActionBarActivity implements
     	RecentFoodsFragment recentFoodsFragment = (RecentFoodsFragment)getFragment(RECENT_FOODS_TAB_INDEX);
 		// During an orientation change, the fragment is still null
     	if (recentFoodsFragment != null) {
-    		recentFoodsFragment.notifyFoodItemListChanged();
+    		recentFoodsFragment.setFoodItemList(mRecentFoodsList);
     	}
     	
     	MealFragment mealFragment = (MealFragment)getFragment(MEAL_TAB_INDEX);
 		// During an orientation change, the fragment is still null
     	if (mealFragment != null) {
-    		mealFragment.notifyFoodItemListChanged();
+    		mealFragment.setFoodItemList(mFoodItemsList);
     	}
 	}
 

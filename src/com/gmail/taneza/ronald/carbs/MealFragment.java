@@ -18,10 +18,10 @@ package com.gmail.taneza.ronald.carbs;
 
 import java.util.ArrayList;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,18 +48,18 @@ public class MealFragment extends BaseListFragment {
 		return mRootView;
 	}
 	
-	public void notifyFoodItemListChanged() {
+	public void setFoodItemList(ArrayList<FoodItem> foodItemList) {
 		if (mFoodItemArrayAdapter != null) {
-			// During an orientation change, the MainActivity onCreate() calls notifyFoodItemListChanged()
+			// During an orientation change, the MainActivity onCreate() calls setFoodItemList()
 			// _before_ onCreateView(), so mFoodItemArrayAdapter is still null
-			mFoodItemArrayAdapter.notifyDataSetChanged();
+			mFoodItemArrayAdapter.setValues(foodItemList);
 		}
 	}
-	
+		
 	public void setLanguage(Language language) {
 		if (mFoodItemArrayAdapter != null) {
 			mFoodItemArrayAdapter.setLanguage(language);
-			notifyFoodItemListChanged();
+			mFoodItemArrayAdapter.notifyDataSetChanged();
 		}
     }
 
@@ -89,6 +89,7 @@ public class MealFragment extends BaseListFragment {
 	    		
         	case FoodDetailsActivity.FOOD_DETAILS_RESULT_REMOVE:
         		foodItem = data.getParcelableExtra(FoodDetailsActivity.FOOD_ITEM_RESULT);
+            	Log.i("Carbs", String.format("index %d", index));
 	    		mMainActivityNotifier.removeFoodItemFromMeal(index);
 	    		break;
         }
