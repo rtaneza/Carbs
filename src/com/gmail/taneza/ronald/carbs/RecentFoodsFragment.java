@@ -54,7 +54,8 @@ public class RecentFoodsFragment extends BaseListFragment {
         addSearchTextListener(mSearchEditText);
 
 		ArrayList<FoodItem> recentFoodsList = mMainActivityNotifier.getRecentFoodsList();
-    	mFoodItemArrayAdapter = new FoodItemArrayAdapter(getActivity(), recentFoodsList, mMainActivityNotifier.getLanguage());
+
+		mFoodItemArrayAdapter = new FoodItemArrayAdapter(getActivity(), mMainActivityNotifier.getFoodDbAdapter(), recentFoodsList);
 		setListAdapter(mFoodItemArrayAdapter);
 	}
 	
@@ -75,7 +76,6 @@ public class RecentFoodsFragment extends BaseListFragment {
 	
 	public void setLanguage(Language language) {
 		if (mFoodItemArrayAdapter != null) {
-			mFoodItemArrayAdapter.setLanguage(language);
 			mFoodItemArrayAdapter.notifyDataSetChanged();
 		}
     }
@@ -85,7 +85,6 @@ public class RecentFoodsFragment extends BaseListFragment {
     	FoodItem foodItem = (FoodItem)l.getItemAtPosition(position);
     	
     	Intent intent = new Intent(getActivity(), FoodDetailsActivity.class);
-    	intent.putExtra(FoodDetailsActivity.LANGUAGE_MESSAGE, mMainActivityNotifier.getLanguage());
     	intent.putExtra(FoodDetailsActivity.FOOD_ITEM_MESSAGE, (Parcelable)foodItem);
     	intent.putExtra(FoodDetailsActivity.ACTIVITY_MODE_MESSAGE, FoodDetailsActivity.Mode.RecentFood.ordinal());
 

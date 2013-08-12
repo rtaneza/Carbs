@@ -19,27 +19,24 @@ package com.gmail.taneza.ronald.carbs;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 
 public class FoodItemBaseArrayAdapter extends ArrayAdapter<FoodItem> {
-	protected final Context mContext;
+	protected final LayoutInflater mInflater;
+	protected final FoodDbAdapter mFoodDbAdapter;
 	private final ArrayList<FoodItem> mOriginalValues;
 	private ArrayList<FoodItem> mFilteredValues;
-	private Language mLanguage;
 	private Filter mFilter;
 	  
-	public FoodItemBaseArrayAdapter(Context context, int layoutResourceId, ArrayList<FoodItem> values, Language language) {
+	public FoodItemBaseArrayAdapter(Context context, FoodDbAdapter foodDbAdapter, int layoutResourceId, ArrayList<FoodItem> values) {
 	    super(context, layoutResourceId);
-	    mContext = context;
+	    mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	    mFoodDbAdapter = foodDbAdapter;
 	    mOriginalValues = values;
-	    mLanguage = language;
 	    
 	    setValues(values);
-	}
-	
-	public void setLanguage(Language language) {
-		mLanguage = language;
 	}
 	
 	public void setValues(ArrayList<FoodItem> values) {
@@ -51,7 +48,7 @@ public class FoodItemBaseArrayAdapter extends ArrayAdapter<FoodItem> {
     @Override
     public Filter getFilter() {
         if (mFilter == null) {
-            mFilter = new FoodItemFilter(this, mOriginalValues);
+            mFilter = new FoodItemFilter(this, mFoodDbAdapter, mOriginalValues);
         }
         return mFilter;
     }

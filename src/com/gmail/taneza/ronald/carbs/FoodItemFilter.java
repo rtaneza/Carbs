@@ -23,10 +23,12 @@ import android.widget.Filter;
 public class FoodItemFilter extends Filter {
 
 	private FoodItemBaseArrayAdapter mAdapter;
+	private FoodDbAdapter mFoodDbAdapter;
 	private ArrayList<FoodItem> mOriginalValues;
 	
-	public FoodItemFilter(FoodItemBaseArrayAdapter adapter, ArrayList<FoodItem> originalValues) {
+	public FoodItemFilter(FoodItemBaseArrayAdapter adapter, FoodDbAdapter foodDbAdapter, ArrayList<FoodItem> originalValues) {
 		mAdapter = adapter;
+		mFoodDbAdapter = foodDbAdapter;
 		mOriginalValues = originalValues;
     }
 	 
@@ -46,7 +48,8 @@ public class FoodItemFilter extends Filter {
             int count = originalList.size();
             for (int i = 0; i < count; i++) {
                 final FoodItem foodItem = originalList.get(i);
-                if (foodItem.getName().toLowerCase().contains(searchText)) {
+                final FoodItemInfo foodItemInfo = mFoodDbAdapter.getFoodItemInfo(foodItem);
+                if (foodItemInfo.getName().toLowerCase().contains(searchText)) {
                 	filteredList.add(foodItem);
                 }
             }

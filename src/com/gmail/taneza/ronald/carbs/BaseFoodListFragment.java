@@ -101,7 +101,7 @@ public abstract class BaseFoodListFragment extends BaseListFragment
     	FoodItem foodItem = createFoodItemFromCursor(cursor);
     	
     	Intent intent = new Intent(getActivity(), FoodDetailsActivity.class);
-    	intent.putExtra(FoodDetailsActivity.LANGUAGE_MESSAGE, mMainActivityNotifier.getLanguage());
+    	//intent.putExtra(FoodDetailsActivity.LANGUAGE_MESSAGE, mMainActivityNotifier.getLanguage());
     	intent.putExtra(FoodDetailsActivity.FOOD_ITEM_MESSAGE, (Parcelable)foodItem);
     	intent.putExtra(FoodDetailsActivity.ACTIVITY_MODE_MESSAGE, FoodDetailsActivity.Mode.NewFood.ordinal());
     	
@@ -177,7 +177,7 @@ public abstract class BaseFoodListFragment extends BaseListFragment
 	        	String foodType = "";
 	        	String tableName = cursor.getString(columnIndex);
 	        	if (tableName.equals(FoodDbAdapter.MYFOODS_TABLE_NAME)) {
-	        		foodType = String.format("%s ", FoodItem.MY_FOOD_TEXT);
+	        		foodType = String.format("%s ", FoodItemInfo.MY_FOOD_TEXT);
 	        	}
 	        	
 	        	int weightPerUnit = cursor.getInt(cursor.getColumnIndexOrThrow(mWeightPerUnitColumnName));

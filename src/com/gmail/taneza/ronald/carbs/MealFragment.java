@@ -42,7 +42,7 @@ public class MealFragment extends BaseListFragment {
 		mRootView = inflater.inflate(R.layout.fragment_meal, container, false);
 	    
 		ArrayList<FoodItem> foodItemList = mMainActivityNotifier.getFoodItemsList();
-    	mFoodItemArrayAdapter = new FoodItemArrayAdapter(getActivity(), foodItemList, mMainActivityNotifier.getLanguage());
+		mFoodItemArrayAdapter = new FoodItemArrayAdapter(getActivity(), mMainActivityNotifier.getFoodDbAdapter(), foodItemList);
 		setListAdapter(mFoodItemArrayAdapter);
 		
 		return mRootView;
@@ -58,7 +58,6 @@ public class MealFragment extends BaseListFragment {
 		
 	public void setLanguage(Language language) {
 		if (mFoodItemArrayAdapter != null) {
-			mFoodItemArrayAdapter.setLanguage(language);
 			mFoodItemArrayAdapter.notifyDataSetChanged();
 		}
     }
@@ -68,7 +67,6 @@ public class MealFragment extends BaseListFragment {
     	FoodItem foodItem = (FoodItem)l.getItemAtPosition(position);
     	
     	Intent intent = new Intent(getActivity(), FoodDetailsActivity.class);
-    	intent.putExtra(FoodDetailsActivity.LANGUAGE_MESSAGE, mMainActivityNotifier.getLanguage());
     	intent.putExtra(FoodDetailsActivity.FOOD_ITEM_MESSAGE, (Parcelable)foodItem);
     	intent.putExtra(FoodDetailsActivity.ACTIVITY_MODE_MESSAGE, FoodDetailsActivity.Mode.EditFoodInMeal.ordinal());
 

@@ -16,28 +16,28 @@
 
 package com.gmail.taneza.ronald.carbs;
 
-import java.io.Serializable;
+public class FoodItemInfo {
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
-import android.os.Parcel;
-import android.os.Parcelable;
-
-public class FoodDbItem {
-
+	public static final String MY_FOOD_TEXT = "My Food";
+	
+	private FoodItem mFoodItem;
 	private String mName;
 	private int mWeightPerUnit; // e.g. 100 g
 	private float mNumCarbsInGramsPerUnit; // e.g. 30 g
 	private String mUnitText; // e.g. g or ml
 	
-	public FoodDbItem(String name, int weightPerUnit, float numCarbsInGramsPerUnit, String unitText) {
+	public FoodItemInfo(FoodItem foodItem, String name, int weightPerUnit, float numCarbsInGramsPerUnit, String unitText) {
+		mFoodItem = foodItem;
 		mName = name;
 		mWeightPerUnit = weightPerUnit;
 		mNumCarbsInGramsPerUnit = numCarbsInGramsPerUnit;
 		mUnitText = unitText;
 	}
 	
+	public FoodItem getFoodItem() {
+		return mFoodItem;
+	}
+
 	public String getName() {
 		return mName;
 	}
@@ -52,5 +52,21 @@ public class FoodDbItem {
 
 	public String getUnitText() {
 		return mUnitText;
+	}
+	
+	public float getNumCarbsInGrams() {
+		return (getNumCarbsInGramsPerUnit() * mFoodItem.getWeight()) / getWeightPerUnit();
+	}
+
+	public String getTableName() {
+		return mFoodItem.getTableName();
+	}
+	
+	public int getWeight() {
+		return mFoodItem.getWeight();
+	}
+	
+	public void setWeight(int weight) {
+		mFoodItem.setWeight(weight);
 	}
 }

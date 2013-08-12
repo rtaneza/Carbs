@@ -47,12 +47,12 @@ public class FoodDetailsActivity extends ActionBarActivity {
 	public final static int FOOD_DETAILS_RESULT_CANCELED = RESULT_CANCELED;
 	public final static int FOOD_DETAILS_RESULT_REMOVE = RESULT_FIRST_USER;
 	
-	public final static String LANGUAGE_MESSAGE = "com.gmail.taneza.ronald.carbs.LANGUAGE_MESSAGE";
+	//public final static String LANGUAGE_MESSAGE = "com.gmail.taneza.ronald.carbs.LANGUAGE_MESSAGE";
 	public final static String FOOD_ITEM_MESSAGE = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_MESSAGE";
 	public final static String FOOD_ITEM_RESULT = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_RESULT";
 	public final static String ACTIVITY_MODE_MESSAGE = "com.gmail.taneza.ronald.carbs.ACTIVITY_MODE_MESSAGE";
 	
-	private FoodItem mFoodItem;
+	private FoodItemInfo mFoodItemInfo;
 	private EditText mWeightEditText;
 	private TextView mNumCarbsTextView;
 	private Mode mMode;
@@ -68,21 +68,23 @@ public class FoodDetailsActivity extends ActionBarActivity {
 		// Get the message from the intent
 		Intent intent = getIntent();
 
-    	Language language = (Language) intent.getSerializableExtra(LANGUAGE_MESSAGE);
-		mFoodItem = intent.getParcelableExtra(FOOD_ITEM_MESSAGE);
+		FoodItem foodItem = intent.getParcelableExtra(FOOD_ITEM_MESSAGE);
 		Mode mode = Mode.values()[intent.getIntExtra(ACTIVITY_MODE_MESSAGE, Mode.NewFood.ordinal())];
+
+		FoodDbAdapter foodDbAdapter = ((CarbsApp)getApplication()).getDatabase();
+		mFoodItemInfo = foodDbAdapter.getFoodItemInfo(foodItem);
 		
 		TextView foodNameTextView = (TextView) findViewById(R.id.food_details_name);
-		foodNameTextView.setText(mFoodItem.getName());
+		foodNameTextView.setText(mFoodItemInfo.getName());
 		
 		mWeightEditText = (EditText) findViewById(R.id.food_details_weight_edit);
-		mWeightEditText.setText(Integer.toString(mFoodItem.getWeight()));
+		mWeightEditText.setText(Integer.toString(mFoodItemInfo.getWeight()));
 		// Request focus and show soft keyboard automatically
 		mWeightEditText.requestFocus();
         getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE); 
 
 		TextView weightUnitTextView = (TextView) findViewById(R.id.food_details_weight_unit);
-		weightUnitTextView.setText(mFoodItem.getUnitText());
+		weightUnitTextView.setText(mFoodItemInfo.getUnitText());
         
 		mNumCarbsTextView = (TextView) findViewById(R.id.food_details_carbs_text);
 		updateCarbsText();
@@ -161,7 +163,7 @@ public class FoodDetailsActivity extends ActionBarActivity {
 					// ignore invalid weight string
 				}
 
-				mFoodItem.setWeight(weight);
+				mFoodItemInfo.setWeight(weight);
 				updateCarbsText();
 			}
 		});
@@ -174,7 +176,7 @@ public class FoodDetailsActivity extends ActionBarActivity {
 	        public void onClick(DialogInterface dialog, int which) { 
 	            // continue with remove
 	    		Intent data = getIntent();
-	    		data.putExtra(FOOD_ITEM_RESULT, (Parcelable)mFoodItem);
+	    		data.putExtra(FOOD_ITEM_RESULT, (Parcelable)mFoodItemInfo.getFoodItem());
 	    	    setResult(FOOD_DETAILS_RESULT_REMOVE, data);
 	    		finish();
 	        }
@@ -194,12 +196,12 @@ public class FoodDetailsActivity extends ActionBarActivity {
 	
 	public void addToMeal(View v) {
 		Intent data = getIntent();
-		data.putExtra(FOOD_ITEM_RESULT, (Parcelable)mFoodItem);
+		data.putExtra(FOOD_ITEM_RESULT, (Parcelable)mFoodItemInfo.getFoodItem());
 	    setResult(FOOD_DETAILS_RESULT_OK, data);
 		finish();
 	}
 	
 	private void updateCarbsText() {
-		mNumCarbsTextView.setText(String.format("%.1f", mFoodItem.getNumCarbsInGrams()));
+		mNumCarbsTextView.setText(String.format("%.1f", mFoodItemInfo.getNumCarbsInGrams()));
 	}
 }

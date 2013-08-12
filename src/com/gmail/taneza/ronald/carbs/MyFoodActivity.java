@@ -50,7 +50,7 @@ public class MyFoodActivity extends ActionBarActivity {
 	public final static String FOOD_ITEM_RESULT = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_RESULT";
 	public final static String ACTIVITY_MODE_MESSAGE = "com.gmail.taneza.ronald.carbs.ACTIVITY_MODE_MESSAGE";
 	
-	private FoodItem mFoodItem;
+	private FoodItemInfo mFoodItemInfo;
 	private EditText mWeightEditText;
 	private TextView mNumCarbsTextView;
 	private Mode mMode;
@@ -66,11 +66,14 @@ public class MyFoodActivity extends ActionBarActivity {
 		// Get the message from the intent
 		Intent intent = getIntent();
 
-		mFoodItem = intent.getParcelableExtra(FOOD_ITEM_MESSAGE);
+		FoodItem foodItem = intent.getParcelableExtra(FOOD_ITEM_MESSAGE);
 		Mode mode = Mode.values()[intent.getIntExtra(ACTIVITY_MODE_MESSAGE, Mode.NewFood.ordinal())];
-
+		
+		FoodDbAdapter foodDbAdapter = ((CarbsApp)getApplication()).getDatabase();
+		mFoodItemInfo = foodDbAdapter.getFoodItemInfo(foodItem);
+		
 		TextView foodNameTextView = (TextView) findViewById(R.id.my_food_name);
-		foodNameTextView.setText(mFoodItem.getName());
+		foodNameTextView.setText(mFoodItemInfo.getName());
 		// Request focus and show soft keyboard automatically
 		foodNameTextView.requestFocus();
         getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE); 
@@ -191,7 +194,7 @@ public class MyFoodActivity extends ActionBarActivity {
 	
 	public void addToMyFoods(View v) {
 		Intent data = getIntent();
-		data.putExtra(FOOD_ITEM_RESULT, (Parcelable)mFoodItem);
+		data.putExtra(FOOD_ITEM_RESULT, (Parcelable)mFoodItemInfo.getFoodItem());
 	    setResult(MY_FOOD_RESULT_OK, data);
 		finish();
 	}

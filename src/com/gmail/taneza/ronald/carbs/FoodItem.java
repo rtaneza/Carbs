@@ -28,8 +28,6 @@ public class FoodItem implements Parcelable, Serializable {
 
 	private static final long serialVersionUID = 6139044679990035503L;
 
-	public static final String MY_FOOD_TEXT = "My Food";
-	
 	/* 
 	 * Do not change, rename, or remove existing fields! 
 	 * New fields may be added without needing to change serialVersionUID.
@@ -49,25 +47,19 @@ public class FoodItem implements Parcelable, Serializable {
 	private String mTableName;
 	private int mId;
 	private int mWeight;
-	private FoodDbAdapter mFoodDbAdapter;
-	private FoodDbItem mFoodDbItem;
 	
-	// TODO: 
-	// Rename FoodItem to FoodItemStruct
-	// Rename FoodDbItem to FoodItem -> this is what will be used in lists
-	// new FoodItem(foodItemStruct)
-	
-	public FoodItem(FoodDbAdapter foodDbAdapter, String tableName, int id, int weight) {
-		mFoodDbAdapter = foodDbAdapter;
+	public FoodItem(String tableName, int id, int weight) {
 		mTableName = tableName;
 		mId = id;
 		mWeight = weight;
-		
-		mFoodDbItem = foodDbAdapter.getFoodDbItem(tableName, id);
 	}
 
 	public String getTableName() {
 		return mTableName;
+	}
+	
+	public int getId() {
+		return mId;
 	}
 	
 	public int getWeight() {
@@ -76,26 +68,6 @@ public class FoodItem implements Parcelable, Serializable {
 	
 	public void setWeight(int weight) {
 		mWeight = weight;
-	}
-	
-	public String getName() {
-		return mFoodDbItem.getName();
-	}
-
-	public int getWeightPerUnit() {
-		return mFoodDbItem.getWeightPerUnit();
-	}
-
-	public float getNumCarbsInGramsPerUnit() {
-		return mFoodDbItem.getNumCarbsInGramsPerUnit();
-	}
-
-	public String getUnitText() {
-		return mFoodDbItem.getUnitText();
-	}
-	
-	public float getNumCarbsInGrams() {
-		return (getNumCarbsInGramsPerUnit() * mWeight) / getWeightPerUnit();
 	}
 	
 	private FoodItem(Parcel parcel) {

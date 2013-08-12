@@ -51,10 +51,9 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     private Language mLanguage;
     private SQLiteDatabase mDatabase;
     
-    public FoodDbAdapter(Context context, Language language) {
+    public FoodDbAdapter(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         deleteDbIfItAlreadyExists(context);
-    	mLanguage = language;
     }
     
 	public void open() {
@@ -122,14 +121,17 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     	}
     }
     
-    public FoodDbItem getFoodDbItem(String tableName, int id) {
+    public FoodItemInfo getFoodItemInfo(FoodItem foodItem) {
+    	String tableName = foodItem.getTableName();
+    	
     	if (tableName.equals(NEVO_TABLE_NAME)) {
     		String[] columns = { getFoodNameColumnName(), NEVO_COLUMN_WEIGHT_PER_UNIT, 
     				NEVO_COLUMN_CARBS_GRAMS_PER_UNIT, NEVO_COLUMN_UNIT_TEXT };
-    		String selection = String.format("%s = %d", NEVO_COLUMN_PRODUCT_CODE, id);
+    		String selection = String.format("%s = %d", NEVO_COLUMN_PRODUCT_CODE, foodItem.getId());
     		Cursor cursor = mDatabase.query(tableName, columns, selection, null, null, null, getFoodNameColumnName());
     		cursor.moveToFirst();
-    		return new FoodDbItem(
+    		return new FoodItemInfo(
+    				foodItem,
     				cursor.getString(cursor.getColumnIndexOrThrow(getFoodNameColumnName())),
     				cursor.getInt(cursor.getColumnIndexOrThrow(NEVO_COLUMN_WEIGHT_PER_UNIT)),
     				cursor.getFloat(cursor.getColumnIndexOrThrow(NEVO_COLUMN_CARBS_GRAMS_PER_UNIT)),
@@ -138,10 +140,11 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     	} else if (tableName.equals(MYFOODS_TABLE_NAME)) {
     		String[] columns = { MYFOODS_COLUMN_NAME, MYFOODS_COLUMN_WEIGHT_PER_UNIT, 
     				MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT, MYFOODS_COLUMN_UNIT_TEXT };
-    		String selection = String.format("%s = %d", MYFOODS_COLUMN_ID, id);
+    		String selection = String.format("%s = %d", MYFOODS_COLUMN_ID, foodItem.getId());
     		Cursor cursor = mDatabase.query(tableName, columns, selection, null, null, null, MYFOODS_COLUMN_NAME);
     		cursor.moveToFirst();
-    		return new FoodDbItem(
+    		return new FoodItemInfo(
+    				foodItem,
     				cursor.getString(cursor.getColumnIndexOrThrow(MYFOODS_COLUMN_NAME)),
     				cursor.getInt(cursor.getColumnIndexOrThrow(MYFOODS_COLUMN_WEIGHT_PER_UNIT)),
     				cursor.getFloat(cursor.getColumnIndexOrThrow(MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT)),

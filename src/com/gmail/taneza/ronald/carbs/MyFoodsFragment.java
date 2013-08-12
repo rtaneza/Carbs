@@ -38,7 +38,6 @@ public class MyFoodsFragment extends BaseFoodListFragment {
 	@Override
 	protected FoodItem createFoodItemFromCursor(SQLiteCursor cursor) {
 		return new FoodItem(
-				mFoodDbAdapter,
 				cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_TABLE_NAME)),
 				cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_ID)),
 				cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_WEIGHT_PER_UNIT)));
@@ -65,7 +64,7 @@ public class MyFoodsFragment extends BaseFoodListFragment {
         // Make sure the request was successful
         if (resultCode == MyFoodActivity.MY_FOOD_RESULT_OK) {
     		FoodItem foodItem = data.getParcelableExtra(MyFoodActivity.FOOD_ITEM_RESULT);
-    		//mMainActivityNotifier.addFoodItemToMeal(foodItem);
+    		mMainActivityNotifier.addFoodItemToMeal(foodItem);
         }
 	}
 }

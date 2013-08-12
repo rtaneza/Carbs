@@ -26,33 +26,33 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 public class FoodItemArrayAdapter extends FoodItemBaseArrayAdapter {
-	public FoodItemArrayAdapter(Context context, ArrayList<FoodItem> values, Language language) {
-	    super(context, R.layout.fragment_meal, values, language);
+	public FoodItemArrayAdapter(Context context, FoodDbAdapter foodDbAdapter, ArrayList<FoodItem> values) {
+	    super(context, foodDbAdapter, R.layout.fragment_meal, values);
 	}
     
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-	    LayoutInflater inflater = (LayoutInflater) mContext
-	        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	    View rowView = inflater.inflate(R.layout.meal_item, parent, false);
+	    View rowView = mInflater.inflate(R.layout.meal_item, parent, false);
 	    
-	    FoodItem foodItem = getItem(position);
+	    final FoodItem foodItem = getItem(position);
+	    final FoodItemInfo foodItemInfo = mFoodDbAdapter.getFoodItemInfo(foodItem);
+	    
 	    TextView nameTextView = (TextView) rowView.findViewById(R.id.meal_item_name);
-	    nameTextView.setText(foodItem.getName());
+	    nameTextView.setText(foodItemInfo.getName());
 
 	    //Log.i("Carbs", String.format("[%s] %d: %s", foodItem.mTableName, foodItem.mProductCode, getFoodName(foodItem)));
 	    
     	String foodType = "";
-    	if (foodItem.getTableName().equals(FoodDbAdapter.MYFOODS_TABLE_NAME)) {
-    		foodType = String.format("%s ", FoodItem.MY_FOOD_TEXT);
+    	if (foodItemInfo.getTableName().equals(FoodDbAdapter.MYFOODS_TABLE_NAME)) {
+    		foodType = String.format("%s ", FoodItemInfo.MY_FOOD_TEXT);
     	}
     	
 	    TextView nameExtraTextView = (TextView) rowView.findViewById(R.id.meal_item_name_extra);
-	    String foodTypeAndWeight = String.format("%s(%d %s)", foodType, foodItem.getWeight(), foodItem.getUnitText());
+	    String foodTypeAndWeight = String.format("%s(%d %s)", foodType, foodItemInfo.getWeight(), foodItemInfo.getUnitText());
 	    nameExtraTextView.setText(foodTypeAndWeight);
 	    
 	    TextView carbsTextView = (TextView) rowView.findViewById(R.id.meal_item_carbs);
-	    carbsTextView.setText(String.format("%.1f", foodItem.getNumCarbsInGrams()));
+	    carbsTextView.setText(String.format("%.1f", foodItemInfo.getNumCarbsInGrams()));
 
 	    return rowView;
 	}

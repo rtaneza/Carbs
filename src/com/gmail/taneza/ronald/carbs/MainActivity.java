@@ -64,7 +64,6 @@ public class MainActivity extends ActionBarActivity implements
     private MainPagerAdapter mPagerAdapter;
     private Menu mOptionsMenu;
 
-    @SuppressWarnings("unchecked")
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,8 +86,8 @@ public class MainActivity extends ActionBarActivity implements
 //            e.printStackTrace();
 //        }
 
-		mFoodDbAdapter = new FoodDbAdapter(this, mLanguage);
-		mFoodDbAdapter.open();
+		mFoodDbAdapter = ((CarbsApp)getApplication()).getDatabase();
+		mFoodDbAdapter.setLanguage(mLanguage);
 
         setContentView(R.layout.activity_main);
 
@@ -285,7 +284,8 @@ public class MainActivity extends ActionBarActivity implements
 		float totalCarbsInGrams = 0;
 		
 		for (FoodItem item : mFoodItemsList) {
-			totalCarbsInGrams += item.getNumCarbsInGrams();
+			final FoodItemInfo info = mFoodDbAdapter.getFoodItemInfo(item);
+			totalCarbsInGrams += info.getNumCarbsInGrams();
 		}
 		
 		mTotalCarbsTextView.setText(String.format("%.1f g", totalCarbsInGrams));

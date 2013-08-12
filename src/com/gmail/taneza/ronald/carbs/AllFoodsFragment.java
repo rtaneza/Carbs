@@ -34,7 +34,6 @@ public class AllFoodsFragment extends BaseFoodListFragment {
 	@Override
 	protected FoodItem createFoodItemFromCursor(SQLiteCursor cursor) {
 		return new FoodItem(
-				mFoodDbAdapter,
 				cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_TABLE_NAME)),
 				cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.NEVO_COLUMN_PRODUCT_CODE)),
 				cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.NEVO_COLUMN_WEIGHT_PER_UNIT)));
