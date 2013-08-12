@@ -33,6 +33,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.Tab;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -64,6 +65,7 @@ public class MainActivity extends ActionBarActivity implements
     private MainPagerAdapter mPagerAdapter;
     private Menu mOptionsMenu;
 
+	@SuppressWarnings("unchecked")
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,20 +77,20 @@ public class MainActivity extends ActionBarActivity implements
  		mFoodItemsList = new ArrayList<FoodItem>();
  		mRecentFoodsList = new ArrayList<FoodItem>();
  		
-// 		try {
-// 			mFoodItemsList = (ArrayList<FoodItem>) ObjectSerializer.deserialize(
-// 					prefs.getString(PREF_FOOD_ITEMS_LIST, ObjectSerializer.serialize(new ArrayList<FoodItem>())));
-// 			mRecentFoodsList = (ArrayList<FoodItem>) ObjectSerializer.deserialize(
-// 					prefs.getString(PREF_RECENT_FOODS_LIST, ObjectSerializer.serialize(new ArrayList<FoodItem>())));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        }
+ 		try {
+ 			mFoodItemsList = (ArrayList<FoodItem>) ObjectSerializer.deserialize(
+ 					prefs.getString(PREF_FOOD_ITEMS_LIST, ObjectSerializer.serialize(new ArrayList<FoodItem>())));
+ 			mRecentFoodsList = (ArrayList<FoodItem>) ObjectSerializer.deserialize(
+ 					prefs.getString(PREF_RECENT_FOODS_LIST, ObjectSerializer.serialize(new ArrayList<FoodItem>())));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
 		mFoodDbAdapter = ((CarbsApp)getApplication()).getDatabase();
 		mFoodDbAdapter.setLanguage(mLanguage);
-
+		
         setContentView(R.layout.activity_main);
 
  		mTotalCarbsTextView = (TextView)findViewById(R.id.meal_total_carbs_text);
@@ -129,12 +131,12 @@ public class MainActivity extends ActionBarActivity implements
       SharedPreferences prefs = getPreferences(0);
       SharedPreferences.Editor editor = prefs.edit();
       editor.putInt(PREF_LANGUAGE, mLanguage.ordinal());
-//      try {
-//    	  editor.putString(PREF_FOOD_ITEMS_LIST, ObjectSerializer.serialize(mFoodItemsList));
-//    	  editor.putString(PREF_RECENT_FOODS_LIST, ObjectSerializer.serialize(mRecentFoodsList));
-//      } catch (IOException e) {
-//    	  e.printStackTrace();
-//      }
+      try {
+    	  editor.putString(PREF_FOOD_ITEMS_LIST, ObjectSerializer.serialize(mFoodItemsList));
+    	  editor.putString(PREF_RECENT_FOODS_LIST, ObjectSerializer.serialize(mRecentFoodsList));
+      } catch (IOException e) {
+    	  e.printStackTrace();
+      }
 
       // Commit the edits!
       editor.commit();
@@ -240,7 +242,9 @@ public class MainActivity extends ActionBarActivity implements
 	    	mLanguage = language;
 
 	    	setLanguageTextInOptionsMenu(language);
-			
+
+	    	mFoodDbAdapter.setLanguage(language);
+	    	
 	    	AllFoodsFragment allFoodsFragment = (AllFoodsFragment)getFragment(ALL_FOODS_TAB_INDEX);
 	    	if (allFoodsFragment != null)
 	    	{

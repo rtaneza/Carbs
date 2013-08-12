@@ -26,7 +26,7 @@ import android.os.Parcelable;
 
 public class FoodItem implements Parcelable, Serializable {
 
-	private static final long serialVersionUID = 6139044679990035503L;
+	private static final long serialVersionUID = 6139044679990035504L;
 
 	/* 
 	 * Do not change, rename, or remove existing fields! 
@@ -35,15 +35,6 @@ public class FoodItem implements Parcelable, Serializable {
 	 * http://macchiato.com/columns/Durable4.html
 	 * http://developer.android.com/reference/java/io/Serializable.html
 	 */
-//	public int mProductCode;
-//	public String mEnglishName;
-//	public String mDutchName;
-//	public int mWeight; // weight input by the user
-//	public int mWeightPerUnit; // e.g. 100 g
-//	public float mNumCarbsInGramsPerUnit; // e.g. 30 g
-//	public String mUnitText; // e.g. g or ml
-//	public String mTableName; // Database table name
-	
 	private String mTableName;
 	private int mId;
 	private int mWeight;

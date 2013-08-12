@@ -15,3 +15,5 @@ ok // use index in removeFoodItemFromMeal() because there may be multiple equal 
 ok // protect access to mFilteredList with mutex -> no need after changing BaseAdaptor
 // add toast msg after removing item
 // replace food list serialization with simpler save/restore of each FoodItem field
+// remove recent foods and meal item lists and save to database tables instead
+// fix bug: after startup, switch to Recent or Meal, then rotate phone, then change language -> crash because mFoodDbAdapter is null

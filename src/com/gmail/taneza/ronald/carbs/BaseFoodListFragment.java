@@ -27,6 +27,7 @@ import android.support.v4.content.Loader;
 import android.support.v4.app.LoaderManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,8 +58,6 @@ public abstract class BaseFoodListFragment extends BaseListFragment
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
              Bundle savedInstanceState) {
-    	mFoodDbAdapter = mMainActivityNotifier.getFoodDbAdapter();
-    	
 		return inflater.inflate(R.layout.fragment_all_foods, container, false);
 	}
 	
@@ -66,7 +65,9 @@ public abstract class BaseFoodListFragment extends BaseListFragment
 	public void onActivityCreated (Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		
-		mSearchEditText = (ClearableEditText) getActivity().findViewById(R.id.search_text);
+		mFoodDbAdapter = mMainActivityNotifier.getFoodDbAdapter();
+		
+    	mSearchEditText = (ClearableEditText) getActivity().findViewById(R.id.search_text);
         addSearchTextListener(mSearchEditText);
         
         initListAdapter();
@@ -75,7 +76,7 @@ public abstract class BaseFoodListFragment extends BaseListFragment
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		String searchText = mSearchEditText.getText().toString();
-		String queryString = getQueryString(searchText);		
+		String queryString = getQueryString(searchText);
 		return new SQLiteCursorLoader(getActivity(), mFoodDbAdapter, queryString, null);
 	}
 	
@@ -101,7 +102,6 @@ public abstract class BaseFoodListFragment extends BaseListFragment
     	FoodItem foodItem = createFoodItemFromCursor(cursor);
     	
     	Intent intent = new Intent(getActivity(), FoodDetailsActivity.class);
-    	//intent.putExtra(FoodDetailsActivity.LANGUAGE_MESSAGE, mMainActivityNotifier.getLanguage());
     	intent.putExtra(FoodDetailsActivity.FOOD_ITEM_MESSAGE, (Parcelable)foodItem);
     	intent.putExtra(FoodDetailsActivity.ACTIVITY_MODE_MESSAGE, FoodDetailsActivity.Mode.NewFood.ordinal());
     	
@@ -118,7 +118,6 @@ public abstract class BaseFoodListFragment extends BaseListFragment
     }
     
     public void setLanguage(Language language) {
-    	mFoodDbAdapter.setLanguage(language);
     	initListAdapter();
     }
     
