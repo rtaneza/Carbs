@@ -69,7 +69,9 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
+		//Log.i("Carbs", this.getClass().getSimpleName() + " onCreate");
+		
  		// Restore preferences
  		SharedPreferences prefs = getPreferences(0);
  		mLanguage = Language.values()[prefs.getInt(PREF_LANGUAGE, Language.DUTCH.ordinal())];
@@ -88,7 +90,7 @@ public class MainActivity extends ActionBarActivity implements
             e.printStackTrace();
         }
 
-		mFoodDbAdapter = ((CarbsApp)getApplication()).getDatabase();
+		mFoodDbAdapter = ((CarbsApp)getApplication()).getFoodDbAdapter();
 		mFoodDbAdapter.setLanguage(mLanguage);
 		
         setContentView(R.layout.activity_main);
@@ -389,7 +391,11 @@ public class MainActivity extends ActionBarActivity implements
 	
 	@Override
 	public FoodDbAdapter getFoodDbAdapter() {
-		return mFoodDbAdapter;
+		// Do not return mFoodDbAdapter because after an orientation change,
+		// the activity and fragments are re-created, but BaseFoodListFragment onCreate() 
+		// is called first before MainActivity's onCreate()! (why???)
+		// So return the application foodDbAdapter, which is never reset.
+		return ((CarbsApp)getApplication()).getFoodDbAdapter();
 	}
 	
 	private Fragment getFragment(int index) {

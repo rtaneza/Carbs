@@ -35,15 +35,13 @@ import android.widget.TextView.OnEditorActionListener;
 
 public class RecentFoodsFragment extends BaseListFragment {
 
-	private View mRootView;
 	protected ClearableEditText mSearchEditText;
 	private FoodItemArrayAdapter mFoodItemArrayAdapter;
 
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
              Bundle savedInstanceState) {
-		mRootView = inflater.inflate(R.layout.fragment_recent_foods, container, false);
-		return mRootView;
+		return inflater.inflate(R.layout.fragment_recent_foods, container, false);
 	}
 
 	@Override
@@ -54,7 +52,6 @@ public class RecentFoodsFragment extends BaseListFragment {
         addSearchTextListener(mSearchEditText);
 
 		ArrayList<FoodItem> recentFoodsList = mMainActivityNotifier.getRecentFoodsList();
-
 		mFoodItemArrayAdapter = new FoodItemArrayAdapter(getActivity(), mMainActivityNotifier.getFoodDbAdapter(), recentFoodsList);
 		setListAdapter(mFoodItemArrayAdapter);
 	}

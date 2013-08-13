@@ -71,7 +71,7 @@ public class FoodDetailsActivity extends ActionBarActivity {
 		FoodItem foodItem = intent.getParcelableExtra(FOOD_ITEM_MESSAGE);
 		Mode mode = Mode.values()[intent.getIntExtra(ACTIVITY_MODE_MESSAGE, Mode.NewFood.ordinal())];
 
-		FoodDbAdapter foodDbAdapter = ((CarbsApp)getApplication()).getDatabase();
+		FoodDbAdapter foodDbAdapter = ((CarbsApp)getApplication()).getFoodDbAdapter();
 		mFoodItemInfo = foodDbAdapter.getFoodItemInfo(foodItem);
 		
 		TextView foodNameTextView = (TextView) findViewById(R.id.food_details_name);

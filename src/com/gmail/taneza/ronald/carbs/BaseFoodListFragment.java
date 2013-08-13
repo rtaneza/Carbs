@@ -47,9 +47,7 @@ public abstract class BaseFoodListFragment extends BaseListFragment
 	protected String mCarbsColumnName;
 	protected String mUnitTextColumnName;
 	
-	protected FoodDbAdapter mFoodDbAdapter;
-	protected SimpleCursorAdapter mAdapter;
-	protected ClearableEditText mSearchEditText;
+	protected SimpleCursorAdapter mCursorAdapter;
 
 	protected abstract String getQueryString(String searchText);
 	protected abstract FoodItem createFoodItemFromCursor(SQLiteCursor cursor);
@@ -65,26 +63,27 @@ public abstract class BaseFoodListFragment extends BaseListFragment
 	public void onActivityCreated (Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		
-		mFoodDbAdapter = mMainActivityNotifier.getFoodDbAdapter();
+		//Log.i("Carbs", this.getClass().getSimpleName() + " onActivityCreated");
 		
-    	mSearchEditText = (ClearableEditText) getActivity().findViewById(R.id.search_text);
-        addSearchTextListener(mSearchEditText);
+		ClearableEditText searchEditText = (ClearableEditText) getActivity().findViewById(R.id.search_text);
+        addSearchTextListener(searchEditText);
         
         initListAdapter();
 	}
 	
 	@Override
-	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		String searchText = mSearchEditText.getText().toString();
+	public Loader<Cursor> onCreateLoader(int id, Bundle args) {		
+		ClearableEditText searchEditText = (ClearableEditText) getActivity().findViewById(R.id.search_text);
+		String searchText = searchEditText.getText().toString();
 		String queryString = getQueryString(searchText);
-		return new SQLiteCursorLoader(getActivity(), mFoodDbAdapter, queryString, null);
+		return new SQLiteCursorLoader(getActivity(), mMainActivityNotifier.getFoodDbAdapter(), queryString, null);
 	}
 	
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 		// Swap the new cursor in.  (The framework will take care of closing the
         // old cursor once we return.)
-        mAdapter.swapCursor(data);
+        mCursorAdapter.swapCursor(data);
 	}
 
 	@Override
@@ -92,7 +91,7 @@ public abstract class BaseFoodListFragment extends BaseListFragment
 		// This is called when the last Cursor provided to onLoadFinished()
         // above is about to be closed.  We need to make sure we are no
         // longer using it.
-        mAdapter.swapCursor(null);		
+        mCursorAdapter.swapCursor(null);		
 	}
 	
     @Override 
@@ -126,13 +125,12 @@ public abstract class BaseFoodListFragment extends BaseListFragment
         int[] to = new int[] { R.id.food_item_name, R.id.food_item_name_extra, R.id.food_item_carbs };
         
         // Create an empty adapter we will use to display the loaded data.
-        mAdapter = new SimpleCursorAdapter(getActivity(),
-        		R.layout.food_item, null, from, to, 0);
+        mCursorAdapter = new SimpleCursorAdapter(getActivity(), R.layout.food_item, null, from, to, 0);
         
         // We set the view binder for the adapter to our own FoodItemViewBinder.
-        mAdapter.setViewBinder(new FoodItemViewBinder());
+        mCursorAdapter.setViewBinder(new FoodItemViewBinder());
         
-        setListAdapter(mAdapter);
+        setListAdapter(mCursorAdapter);
         
         restartLoader();
 	}

@@ -18,6 +18,7 @@ package com.gmail.taneza.ronald.carbs;
 
 import android.app.Activity;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 
 public class BaseListFragment extends ListFragment {
 

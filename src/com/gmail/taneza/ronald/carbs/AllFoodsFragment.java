@@ -28,7 +28,7 @@ public class AllFoodsFragment extends BaseFoodListFragment {
 	
 	@Override
 	protected String getQueryString(String searchText) {
-		return mFoodDbAdapter.getQueryStringAllFoods(searchText);
+		return mMainActivityNotifier.getFoodDbAdapter().getQueryStringAllFoods(searchText);
 	}
 
 	@Override
@@ -41,6 +41,6 @@ public class AllFoodsFragment extends BaseFoodListFragment {
 
 	@Override
 	protected String getFoodNameColumnName() {
-		return mFoodDbAdapter.getFoodNameColumnName();
+		return mMainActivityNotifier.getFoodDbAdapter().getFoodNameColumnName();
 	}
 }

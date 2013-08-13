@@ -33,19 +33,21 @@ public class MealFragment extends BaseListFragment {
 	public final static String FOOD_ITEM_MESSAGE = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_MESSAGE";
 	public final static String FOOD_ITEM_RESULT = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_RESULT";
 
-	private View mRootView;
 	private FoodItemArrayAdapter mFoodItemArrayAdapter;
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
              Bundle savedInstanceState) {
-		mRootView = inflater.inflate(R.layout.fragment_meal, container, false);
+		return inflater.inflate(R.layout.fragment_meal, container, false);
+	}
+
+	@Override
+	public void onActivityCreated (Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
 	    
 		ArrayList<FoodItem> foodItemList = mMainActivityNotifier.getFoodItemsList();
 		mFoodItemArrayAdapter = new FoodItemArrayAdapter(getActivity(), mMainActivityNotifier.getFoodDbAdapter(), foodItemList);
 		setListAdapter(mFoodItemArrayAdapter);
-		
-		return mRootView;
 	}
 	
 	public void setFoodItemList(ArrayList<FoodItem> foodItemList) {

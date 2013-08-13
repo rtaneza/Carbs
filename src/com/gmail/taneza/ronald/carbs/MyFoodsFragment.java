@@ -32,7 +32,7 @@ public class MyFoodsFragment extends BaseFoodListFragment {
 	
 	@Override
 	protected String getQueryString(String searchText) {
-		return mFoodDbAdapter.getQueryStringMyFoods(searchText);
+		return mMainActivityNotifier.getFoodDbAdapter().getQueryStringMyFoods(searchText);
 	}
 	
 	@Override

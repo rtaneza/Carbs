@@ -29,7 +29,7 @@ public class CarbsApp extends Application {
 
     }
 
-    public FoodDbAdapter getDatabase(){
+    public FoodDbAdapter getFoodDbAdapter(){
         return mFoodDbAdapter;
     }
 
