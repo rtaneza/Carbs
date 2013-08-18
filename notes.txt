@@ -77,3 +77,12 @@ My Food (100g)
 
 Brood
 (100g)
+-----
+
+insert into MyFoods(Name, WeightPerUnit, UnitText, CarbsGramsPerUnit) values('mami', 30, 'g', 17)
+
+insert or replace into MyFoods values(5, 'mami guid', 50, 'g', 17)
+
+UPDATE MyFoods SET CarbsGramsPerUnit=13 WHERE Id=5
+
+DELETE FROM MyFoods WHERE Id=5
