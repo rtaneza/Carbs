@@ -52,7 +52,7 @@ public class RecentFoodsFragment extends BaseListFragment {
         addSearchTextListener(mSearchEditText);
 
 		ArrayList<FoodItem> recentFoodsList = mMainActivityNotifier.getRecentFoodsList();
-		mFoodItemArrayAdapter = new FoodItemArrayAdapter(getActivity(), mMainActivityNotifier.getFoodDbAdapter(), recentFoodsList);
+		mFoodItemArrayAdapter = new FoodItemArrayAdapter(getActivity(), mFoodDbAdapter, recentFoodsList);
 		setListAdapter(mFoodItemArrayAdapter);
 	}
 	

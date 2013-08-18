@@ -1,12 +1,12 @@
 <resources>
 
-    <dimen name="activity_horizontal_margin">16sp</dimen>
-    <dimen name="activity_vertical_margin">16sp</dimen>
     <dimen name="padding_horizontal">16sp</dimen>
     <dimen name="padding_horizontal_half">8sp</dimen>
     <dimen name="padding_vertical">8sp</dimen>
+    <dimen name="padding_vertical_half">4sp</dimen>
     <dimen name="text_size_small">14sp</dimen>
     <dimen name="text_size">16sp</dimen>
     <dimen name="text_size_medium">18sp</dimen>
+    <dimen name="my_food_details_label">100sp</dimen>
 
 </resources>

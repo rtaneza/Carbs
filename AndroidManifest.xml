@@ -33,12 +33,20 @@
                 android:value="com.gmail.taneza.ronald.carbs.MainActivity" />
         </activity>
         <activity
-            android:name="com.gmail.taneza.ronald.carbs.MyFoodActivity"
-            android:label="@string/title_activity_my_food"
+            android:name="com.gmail.taneza.ronald.carbs.MyFoodsActivity"
+            android:label="@string/title_activity_my_foods"
             android:parentActivityName="com.gmail.taneza.ronald.carbs.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.gmail.taneza.ronald.carbs.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.gmail.taneza.ronald.carbs.MyFoodDetailsActivity"
+            android:label="@string/title_activity_my_food_details"
+            android:parentActivityName="com.gmail.taneza.ronald.carbs.MyFoodsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.gmail.taneza.ronald.carbs.MyFoodsActivity" />
         </activity>
     </application>
 

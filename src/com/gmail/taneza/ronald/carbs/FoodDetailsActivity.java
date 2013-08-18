@@ -47,7 +47,6 @@ public class FoodDetailsActivity extends ActionBarActivity {
 	public final static int FOOD_DETAILS_RESULT_CANCELED = RESULT_CANCELED;
 	public final static int FOOD_DETAILS_RESULT_REMOVE = RESULT_FIRST_USER;
 	
-	//public final static String LANGUAGE_MESSAGE = "com.gmail.taneza.ronald.carbs.LANGUAGE_MESSAGE";
 	public final static String FOOD_ITEM_MESSAGE = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_MESSAGE";
 	public final static String FOOD_ITEM_RESULT = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_RESULT";
 	public final static String ACTIVITY_MODE_MESSAGE = "com.gmail.taneza.ronald.carbs.ACTIVITY_MODE_MESSAGE";
@@ -63,7 +62,7 @@ public class FoodDetailsActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_food_details);
-		setupActionBar();
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		// Get the message from the intent
 		Intent intent = getIntent();
@@ -100,13 +99,6 @@ public class FoodDetailsActivity extends ActionBarActivity {
 		}
 		
 		addWeightTextListener();
-	}
-	
-	/**
-	 * Set up the {@link android.app.ActionBar}, if the API is available.
-	 */
-	private void setupActionBar() {
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 	}
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)

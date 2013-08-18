@@ -5,8 +5,10 @@
     <string name="no_items">No items found</string>
     <string name="meal_total_carbs">Total carbs in meal:</string>
     <string name="search_text_hint">Search</string>
+    <string name="menu_my_foods">My foods</string>
     <string name="menu_clear_recent_foods">Clear recent</string>
     <string name="menu_clear_meal">Clear meal</string>
+    <string name="menu_clear_my_foods">Clear my foods</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_add_my_food">Add my food</string>
     <string name="menu_language_english">EN</string>
@@ -24,22 +26,27 @@
     <string name="save_food_details">Save</string>
     <string name="title_activity_meal">Meal</string>
     <string name="title_all_foods">All</string>
-    <string name="title_my_foods">My Foods</string>
+    <string name="title_my_foods">Mine</string>
     <string name="title_recent_foods">Recent</string>
     <string name="title_meal">Meal</string>
     <string name="recent_foods_no_items">No recent items</string>
     <string name="meal_no_items">No items</string>
     <string name="remove_item_from_meal_confirmation">Remove this item from the meal?</string>
     <string name="remove_item_from_recent_foods_confirmation">Remove this item from the history?</string>
+    <string name="remove_item_from_my_foods">Remove this item from the My Foods list? This item will also be removed from the history and meal.</string>
     <string name="remove_item_do_remove">Remove</string>
     <string name="remove_item_cancel">Cancel</string>
     <string name="menu_remove">Remove</string>
     <string name="my_food_name_label">Name:</string>
     <string name="my_food_weight_per_unit">Weight per unit:</string>
     <string name="my_food_carbs_per_unit">Carbs per unit:</string>
-    <string name="my_foods_add">Add to My Foods</string>
-    <string name="title_activity_my_food">Add my food</string>
+    <string name="my_foods_add">Add food</string>
+    <string name="title_activity_my_foods">My foods</string>
+    <string name="title_activity_my_food_details">Add my food</string>
     <string name="title_activity_my_food_edit">Edit my food</string>
     
-    
+    <string-array name="weight_unit_text_array">
+        <item>g</item>
+        <item>ml</item>
+    </string-array>
 </resources>

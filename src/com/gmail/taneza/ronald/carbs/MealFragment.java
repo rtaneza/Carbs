@@ -46,7 +46,7 @@ public class MealFragment extends BaseListFragment {
 		super.onActivityCreated(savedInstanceState);
 	    
 		ArrayList<FoodItem> foodItemList = mMainActivityNotifier.getFoodItemsList();
-		mFoodItemArrayAdapter = new FoodItemArrayAdapter(getActivity(), mMainActivityNotifier.getFoodDbAdapter(), foodItemList);
+		mFoodItemArrayAdapter = new FoodItemArrayAdapter(getActivity(), mFoodDbAdapter, foodItemList);
 		setListAdapter(mFoodItemArrayAdapter);
 	}
 	

@@ -23,14 +23,17 @@ import android.util.Log;
 public class BaseListFragment extends ListFragment {
 
 	protected MainActivityNotifier mMainActivityNotifier;
+	protected FoodDbAdapter mFoodDbAdapter;
 
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		
+		mFoodDbAdapter = ((CarbsApp)getActivity().getApplication()).getFoodDbAdapter();
+		
 	    try {
 	    	mMainActivityNotifier = (MainActivityNotifier) activity;
-	    } catch(ClassCastException e) {
+	    } catch (ClassCastException e) {
 	        throw new ClassCastException(activity.toString() + " must implement MainActivityNotifier");
 	    }
 	}

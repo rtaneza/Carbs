@@ -17,18 +17,28 @@
 package com.gmail.taneza.ronald.carbs;
 
 import android.database.sqlite.SQLiteCursor;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 public class AllFoodsFragment extends BaseFoodListFragment { 
 
 	public AllFoodsFragment() {
 		mWeightPerUnitColumnName = FoodDbAdapter.NEVO_COLUMN_WEIGHT_PER_UNIT;
-		mCarbsColumnName = FoodDbAdapter.NEVO_COLUMN_CARBS_GRAMS_PER_UNIT;
 		mUnitTextColumnName = FoodDbAdapter.NEVO_COLUMN_UNIT_TEXT;
+		mCarbsColumnName = FoodDbAdapter.NEVO_COLUMN_CARBS_GRAMS_PER_UNIT;
+	}
+
+	@Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+             Bundle savedInstanceState) {
+		return inflater.inflate(R.layout.fragment_all_foods, container, false);
 	}
 	
 	@Override
 	protected String getQueryString(String searchText) {
-		return mMainActivityNotifier.getFoodDbAdapter().getQueryStringAllFoods(searchText);
+		return mFoodDbAdapter.getQueryStringAllFoods(searchText);
 	}
 
 	@Override
@@ -41,6 +51,6 @@ public class AllFoodsFragment extends BaseFoodListFragment {
 
 	@Override
 	protected String getFoodNameColumnName() {
-		return mMainActivityNotifier.getFoodDbAdapter().getFoodNameColumnName();
+		return mFoodDbAdapter.getFoodNameColumnName();
 	}
 }

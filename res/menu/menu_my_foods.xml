@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" 
+      xmlns:carbs="http://schemas.android.com/apk/res-auto">
+      
+    <!--
+    When using the support library v7, the "showAsAction" attribute
+    should use our app's namespace.
+    See: http://developer.android.com/guide/topics/ui/actionbar.html#ActionItems
+     -->
+	
+    <item
+        android:id="@+id/menu_add_my_food"
+        android:orderInCategory="0"
+        carbs:showAsAction="always|withText"
+        android:icon="@android:drawable/ic_input_add"
+        android:title="@string/menu_add_my_food"/>
+    
+    <item
+        android:id="@+id/menu_clear_my_foods"
+        android:orderInCategory="50"
+        carbs:showAsAction="never"
+        android:title="@string/menu_clear_my_foods"/>
+
+</menu>

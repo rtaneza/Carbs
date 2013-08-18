@@ -24,6 +24,7 @@ import android.database.sqlite.SQLiteCursor;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.content.Loader;
+import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -34,32 +35,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.SimpleCursorAdapter.ViewBinder;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 import com.commonsware.cwac.loaderex.acl.SQLiteCursorLoader;
 
-public abstract class BaseFoodListFragment extends BaseListFragment 
+public class MyFoodsEditableFragment extends ListFragment 
     implements LoaderManager.LoaderCallbacks<Cursor> {
-
-	protected String mWeightPerUnitColumnName;
-	protected String mUnitTextColumnName;
-	protected String mCarbsColumnName;
 	
-	protected SimpleCursorAdapter mCursorAdapter;
-
-	protected abstract String getQueryString(String searchText);
-	protected abstract FoodItem createFoodItemFromCursor(SQLiteCursor cursor);
-	protected abstract String getFoodNameColumnName();
+	private SimpleCursorAdapter mCursorAdapter;
+	private FoodDbAdapter mFoodDbAdapter;
+	
+	@Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+             Bundle savedInstanceState) {
+		return inflater.inflate(R.layout.fragment_my_foods, container, false);
+	}
 	
 	@Override
 	public void onActivityCreated (Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+
+		mFoodDbAdapter = ((CarbsApp)getActivity().getApplication()).getFoodDbAdapter();
 		
-		//Log.i("Carbs", this.getClass().getSimpleName() + " onActivityCreated");
-		
-		ClearableEditText searchEditText = (ClearableEditText) getActivity().findViewById(R.id.search_text);
+		ClearableEditText searchEditText = (ClearableEditText) getActivity().findViewById(R.id.my_foods_search_text);
         addSearchTextListener(searchEditText);
         
         initListAdapter();
@@ -67,9 +66,9 @@ public abstract class BaseFoodListFragment extends BaseListFragment
 	
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {		
-		ClearableEditText searchEditText = (ClearableEditText) getActivity().findViewById(R.id.search_text);
+		ClearableEditText searchEditText = (ClearableEditText) getActivity().findViewById(R.id.my_foods_search_text);
 		String searchText = searchEditText.getText().toString();
-		String queryString = getQueryString(searchText);
+		String queryString = mFoodDbAdapter.getQueryStringMyFoods(searchText);
 		return new SQLiteCursorLoader(getActivity(), mFoodDbAdapter, queryString, null);
 	}
 	
@@ -88,15 +87,27 @@ public abstract class BaseFoodListFragment extends BaseListFragment
         mCursorAdapter.swapCursor(null);		
 	}
 	
+	public void addNewFood() {
+		FoodItem foodItem = new FoodItem(FoodDbAdapter.MYFOODS_TABLE_NAME, 0, MyFoodDetailsActivity.NEW_FOOD_DEFAULT_WEIGHT);
+    	startMyFoodDetailsActivity(foodItem, MyFoodDetailsActivity.Mode.NewFood);
+	}
+	
     @Override 
     public void onListItemClick(ListView l, View v, int position, long id) {
     	SQLiteCursor cursor = (SQLiteCursor)l.getItemAtPosition(position);
 
-    	FoodItem foodItem = createFoodItemFromCursor(cursor);
+    	FoodItem foodItem = new FoodItem(
+				cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_TABLE_NAME)),
+				cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_ID)),
+				cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_WEIGHT_PER_UNIT)));
     	
-    	Intent intent = new Intent(getActivity(), FoodDetailsActivity.class);
-    	intent.putExtra(FoodDetailsActivity.FOOD_ITEM_MESSAGE, (Parcelable)foodItem);
-    	intent.putExtra(FoodDetailsActivity.ACTIVITY_MODE_MESSAGE, FoodDetailsActivity.Mode.NewFood.ordinal());
+    	startMyFoodDetailsActivity(foodItem, MyFoodDetailsActivity.Mode.EditFood);
+    }
+    
+    private void startMyFoodDetailsActivity(FoodItem foodItem, MyFoodDetailsActivity.Mode mode) {
+    	Intent intent = new Intent(getActivity(), MyFoodDetailsActivity.class);
+    	intent.putExtra(MyFoodDetailsActivity.MY_FOOD_ITEM_MESSAGE, (Parcelable)foodItem);
+    	intent.putExtra(MyFoodDetailsActivity.MY_FOOD_ACTIVITY_MODE_MESSAGE, mode.ordinal());
     	
     	startActivityForResult(intent, 0);
     }
@@ -104,25 +115,22 @@ public abstract class BaseFoodListFragment extends BaseListFragment
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Make sure the request was successful
-        if (resultCode == FoodDetailsActivity.FOOD_DETAILS_RESULT_OK) {
-    		FoodItem foodItem = data.getParcelableExtra(FoodDetailsActivity.FOOD_ITEM_RESULT);
-    		mMainActivityNotifier.addFoodItemToMeal(foodItem);
+        if (resultCode == MyFoodDetailsActivity.MY_FOOD_RESULT_OK) {
+    		FoodItem foodItem = data.getParcelableExtra(MyFoodDetailsActivity.MY_FOOD_ITEM_RESULT);
+    		//mMainActivityNotifier.addFoodItemToMeal(foodItem);
         }
-    }
-    
-    public void setLanguage(Language language) {
-    	initListAdapter();
-    }
+	}
     
 	private void initListAdapter() {
-		String[] from = { getFoodNameColumnName(), FoodDbAdapter.COLUMN_TABLE_NAME, mCarbsColumnName };
+		String[] from = { FoodDbAdapter.MYFOODS_COLUMN_NAME, FoodDbAdapter.COLUMN_TABLE_NAME, FoodDbAdapter.MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT };
         int[] to = new int[] { R.id.food_item_name, R.id.food_item_name_extra, R.id.food_item_carbs };
         
         // Create an empty adapter we will use to display the loaded data.
         mCursorAdapter = new SimpleCursorAdapter(getActivity(), R.layout.food_item, null, from, to, 0);
         
         // We set the view binder for the adapter to our own FoodItemViewBinder.
-        mCursorAdapter.setViewBinder(new FoodItemViewBinder(mWeightPerUnitColumnName, mUnitTextColumnName));
+        mCursorAdapter.setViewBinder(new FoodItemViewBinder(
+        		FoodDbAdapter.MYFOODS_COLUMN_WEIGHT_PER_UNIT, FoodDbAdapter.MYFOODS_COLUMN_UNIT_TEXT));
         
         setListAdapter(mCursorAdapter);
         

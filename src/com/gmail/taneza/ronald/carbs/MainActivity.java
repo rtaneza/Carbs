@@ -22,9 +22,11 @@ import java.util.ArrayList;
 import org.apache.pig.impl.util.ObjectSerializer;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -188,7 +190,7 @@ public class MainActivity extends ActionBarActivity implements
                 case ALL_FOODS_TAB_INDEX:
                     return new AllFoodsFragment();
                 case MY_FOODS_TAB_INDEX:
-                    return new MyFoodsFragment();
+                    return new MyFoodsMainFragment();
                 case RECENT_FOODS_TAB_INDEX:
                     return new RecentFoodsFragment();
                 case MEAL_TAB_INDEX:
@@ -220,6 +222,9 @@ public class MainActivity extends ActionBarActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
 	    // Handle presses on the action bar items
 	    switch (item.getItemId()) {
+	    	case R.id.menu_my_foods:
+	    		startMyFoodsActivity();
+	    		break;
 	        case R.id.menu_language_option_english:
 	        	setLanguage(Language.ENGLISH);
 	        	break;
@@ -238,6 +243,12 @@ public class MainActivity extends ActionBarActivity implements
 	    
         return true;
     }
+    
+    private void startMyFoodsActivity() {
+    	Intent intent = new Intent(this, MyFoodsActivity.class);
+    	//TODO: when this activity returns, update the Recent and Meal list, because some items may have been removed.
+    	startActivity(intent);
+    }
 
 	private void setLanguage(Language language) {
 	    if (language != mLanguage) {
@@ -253,7 +264,7 @@ public class MainActivity extends ActionBarActivity implements
 	    		allFoodsFragment.setLanguage(language);
 	    	}
 
-	    	MyFoodsFragment myFoodsFragment = (MyFoodsFragment)getFragment(MY_FOODS_TAB_INDEX);
+	    	MyFoodsMainFragment myFoodsFragment = (MyFoodsMainFragment)getFragment(MY_FOODS_TAB_INDEX);
 	    	if (myFoodsFragment != null)
 	    	{
 	    		myFoodsFragment.setLanguage(language);
@@ -387,15 +398,6 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
 	public Language getLanguage() {
 		return mLanguage;
-	}
-	
-	@Override
-	public FoodDbAdapter getFoodDbAdapter() {
-		// Do not return mFoodDbAdapter because after an orientation change,
-		// the activity and fragments are re-created, but BaseFoodListFragment onCreate() 
-		// is called first before MainActivity's onCreate()! (why???)
-		// So return the application foodDbAdapter, which is never reset.
-		return ((CarbsApp)getApplication()).getFoodDbAdapter();
 	}
 	
 	private Fragment getFragment(int index) {

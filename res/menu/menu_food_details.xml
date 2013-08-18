@@ -7,11 +7,5 @@
         carbs:showAsAction="always|withText"
         android:icon="@android:drawable/ic_menu_delete"
         android:title="@string/menu_remove"/>
-    
-    <item
-        android:id="@+id/menu_food_details_settings"
-        android:orderInCategory="100"
-        carbs:showAsAction="never"
-        android:title="@string/menu_settings"/>
 
 </menu>

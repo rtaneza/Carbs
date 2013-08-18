@@ -86,3 +86,10 @@ insert or replace into MyFoods values(5, 'mami guid', 50, 'g', 17)
 UPDATE MyFoods SET CarbsGramsPerUnit=13 WHERE Id=5
 
 DELETE FROM MyFoods WHERE Id=5
+
+-----
+
+Cannot use v4 support libraries (LoaderManager) with default ListActivity.
+
+http://stackoverflow.com/questions/7834647/how-to-get-loadermanager-in-a-listactivity
+You can only use the Loader framework from the Android Compatibility Library if you extend FragmentActivity. Consider converting your ListActivity into a ListFragment and a FragmentActivity.
