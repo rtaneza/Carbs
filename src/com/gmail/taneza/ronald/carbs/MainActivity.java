@@ -56,6 +56,10 @@ public class MainActivity extends ActionBarActivity implements
 	public final static int MY_FOODS_TAB_INDEX = 1;
 	public final static int RECENT_FOODS_TAB_INDEX = 2;
 	public final static int MEAL_TAB_INDEX = 3;
+
+	public final static int REQUEST_CODE_ADD_FOOD_TO_MEAL = 0;
+	public final static int REQUEST_CODE_EDIT_FOOD_IN_MEAL = 1;
+	public final static int REQUEST_CODE_SHOW_MY_FOODS = 2;
 	
 	private Language mLanguage;
 	private FoodDbAdapter mFoodDbAdapter;
@@ -66,6 +70,8 @@ public class MainActivity extends ActionBarActivity implements
     private ViewPager mViewPager;
     private MainPagerAdapter mPagerAdapter;
     private Menu mOptionsMenu;
+    
+    private int mEditFoodItemIndex;
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -124,6 +130,8 @@ public class MainActivity extends ActionBarActivity implements
         actionBar.setHomeButtonEnabled(false);
         
  		updateRecentFoodsAndMealData();
+ 		
+ 		mEditFoodItemIndex = -1;
     }
 	
 	@Override
@@ -246,15 +254,73 @@ public class MainActivity extends ActionBarActivity implements
     
     private void startMyFoodsActivity() {
     	Intent intent = new Intent(this, MyFoodsActivity.class);
-    	startActivityForResult(intent, 0);
+    	startActivityForResult(intent, REQUEST_CODE_SHOW_MY_FOODS);
     }
+    
+	public void startActivityToAddFoodToMeal(FoodItem foodItem) {
+    	startFoodDetailsActivityForResult(foodItem, FoodDetailsActivity.Mode.NewFood, REQUEST_CODE_ADD_FOOD_TO_MEAL);
+	}
 
+	public void startActivityToAddRecentFoodToMeal(FoodItem foodItem) {
+    	startFoodDetailsActivityForResult(foodItem, FoodDetailsActivity.Mode.RecentFood, REQUEST_CODE_ADD_FOOD_TO_MEAL);
+	}
+	
+	public void startActivityToEditFoodInMeal(FoodItem foodItem, int foodItemIndex) {
+    	mEditFoodItemIndex = foodItemIndex;
+    	startFoodDetailsActivityForResult(foodItem, FoodDetailsActivity.Mode.EditFoodInMeal, REQUEST_CODE_EDIT_FOOD_IN_MEAL);
+	}
+	
+	private void startFoodDetailsActivityForResult(FoodItem foodItem, FoodDetailsActivity.Mode mode, int requestCode) {
+    	Intent intent = new Intent(this, FoodDetailsActivity.class);
+    	intent.putExtra(FoodDetailsActivity.FOOD_ITEM_MESSAGE, (Parcelable)foodItem);
+    	intent.putExtra(FoodDetailsActivity.ACTIVITY_MODE_MESSAGE, mode.ordinal());
+
+    	startActivityForResult(intent, requestCode);
+	}
+	
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == MyFoodsActivity.MY_FOODS_RESULT_ITEM_CHANGED) {
-        	//TODO: when this activity returns, update the Recent and Meal list, because some items may have been removed.
-        	updateAllFoodsAndMyFoodsData();
-        }
+		FoodItem foodItem;
+		
+    	switch (requestCode) {
+	    	case REQUEST_CODE_ADD_FOOD_TO_MEAL:
+	            switch (resultCode) {
+	            	case FoodDetailsActivity.FOOD_DETAILS_RESULT_OK:
+	            		foodItem = data.getParcelableExtra(FoodDetailsActivity.FOOD_ITEM_RESULT);
+	    	    		addFoodItemToMeal(foodItem);
+	    	    		break;
+	    	    		
+	            	case FoodDetailsActivity.FOOD_DETAILS_RESULT_REMOVE:
+	            		foodItem = data.getParcelableExtra(FoodDetailsActivity.FOOD_ITEM_RESULT);
+	    	    		removeFoodItemFromRecentFoods(foodItem);
+	    	    		break;
+	            }
+	            break;
+	            
+	    	case REQUEST_CODE_EDIT_FOOD_IN_MEAL:
+	    		// The food item list in the meal is not filterable, and can contain duplicate foodItems, 
+	    		// so we need the index to remove the correct foodItem.
+	            switch (resultCode) {
+	            	case FoodDetailsActivity.FOOD_DETAILS_RESULT_OK:
+	            		foodItem = data.getParcelableExtra(FoodDetailsActivity.FOOD_ITEM_RESULT);
+	    	    		replaceFoodItemInMeal(mEditFoodItemIndex, foodItem);
+	    	    		break;
+	    	    		
+	            	case FoodDetailsActivity.FOOD_DETAILS_RESULT_REMOVE:
+	            		foodItem = data.getParcelableExtra(FoodDetailsActivity.FOOD_ITEM_RESULT);
+	    	    		removeFoodItemFromMeal(mEditFoodItemIndex);
+	    	    		break;
+	            }
+	            mEditFoodItemIndex = -1;
+	    		break;
+	    		
+	    	case REQUEST_CODE_SHOW_MY_FOODS:
+	    		if (resultCode == MyFoodsActivity.MY_FOODS_RESULT_ITEM_CHANGED) {
+	            	//TODO: when this activity returns, update the Recent and Meal list, because some items may have been removed.
+	            	updateAllFoodsAndMyFoodsData();
+	            }
+	    		break;
+    	}
     }
     
 	private void setLanguage(Language language) {
@@ -387,7 +453,6 @@ public class MainActivity extends ActionBarActivity implements
     	mRecentFoodsList.add(0, foodItem);
 	}
 	
-	@Override
 	public void addFoodItemToMeal(FoodItem foodItem) {
 		mFoodItemsList.add(foodItem);
 		
@@ -395,7 +460,6 @@ public class MainActivity extends ActionBarActivity implements
 		updateRecentFoodsAndMealData();
 	}
 
-	@Override
 	public void replaceFoodItemInMeal(int index, FoodItem foodItem) {
 		mFoodItemsList.remove(index);
 		mFoodItemsList.add(index, foodItem);
@@ -404,13 +468,11 @@ public class MainActivity extends ActionBarActivity implements
 		updateRecentFoodsAndMealData();
 	}
 
-	@Override
 	public void removeFoodItemFromMeal(int index) {
 		mFoodItemsList.remove(index);
 		updateRecentFoodsAndMealData();
 	}
 
-	@Override
 	public void removeFoodItemFromRecentFoods(FoodItem foodItem) {
 		mRecentFoodsList.remove(foodItem);
 		updateRecentFoodsAndMealData();

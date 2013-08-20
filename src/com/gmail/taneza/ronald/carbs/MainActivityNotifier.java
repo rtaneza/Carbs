@@ -21,13 +21,9 @@ import java.util.ArrayList;
 public interface MainActivityNotifier {
 	public Language getLanguage();
 	
-	public void addFoodItemToMeal(FoodItem foodItem);
-	public void replaceFoodItemInMeal(int index, FoodItem foodItem);
-	// Meal list is not filterable, and can contain duplicate foodItems, so we need the index to remove the correct foodItem
-	public void removeFoodItemFromMeal(int index);
-	// Recent list is filterable, so a foodItem's list index may change, so we pass the foodItem object to remove it.
-	// Also, the recent list does not contain duplicate foodItems, so a foodItem object is unique in the list.
-	public void removeFoodItemFromRecentFoods(FoodItem foodItem);
+	public void startActivityToAddFoodToMeal(FoodItem foodItem);
+	public void startActivityToAddRecentFoodToMeal(FoodItem foodItem);
+	public void startActivityToEditFoodInMeal(FoodItem foodItem, int foodItemIndex);
 	
 	public ArrayList<FoodItem> getFoodItemsList();
 	public ArrayList<FoodItem> getRecentFoodsList();

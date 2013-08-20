@@ -67,31 +67,6 @@ public class MealFragment extends BaseListFragment {
     @Override 
     public void onListItemClick(ListView l, View v, int position, long id) {
     	FoodItem foodItem = (FoodItem)l.getItemAtPosition(position);
-    	
-    	Intent intent = new Intent(getActivity(), FoodDetailsActivity.class);
-    	intent.putExtra(FoodDetailsActivity.FOOD_ITEM_MESSAGE, (Parcelable)foodItem);
-    	intent.putExtra(FoodDetailsActivity.ACTIVITY_MODE_MESSAGE, FoodDetailsActivity.Mode.EditFoodInMeal.ordinal());
-
-    	// use the requestCode arg for the list position
-    	startActivityForResult(intent, position);
-    }
-    
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    	FoodItem foodItem;
-		int index = requestCode;
-		
-        switch (resultCode) {
-        	case FoodDetailsActivity.FOOD_DETAILS_RESULT_OK:
-        		foodItem = data.getParcelableExtra(FoodDetailsActivity.FOOD_ITEM_RESULT);
-	    		mMainActivityNotifier.replaceFoodItemInMeal(index, foodItem);
-	    		break;
-	    		
-        	case FoodDetailsActivity.FOOD_DETAILS_RESULT_REMOVE:
-        		foodItem = data.getParcelableExtra(FoodDetailsActivity.FOOD_ITEM_RESULT);
-            	Log.i("Carbs", String.format("index %d", index));
-	    		mMainActivityNotifier.removeFoodItemFromMeal(index);
-	    		break;
-        }
+    	mMainActivityNotifier.startActivityToEditFoodInMeal(foodItem, position);
     }
 }

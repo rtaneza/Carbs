@@ -45,7 +45,8 @@ public class FoodDetailsActivity extends ActionBarActivity {
 
 	public final static int FOOD_DETAILS_RESULT_OK = RESULT_OK;
 	public final static int FOOD_DETAILS_RESULT_CANCELED = RESULT_CANCELED;
-	public final static int FOOD_DETAILS_RESULT_REMOVE = RESULT_FIRST_USER;
+	public final static int FOOD_DETAILS_RESULT_REPLACE = RESULT_FIRST_USER;
+	public final static int FOOD_DETAILS_RESULT_REMOVE = RESULT_FIRST_USER + 1;
 	
 	public final static String FOOD_ITEM_MESSAGE = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_MESSAGE";
 	public final static String FOOD_ITEM_RESULT = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_RESULT";
@@ -186,7 +187,7 @@ public class FoodDetailsActivity extends ActionBarActivity {
 		finish();
 	}
 	
-	public void addToMeal(View v) {
+	public void addToMealOrUpdate(View v) {
 		Intent data = getIntent();
 		data.putExtra(FOOD_ITEM_RESULT, (Parcelable)mFoodItemInfo.getFoodItem());
 	    setResult(FOOD_DETAILS_RESULT_OK, data);
