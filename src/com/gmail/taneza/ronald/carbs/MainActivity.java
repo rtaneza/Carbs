@@ -395,6 +395,8 @@ public class MainActivity extends ActionBarActivity implements
 	}
 	
 	private void updateAllFoodsAndMyFoodsData() {
+		mFoodDbAdapter.refreshList();
+		
     	AllFoodsFragment allFoodsFragment = (AllFoodsFragment)getFragment(ALL_FOODS_TAB_INDEX);
 		// During an orientation change, the fragment is still null
     	if (allFoodsFragment != null) {

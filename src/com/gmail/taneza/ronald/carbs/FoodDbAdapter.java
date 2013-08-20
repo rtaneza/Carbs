@@ -18,6 +18,8 @@ package com.gmail.taneza.ronald.carbs;
 
 import java.io.File;
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -52,10 +54,14 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     private Language mLanguage;
     private SQLiteDatabase mDatabase;
     
+    private HashMap<FoodItem, FoodItemInfo> mFoodItemHashMap;
+    
     public FoodDbAdapter(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         //Enable this only during development, if there's a new db with the same version as the previous one.
         //deleteDbIfItAlreadyExists(context);
+        
+        mFoodItemHashMap = new HashMap<FoodItem, FoodItemInfo>();
     }
     
 	public void open() {
@@ -110,6 +116,12 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     
     public void setLanguage(Language language) {
     	mLanguage = language;
+    	refreshList();
+    }
+    
+    public void refreshList() {
+		//Log.i("Carbs", "refreshList");
+    	mFoodItemHashMap.clear();
     }
     
     public String getFoodNameColumnName() {
@@ -124,6 +136,12 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     }
     
     public FoodItemInfo getFoodItemInfo(FoodItem foodItem) {
+    	if (mFoodItemHashMap.containsKey(foodItem)) {
+    		//Log.i("Carbs", String.format("getFoodItemInfo get [%d] %s - %d", mFoodItemHashMap.size(), foodItem.getTableName(), foodItem.getId()));
+    		return mFoodItemHashMap.get(foodItem);
+    	}
+    	
+    	FoodItemInfo foodItemInfo;
     	String tableName = foodItem.getTableName();
     	
     	if (tableName.equals(NEVO_TABLE_NAME)) {
@@ -132,7 +150,7 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     		String selection = String.format("%s = %d", NEVO_COLUMN_PRODUCT_CODE, foodItem.getId());
     		Cursor cursor = mDatabase.query(tableName, columns, selection, null, null, null, getFoodNameColumnName());
     		cursor.moveToFirst();
-    		return new FoodItemInfo(
+    		foodItemInfo = new FoodItemInfo(
     				foodItem,
     				cursor.getString(cursor.getColumnIndexOrThrow(getFoodNameColumnName())),
     				cursor.getInt(cursor.getColumnIndexOrThrow(NEVO_COLUMN_WEIGHT_PER_UNIT)),
@@ -145,7 +163,7 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     		String selection = String.format("%s = %d", MYFOODS_COLUMN_ID, foodItem.getId());
     		Cursor cursor = mDatabase.query(tableName, columns, selection, null, null, null, MYFOODS_COLUMN_NAME);
     		cursor.moveToFirst();
-    		return new FoodItemInfo(
+    		foodItemInfo = new FoodItemInfo(
     				foodItem,
     				cursor.getString(cursor.getColumnIndexOrThrow(MYFOODS_COLUMN_NAME)),
     				cursor.getInt(cursor.getColumnIndexOrThrow(MYFOODS_COLUMN_WEIGHT_PER_UNIT)),
@@ -155,6 +173,11 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     	} else {
     		throw new InvalidParameterException(String.format("Invalid tableName: %s", tableName));
     	}
+
+    	mFoodItemHashMap.put(foodItem, foodItemInfo);
+		//Log.i("Carbs", String.format("getFoodItemInfo put [%d] %s - %d",  mFoodItemHashMap.size(), foodItem.getTableName(), foodItem.getId()));
+    	
+    	return foodItemInfo;
     }
 
     public void addMyFoodItemInfo(FoodItemInfo foodItemInfo) {
