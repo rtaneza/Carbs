@@ -24,9 +24,11 @@ import org.apache.pig.impl.util.ObjectSerializer;
 import com.gmail.taneza.ronald.carbs.FoodDetailsActivity.Mode;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -42,20 +44,30 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-public class MyFoodsActivity extends ActionBarActivity {
+public class MyFoodsActivity extends ActionBarActivity
+	implements MyFoodsActivityNotifier {
 
-	private FoodDbAdapter mFoodDbAdapter;
+	public final static int MY_FOODS_RESULT_NO_CHANGES = RESULT_FIRST_USER;
+	public final static int MY_FOODS_RESULT_ITEM_CHANGED = RESULT_FIRST_USER + 1;
+	
+	private boolean mItemChanged;
 
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-		mFoodDbAdapter = ((CarbsApp)getApplication()).getFoodDbAdapter();
+        mItemChanged = false;
 		
         setContentView(R.layout.activity_my_foods);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+	@Override
+	public void finish() {
+	    setResult(mItemChanged ? MY_FOODS_RESULT_ITEM_CHANGED : MY_FOODS_RESULT_NO_CHANGES);
+		super.finish();
+	}
+	
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -73,17 +85,15 @@ public class MyFoodsActivity extends ActionBarActivity {
 				break;
 				
 			case android.R.id.home:
-				// This ID represents the Home or Up button. In the case of this
-				// activity, the Up button is shown. Use NavUtils to allow users
-				// to navigate up one level in the application structure. For
-				// more details, see the Navigation pattern on Android Design:
-				//
-				// http://developer.android.com/design/patterns/navigation.html#up-vs-back
-				//
-				NavUtils.navigateUpFromSameTask(this);
+				finish();
 				return true;
 		}
 		
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public void setItemChanged() {
+		mItemChanged = true;
 	}
 }

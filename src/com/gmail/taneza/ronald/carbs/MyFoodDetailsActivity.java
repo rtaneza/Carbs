@@ -41,7 +41,7 @@ public class MyFoodDetailsActivity extends ActionBarActivity {
 
 	public static final String NEW_FOOD_DEFAULT_NAME = "My food"; 
 	public static final String NEW_FOOD_DEFAULT_UNIT_TEXT = "g"; 
-	public static final int NEW_FOOD_DEFAULT_WEIGHT = 100;
+	public static final int NEW_FOOD_DEFAULT_WEIGHT_PER_UNIT = 100;
 	public static final int NEW_FOOD_DEFAULT_CARBS = 0;
 	
 	public enum Mode {
@@ -54,12 +54,14 @@ public class MyFoodDetailsActivity extends ActionBarActivity {
 	public final static int MY_FOOD_RESULT_REMOVE = RESULT_FIRST_USER;
 	
 	public final static String MY_FOOD_ITEM_MESSAGE = "com.gmail.taneza.ronald.carbs.MY_FOOD_ITEM_MESSAGE";
-	public final static String MY_FOOD_ITEM_RESULT = "com.gmail.taneza.ronald.carbs.MY_FOOD_ITEM_RESULT";
+	public final static String MY_FOOD_ITEM_INFO_RESULT = "com.gmail.taneza.ronald.carbs.MY_FOOD_ITEM_INFO_RESULT";
 	public final static String MY_FOOD_ACTIVITY_MODE_MESSAGE = "com.gmail.taneza.ronald.carbs.MY_FOOD_ACTIVITY_MODE_MESSAGE";
 	
-	private FoodItemInfo mFoodItemInfo;
+	private FoodItem mFoodItem;
+	private TextView mFoodNameTextView;
 	private EditText mWeightEditText;
 	private TextView mNumCarbsTextView;
+	private Spinner mWeightUnitTextSpinner;
 	private Mode mMode;
 	
 	@Override
@@ -72,43 +74,53 @@ public class MyFoodDetailsActivity extends ActionBarActivity {
 		// Get the message from the intent
 		Intent intent = getIntent();
 
-		FoodItem foodItem = intent.getParcelableExtra(MY_FOOD_ITEM_MESSAGE);
+		mFoodItem = intent.getParcelableExtra(MY_FOOD_ITEM_MESSAGE);
+		FoodItemInfo foodItemInfo;
+		
 		Mode mode = Mode.values()[intent.getIntExtra(MY_FOOD_ACTIVITY_MODE_MESSAGE, Mode.NewFood.ordinal())];
-
 		mMode = mode;
 		if (mode == Mode.NewFood) {
-			mFoodItemInfo = new FoodItemInfo(foodItem, NEW_FOOD_DEFAULT_NAME, foodItem.getWeight(), NEW_FOOD_DEFAULT_CARBS, NEW_FOOD_DEFAULT_UNIT_TEXT);
+			foodItemInfo = new FoodItemInfo(mFoodItem, NEW_FOOD_DEFAULT_NAME, NEW_FOOD_DEFAULT_WEIGHT_PER_UNIT, NEW_FOOD_DEFAULT_CARBS, NEW_FOOD_DEFAULT_UNIT_TEXT);
 		} else {			
 			FoodDbAdapter foodDbAdapter = ((CarbsApp)getApplication()).getFoodDbAdapter();
-			mFoodItemInfo = foodDbAdapter.getFoodItemInfo(foodItem);
+			foodItemInfo = foodDbAdapter.getFoodItemInfo(mFoodItem);
 
 			setTitle(R.string.title_activity_my_food_edit);
 			Button okButton = (Button) findViewById(R.id.my_food_ok_button);
 			okButton.setText(R.string.save_food_details);
 		}
 		
-		TextView foodNameTextView = (TextView) findViewById(R.id.my_food_name);
-		foodNameTextView.setText(mFoodItemInfo.getName());
+		mFoodNameTextView = (TextView) findViewById(R.id.my_food_name);
+		mFoodNameTextView.setText(foodItemInfo.getName());
 		// Request focus and show soft keyboard automatically
-		foodNameTextView.requestFocus();
+		mFoodNameTextView.requestFocus();
         getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE); 
 		
 		mWeightEditText = (EditText) findViewById(R.id.my_food_weight_edit);
-		mWeightEditText.setText(Integer.toString(mFoodItemInfo.getWeightPerUnit()));
+		mWeightEditText.setText(Integer.toString(foodItemInfo.getWeightPerUnit()));
 
-		Spinner weightUnitTextSpinner = (Spinner) findViewById(R.id.my_food_weight_unit_spinner);
+		mWeightUnitTextSpinner = (Spinner) findViewById(R.id.my_food_weight_unit_spinner);
 		// Create an ArrayAdapter using the string array and a default spinner layout
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+		ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this,
 		        R.array.weight_unit_text_array, android.R.layout.simple_spinner_item);
 		// Specify the layout to use when the list of choices appears
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+		arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
 		// Apply the adapter to the spinner
-		weightUnitTextSpinner.setAdapter(adapter);
+		mWeightUnitTextSpinner.setAdapter(arrayAdapter);
 		
-		weightUnitTextSpinner.setSelection(adapter.getPosition(mFoodItemInfo.getUnitText()));
+		mWeightUnitTextSpinner.setSelection(arrayAdapter.getPosition(foodItemInfo.getUnitText()));
 		
 		mNumCarbsTextView = (TextView) findViewById(R.id.my_food_carbs);
-		mNumCarbsTextView.setText(String.format("%.1f", mFoodItemInfo.getNumCarbsInGrams()));
+		
+		// Display decimal place only when non-zero, so it's easier to edit
+		String numCarbsString;
+		float numCarbs = foodItemInfo.getNumCarbsInGrams();
+		if (numCarbs == (int)numCarbs) {
+			numCarbsString = String.format("%.0f", numCarbs);
+		} else {
+			numCarbsString = String.format("%.1f", numCarbs);
+		}
+		mNumCarbsTextView.setText(numCarbsString);
 	}
 	
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -170,9 +182,15 @@ public class MyFoodDetailsActivity extends ActionBarActivity {
 		finish();
 	}
 	
-	public void addToMyFoods(View v) {
+	public void addOrUpdate(View v) {
+		FoodItemInfo foodItemInfo = new FoodItemInfo(mFoodItem, 
+				mFoodNameTextView.getText().toString(),
+				Integer.parseInt(mWeightEditText.getText().toString()),
+				Float.parseFloat(mNumCarbsTextView.getText().toString()),
+				mWeightUnitTextSpinner.getSelectedItem().toString());
+		
 		Intent data = getIntent();
-		data.putExtra(MY_FOOD_ITEM_RESULT, (Parcelable)mFoodItemInfo.getFoodItem());
+		data.putExtra(MY_FOOD_ITEM_INFO_RESULT, (Parcelable)foodItemInfo);
 	    setResult(MY_FOOD_RESULT_OK, data);
 		finish();
 	}

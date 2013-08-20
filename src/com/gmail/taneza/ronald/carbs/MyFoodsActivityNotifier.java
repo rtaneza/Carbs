@@ -16,26 +16,8 @@
 
 package com.gmail.taneza.ronald.carbs;
 
-import android.app.Application;
+import java.util.ArrayList;
 
-public class CarbsApp extends Application {
-	private FoodDbAdapter mFoodDbAdapter;
-
-    @Override
-    public void onCreate() {
-        super.onCreate(); 
-        mFoodDbAdapter = new FoodDbAdapter(this);
-		mFoodDbAdapter.open();
-
-    }
-
-    public FoodDbAdapter getFoodDbAdapter(){
-        return mFoodDbAdapter;
-    }
-
-    @Override
-    public void onTerminate() {
-        mFoodDbAdapter.close();
-        super.onTerminate();
-    }   
+public interface MyFoodsActivityNotifier {
+	public void setItemChanged();
 }

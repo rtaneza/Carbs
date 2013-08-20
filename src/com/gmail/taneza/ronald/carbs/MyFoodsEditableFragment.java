@@ -18,6 +18,7 @@ package com.gmail.taneza.ronald.carbs;
 
 import org.droidparts.widget.ClearableEditText;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteCursor;
@@ -42,9 +43,20 @@ import com.commonsware.cwac.loaderex.acl.SQLiteCursorLoader;
 
 public class MyFoodsEditableFragment extends ListFragment 
     implements LoaderManager.LoaderCallbacks<Cursor> {
-	
+
+	private MyFoodsActivityNotifier mMyFoodsActivityNotifier;
 	private SimpleCursorAdapter mCursorAdapter;
 	private FoodDbAdapter mFoodDbAdapter;
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);		
+	    try {
+	    	mMyFoodsActivityNotifier = (MyFoodsActivityNotifier) activity;
+	    } catch (ClassCastException e) {
+	        throw new ClassCastException(activity.toString() + " must implement MyFoodsActivityNotifier");
+	    }
+	}
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -88,7 +100,7 @@ public class MyFoodsEditableFragment extends ListFragment
 	}
 	
 	public void addNewFood() {
-		FoodItem foodItem = new FoodItem(FoodDbAdapter.MYFOODS_TABLE_NAME, 0, MyFoodDetailsActivity.NEW_FOOD_DEFAULT_WEIGHT);
+		FoodItem foodItem = new FoodItem(FoodDbAdapter.MYFOODS_TABLE_NAME, 0, MyFoodDetailsActivity.NEW_FOOD_DEFAULT_WEIGHT_PER_UNIT);
     	startMyFoodDetailsActivity(foodItem, MyFoodDetailsActivity.Mode.NewFood);
 	}
 	
@@ -109,15 +121,21 @@ public class MyFoodsEditableFragment extends ListFragment
     	intent.putExtra(MyFoodDetailsActivity.MY_FOOD_ITEM_MESSAGE, (Parcelable)foodItem);
     	intent.putExtra(MyFoodDetailsActivity.MY_FOOD_ACTIVITY_MODE_MESSAGE, mode.ordinal());
     	
-    	startActivityForResult(intent, 0);
+    	startActivityForResult(intent, mode.ordinal());
     }
     
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Make sure the request was successful
         if (resultCode == MyFoodDetailsActivity.MY_FOOD_RESULT_OK) {
-    		FoodItem foodItem = data.getParcelableExtra(MyFoodDetailsActivity.MY_FOOD_ITEM_RESULT);
-    		//mMainActivityNotifier.addFoodItemToMeal(foodItem);
+    		FoodItemInfo foodItemInfo = data.getParcelableExtra(MyFoodDetailsActivity.MY_FOOD_ITEM_INFO_RESULT);
+    		if (resultCode == MyFoodDetailsActivity.Mode.NewFood.ordinal()) {
+    			mFoodDbAdapter.addMyFoodItemInfo(foodItemInfo);
+    		} else {
+    			mFoodDbAdapter.updateMyFoodItemInfo(foodItemInfo);
+    		}
+    		restartLoader();
+        	mMyFoodsActivityNotifier.setItemChanged();
         }
 	}
     

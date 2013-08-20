@@ -130,7 +130,7 @@
 	        android:layout_weight="0.5"
 	        android:textSize="@dimen/text_size"
 	        android:text="@string/my_foods_add"
-	        android:onClick="addToMyFoods" />
+	        android:onClick="addOrUpdate" />
     
     </LinearLayout>
 	    

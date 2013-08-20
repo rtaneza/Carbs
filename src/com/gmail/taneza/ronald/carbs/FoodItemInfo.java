@@ -16,7 +16,11 @@
 
 package com.gmail.taneza.ronald.carbs;
 
-public class FoodItemInfo {
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.os.Parcelable.Creator;
+
+public class FoodItemInfo implements Parcelable {
 
 	public static final String MY_FOOD_TEXT = "My Food";
 	
@@ -69,4 +73,40 @@ public class FoodItemInfo {
 	public void setWeight(int weight) {
 		mFoodItem.setWeight(weight);
 	}
+
+	private FoodItemInfo(Parcel parcel) {
+		mFoodItem = parcel.readParcelable(FoodItem.class.getClassLoader());
+		mName = parcel.readString();
+		mWeightPerUnit = parcel.readInt();
+		mNumCarbsInGramsPerUnit = parcel.readFloat();
+		mUnitText = parcel.readString();
+    }
+	
+	public static final Creator<FoodItemInfo> CREATOR = new Creator<FoodItemInfo>() {
+
+        @Override
+        public FoodItemInfo createFromParcel(Parcel parcel) {
+            return new FoodItemInfo(parcel);
+        }
+
+        @Override
+        public FoodItemInfo[] newArray(int size) {
+            return new FoodItemInfo[size];
+        }
+    };
+    
+	@Override 
+	public int describeContents() { 
+		return 0; 
+	}
+	
+	@Override 
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeParcelable(mFoodItem, flags);
+		dest.writeString(mName);
+		dest.writeInt(mWeightPerUnit);
+		dest.writeFloat(mNumCarbsInGramsPerUnit);
+		dest.writeString(mUnitText);
+	}
+	
 }

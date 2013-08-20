@@ -19,6 +19,7 @@ package com.gmail.taneza.ronald.carbs;
 import java.io.File;
 import java.security.InvalidParameterException;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -53,7 +54,8 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     
     public FoodDbAdapter(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        deleteDbIfItAlreadyExists(context);
+        //Enable this only during development, if there's a new db with the same version as the previous one.
+        //deleteDbIfItAlreadyExists(context);
     }
     
 	public void open() {
@@ -153,6 +155,27 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     	} else {
     		throw new InvalidParameterException(String.format("Invalid tableName: %s", tableName));
     	}
+    }
+
+    public void addMyFoodItemInfo(FoodItemInfo foodItemInfo) {
+    	ContentValues values = new ContentValues();
+    	values.put(MYFOODS_COLUMN_NAME, foodItemInfo.getName());
+    	values.put(MYFOODS_COLUMN_WEIGHT_PER_UNIT, foodItemInfo.getWeightPerUnit());
+    	values.put(MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT, foodItemInfo.getNumCarbsInGramsPerUnit());
+    	values.put(MYFOODS_COLUMN_UNIT_TEXT, foodItemInfo.getUnitText());
+    	
+    	mDatabase.insertOrThrow(MYFOODS_TABLE_NAME, null, values);
+    }
+    
+    public void updateMyFoodItemInfo(FoodItemInfo foodItemInfo) {
+    	ContentValues values = new ContentValues();
+    	values.put(MYFOODS_COLUMN_ID, foodItemInfo.getFoodItem().getId());
+    	values.put(MYFOODS_COLUMN_NAME, foodItemInfo.getName());
+    	values.put(MYFOODS_COLUMN_WEIGHT_PER_UNIT, foodItemInfo.getWeightPerUnit());
+    	values.put(MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT, foodItemInfo.getNumCarbsInGramsPerUnit());
+    	values.put(MYFOODS_COLUMN_UNIT_TEXT, foodItemInfo.getUnitText());
+    	
+    	mDatabase.replaceOrThrow(MYFOODS_TABLE_NAME, null, values);
     }
     
     private void deleteDbIfItAlreadyExists(Context context) {

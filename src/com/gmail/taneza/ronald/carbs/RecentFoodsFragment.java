@@ -59,7 +59,7 @@ public class RecentFoodsFragment extends BaseListFragment {
 	@Override
 	public void onStart() {
 		// This is called when the fragment is visible to the user.
-		super.onStart();		
+		super.onStart();
 		filterListBasedOnSearchText();
 	}
 	

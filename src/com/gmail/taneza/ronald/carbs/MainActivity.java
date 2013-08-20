@@ -128,8 +128,6 @@ public class MainActivity extends ActionBarActivity implements
 	
 	@Override
     protected void onStop(){
-       super.onStop();
-
       // We need an Editor object to make preference changes.
       // All objects are from android.context.Context
       SharedPreferences prefs = getPreferences(0);
@@ -144,6 +142,8 @@ public class MainActivity extends ActionBarActivity implements
 
       // Commit the edits!
       editor.commit();
+      
+      super.onStop();
     }
 	
     @Override
@@ -246,10 +246,17 @@ public class MainActivity extends ActionBarActivity implements
     
     private void startMyFoodsActivity() {
     	Intent intent = new Intent(this, MyFoodsActivity.class);
-    	//TODO: when this activity returns, update the Recent and Meal list, because some items may have been removed.
-    	startActivity(intent);
+    	startActivityForResult(intent, 0);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == MyFoodsActivity.MY_FOODS_RESULT_ITEM_CHANGED) {
+        	//TODO: when this activity returns, update the Recent and Meal list, because some items may have been removed.
+        	updateAllFoodsAndMyFoodsData();
+        }
+    }
+    
 	private void setLanguage(Language language) {
 	    if (language != mLanguage) {
 	    	mLanguage = language;
@@ -319,6 +326,20 @@ public class MainActivity extends ActionBarActivity implements
         } else {
         	mealTab.setText(origTitle);
         }
+	}
+	
+	private void updateAllFoodsAndMyFoodsData() {
+    	AllFoodsFragment allFoodsFragment = (AllFoodsFragment)getFragment(ALL_FOODS_TAB_INDEX);
+		// During an orientation change, the fragment is still null
+    	if (allFoodsFragment != null) {
+    		allFoodsFragment.refreshList();
+    	}
+    	
+    	MyFoodsMainFragment myFoodsFragment = (MyFoodsMainFragment)getFragment(MY_FOODS_TAB_INDEX);
+		// During an orientation change, the fragment is still null
+    	if (myFoodsFragment != null) {
+    		myFoodsFragment.refreshList();
+    	}
 	}
 	
 	private void updateRecentFoodsAndMealData() {

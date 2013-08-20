@@ -62,7 +62,7 @@ public abstract class BaseFoodListFragment extends BaseListFragment
 		ClearableEditText searchEditText = (ClearableEditText) getActivity().findViewById(R.id.search_text);
         addSearchTextListener(searchEditText);
         
-        initListAdapter();
+		initListAdapter();
 	}
 	
 	@Override
@@ -112,6 +112,10 @@ public abstract class BaseFoodListFragment extends BaseListFragment
     
     public void setLanguage(Language language) {
     	initListAdapter();
+    }
+    
+    public void refreshList() {
+    	restartLoader();
     }
     
 	private void initListAdapter() {
