@@ -18,7 +18,6 @@ package com.gmail.taneza.ronald.carbs;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
 
 public class FoodItemInfo implements Parcelable {
 

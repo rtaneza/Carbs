@@ -18,7 +18,6 @@ package com.gmail.taneza.ronald.carbs;
 
 import java.io.File;
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.content.ContentValues;
@@ -54,14 +53,14 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     private Language mLanguage;
     private SQLiteDatabase mDatabase;
     
-    private HashMap<FoodItem, FoodItemInfo> mFoodItemHashMap;
+    private HashMap<FoodDbItem, FoodItemInfo> mFoodItemHashMap;
     
     public FoodDbAdapter(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         //Enable this only during development, if there's a new db with the same version as the previous one.
         //deleteDbIfItAlreadyExists(context);
         
-        mFoodItemHashMap = new HashMap<FoodItem, FoodItemInfo>();
+        mFoodItemHashMap = new HashMap<FoodDbItem, FoodItemInfo>();
     }
     
 	public void open() {
@@ -132,9 +131,9 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     public FoodItemInfo getFoodItemInfo(FoodItem foodItem) {
     	FoodItemInfo foodItemInfo;
     	
-    	//TODO: Cache should use only tableName and id, not the weight
-    	if (mFoodItemHashMap.containsKey(foodItem)) {
-    		foodItemInfo = mFoodItemHashMap.get(foodItem);
+    	FoodDbItem foodDbItem = new FoodDbItem(foodItem);
+    	if (mFoodItemHashMap.containsKey(foodDbItem)) {
+    		foodItemInfo = mFoodItemHashMap.get(foodDbItem);
     		//Log.i("Carbs", String.format("Get from cache [%d] %s - %d - %s", mFoodItemHashMap.size(), foodItem.getTableName(), foodItem.getId(), foodItemInfo.getName()));
     		return foodItemInfo;
     	}
@@ -171,7 +170,7 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     		throw new InvalidParameterException(String.format("Invalid tableName: %s", tableName));
     	}
 
-    	mFoodItemHashMap.put(foodItem, foodItemInfo);
+    	mFoodItemHashMap.put(foodDbItem, foodItemInfo);
 		//Log.i("Carbs", String.format("Add to cache [%d] %s - %d - %s",  mFoodItemHashMap.size(), foodItem.getTableName(), foodItem.getId(), foodItemInfo.getName()));
     	
     	return foodItemInfo;
@@ -196,9 +195,10 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     	values.put(MYFOODS_COLUMN_UNIT_TEXT, foodItemInfo.getUnitText());
     	
     	mDatabase.replaceOrThrow(MYFOODS_TABLE_NAME, null, values);
-    	
+
     	//Log.i("Carbs", String.format("Remove %d: %s", foodItemInfo.getFoodItem().getId(), foodItemInfo.getName()));
-    	mFoodItemHashMap.remove(foodItemInfo.getFoodItem());
+    	FoodDbItem foodDbItem = new FoodDbItem(foodItemInfo.getFoodItem());
+    	mFoodItemHashMap.remove(foodDbItem);
     }
     
     private void deleteDbIfItAlreadyExists(Context context) {

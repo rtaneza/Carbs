@@ -16,8 +16,6 @@
 
 package com.gmail.taneza.ronald.carbs;
 
-import java.util.ArrayList;
-
 public interface MyFoodsActivityNotifier {
 	public void setItemChanged();
 }

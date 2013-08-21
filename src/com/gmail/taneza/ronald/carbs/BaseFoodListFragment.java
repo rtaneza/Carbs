@@ -18,23 +18,17 @@ package com.gmail.taneza.ronald.carbs;
 
 import org.droidparts.widget.ClearableEditText;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteCursor;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.content.Loader;
 import android.support.v4.app.LoaderManager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.SimpleCursorAdapter.ViewBinder;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 

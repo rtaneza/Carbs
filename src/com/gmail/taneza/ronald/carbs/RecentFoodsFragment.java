@@ -20,9 +20,7 @@ import java.util.ArrayList;
 
 import org.droidparts.widget.ClearableEditText;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
