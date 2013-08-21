@@ -125,17 +125,25 @@ public class MyFoodsEditableFragment extends ListFragment
     
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Make sure the request was successful
-        if (resultCode == MyFoodDetailsActivity.MY_FOOD_RESULT_OK) {
-    		FoodItemInfo foodItemInfo = data.getParcelableExtra(MyFoodDetailsActivity.MY_FOOD_ITEM_INFO_RESULT);
-    		if (resultCode == MyFoodDetailsActivity.Mode.NewFood.ordinal()) {
-    			mFoodDbAdapter.addMyFoodItemInfo(foodItemInfo);
-    		} else {
-    			mFoodDbAdapter.updateMyFoodItemInfo(foodItemInfo);
-    		}
-    		restartLoader();
-        	mMyFoodsActivityNotifier.setItemChanged();
-        }
+    	switch (resultCode) {
+    		case MyFoodDetailsActivity.MY_FOOD_RESULT_OK:
+    			FoodItemInfo foodItemInfo = data.getParcelableExtra(MyFoodDetailsActivity.MY_FOOD_ITEM_INFO_RESULT);
+	    		if (requestCode == MyFoodDetailsActivity.Mode.NewFood.ordinal()) {
+	    			mFoodDbAdapter.addMyFoodItemInfo(foodItemInfo);
+	    		} else {
+	    			mFoodDbAdapter.updateMyFoodItemInfo(foodItemInfo);
+	    		}
+	    		restartLoader();
+	        	mMyFoodsActivityNotifier.setItemChanged();
+	        	break;
+	        	
+    		case MyFoodDetailsActivity.MY_FOOD_RESULT_REMOVE:
+    			FoodItem foodItem = data.getParcelableExtra(MyFoodDetailsActivity.MY_FOOD_ITEM_RESULT);
+    			mFoodDbAdapter.removeMyFoodItemInfo(foodItem);
+	    		restartLoader();
+	        	mMyFoodsActivityNotifier.setItemRemoved();
+    			break;
+    	}
 	}
     
 	private void initListAdapter() {

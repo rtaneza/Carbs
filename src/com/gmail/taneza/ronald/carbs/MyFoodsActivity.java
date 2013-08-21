@@ -28,14 +28,17 @@ public class MyFoodsActivity extends ActionBarActivity
 
 	public final static int MY_FOODS_RESULT_NO_CHANGES = RESULT_FIRST_USER;
 	public final static int MY_FOODS_RESULT_ITEM_CHANGED = RESULT_FIRST_USER + 1;
+	public final static int MY_FOODS_RESULT_ITEM_REMOVED = RESULT_FIRST_USER + 2;
 	
 	private boolean mItemChanged;
+	private boolean mItemRemoved;
 
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         mItemChanged = false;
+        mItemRemoved = false;
 		
         setContentView(R.layout.activity_my_foods);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -43,7 +46,17 @@ public class MyFoodsActivity extends ActionBarActivity
 
 	@Override
 	public void finish() {
-	    setResult(mItemChanged ? MY_FOODS_RESULT_ITEM_CHANGED : MY_FOODS_RESULT_NO_CHANGES);
+		int resultCode;
+		
+		if (mItemRemoved) {
+			resultCode = MY_FOODS_RESULT_ITEM_REMOVED;
+		} else if (mItemChanged) {
+			resultCode = MY_FOODS_RESULT_ITEM_CHANGED;
+		} else {
+			resultCode = MY_FOODS_RESULT_NO_CHANGES;
+		}
+		
+	    setResult(resultCode);
 		super.finish();
 	}
 	
@@ -63,6 +76,8 @@ public class MyFoodsActivity extends ActionBarActivity
 				fragment.addNewFood();
 				break;
 				
+			//TODO: handle clearing of all foods
+				
 			case android.R.id.home:
 				finish();
 				return true;
@@ -74,5 +89,10 @@ public class MyFoodsActivity extends ActionBarActivity
 	@Override
 	public void setItemChanged() {
 		mItemChanged = true;
+	}
+
+	@Override
+	public void setItemRemoved() {
+		mItemRemoved = true;
 	}
 }

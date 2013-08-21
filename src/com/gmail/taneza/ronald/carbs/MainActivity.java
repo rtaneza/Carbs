@@ -314,14 +314,36 @@ public class MainActivity extends ActionBarActivity implements
 	    		break;
 	    		
 	    	case REQUEST_CODE_SHOW_MY_FOODS:
-	    		if (resultCode == MyFoodsActivity.MY_FOODS_RESULT_ITEM_CHANGED) {
-	            	//TODO: when this activity returns, update the Recent and Meal list, because some items may have been removed.
-	            	refreshAllTabs();
+	            switch (resultCode) {
+	            	case MyFoodsActivity.MY_FOODS_RESULT_ITEM_CHANGED:
+	            		refreshAllTabs();
+	            		break;
+
+	            	case MyFoodsActivity.MY_FOODS_RESULT_ITEM_REMOVED:
+	            		pruneRecentAndFoodLists();
+	            		updateRecentFoodsAndMealData();
+	            		refreshAllFoodsAndMyFoodsTabs();
+	            		break;
 	            }
 	    		break;
     	}
     }
-    
+
+	@Override
+	public Language getLanguage() {
+		return mLanguage;
+	}
+	
+	@Override
+	public ArrayList<FoodItem> getFoodItemsList() {
+		return mFoodItemsList;
+	}
+
+	@Override
+	public ArrayList<FoodItem> getRecentFoodsList() {
+		return mRecentFoodsList;
+	}
+	
 	private void setLanguage(Language language) {
 	    if (language != mLanguage) {
 	    	mLanguage = language;
@@ -372,6 +394,11 @@ public class MainActivity extends ActionBarActivity implements
 	}
 	
 	private void refreshAllTabs() {
+		refreshAllFoodsAndMyFoodsTabs();
+		refreshRecentAndMealTabs();	
+	}
+	
+	private void refreshAllFoodsAndMyFoodsTabs() {
 		// During an orientation change, the fragment may still be null
     	AllFoodsFragment allFoodsFragment = (AllFoodsFragment)getFragment(ALL_FOODS_TAB_INDEX);
     	if (allFoodsFragment != null) {
@@ -382,7 +409,10 @@ public class MainActivity extends ActionBarActivity implements
     	if (myFoodsFragment != null) {
     		myFoodsFragment.refreshList();
     	}
+	}
 
+	private void refreshRecentAndMealTabs() {
+		// During an orientation change, the fragment may still be null
     	RecentFoodsFragment recentFoodsFragment = (RecentFoodsFragment)getFragment(RECENT_FOODS_TAB_INDEX);
     	if (recentFoodsFragment != null) {
     		recentFoodsFragment.refreshList();
@@ -464,23 +494,28 @@ public class MainActivity extends ActionBarActivity implements
 		updateRecentFoodsAndMealData();
 	}
 	
-	@Override
-	public Language getLanguage() {
-		return mLanguage;
-	}
-	
 	private Fragment getFragment(int index) {
 		String fragmentTag = getFragmentTag(index);
     	return getSupportFragmentManager().findFragmentByTag(fragmentTag);
 	}
 
-	@Override
-	public ArrayList<FoodItem> getFoodItemsList() {
-		return mFoodItemsList;
-	}
+	private void pruneRecentAndFoodLists() {
+		for (int i = 0; i < mRecentFoodsList.size();) {
+			FoodItem foodItem = mRecentFoodsList.get(i);
+			if (mFoodDbAdapter.getFoodItemInfo(foodItem) == null) {
+				mRecentFoodsList.remove(i);
+			} else {
+				i++;
+			}
+		}
 
-	@Override
-	public ArrayList<FoodItem> getRecentFoodsList() {
-		return mRecentFoodsList;
+		for (int i = 0; i < mFoodItemsList.size();) {
+			FoodItem foodItem = mFoodItemsList.get(i);
+			if (mFoodDbAdapter.getFoodItemInfo(foodItem) == null) {
+				mFoodItemsList.remove(i);
+			} else {
+				i++;
+			}
+		}
 	}
 }

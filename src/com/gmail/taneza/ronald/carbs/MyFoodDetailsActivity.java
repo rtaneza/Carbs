@@ -25,8 +25,6 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -55,6 +53,7 @@ public class MyFoodDetailsActivity extends ActionBarActivity {
 	
 	public final static String MY_FOOD_ITEM_MESSAGE = "com.gmail.taneza.ronald.carbs.MY_FOOD_ITEM_MESSAGE";
 	public final static String MY_FOOD_ITEM_INFO_RESULT = "com.gmail.taneza.ronald.carbs.MY_FOOD_ITEM_INFO_RESULT";
+	public final static String MY_FOOD_ITEM_RESULT = "com.gmail.taneza.ronald.carbs.MY_FOOD_ITEM_RESULT";
 	public final static String MY_FOOD_ACTIVITY_MODE_MESSAGE = "com.gmail.taneza.ronald.carbs.MY_FOOD_ACTIVITY_MODE_MESSAGE";
 	
 	private FoodItem mFoodItem;
@@ -140,8 +139,9 @@ public class MyFoodDetailsActivity extends ActionBarActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_my_food_remove:
-			//removeItem();
+			removeItem();
 			return true;
+			
 		case android.R.id.home:
 			// This ID represents the Home or Up button. In the case of this
 			// activity, the Up button is shown. Use NavUtils to allow users
@@ -155,27 +155,27 @@ public class MyFoodDetailsActivity extends ActionBarActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-//
-//	public void removeItem() {
-//		new AlertDialog.Builder(this)
-//	    .setMessage(mRemoveItemConfirmationStringId)
-//	    .setPositiveButton(R.string.remove_item_do_remove, new DialogInterface.OnClickListener() {
-//	        public void onClick(DialogInterface dialog, int which) { 
-//	            // continue with remove
-//	    		Intent data = getIntent();
-//	    		data.putExtra(MY_FOOD_ITEM_RESULT, (Parcelable)mFoodItem);
-//	    	    setResult(MY_FOOD_RESULT_REMOVE, data);
-//	    		finish();
-//	        }
-//	     })
-//	    .setNegativeButton(R.string.remove_item_cancel, new DialogInterface.OnClickListener() {
-//	        public void onClick(DialogInterface dialog, int which) { 
-//	            // do nothing
-//	        }
-//	     })
-//	    .show();
-//	}
-//
+
+	public void removeItem() {
+		new AlertDialog.Builder(this)
+	    .setMessage(R.string.remove_item_from_my_foods)
+	    .setPositiveButton(R.string.remove_item_do_remove, new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int which) { 
+	            // continue with remove
+	    		Intent data = getIntent();
+	    		data.putExtra(MY_FOOD_ITEM_RESULT, (Parcelable)mFoodItem);
+	    	    setResult(MY_FOOD_RESULT_REMOVE, data);
+	    		finish();
+	        }
+	     })
+	    .setNegativeButton(R.string.remove_item_cancel, new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int which) { 
+	            // do nothing
+	        }
+	     })
+	    .show();
+	}
+
 	public void cancel(View v) {
 	    setResult(MY_FOOD_RESULT_CANCELED);
 		finish();

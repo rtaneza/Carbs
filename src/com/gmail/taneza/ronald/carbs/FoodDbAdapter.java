@@ -145,33 +145,41 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     				NEVO_COLUMN_CARBS_GRAMS_PER_UNIT, NEVO_COLUMN_UNIT_TEXT };
     		String selection = String.format("%s = %d", NEVO_COLUMN_PRODUCT_CODE, foodItem.getId());
     		Cursor cursor = mDatabase.query(tableName, columns, selection, null, null, null, getFoodNameColumnName());
-    		cursor.moveToFirst();
-    		foodItemInfo = new FoodItemInfo(
-    				foodItem,
-    				cursor.getString(cursor.getColumnIndexOrThrow(getFoodNameColumnName())),
-    				cursor.getInt(cursor.getColumnIndexOrThrow(NEVO_COLUMN_WEIGHT_PER_UNIT)),
-    				cursor.getFloat(cursor.getColumnIndexOrThrow(NEVO_COLUMN_CARBS_GRAMS_PER_UNIT)),
-    				cursor.getString(cursor.getColumnIndexOrThrow(NEVO_COLUMN_UNIT_TEXT)));
+    		if (cursor.moveToFirst()) {
+	    		foodItemInfo = new FoodItemInfo(
+	    				foodItem,
+	    				cursor.getString(cursor.getColumnIndexOrThrow(getFoodNameColumnName())),
+	    				cursor.getInt(cursor.getColumnIndexOrThrow(NEVO_COLUMN_WEIGHT_PER_UNIT)),
+	    				cursor.getFloat(cursor.getColumnIndexOrThrow(NEVO_COLUMN_CARBS_GRAMS_PER_UNIT)),
+	    				cursor.getString(cursor.getColumnIndexOrThrow(NEVO_COLUMN_UNIT_TEXT)));
+    		} else {
+    			foodItemInfo = null;
+    		}
     		
     	} else if (tableName.equals(MYFOODS_TABLE_NAME)) {
     		String[] columns = { MYFOODS_COLUMN_NAME, MYFOODS_COLUMN_WEIGHT_PER_UNIT, 
     				MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT, MYFOODS_COLUMN_UNIT_TEXT };
     		String selection = String.format("%s = %d", MYFOODS_COLUMN_ID, foodItem.getId());
     		Cursor cursor = mDatabase.query(tableName, columns, selection, null, null, null, MYFOODS_COLUMN_NAME);
-    		cursor.moveToFirst();
-    		foodItemInfo = new FoodItemInfo(
-    				foodItem,
-    				cursor.getString(cursor.getColumnIndexOrThrow(MYFOODS_COLUMN_NAME)),
-    				cursor.getInt(cursor.getColumnIndexOrThrow(MYFOODS_COLUMN_WEIGHT_PER_UNIT)),
-    				cursor.getFloat(cursor.getColumnIndexOrThrow(MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT)),
-    				cursor.getString(cursor.getColumnIndexOrThrow(MYFOODS_COLUMN_UNIT_TEXT)));
+    		if (cursor.moveToFirst()) {
+	    		foodItemInfo = new FoodItemInfo(
+	    				foodItem,
+	    				cursor.getString(cursor.getColumnIndexOrThrow(MYFOODS_COLUMN_NAME)),
+	    				cursor.getInt(cursor.getColumnIndexOrThrow(MYFOODS_COLUMN_WEIGHT_PER_UNIT)),
+	    				cursor.getFloat(cursor.getColumnIndexOrThrow(MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT)),
+	    				cursor.getString(cursor.getColumnIndexOrThrow(MYFOODS_COLUMN_UNIT_TEXT)));
+    		} else {
+    			foodItemInfo = null;
+    		}
     		
     	} else {
     		throw new InvalidParameterException(String.format("Invalid tableName: %s", tableName));
     	}
 
-    	mFoodItemHashMap.put(foodDbItem, foodItemInfo);
-		//Log.i("Carbs", String.format("Add to cache [%d] %s - %d - %s",  mFoodItemHashMap.size(), foodItem.getTableName(), foodItem.getId(), foodItemInfo.getName()));
+    	if (foodItemInfo != null) {
+    		mFoodItemHashMap.put(foodDbItem, foodItemInfo);
+    		//Log.i("Carbs", String.format("Add to cache [%d] %s - %d - %s",  mFoodItemHashMap.size(), foodItem.getTableName(), foodItem.getId(), foodItemInfo.getName()));
+    	}
     	
     	return foodItemInfo;
     }
@@ -198,6 +206,14 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
 
     	//Log.i("Carbs", String.format("Remove %d: %s", foodItemInfo.getFoodItem().getId(), foodItemInfo.getName()));
     	FoodDbItem foodDbItem = new FoodDbItem(foodItemInfo.getFoodItem());
+    	mFoodItemHashMap.remove(foodDbItem);
+    }
+    
+    public void removeMyFoodItemInfo(FoodItem foodItem) {
+    	String whereClause = String.format("%s = %s", MYFOODS_COLUMN_ID, foodItem.getId());
+    	mDatabase.delete(MYFOODS_TABLE_NAME, whereClause, null);
+    	
+    	FoodDbItem foodDbItem = new FoodDbItem(foodItem);
     	mFoodItemHashMap.remove(foodDbItem);
     }
     

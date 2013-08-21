@@ -33,7 +33,7 @@
     <string name="meal_no_items">No items</string>
     <string name="remove_item_from_meal_confirmation">Remove this item from the meal?</string>
     <string name="remove_item_from_recent_foods_confirmation">Remove this item from the history?</string>
-    <string name="remove_item_from_my_foods">Remove this item from the My Foods list? This item will also be removed from the history and meal.</string>
+    <string name="remove_item_from_my_foods">Remove this item from the My Foods list? It will also be removed from the Recent and Meal lists.</string>
     <string name="remove_item_do_remove">Remove</string>
     <string name="remove_item_cancel">Cancel</string>
     <string name="menu_remove">Remove</string>
