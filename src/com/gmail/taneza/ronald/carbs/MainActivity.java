@@ -317,7 +317,7 @@ public class MainActivity extends ActionBarActivity implements
 	    	case REQUEST_CODE_SHOW_MY_FOODS:
 	    		if (resultCode == MyFoodsActivity.MY_FOODS_RESULT_ITEM_CHANGED) {
 	            	//TODO: when this activity returns, update the Recent and Meal list, because some items may have been removed.
-	            	updateAllFoodsAndMyFoodsData();
+	            	refreshAllTabs();
 	            }
 	    		break;
     	}
@@ -331,29 +331,7 @@ public class MainActivity extends ActionBarActivity implements
 
 	    	mFoodDbAdapter.setLanguage(language);
 	    	
-	    	AllFoodsFragment allFoodsFragment = (AllFoodsFragment)getFragment(ALL_FOODS_TAB_INDEX);
-	    	if (allFoodsFragment != null)
-	    	{
-	    		allFoodsFragment.setLanguage(language);
-	    	}
-
-	    	MyFoodsMainFragment myFoodsFragment = (MyFoodsMainFragment)getFragment(MY_FOODS_TAB_INDEX);
-	    	if (myFoodsFragment != null)
-	    	{
-	    		myFoodsFragment.setLanguage(language);
-	    	}
-	    	
-	    	RecentFoodsFragment recentFoodsFragment = (RecentFoodsFragment)getFragment(RECENT_FOODS_TAB_INDEX);
-	    	if (recentFoodsFragment != null)
-	    	{
-	    		recentFoodsFragment.setLanguage(language);
-	    	}
-	    	
-	    	MealFragment mealFragment = (MealFragment)getFragment(MEAL_TAB_INDEX);
-	    	if (mealFragment != null)
-	    	{
-	    		mealFragment.setLanguage(language);
-	    	}
+	    	refreshAllTabs();
 	    }
 	}
 	
@@ -394,19 +372,26 @@ public class MainActivity extends ActionBarActivity implements
         }
 	}
 	
-	private void updateAllFoodsAndMyFoodsData() {
-		mFoodDbAdapter.refreshList();
-		
+	private void refreshAllTabs() {
+		// During an orientation change, the fragment may still be null
     	AllFoodsFragment allFoodsFragment = (AllFoodsFragment)getFragment(ALL_FOODS_TAB_INDEX);
-		// During an orientation change, the fragment is still null
     	if (allFoodsFragment != null) {
     		allFoodsFragment.refreshList();
     	}
     	
     	MyFoodsMainFragment myFoodsFragment = (MyFoodsMainFragment)getFragment(MY_FOODS_TAB_INDEX);
-		// During an orientation change, the fragment is still null
     	if (myFoodsFragment != null) {
     		myFoodsFragment.refreshList();
+    	}
+
+    	RecentFoodsFragment recentFoodsFragment = (RecentFoodsFragment)getFragment(RECENT_FOODS_TAB_INDEX);
+    	if (recentFoodsFragment != null) {
+    		recentFoodsFragment.refreshList();
+    	}
+    	
+    	MealFragment mealFragment = (MealFragment)getFragment(MEAL_TAB_INDEX);
+    	if (mealFragment != null) {
+    		mealFragment.refreshList();
     	}
 	}
 	

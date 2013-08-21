@@ -104,10 +104,9 @@ public class MyFoodDetailsActivity extends ActionBarActivity {
 		ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this,
 		        R.array.weight_unit_text_array, android.R.layout.simple_spinner_item);
 		// Specify the layout to use when the list of choices appears
-		arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+		arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		// Apply the adapter to the spinner
 		mWeightUnitTextSpinner.setAdapter(arrayAdapter);
-		
 		mWeightUnitTextSpinner.setSelection(arrayAdapter.getPosition(foodItemInfo.getUnitText()));
 		
 		mNumCarbsTextView = (TextView) findViewById(R.id.my_food_carbs);

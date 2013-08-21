@@ -95,12 +95,8 @@ public abstract class BaseFoodListFragment extends BaseListFragment
     	mMainActivityNotifier.startActivityToAddFoodToMeal(foodItem);
     }
     
-    public void setLanguage(Language language) {
-    	initListAdapter();
-    }
-    
     public void refreshList() {
-    	restartLoader();
+    	initListAdapter();
     }
     
 	private void initListAdapter() {

@@ -8,6 +8,5 @@
     <dimen name="text_size_small">14sp</dimen>
     <dimen name="text_size">16sp</dimen>
     <dimen name="text_size_medium">18sp</dimen>
-    <dimen name="my_food_details_label">100sp</dimen>
-
+    
 </resources>

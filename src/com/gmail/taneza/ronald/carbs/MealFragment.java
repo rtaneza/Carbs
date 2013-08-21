@@ -58,7 +58,7 @@ public class MealFragment extends BaseListFragment {
 		}
 	}
 		
-	public void setLanguage(Language language) {
+	public void refreshList() {
 		if (mFoodItemArrayAdapter != null) {
 			mFoodItemArrayAdapter.notifyDataSetChanged();
 		}

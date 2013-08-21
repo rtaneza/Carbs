@@ -116,12 +116,6 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     
     public void setLanguage(Language language) {
     	mLanguage = language;
-    	refreshList();
-    }
-    
-    public void refreshList() {
-		//Log.i("Carbs", "refreshList");
-    	mFoodItemHashMap.clear();
     }
     
     public String getFoodNameColumnName() {
@@ -136,12 +130,15 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     }
     
     public FoodItemInfo getFoodItemInfo(FoodItem foodItem) {
+    	FoodItemInfo foodItemInfo;
+    	
+    	//TODO: Cache should use only tableName and id, not the weight
     	if (mFoodItemHashMap.containsKey(foodItem)) {
-    		//Log.i("Carbs", String.format("getFoodItemInfo get [%d] %s - %d", mFoodItemHashMap.size(), foodItem.getTableName(), foodItem.getId()));
-    		return mFoodItemHashMap.get(foodItem);
+    		foodItemInfo = mFoodItemHashMap.get(foodItem);
+    		//Log.i("Carbs", String.format("Get from cache [%d] %s - %d - %s", mFoodItemHashMap.size(), foodItem.getTableName(), foodItem.getId(), foodItemInfo.getName()));
+    		return foodItemInfo;
     	}
     	
-    	FoodItemInfo foodItemInfo;
     	String tableName = foodItem.getTableName();
     	
     	if (tableName.equals(NEVO_TABLE_NAME)) {
@@ -175,7 +172,7 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     	}
 
     	mFoodItemHashMap.put(foodItem, foodItemInfo);
-		//Log.i("Carbs", String.format("getFoodItemInfo put [%d] %s - %d",  mFoodItemHashMap.size(), foodItem.getTableName(), foodItem.getId()));
+		//Log.i("Carbs", String.format("Add to cache [%d] %s - %d - %s",  mFoodItemHashMap.size(), foodItem.getTableName(), foodItem.getId(), foodItemInfo.getName()));
     	
     	return foodItemInfo;
     }
@@ -199,6 +196,9 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     	values.put(MYFOODS_COLUMN_UNIT_TEXT, foodItemInfo.getUnitText());
     	
     	mDatabase.replaceOrThrow(MYFOODS_TABLE_NAME, null, values);
+    	
+    	//Log.i("Carbs", String.format("Remove %d: %s", foodItemInfo.getFoodItem().getId(), foodItemInfo.getName()));
+    	mFoodItemHashMap.remove(foodItemInfo.getFoodItem());
     }
     
     private void deleteDbIfItAlreadyExists(Context context) {

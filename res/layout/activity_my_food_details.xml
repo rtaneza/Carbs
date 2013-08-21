@@ -22,7 +22,7 @@
 	        android:layout_height="wrap_content" 
         	android:layout_alignParentLeft="true"
     		android:paddingLeft="@dimen/padding_horizontal_half"
-    		android:paddingRight="@dimen/padding_horizontal" />
+    		android:paddingRight="@dimen/padding_horizontal_half" />
 			
 	    <EditText android:id="@+id/my_food_name"
 	        android:layout_width="match_parent"
@@ -51,23 +51,26 @@
 	        android:text="@string/my_food_weight_per_unit"
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
-	        android:layout_weight="0.5" 
+	        android:layout_weight="0.4" 
     		android:paddingLeft="@dimen/padding_horizontal_half"
     		android:paddingRight="@dimen/padding_horizontal_half" />
 	    
 	    <EditText android:id="@+id/my_food_weight_edit"
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
-	        android:layout_weight="0.5"
+	        android:layout_weight="0.42"
 	        android:inputType="number"
 	        android:textSize="@dimen/text_size"
 	        android:gravity="right" />
 	    
 	    <Spinner android:id="@+id/my_food_weight_unit_spinner"
-	        android:layout_width="wrap_content"
+	        android:layout_width="0dp"
 	        android:layout_height="wrap_content" 
+	        android:layout_weight="0.18"
     		android:paddingLeft="@dimen/padding_horizontal_half"
-    		android:paddingRight="@dimen/padding_horizontal_half"/>
+    		android:paddingRight="@dimen/padding_horizontal_half"
+    		android:paddingTop="0dp"
+    		android:paddingBottom="0dp" />
 	    
     </LinearLayout>
     
@@ -84,24 +87,26 @@
 	        android:text="@string/my_food_carbs_per_unit"
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
-	        android:layout_weight="0.5" 
+	        android:layout_weight="0.4" 
     		android:paddingLeft="@dimen/padding_horizontal_half"
     		android:paddingRight="@dimen/padding_horizontal_half"/>
 	    
 	    <EditText android:id="@+id/my_food_carbs"
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
-	        android:layout_weight="0.5"
+	        android:layout_weight="0.42"
 	        android:inputType="numberDecimal"
 	        android:textSize="@dimen/text_size"
 	        android:gravity="right" />
 	    
 	    <TextView android:id="@+id/my_food_carbs_unit"
 	        android:text="@string/unit_grams"
-	        android:layout_width="wrap_content"
+	        android:layout_width="0dp"
 	        android:layout_height="wrap_content" 
-    		android:paddingLeft="@dimen/padding_horizontal_half"
-    		android:paddingRight="@dimen/padding_horizontal_half"/>
+	        android:layout_weight="0.18"
+    		android:paddingLeft="@dimen/padding_horizontal"
+    		android:paddingRight="@dimen/padding_horizontal"
+	        android:gravity="left"/>
 	    
     </LinearLayout>
     
