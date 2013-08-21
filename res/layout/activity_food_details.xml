@@ -20,13 +20,24 @@
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content" 
     		android:paddingLeft="@dimen/padding_horizontal_half"
-    		android:paddingRight="@dimen/padding_horizontal_half" />
-			
+    		android:paddingRight="@dimen/padding_horizontal_half" 
+   			android:paddingBottom="@dimen/padding_vertical_half"/>
+				
+		<TextView android:id="@+id/food_details_name_extra"
+	        android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:textSize="@dimen/text_size_small"
+	    	android:textColor="@android:color/tertiary_text_dark"
+    		android:paddingLeft="@dimen/padding_horizontal_half"
+    		android:paddingRight="@dimen/padding_horizontal_half"
+			android:paddingTop="0dp"
+   			android:paddingBottom="@dimen/padding_vertical_double"
+		    />
+		
 		<View
 		    android:layout_width="match_parent"
 		    android:layout_height="1dp"
 		    android:visibility="visible"
-   			android:paddingTop="@dimen/padding_vertical"
 		    android:background="@android:color/darker_gray"/>
 	
 	</LinearLayout>

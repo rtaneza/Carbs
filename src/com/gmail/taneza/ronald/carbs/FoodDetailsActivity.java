@@ -77,6 +77,10 @@ public class FoodDetailsActivity extends ActionBarActivity {
 		TextView foodNameTextView = (TextView) findViewById(R.id.food_details_name);
 		foodNameTextView.setText(mFoodItemInfo.getName());
 		
+		TextView foodNameExtraTextView = (TextView) findViewById(R.id.food_details_name_extra);
+		foodNameExtraTextView.setText(String.format("(%.1f g carbs per %d %s)", 
+				mFoodItemInfo.getNumCarbsInGramsPerUnit(), mFoodItemInfo.getWeightPerUnit(), mFoodItemInfo.getUnitText()));
+		
 		mWeightEditText = (EditText) findViewById(R.id.food_details_weight_edit);
 		mWeightEditText.setText(Integer.toString(mFoodItemInfo.getWeight()));
 		// Request focus and show soft keyboard automatically
