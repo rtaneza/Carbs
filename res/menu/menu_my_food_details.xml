@@ -3,7 +3,6 @@
 
     <item
         android:id="@+id/menu_my_food_remove"
-        android:orderInCategory="0"
         carbs:showAsAction="always|withText"
         android:icon="@android:drawable/ic_menu_delete"
         android:title="@string/remove"/>

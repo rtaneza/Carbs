@@ -9,14 +9,12 @@
 	
     <item
         android:id="@+id/menu_add_my_food"
-        android:orderInCategory="0"
         carbs:showAsAction="always|withText"
-        android:icon="@android:drawable/ic_input_add"
+        android:icon="@drawable/ic_new"
         android:title="@string/menu_add_my_food"/>
     
     <item
         android:id="@+id/menu_clear_my_foods"
-        android:orderInCategory="50"
         carbs:showAsAction="never"
         android:title="@string/menu_clear_my_foods"/>
 
