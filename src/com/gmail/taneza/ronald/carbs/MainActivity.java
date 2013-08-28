@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import org.apache.pig.impl.util.ObjectSerializer;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -442,13 +444,39 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	private void clearRecentFoods() {
-		mRecentFoodsList.clear();
-		updateRecentFoodsAndMealData();
+		new AlertDialog.Builder(this)
+	    .setMessage(R.string.clear_recent_foods_confirmation)
+	    .setPositiveButton(R.string.menu_clear_recent_foods, new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int which) { 
+	            // continue with the clear
+	    		mRecentFoodsList.clear();
+	    		updateRecentFoodsAndMealData();
+	        }
+	     })
+	    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int which) { 
+	            // do nothing
+	        }
+	     })
+	    .show();
 	}
 	
 	private void clearMeal() {
-		mFoodItemsList.clear();
-		updateRecentFoodsAndMealData();
+		new AlertDialog.Builder(this)
+	    .setMessage(R.string.clear_meal_confirmation)
+	    .setPositiveButton(R.string.menu_clear_meal, new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int which) { 
+	            // continue with the clear
+	    		mFoodItemsList.clear();
+	    		updateRecentFoodsAndMealData();
+	        }
+	     })
+	    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int which) { 
+	            // do nothing
+	        }
+	     })
+	    .show();
 	}
 	
 	private void addFoodItemtoRecentFoodsList(FoodItem foodItem) {

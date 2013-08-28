@@ -169,7 +169,7 @@ public class FoodDetailsActivity extends ActionBarActivity {
 	public void removeItem() {
 		new AlertDialog.Builder(this)
 	    .setMessage(mRemoveItemConfirmationStringId)
-	    .setPositiveButton(R.string.remove_item_do_remove, new DialogInterface.OnClickListener() {
+	    .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
 	        public void onClick(DialogInterface dialog, int which) { 
 	            // continue with remove
 	    		Intent data = getIntent();
@@ -178,7 +178,7 @@ public class FoodDetailsActivity extends ActionBarActivity {
 	    		finish();
 	        }
 	     })
-	    .setNegativeButton(R.string.remove_item_cancel, new DialogInterface.OnClickListener() {
+	    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
 	        public void onClick(DialogInterface dialog, int which) { 
 	            // do nothing
 	        }

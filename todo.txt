@@ -6,17 +6,17 @@ ok // save last used weight per food
 // better handling of remove: remove multiple items at once
 ok // move meal list to SharedPreferences
 // start calculator intent? to be able to add carbs manually
-// add my food list 
+ok // add my food list 
  -> should be separate from MainActivity so we can differentiate between editing a food and adding it to a meal
 ok // search recent food list
 ok // use index in removeFoodItemFromMeal() because there may be multiple equal foodItems there
-// confirm with user before clearing recent and meal
+ok // confirm with user before clearing recent and meal
 // change meal total background color
 ok // protect access to mFilteredList with mutex -> no need after changing BaseAdaptor
 // add toast msg after removing item
 // replace food list serialization with simpler save/restore of each FoodItem field
 // remove recent foods and meal item lists and save to database tables instead
 ok // fix bug: after startup, switch to Recent or Meal, then rotate phone, then change language -> crash because mFoodDbAdapter is null
-// In Food Details, add "x g carbs per y g" under the food name
+ok // In Food Details, add "x g carbs per y g" under the food name
 // clear my foods -> are you sure?
 

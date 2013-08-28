@@ -21,7 +21,6 @@
     <string name="food_details_weight">Weight:</string>
     <string name="food_details_carbs">Carbs:</string>
     <string name="unit_grams">g</string>
-    <string name="cancel_food_details">Cancel</string>
     <string name="add_to_meal">Add to meal</string>
     <string name="save_food_details">Save</string>
     <string name="title_activity_meal">Meal</string>
@@ -34,9 +33,8 @@
     <string name="remove_item_from_meal_confirmation">Remove this item from the meal?</string>
     <string name="remove_item_from_recent_foods_confirmation">Remove this item from the history?</string>
     <string name="remove_item_from_my_foods">Remove this item from the My Foods list? It will also be removed from the Recent and Meal lists.</string>
-    <string name="remove_item_do_remove">Remove</string>
-    <string name="remove_item_cancel">Cancel</string>
-    <string name="menu_remove">Remove</string>
+    <string name="cancel">Cancel</string>
+    <string name="remove">Remove</string>
     <string name="my_food_name_label">Name:</string>
     <string name="my_food_weight_per_unit">Weight per unit:</string>
     <string name="my_food_carbs_per_unit">Carbs per unit:</string>
@@ -44,6 +42,8 @@
     <string name="title_activity_my_foods">My foods</string>
     <string name="title_activity_my_food_details">Add my food</string>
     <string name="title_activity_my_food_edit">Edit my food</string>
+    <string name="clear_recent_foods_confirmation">Clear the recent foods history?</string>
+    <string name="clear_meal_confirmation">Clear all items in the meal?</string>
     
     <string-array name="weight_unit_text_array">
         <item>g</item>

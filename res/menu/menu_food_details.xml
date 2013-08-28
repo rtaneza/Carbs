@@ -6,6 +6,6 @@
         android:orderInCategory="0"
         carbs:showAsAction="always|withText"
         android:icon="@android:drawable/ic_menu_delete"
-        android:title="@string/menu_remove"/>
+        android:title="@string/remove"/>
 
 </menu>
