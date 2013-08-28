@@ -78,7 +78,7 @@ public class RecentFoodsFragment extends BaseListFragment {
     @Override 
     public void onListItemClick(ListView l, View v, int position, long id) {
     	FoodItem foodItem = (FoodItem)l.getItemAtPosition(position);
-    	mMainActivityNotifier.startActivityToAddFoodToMeal(foodItem);
+    	mMainActivityNotifier.startActivityToAddRecentFoodToMeal(foodItem);
     }
 
 	private void addSearchTextListener(ClearableEditText searchEditText) {
