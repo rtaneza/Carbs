@@ -35,4 +35,9 @@ public class MealFragment extends BaseFoodListFragment {
 	public ArrayList<FoodItem> getFoodList() {
 		return mMainActivityNotifier.getFoodItemsList();
 	}
+	
+	@Override
+	public void startActivityToAddOrEditFood(FoodItem foodItem, int foodItemIndex) {
+    	mMainActivityNotifier.startActivityToEditFoodInMeal(foodItem, foodItemIndex);
+	}
 }

@@ -19,6 +19,9 @@ package com.gmail.taneza.ronald.carbs;
 import java.io.File;
 import java.security.InvalidParameterException;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -211,7 +214,27 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     	String whereClause = String.format("%s = %s", MYFOODS_COLUMN_ID, foodItem.getId());
     	mDatabase.delete(MYFOODS_TABLE_NAME, whereClause, null);
     	
-    	mFoodItemCache.remove(foodItem);
+    	// Remove all FoodItem's that have the same TableName and ID, regardless of the weight.
+        Iterator<Entry<FoodItem, FoodItemInfo>> it = mFoodItemCache.entrySet().iterator();
+        while (it.hasNext()) {
+            FoodItem item = it.next().getKey();
+            if ((item.getTableName().equals(foodItem.getTableName())) &&
+            	(item.getId() == foodItem.getId())) {
+            	it.remove(); // avoids a ConcurrentModificationException
+    		}
+        }
+    }
+
+    public void removeAllMyFoods() {
+    	mDatabase.delete(MYFOODS_TABLE_NAME, null, null);
+    	
+        Iterator<Entry<FoodItem, FoodItemInfo>> it = mFoodItemCache.entrySet().iterator();
+        while (it.hasNext()) {
+            FoodItem foodItem = it.next().getKey();
+            if (foodItem.getTableName().equals(MYFOODS_TABLE_NAME)) {
+            	it.remove(); // avoids a ConcurrentModificationException
+    		}
+        }
     }
     
     private void deleteDbIfItAlreadyExists(Context context) {

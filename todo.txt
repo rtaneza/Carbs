@@ -18,6 +18,8 @@ ok // protect access to mFilteredList with mutex -> no need after changing BaseA
 // remove recent foods and meal item lists and save to database tables instead
 ok // fix bug: after startup, switch to Recent or Meal, then rotate phone, then change language -> crash because mFoodDbAdapter is null
 ok // In Food Details, add "x g carbs per y g" under the food name
-// clear my foods -> are you sure?
-// ClearableEditableText's delete icon disappears when moving from the Meal tab to any of the other 3 tabs
+ok // clear my foods -> are you sure?
+ok // ClearableEditableText's delete icon disappears when moving from the Meal tab to any of the other 3 tabs
+      -> all tabs now have this search text field, so this problem does not occur anymore.
 // Test on emulator v8
+ok // when removing a MyFood, also update the recent and meal lists

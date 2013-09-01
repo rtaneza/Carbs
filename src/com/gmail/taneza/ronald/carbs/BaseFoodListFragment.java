@@ -37,6 +37,7 @@ public abstract class BaseFoodListFragment extends BaseListFragment {
 	protected FoodItemArrayAdapter mFoodItemArrayAdapter;
 
 	protected abstract ArrayList<FoodItem> getFoodList();
+	protected abstract void startActivityToAddOrEditFood(FoodItem foodItem, int foodItemIndex);
 	
 	@Override
 	public void onActivityCreated (Bundle savedInstanceState) {
@@ -74,7 +75,7 @@ public abstract class BaseFoodListFragment extends BaseListFragment {
     @Override 
     public void onListItemClick(ListView l, View v, int position, long id) {
     	FoodItem foodItem = (FoodItem)l.getItemAtPosition(position);
-    	mMainActivityNotifier.startActivityToAddRecentFoodToMeal(foodItem);
+    	startActivityToAddOrEditFood(foodItem, position);
     }
 
 	private void addSearchTextListener(ClearableEditText searchEditText) {

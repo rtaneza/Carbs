@@ -19,6 +19,8 @@ package com.gmail.taneza.ronald.carbs;
 import org.droidparts.widget.ClearableEditText;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteCursor;
@@ -101,6 +103,24 @@ public class MyFoodsEditableFragment extends ListFragment
 	public void addNewFood() {
 		FoodItem foodItem = new FoodItem(FoodDbAdapter.MYFOODS_TABLE_NAME, 0, MyFoodDetailsActivity.NEW_FOOD_DEFAULT_WEIGHT_PER_UNIT);
     	startMyFoodDetailsActivity(foodItem, MyFoodDetailsActivity.Mode.NewFood);
+	}
+
+	public void clearMyFoods() {
+		new AlertDialog.Builder(getActivity())
+	    .setMessage(R.string.clear_my_foods_confirmation)
+	    .setPositiveButton(R.string.menu_clear_my_foods, new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int which) { 
+	    		mFoodDbAdapter.removeAllMyFoods();
+	    		restartLoader();
+	    		mMyFoodsActivityNotifier.setItemRemoved();
+	        }
+	     })
+	    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int which) { 
+	            // do nothing
+	        }
+	     })
+	    .show();
 	}
 	
     @Override 

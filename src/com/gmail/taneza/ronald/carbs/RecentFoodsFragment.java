@@ -35,4 +35,10 @@ public class RecentFoodsFragment extends BaseFoodListFragment {
 	public ArrayList<FoodItem> getFoodList() {
 		return mMainActivityNotifier.getRecentFoodsList();
 	}
+
+	@Override
+	public void startActivityToAddOrEditFood(FoodItem foodItem, int foodItemIndex) {
+		// foodItemIndex is not used
+    	mMainActivityNotifier.startActivityToAddRecentFoodToMeal(foodItem);
+	}
 }

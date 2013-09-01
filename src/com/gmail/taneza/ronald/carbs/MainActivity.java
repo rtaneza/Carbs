@@ -101,6 +101,8 @@ public class MainActivity extends ActionBarActivity implements
 
 		mFoodDbAdapter = ((CarbsApp)getApplication()).getFoodDbAdapter();
 		mFoodDbAdapter.setLanguage(mLanguage);
+
+		pruneRecentAndFoodLists();
 		
         setContentView(R.layout.activity_main);
 
@@ -137,22 +139,24 @@ public class MainActivity extends ActionBarActivity implements
 	
 	@Override
     protected void onStop(){
-      // We need an Editor object to make preference changes.
-      // All objects are from android.context.Context
-      SharedPreferences prefs = getPreferences(0);
-      SharedPreferences.Editor editor = prefs.edit();
-      editor.putInt(PREF_LANGUAGE, mLanguage.ordinal());
-      try {
-    	  editor.putString(PREF_FOOD_ITEMS_LIST, ObjectSerializer.serialize(mFoodItemsList));
-    	  editor.putString(PREF_RECENT_FOODS_LIST, ObjectSerializer.serialize(mRecentFoodsList));
-      } catch (IOException e) {
-    	  e.printStackTrace();
-      }
+		pruneRecentAndFoodLists();
+		
+		// We need an Editor object to make preference changes.
+		// All objects are from android.context.Context
+		SharedPreferences prefs = getPreferences(0);
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putInt(PREF_LANGUAGE, mLanguage.ordinal());
+		try {
+		  editor.putString(PREF_FOOD_ITEMS_LIST, ObjectSerializer.serialize(mFoodItemsList));
+		  editor.putString(PREF_RECENT_FOODS_LIST, ObjectSerializer.serialize(mRecentFoodsList));
+		} catch (IOException e) {
+		  e.printStackTrace();
+		}
 
-      // Commit the edits!
-      editor.commit();
-      
-      super.onStop();
+		// Commit the edits!
+		editor.commit();
+
+		super.onStop();
     }
 	
     @Override

@@ -70,13 +70,16 @@ public class MyFoodsActivity extends ActionBarActivity
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		MyFoodsEditableFragment fragment = (MyFoodsEditableFragment)getSupportFragmentManager().findFragmentById(R.id.my_foods_editable_fragment);
+		
 		switch (item.getItemId()) {
 			case R.id.menu_add_my_food:
-				MyFoodsEditableFragment fragment = (MyFoodsEditableFragment)getSupportFragmentManager().findFragmentById(R.id.my_foods_editable_fragment);
 				fragment.addNewFood();
 				break;
 				
-			//TODO: handle clearing of all foods
+			case R.id.menu_clear_my_foods:
+				fragment.clearMyFoods();
+				break;
 				
 			case android.R.id.home:
 				finish();
@@ -94,5 +97,5 @@ public class MyFoodsActivity extends ActionBarActivity
 	@Override
 	public void setItemRemoved() {
 		mItemRemoved = true;
-	}
+	}	
 }
