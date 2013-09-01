@@ -22,15 +22,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
-public class MealFragment extends BaseListFragment {
-
-	public final static String LANGUAGE_MESSAGE = "com.gmail.taneza.ronald.carbs.LANGUAGE_MESSAGE";
-	public final static String FOOD_ITEM_MESSAGE = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_MESSAGE";
-	public final static String FOOD_ITEM_RESULT = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_RESULT";
-
-	private FoodItemArrayAdapter mFoodItemArrayAdapter;
+public class MealFragment extends BaseFoodListFragment {
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,31 +32,7 @@ public class MealFragment extends BaseListFragment {
 	}
 
 	@Override
-	public void onActivityCreated (Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-	    
-		ArrayList<FoodItem> foodItemList = mMainActivityNotifier.getFoodItemsList();
-		mFoodItemArrayAdapter = new FoodItemArrayAdapter(getActivity(), mFoodDbAdapter, foodItemList);
-		setListAdapter(mFoodItemArrayAdapter);
+	public ArrayList<FoodItem> getFoodList() {
+		return mMainActivityNotifier.getFoodItemsList();
 	}
-	
-	public void setFoodItemList(ArrayList<FoodItem> foodItemList) {
-		if (mFoodItemArrayAdapter != null) {
-			// During an orientation change, the MainActivity onCreate() calls setFoodItemList()
-			// _before_ onCreateView(), so mFoodItemArrayAdapter is still null
-			mFoodItemArrayAdapter.setValues(foodItemList);
-		}
-	}
-		
-	public void refreshList() {
-		if (mFoodItemArrayAdapter != null) {
-			mFoodItemArrayAdapter.notifyDataSetChanged();
-		}
-    }
-
-    @Override 
-    public void onListItemClick(ListView l, View v, int position, long id) {
-    	FoodItem foodItem = (FoodItem)l.getItemAtPosition(position);
-    	mMainActivityNotifier.startActivityToEditFoodInMeal(foodItem, position);
-    }
 }

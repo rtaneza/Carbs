@@ -22,7 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class AllFoodsFragment extends BaseFoodListFragment { 
+public class AllFoodsFragment extends BaseFoodDbListFragment { 
 
 	public AllFoodsFragment() {
 		mWeightPerUnitColumnName = FoodDbAdapter.NEVO_COLUMN_WEIGHT_PER_UNIT;

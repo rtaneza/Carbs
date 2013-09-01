@@ -158,13 +158,6 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
         mViewPager.setCurrentItem(tab.getPosition());
-
- 		View searchText = findViewById(R.id.search_text);
-        if (tab.getPosition() == MEAL_TAB_INDEX) {
-        	searchText.setVisibility(View.GONE);
-        } else {
-        	searchText.setVisibility(View.VISIBLE);
-        }
     }
 
     @Override

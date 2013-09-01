@@ -16,102 +16,67 @@
 
 package com.gmail.taneza.ronald.carbs;
 
+import java.util.ArrayList;
+
 import org.droidparts.widget.ClearableEditText;
 
-import android.database.Cursor;
-import android.database.sqlite.SQLiteCursor;
 import android.os.Bundle;
-import android.support.v4.content.Loader;
-import android.support.v4.app.LoaderManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
-import com.commonsware.cwac.loaderex.acl.SQLiteCursorLoader;
+public abstract class BaseFoodListFragment extends BaseListFragment {
 
-public abstract class BaseFoodListFragment extends BaseListFragment 
-    implements LoaderManager.LoaderCallbacks<Cursor> {
+	protected ClearableEditText mSearchEditText;
+	protected FoodItemArrayAdapter mFoodItemArrayAdapter;
 
-	protected String mWeightPerUnitColumnName;
-	protected String mUnitTextColumnName;
-	protected String mCarbsColumnName;
-	
-	protected SimpleCursorAdapter mCursorAdapter;
-
-	protected abstract String getQueryString(String searchText);
-	protected abstract FoodItem createFoodItemFromCursor(SQLiteCursor cursor);
-	protected abstract String getFoodNameColumnName();
+	protected abstract ArrayList<FoodItem> getFoodList();
 	
 	@Override
 	public void onActivityCreated (Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		
-		//Log.i("Carbs", this.getClass().getSimpleName() + " onActivityCreated");
-		
-		ClearableEditText searchEditText = (ClearableEditText) getActivity().findViewById(R.id.search_text);
-        addSearchTextListener(searchEditText);
-        
-		initListAdapter();
-	}
-	
-	@Override
-	public Loader<Cursor> onCreateLoader(int id, Bundle args) {		
-		ClearableEditText searchEditText = (ClearableEditText) getActivity().findViewById(R.id.search_text);
-		String searchText = searchEditText.getText().toString();
-		String queryString = getQueryString(searchText);
-		return new SQLiteCursorLoader(getActivity(), mFoodDbAdapter, queryString, null);
-	}
-	
-	@Override
-	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-		// Swap the new cursor in.  (The framework will take care of closing the
-        // old cursor once we return.)
-        mCursorAdapter.swapCursor(data);
-	}
+		mSearchEditText = (ClearableEditText) getActivity().findViewById(R.id.search_text);
+        addSearchTextListener(mSearchEditText);
 
-	@Override
-	public void onLoaderReset(Loader<Cursor> loader) {
-		// This is called when the last Cursor provided to onLoadFinished()
-        // above is about to be closed.  We need to make sure we are no
-        // longer using it.
-        mCursorAdapter.swapCursor(null);		
+		ArrayList<FoodItem> recentFoodsList = getFoodList();
+		mFoodItemArrayAdapter = new FoodItemArrayAdapter(getActivity(), mFoodDbAdapter, recentFoodsList);
+		setListAdapter(mFoodItemArrayAdapter);
 	}
 	
+	@Override
+	public void onStart() {
+		// This is called when the fragment is visible to the user.
+		super.onStart();
+		filterListBasedOnSearchText();
+	}
+	
+	public void setFoodItemList(ArrayList<FoodItem> foodItemList) {
+		if (mFoodItemArrayAdapter != null) {
+			// During an orientation change, the MainActivity onCreate() calls setFoodItemList()
+			// _before_ onCreateView(), so mFoodItemArrayAdapter is still null
+			mFoodItemArrayAdapter.setValues(foodItemList);
+		}
+	}
+	
+	public void refreshList() {
+		if (mFoodItemArrayAdapter != null) {
+			mFoodItemArrayAdapter.notifyDataSetChanged();
+		}
+    }
+
     @Override 
     public void onListItemClick(ListView l, View v, int position, long id) {
-    	SQLiteCursor cursor = (SQLiteCursor)l.getItemAtPosition(position);
-    	FoodItem foodItem = createFoodItemFromCursor(cursor);
-    	mMainActivityNotifier.startActivityToAddFoodToMeal(foodItem);
+    	FoodItem foodItem = (FoodItem)l.getItemAtPosition(position);
+    	mMainActivityNotifier.startActivityToAddRecentFoodToMeal(foodItem);
     }
-    
-    public void refreshList() {
-    	initListAdapter();
-    }
-    
-	private void initListAdapter() {
-		String[] from = { getFoodNameColumnName(), FoodDbAdapter.COLUMN_TABLE_NAME, mCarbsColumnName };
-        int[] to = new int[] { R.id.food_item_name, R.id.food_item_name_extra, R.id.food_item_carbs };
-        
-        // Create an empty adapter we will use to display the loaded data.
-        mCursorAdapter = new SimpleCursorAdapter(getActivity(), R.layout.food_item, null, from, to, 0);
-        
-        // We set the view binder for the adapter to our own FoodItemViewBinder.
-        mCursorAdapter.setViewBinder(new FoodItemViewBinder(mWeightPerUnitColumnName, mUnitTextColumnName));
-        
-        setListAdapter(mCursorAdapter);
-        
-        restartLoader();
-	}
-	
-	private void restartLoader() {
-		getLoaderManager().restartLoader(0, null, this);
-	}
-	
+
 	private void addSearchTextListener(ClearableEditText searchEditText) {
 		
 		searchEditText.addTextChangedListener(new TextWatcher() {
@@ -123,7 +88,7 @@ public abstract class BaseFoodListFragment extends BaseListFragment
 			}
 
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				restartLoader();
+				filterListBasedOnSearchText();
 			}
 		});
 		
@@ -136,4 +101,8 @@ public abstract class BaseFoodListFragment extends BaseListFragment
 			}
 		});
 	}
+	
+    private void filterListBasedOnSearchText() {
+		mFoodItemArrayAdapter.getFilter().filter(mSearchEditText.getText().toString());
+    }
 }
