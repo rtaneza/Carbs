@@ -14,17 +14,28 @@
  * limitations under the License.
  */
 
-package com.gmail.taneza.ronald.carbs;
+package com.gmail.taneza.ronald.carbs.common;
 
-import java.util.ArrayList;
+import android.app.Application;
 
-public interface MainActivityNotifier {
-	public Language getLanguage();
-	
-	public void startActivityToAddFoodToMeal(FoodItem foodItem);
-	public void startActivityToAddRecentFoodToMeal(FoodItem foodItem);
-	public void startActivityToEditFoodInMeal(FoodItem foodItem, int foodItemIndex);
-	
-	public ArrayList<FoodItem> getFoodItemsList();
-	public ArrayList<FoodItem> getRecentFoodsList();
+public class CarbsApp extends Application {
+	private FoodDbAdapter mFoodDbAdapter;
+
+    @Override
+    public void onCreate() {
+        super.onCreate(); 
+        mFoodDbAdapter = new FoodDbAdapter(this);
+		mFoodDbAdapter.open();
+
+    }
+
+    public FoodDbAdapter getFoodDbAdapter(){
+        return mFoodDbAdapter;
+    }
+
+    @Override
+    public void onTerminate() {
+        mFoodDbAdapter.close();
+        super.onTerminate();
+    }   
 }

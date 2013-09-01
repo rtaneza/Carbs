@@ -14,28 +14,9 @@
  * limitations under the License.
  */
 
-package com.gmail.taneza.ronald.carbs;
+package com.gmail.taneza.ronald.carbs.myfoods;
 
-import android.app.Application;
-
-public class CarbsApp extends Application {
-	private FoodDbAdapter mFoodDbAdapter;
-
-    @Override
-    public void onCreate() {
-        super.onCreate(); 
-        mFoodDbAdapter = new FoodDbAdapter(this);
-		mFoodDbAdapter.open();
-
-    }
-
-    public FoodDbAdapter getFoodDbAdapter(){
-        return mFoodDbAdapter;
-    }
-
-    @Override
-    public void onTerminate() {
-        mFoodDbAdapter.close();
-        super.onTerminate();
-    }   
+public interface MyFoodsActivityNotifier {
+	public void setItemChanged();
+	public void setItemRemoved();
 }

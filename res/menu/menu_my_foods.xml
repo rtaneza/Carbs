@@ -18,4 +18,9 @@
         carbs:showAsAction="never"
         android:title="@string/menu_clear_my_foods"/>
 
+    <item
+        android:id="@+id/menu_export_my_foods"
+        carbs:showAsAction="never"
+        android:title="@string/menu_export_my_foods"/>
+    
 </menu>

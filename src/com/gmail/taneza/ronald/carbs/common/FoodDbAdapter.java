@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package com.gmail.taneza.ronald.carbs;
+package com.gmail.taneza.ronald.carbs.common;
 
 import java.io.File;
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -114,6 +115,34 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
 		
 		//Log.i("Carbs", "MyFoods query string: " + queryString);
 		return queryString;
+    }
+    
+    public ArrayList<FoodItemInfo> getAllMyFoods() {
+    	String [] columns = {"0 _id", 
+				MYFOODS_COLUMN_NAME, MYFOODS_COLUMN_WEIGHT_PER_UNIT, MYFOODS_COLUMN_UNIT_TEXT, 
+				MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT, MYFOODS_COLUMN_ID};
+    	Cursor cursor = mDatabase.query(MYFOODS_TABLE_NAME, columns, null, null, null, null, MYFOODS_COLUMN_NAME);
+    	
+    	ArrayList<FoodItemInfo> list = new ArrayList<FoodItemInfo>();
+    	if (cursor != null) {
+	    	cursor.moveToFirst();
+	    	while (!cursor.isAfterLast()) {
+	    		FoodItem foodItem = new FoodItem(
+	    				MYFOODS_TABLE_NAME,
+	    				cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_ID)),
+	    				cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_WEIGHT_PER_UNIT)));
+	    		FoodItemInfo foodItemInfo = new FoodItemInfo(foodItem, 
+	    				cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_NAME)),
+	    				cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_WEIGHT_PER_UNIT)),
+	    				cursor.getFloat(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT)),
+	    				cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_UNIT_TEXT)));
+	    	     
+	    		list.add(foodItemInfo);
+	    	    cursor.moveToNext();
+	    	}
+    	}
+    	
+    	return list;
     }
     
     public void setLanguage(Language language) {

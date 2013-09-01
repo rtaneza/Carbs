@@ -14,20 +14,9 @@
  * limitations under the License.
  */
 
-package com.gmail.taneza.ronald.carbs;
+package com.gmail.taneza.ronald.carbs.common;
 
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-public class MealTotalFragment extends Fragment {
-	
-	@Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-		ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_meal_total, container);
-        return rootView;
-	}
+public enum Language {
+   ENGLISH,
+   DUTCH
 }

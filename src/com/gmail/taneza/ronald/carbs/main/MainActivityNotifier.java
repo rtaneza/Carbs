@@ -14,9 +14,20 @@
  * limitations under the License.
  */
 
-package com.gmail.taneza.ronald.carbs;
+package com.gmail.taneza.ronald.carbs.main;
 
-public interface MyFoodsActivityNotifier {
-	public void setItemChanged();
-	public void setItemRemoved();
+import java.util.ArrayList;
+
+import com.gmail.taneza.ronald.carbs.common.FoodItem;
+import com.gmail.taneza.ronald.carbs.common.Language;
+
+public interface MainActivityNotifier {
+	public Language getLanguage();
+	
+	public void startActivityToAddFoodToMeal(FoodItem foodItem);
+	public void startActivityToAddRecentFoodToMeal(FoodItem foodItem);
+	public void startActivityToEditFoodInMeal(FoodItem foodItem, int foodItemIndex);
+	
+	public ArrayList<FoodItem> getFoodItemsList();
+	public ArrayList<FoodItem> getRecentFoodsList();
 }

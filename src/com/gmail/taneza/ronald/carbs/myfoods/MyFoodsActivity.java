@@ -14,7 +14,12 @@
  * limitations under the License.
  */
 
-package com.gmail.taneza.ronald.carbs;
+package com.gmail.taneza.ronald.carbs.myfoods;
+
+import com.gmail.taneza.ronald.carbs.R;
+import com.gmail.taneza.ronald.carbs.R.id;
+import com.gmail.taneza.ronald.carbs.R.layout;
+import com.gmail.taneza.ronald.carbs.R.menu;
 
 import android.annotation.TargetApi;
 import android.os.Build;
@@ -79,6 +84,10 @@ public class MyFoodsActivity extends ActionBarActivity
 				
 			case R.id.menu_clear_my_foods:
 				fragment.clearMyFoods();
+				break;
+				
+			case R.id.menu_export_my_foods:
+				fragment.exportMyFoods();
 				break;
 				
 			case android.R.id.home:

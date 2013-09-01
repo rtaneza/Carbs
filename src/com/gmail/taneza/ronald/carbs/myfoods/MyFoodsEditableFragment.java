@@ -14,7 +14,12 @@
  * limitations under the License.
  */
 
-package com.gmail.taneza.ronald.carbs;
+package com.gmail.taneza.ronald.carbs.myfoods;
+
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.droidparts.widget.ClearableEditText;
 
@@ -39,8 +44,20 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
+import au.com.bytecode.opencsv.CSV;
+import au.com.bytecode.opencsv.CSVWriteProc;
+import au.com.bytecode.opencsv.CSVWriter;
 
 import com.commonsware.cwac.loaderex.acl.SQLiteCursorLoader;
+import com.gmail.taneza.ronald.carbs.R;
+import com.gmail.taneza.ronald.carbs.R.id;
+import com.gmail.taneza.ronald.carbs.R.layout;
+import com.gmail.taneza.ronald.carbs.R.string;
+import com.gmail.taneza.ronald.carbs.common.CarbsApp;
+import com.gmail.taneza.ronald.carbs.common.FoodDbAdapter;
+import com.gmail.taneza.ronald.carbs.common.FoodItem;
+import com.gmail.taneza.ronald.carbs.common.FoodItemInfo;
+import com.gmail.taneza.ronald.carbs.common.FoodItemViewBinder;
 
 public class MyFoodsEditableFragment extends ListFragment 
     implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -121,6 +138,47 @@ public class MyFoodsEditableFragment extends ListFragment
 	        }
 	     })
 	    .show();
+	}
+
+	public void exportMyFoods() {
+		StringWriter sw = new StringWriter();
+		sw.append("Carbs MyFoods");
+		sw.append(String.format("%n")); // platform-independent newline
+		
+		// TODO: add minimalQuoting feature to opencsv library
+		CSV csv = CSV
+			    .separator(',')  // delimiter of fields
+			    .quote('"')      // quote character
+			    //.setMinimalQuoting(true)
+			    .create();       // new instance is immutable
+		
+		csv.write(sw, new CSVWriteProc() {
+		    public void process(CSVWriter out) {
+		        out.writeNext(
+		    			FoodDbAdapter.MYFOODS_COLUMN_ID,
+		    			FoodDbAdapter.MYFOODS_COLUMN_NAME,
+		    			FoodDbAdapter.MYFOODS_COLUMN_WEIGHT_PER_UNIT,
+		    			FoodDbAdapter.MYFOODS_COLUMN_UNIT_TEXT,
+		    			FoodDbAdapter.MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT);
+
+				ArrayList<FoodItemInfo> myFoodsList = mFoodDbAdapter.getAllMyFoods();
+		        
+				for (FoodItemInfo info : myFoodsList) {
+			        out.writeNext(
+			        		String.format("%d", info.getFoodItem().getId()),
+							info.getName(),
+							String.format("%d", info.getWeightPerUnit()),
+							info.getUnitText(),
+							String.format("%.1f", info.getNumCarbsInGramsPerUnit()));
+				}
+		   }
+		});
+		
+		Intent sendIntent = new Intent();
+		sendIntent.setAction(Intent.ACTION_SEND);
+		sendIntent.putExtra(Intent.EXTRA_TEXT, sw.toString());
+		sendIntent.setType("text/plain");
+		startActivity(sendIntent);
 	}
 	
     @Override 

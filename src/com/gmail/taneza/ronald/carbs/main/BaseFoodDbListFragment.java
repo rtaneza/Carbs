@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.gmail.taneza.ronald.carbs;
+package com.gmail.taneza.ronald.carbs.main;
 
 import org.droidparts.widget.ClearableEditText;
 
@@ -33,6 +33,12 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 import com.commonsware.cwac.loaderex.acl.SQLiteCursorLoader;
+import com.gmail.taneza.ronald.carbs.R;
+import com.gmail.taneza.ronald.carbs.R.id;
+import com.gmail.taneza.ronald.carbs.R.layout;
+import com.gmail.taneza.ronald.carbs.common.FoodDbAdapter;
+import com.gmail.taneza.ronald.carbs.common.FoodItem;
+import com.gmail.taneza.ronald.carbs.common.FoodItemViewBinder;
 
 public abstract class BaseFoodDbListFragment extends BaseListFragment 
     implements LoaderManager.LoaderCallbacks<Cursor> {

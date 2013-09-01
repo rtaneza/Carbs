@@ -14,11 +14,16 @@
  * limitations under the License.
  */
 
-package com.gmail.taneza.ronald.carbs;
+package com.gmail.taneza.ronald.carbs.main;
 
 import java.util.ArrayList;
 
 import org.droidparts.widget.ClearableEditText;
+
+import com.gmail.taneza.ronald.carbs.R;
+import com.gmail.taneza.ronald.carbs.R.id;
+import com.gmail.taneza.ronald.carbs.common.FoodItem;
+import com.gmail.taneza.ronald.carbs.common.FoodItemArrayAdapter;
 
 import android.os.Bundle;
 import android.text.Editable;

@@ -12,10 +12,10 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_donut"
         android:label="@string/app_name"
-        android:name="com.gmail.taneza.ronald.carbs.CarbsApp"
+        android:name="com.gmail.taneza.ronald.carbs.common.CarbsApp"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.gmail.taneza.ronald.carbs.MainActivity"
+            android:name="com.gmail.taneza.ronald.carbs.main.MainActivity"
             android:label="@string/app_name" 
             android:launchMode="singleTop">
             <intent-filter>
@@ -25,28 +25,28 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.gmail.taneza.ronald.carbs.FoodDetailsActivity"
+            android:name="com.gmail.taneza.ronald.carbs.main.FoodDetailsActivity"
             android:label="@string/title_activity_food_details"
-            android:parentActivityName="com.gmail.taneza.ronald.carbs.MainActivity" >
+            android:parentActivityName="com.gmail.taneza.ronald.carbs.main.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.gmail.taneza.ronald.carbs.MainActivity" />
+                android:value="com.gmail.taneza.ronald.carbs.main.MainActivity" />
         </activity>
         <activity
-            android:name="com.gmail.taneza.ronald.carbs.MyFoodsActivity"
+            android:name="com.gmail.taneza.ronald.carbs.myfoods.MyFoodsActivity"
             android:label="@string/title_activity_my_foods"
-            android:parentActivityName="com.gmail.taneza.ronald.carbs.MainActivity" >
+            android:parentActivityName="com.gmail.taneza.ronald.carbs.main.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.gmail.taneza.ronald.carbs.MainActivity" />
+                android:value="com.gmail.taneza.ronald.carbs.main.MainActivity" />
         </activity>
         <activity
-            android:name="com.gmail.taneza.ronald.carbs.MyFoodDetailsActivity"
+            android:name="com.gmail.taneza.ronald.carbs.myfoods.MyFoodDetailsActivity"
             android:label="@string/title_activity_my_food_details"
-            android:parentActivityName="com.gmail.taneza.ronald.carbs.MyFoodsActivity" >
+            android:parentActivityName="com.gmail.taneza.ronald.carbs.myfoods.MyFoodsActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.gmail.taneza.ronald.carbs.MyFoodsActivity" />
+                android:value="com.gmail.taneza.ronald.carbs.myfoods.MyFoodsActivity" />
         </activity>
     </application>
 

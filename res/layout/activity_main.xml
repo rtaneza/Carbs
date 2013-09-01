@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     
-    <fragment android:name="com.gmail.taneza.ronald.carbs.MealTotalFragment"
+    <fragment android:name="com.gmail.taneza.ronald.carbs.main.MealTotalFragment"
         android:id="@+id/fragment_meal_total"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

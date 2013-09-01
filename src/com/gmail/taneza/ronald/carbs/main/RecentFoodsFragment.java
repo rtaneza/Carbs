@@ -14,30 +14,35 @@
  * limitations under the License.
  */
 
-package com.gmail.taneza.ronald.carbs;
+package com.gmail.taneza.ronald.carbs.main;
 
 import java.util.ArrayList;
+
+import com.gmail.taneza.ronald.carbs.R;
+import com.gmail.taneza.ronald.carbs.R.layout;
+import com.gmail.taneza.ronald.carbs.common.FoodItem;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class MealFragment extends BaseFoodListFragment {
+public class RecentFoodsFragment extends BaseFoodListFragment {
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
              Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.fragment_meal, container, false);
+		return inflater.inflate(R.layout.fragment_recent_foods, container, false);
 	}
 
 	@Override
 	public ArrayList<FoodItem> getFoodList() {
-		return mMainActivityNotifier.getFoodItemsList();
+		return mMainActivityNotifier.getRecentFoodsList();
 	}
-	
+
 	@Override
 	public void startActivityToAddOrEditFood(FoodItem foodItem, int foodItemIndex) {
-    	mMainActivityNotifier.startActivityToEditFoodInMeal(foodItem, foodItemIndex);
+		// foodItemIndex is not used
+    	mMainActivityNotifier.startActivityToAddRecentFoodToMeal(foodItem);
 	}
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.gmail.taneza.ronald.carbs;
+package com.gmail.taneza.ronald.carbs.common;
 
 import android.os.Parcel;
 import android.os.Parcelable;

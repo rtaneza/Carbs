@@ -14,7 +14,12 @@
  * limitations under the License.
  */
 
-package com.gmail.taneza.ronald.carbs;
+package com.gmail.taneza.ronald.carbs.main;
+
+import com.gmail.taneza.ronald.carbs.R;
+import com.gmail.taneza.ronald.carbs.R.layout;
+import com.gmail.taneza.ronald.carbs.common.FoodDbAdapter;
+import com.gmail.taneza.ronald.carbs.common.FoodItem;
 
 import android.database.sqlite.SQLiteCursor;
 import android.os.Bundle;

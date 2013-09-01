@@ -14,9 +14,13 @@
  * limitations under the License.
  */
 
-package com.gmail.taneza.ronald.carbs;
+package com.gmail.taneza.ronald.carbs.common;
 
 import java.util.ArrayList;
+
+import com.gmail.taneza.ronald.carbs.R;
+import com.gmail.taneza.ronald.carbs.R.id;
+import com.gmail.taneza.ronald.carbs.R.layout;
 
 import android.content.Context;
 import android.view.View;

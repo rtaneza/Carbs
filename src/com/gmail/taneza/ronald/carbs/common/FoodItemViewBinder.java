@@ -1,4 +1,4 @@
-package com.gmail.taneza.ronald.carbs;
+package com.gmail.taneza.ronald.carbs.common;
 
 import android.database.Cursor;
 import android.view.View;

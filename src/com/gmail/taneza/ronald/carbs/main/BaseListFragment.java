@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-package com.gmail.taneza.ronald.carbs;
+package com.gmail.taneza.ronald.carbs.main;
+
+import com.gmail.taneza.ronald.carbs.common.CarbsApp;
+import com.gmail.taneza.ronald.carbs.common.FoodDbAdapter;
 
 import android.app.Activity;
 import android.support.v4.app.ListFragment;
