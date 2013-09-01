@@ -53,14 +53,14 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     private Language mLanguage;
     private SQLiteDatabase mDatabase;
     
-    private HashMap<FoodDbItem, FoodItemInfo> mFoodItemHashMap;
+    private HashMap<FoodItem, FoodItemInfo> mFoodItemCache;
     
     public FoodDbAdapter(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         //Enable this only during development, if there's a new db with the same version as the previous one.
         //deleteDbIfItAlreadyExists(context);
         
-        mFoodItemHashMap = new HashMap<FoodDbItem, FoodItemInfo>();
+        mFoodItemCache = new HashMap<FoodItem, FoodItemInfo>();
     }
     
 	public void open() {
@@ -131,9 +131,8 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     public FoodItemInfo getFoodItemInfo(FoodItem foodItem) {
     	FoodItemInfo foodItemInfo;
     	
-    	FoodDbItem foodDbItem = new FoodDbItem(foodItem);
-    	if (mFoodItemHashMap.containsKey(foodDbItem)) {
-    		foodItemInfo = mFoodItemHashMap.get(foodDbItem);
+    	if (mFoodItemCache.containsKey(foodItem)) {
+    		foodItemInfo = mFoodItemCache.get(foodItem);
     		//Log.i("Carbs", String.format("Get from cache [%d] %s - %d - %s", mFoodItemHashMap.size(), foodItem.getTableName(), foodItem.getId(), foodItemInfo.getName()));
     		return foodItemInfo;
     	}
@@ -177,7 +176,7 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     	}
 
     	if (foodItemInfo != null) {
-    		mFoodItemHashMap.put(foodDbItem, foodItemInfo);
+    		mFoodItemCache.put(foodItem, foodItemInfo);
     		//Log.i("Carbs", String.format("Add to cache [%d] %s - %d - %s",  mFoodItemHashMap.size(), foodItem.getTableName(), foodItem.getId(), foodItemInfo.getName()));
     	}
     	
@@ -205,16 +204,14 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     	mDatabase.replaceOrThrow(MYFOODS_TABLE_NAME, null, values);
 
     	//Log.i("Carbs", String.format("Remove %d: %s", foodItemInfo.getFoodItem().getId(), foodItemInfo.getName()));
-    	FoodDbItem foodDbItem = new FoodDbItem(foodItemInfo.getFoodItem());
-    	mFoodItemHashMap.remove(foodDbItem);
+    	mFoodItemCache.remove(foodItemInfo.getFoodItem());
     }
     
     public void removeMyFoodItemInfo(FoodItem foodItem) {
     	String whereClause = String.format("%s = %s", MYFOODS_COLUMN_ID, foodItem.getId());
     	mDatabase.delete(MYFOODS_TABLE_NAME, whereClause, null);
     	
-    	FoodDbItem foodDbItem = new FoodDbItem(foodItem);
-    	mFoodItemHashMap.remove(foodDbItem);
+    	mFoodItemCache.remove(foodItem);
     }
     
     private void deleteDbIfItAlreadyExists(Context context) {
