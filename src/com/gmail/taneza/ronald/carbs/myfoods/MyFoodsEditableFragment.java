@@ -22,6 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.droidparts.widget.ClearableEditText;
+import org.supercsv.io.CsvListWriter;
+import org.supercsv.io.ICsvListWriter;
+import org.supercsv.prefs.CsvPreference;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -44,9 +47,6 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
-import au.com.bytecode.opencsv.CSV;
-import au.com.bytecode.opencsv.CSVWriteProc;
-import au.com.bytecode.opencsv.CSVWriter;
 
 import com.commonsware.cwac.loaderex.acl.SQLiteCursorLoader;
 import com.gmail.taneza.ronald.carbs.R;
@@ -141,44 +141,56 @@ public class MyFoodsEditableFragment extends ListFragment
 	}
 
 	public void exportMyFoods() {
-		StringWriter sw = new StringWriter();
-		sw.append("Carbs MyFoods");
-		sw.append(String.format("%n")); // platform-independent newline
-		
-		// TODO: add minimalQuoting feature to opencsv library
-		CSV csv = CSV
-			    .separator(',')  // delimiter of fields
-			    .quote('"')      // quote character
-			    //.setMinimalQuoting(true)
-			    .create();       // new instance is immutable
-		
-		csv.write(sw, new CSVWriteProc() {
-		    public void process(CSVWriter out) {
-		        out.writeNext(
-		    			FoodDbAdapter.MYFOODS_COLUMN_ID,
-		    			FoodDbAdapter.MYFOODS_COLUMN_NAME,
-		    			FoodDbAdapter.MYFOODS_COLUMN_WEIGHT_PER_UNIT,
-		    			FoodDbAdapter.MYFOODS_COLUMN_UNIT_TEXT,
-		    			FoodDbAdapter.MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT);
-
-				ArrayList<FoodItemInfo> myFoodsList = mFoodDbAdapter.getAllMyFoods();
-		        
-				for (FoodItemInfo info : myFoodsList) {
-			        out.writeNext(
-			        		String.format("%d", info.getFoodItem().getId()),
-							info.getName(),
-							String.format("%d", info.getWeightPerUnit()),
-							info.getUnitText(),
-							String.format("%.1f", info.getNumCarbsInGramsPerUnit()));
-				}
-		   }
-		});
+		String myFoodsCsv = getMyFoodsCsv();
 		
 		Intent sendIntent = new Intent();
 		sendIntent.setAction(Intent.ACTION_SEND);
-		sendIntent.putExtra(Intent.EXTRA_TEXT, sw.toString());
+		sendIntent.putExtra(Intent.EXTRA_TEXT, myFoodsCsv);
 		sendIntent.setType("text/plain");
 		startActivity(sendIntent);
+	}
+	
+	private String getMyFoodsCsv() {
+		StringWriter sw = new StringWriter();
+		
+		sw.append("Carbs MyFoods");
+		sw.append(String.format("%n")); // platform-independent newline
+		
+		ICsvListWriter csvWriter = null;
+        try {
+        	// EXCEL_PREFERENCE is:
+        	//   quote char:     "
+        	//   delimeter char: ,
+        	//   end of line:    \n
+        	// QuoteMode is the default NormalQuoteMode: 
+        	//   quotes are only applied if required to escape special characters (per RFC4180)
+            csvWriter = new CsvListWriter(sw, CsvPreference.EXCEL_PREFERENCE);
+                
+            csvWriter.writeHeader(new String[] {
+    			FoodDbAdapter.MYFOODS_COLUMN_ID,
+    			FoodDbAdapter.MYFOODS_COLUMN_NAME,
+    			FoodDbAdapter.MYFOODS_COLUMN_WEIGHT_PER_UNIT,
+    			FoodDbAdapter.MYFOODS_COLUMN_UNIT_TEXT,
+    			FoodDbAdapter.MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT });
+
+			ArrayList<FoodItemInfo> myFoodsList = mFoodDbAdapter.getAllMyFoods();
+			for (FoodItemInfo info : myFoodsList) {
+				csvWriter.write(new String[] {
+	        		String.format("%d", info.getFoodItem().getId()),
+					info.getName(),
+					String.format("%d", info.getWeightPerUnit()),
+					info.getUnitText(),
+					String.format("%.1f", info.getNumCarbsInGramsPerUnit()) });
+			}
+			
+			csvWriter.close();
+			
+		} catch (IOException e) {
+			// We don't write to a file, but just to an in-memory stringWriter,
+			// so an IOException is very unlikely to occur.
+        }
+        
+        return sw.toString();
 	}
 	
     @Override 
