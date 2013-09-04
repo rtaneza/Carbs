@@ -21,19 +21,14 @@ import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
-import android.annotation.TargetApi;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
-import android.os.Build;
 import android.util.Log;
-import android.view.Menu;
 
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
@@ -133,22 +128,20 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     	Cursor cursor = mDatabase.query(MYFOODS_TABLE_NAME, columns, null, null, null, null, MYFOODS_COLUMN_NAME);
     	
     	ArrayList<FoodItemInfo> list = new ArrayList<FoodItemInfo>();
-    	if (cursor != null) {
-	    	cursor.moveToFirst();
-	    	while (!cursor.isAfterLast()) {
-	    		FoodItem foodItem = new FoodItem(
-	    				MYFOODS_TABLE_NAME,
-	    				cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_ID)),
-	    				cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_WEIGHT_PER_UNIT)));
-	    		FoodItemInfo foodItemInfo = new FoodItemInfo(foodItem, 
-	    				cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_NAME)),
-	    				cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_WEIGHT_PER_UNIT)),
-	    				cursor.getFloat(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT)),
-	    				cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_UNIT_TEXT)));
-	    	     
-	    		list.add(foodItemInfo);
-	    	    cursor.moveToNext();
-	    	}
+    	cursor.moveToFirst();
+    	while (!cursor.isAfterLast()) {
+    		FoodItem foodItem = new FoodItem(
+    				MYFOODS_TABLE_NAME,
+    				cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_ID)),
+    				cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_WEIGHT_PER_UNIT)));
+    		FoodItemInfo foodItemInfo = new FoodItemInfo(foodItem, 
+    				cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_NAME)),
+    				cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_WEIGHT_PER_UNIT)),
+    				cursor.getFloat(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT)),
+    				cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_UNIT_TEXT)));
+    	     
+    		list.add(foodItemInfo);
+    	    cursor.moveToNext();
     	}
     	
     	return list;
@@ -246,13 +239,38 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     	mDatabase.replaceOrThrow(MYFOODS_TABLE_NAME, null, values);
 
     	//Log.i("Carbs", String.format("Remove %d: %s", foodItemInfo.getFoodItem().getId(), foodItemInfo.getName()));
-    	mFoodItemCache.remove(foodItemInfo.getFoodItem());
+    	removeMyFoodItemFromCache(foodItemInfo.getFoodItem());
     }
     
     public void removeMyFoodItemInfo(FoodItem foodItem) {
     	String whereClause = String.format("%s = %s", MYFOODS_COLUMN_ID, foodItem.getId());
     	mDatabase.delete(MYFOODS_TABLE_NAME, whereClause, null);
-    	
+    	removeMyFoodItemFromCache(foodItem);
+    }
+    
+    public void removeAllMyFoods() {
+    	mDatabase.delete(MYFOODS_TABLE_NAME, null, null);
+    	removeAllMyFoodsFromCache();
+    }
+    
+    // Returns true if MyFood table already contains item with 'foodName' and ID not equal to 'exceptId'
+    public boolean myFoodNameExists(String foodName, int exceptId) {
+		String[] columns = { MYFOODS_COLUMN_NAME, MYFOODS_COLUMN_ID };
+		String selection = MYFOODS_COLUMN_NAME + " like '" + foodName + "'";
+		
+		Cursor cursor = mDatabase.query(MYFOODS_TABLE_NAME, columns, selection, null, null, null, MYFOODS_COLUMN_NAME);
+    	cursor.moveToFirst();
+    	while (!cursor.isAfterLast()) {
+			int id = cursor.getInt(cursor.getColumnIndexOrThrow(MYFOODS_COLUMN_ID));
+			if (id != exceptId) {
+				return true;
+			}
+			cursor.moveToNext();
+    	}
+    	return false;
+    }
+
+    private void removeMyFoodItemFromCache(FoodItem foodItem) {
     	// Remove all FoodItem's that have the same TableName and ID, regardless of the weight.
         Iterator<Entry<FoodItem, FoodItemInfo>> it = mFoodItemCache.entrySet().iterator();
         while (it.hasNext()) {
@@ -264,9 +282,7 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
         }
     }
 
-    public void removeAllMyFoods() {
-    	mDatabase.delete(MYFOODS_TABLE_NAME, null, null);
-    	
+    private void removeAllMyFoodsFromCache() {
         Iterator<Entry<FoodItem, FoodItemInfo>> it = mFoodItemCache.entrySet().iterator();
         while (it.hasNext()) {
             FoodItem foodItem = it.next().getKey();
@@ -275,14 +291,7 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     		}
         }
     }
-    
-    public boolean myFoodNameExists(String foodName) {
-		String[] columns = { MYFOODS_COLUMN_NAME };
-		String selection = MYFOODS_COLUMN_NAME + " like '%" + foodName + "%'";
-		Cursor cursor = mDatabase.query(MYFOODS_TABLE_NAME, columns, selection, null, null, null, MYFOODS_COLUMN_NAME);
-		return cursor.moveToFirst();
-    }
-    
+
     private void deleteDbIfItAlreadyExists(Context context) {
 		File db = context.getDatabasePath(DATABASE_NAME);
 		if (db.exists()) {

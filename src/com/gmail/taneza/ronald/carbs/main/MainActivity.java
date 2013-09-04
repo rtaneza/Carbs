@@ -347,13 +347,12 @@ public class MainActivity extends ActionBarActivity implements
 	    	case REQUEST_CODE_SHOW_MY_FOODS:
 	            switch (resultCode) {
 	            	case MyFoodsActivity.MY_FOODS_RESULT_ITEM_CHANGED:
-	            		refreshAllTabs();
+	            		refreshAllTabsAndMealTotal();
 	            		break;
 
 	            	case MyFoodsActivity.MY_FOODS_RESULT_ITEM_REMOVED:
 	            		pruneRecentAndFoodLists();
-	            		updateRecentFoodsAndMealData();
-	            		refreshAllFoodsAndMyFoodsTabs();
+	            		refreshAllTabsAndMealTotal();
 	            		break;
 	            }
 	    		break;
@@ -424,9 +423,15 @@ public class MainActivity extends ActionBarActivity implements
         }
 	}
 	
+
 	private void refreshAllTabs() {
 		refreshAllFoodsAndMyFoodsTabs();
-		refreshRecentAndMealTabs();	
+		refreshRecentFoodsAndMealTabs();	
+	}
+
+	private void refreshAllTabsAndMealTotal() {
+		refreshAllFoodsAndMyFoodsTabs();
+		updateRecentFoodsAndMealData();	
 	}
 	
 	private void refreshAllFoodsAndMyFoodsTabs() {
@@ -442,34 +447,23 @@ public class MainActivity extends ActionBarActivity implements
     	}
 	}
 
-	private void refreshRecentAndMealTabs() {
-		// During an orientation change, the fragment may still be null
-    	RecentFoodsFragment recentFoodsFragment = (RecentFoodsFragment)getFragment(RECENT_FOODS_TAB_INDEX);
-    	if (recentFoodsFragment != null) {
-    		recentFoodsFragment.refreshList();
-    	}
-    	
-    	MealFragment mealFragment = (MealFragment)getFragment(MEAL_TAB_INDEX);
-    	if (mealFragment != null) {
-    		mealFragment.refreshList();
-    	}
-	}
-	
-	private void updateRecentFoodsAndMealData() {
-		updateTotalCarbsText();
-    	updateMealTabText();
-    	
-    	RecentFoodsFragment recentFoodsFragment = (RecentFoodsFragment)getFragment(RECENT_FOODS_TAB_INDEX);
+	private void refreshRecentFoodsAndMealTabs() {
 		// During an orientation change, the fragment is still null
+    	RecentFoodsFragment recentFoodsFragment = (RecentFoodsFragment)getFragment(RECENT_FOODS_TAB_INDEX);
     	if (recentFoodsFragment != null) {
     		recentFoodsFragment.setFoodItemList(mRecentFoodsList);
     	}
     	
     	MealFragment mealFragment = (MealFragment)getFragment(MEAL_TAB_INDEX);
-		// During an orientation change, the fragment is still null
     	if (mealFragment != null) {
     		mealFragment.setFoodItemList(mFoodItemsList);
     	}
+	}
+
+	private void updateRecentFoodsAndMealData() {
+		updateTotalCarbsText();
+    	updateMealTabText();
+    	refreshRecentFoodsAndMealTabs();
 	}
 
 	private void clearRecentFoods() {

@@ -196,9 +196,12 @@ public class MyFoodDetailsActivity extends ActionBarActivity {
 	}
 	
 	public void addOrUpdate(View v) {
-		String foodName = mFoodNameTextView.getText().toString();
-		
-		if (mFoodDbAdapter.myFoodNameExists(foodName)) {
+		String foodName = mFoodNameTextView.getText().toString().trim();
+		int exceptId = 0;
+		if (mMode == Mode.EditFood) {
+			exceptId = mFoodItem.getId();
+		}
+		if (mFoodDbAdapter.myFoodNameExists(foodName, exceptId)) {
 			mFoodNameTextView.setError(getText(R.string.my_food_name_exists_error));
 			return;
 		}
