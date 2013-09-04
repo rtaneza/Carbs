@@ -58,7 +58,7 @@ public class MainActivity extends ActionBarActivity implements
 	public final static String PREF_RECENT_FOODS_LIST = "PREF_RECENT_FOODS_LIST";
 	public final static String PREF_FOOD_ITEMS_LIST = "PREF_FOOD_ITEMS_LIST";
 
-	public final static int RECENT_FOODS_LIST_MAX_SIZE = 30;
+	public final static int RECENT_FOODS_LIST_MAX_SIZE = 50;
 	
 	public final static int ALL_FOODS_TAB_INDEX = 0;
 	public final static int MY_FOODS_TAB_INDEX = 1;
