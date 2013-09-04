@@ -62,6 +62,7 @@ public class MyFoodDetailsActivity extends ActionBarActivity {
 	public final static String MY_FOOD_ITEM_RESULT = "com.gmail.taneza.ronald.carbs.MY_FOOD_ITEM_RESULT";
 	public final static String MY_FOOD_ACTIVITY_MODE_MESSAGE = "com.gmail.taneza.ronald.carbs.MY_FOOD_ACTIVITY_MODE_MESSAGE";
 	
+	private FoodDbAdapter mFoodDbAdapter;
 	private FoodItem mFoodItem;
 	private TextView mFoodNameTextView;
 	private EditText mWeightEditText;
@@ -70,12 +71,14 @@ public class MyFoodDetailsActivity extends ActionBarActivity {
 	private Mode mMode;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_my_food_details);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+		
+		mFoodDbAdapter = ((CarbsApp)getApplication()).getFoodDbAdapter();
+		
 		// Get the message from the intent
 		Intent intent = getIntent();
 
@@ -86,9 +89,8 @@ public class MyFoodDetailsActivity extends ActionBarActivity {
 		mMode = mode;
 		if (mode == Mode.NewFood) {
 			foodItemInfo = new FoodItemInfo(mFoodItem, NEW_FOOD_DEFAULT_NAME, NEW_FOOD_DEFAULT_WEIGHT_PER_UNIT, NEW_FOOD_DEFAULT_CARBS, NEW_FOOD_DEFAULT_UNIT_TEXT);
-		} else {			
-			FoodDbAdapter foodDbAdapter = ((CarbsApp)getApplication()).getFoodDbAdapter();
-			foodItemInfo = foodDbAdapter.getFoodItemInfo(mFoodItem);
+		} else {
+			foodItemInfo = mFoodDbAdapter.getFoodItemInfo(mFoodItem);
 
 			setTitle(R.string.title_activity_my_food_edit);
 			Button okButton = (Button) findViewById(R.id.my_food_ok_button);
@@ -188,8 +190,15 @@ public class MyFoodDetailsActivity extends ActionBarActivity {
 	}
 	
 	public void addOrUpdate(View v) {
+		String foodName = mFoodNameTextView.getText().toString();
+		
+		if (mFoodDbAdapter.myFoodNameExists(foodName)) {
+			mFoodNameTextView.setError(getText(R.string.my_food_name_exists_error));
+			return;
+		}
+		
 		FoodItemInfo foodItemInfo = new FoodItemInfo(mFoodItem, 
-				mFoodNameTextView.getText().toString(),
+				foodName,
 				Integer.parseInt(mWeightEditText.getText().toString()),
 				Float.parseFloat(mNumCarbsTextView.getText().toString()),
 				mWeightUnitTextSpinner.getSelectedItem().toString());

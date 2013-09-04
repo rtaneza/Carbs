@@ -276,6 +276,13 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
         }
     }
     
+    public boolean myFoodNameExists(String foodName) {
+		String[] columns = { MYFOODS_COLUMN_NAME };
+		String selection = MYFOODS_COLUMN_NAME + " like '%" + foodName + "%'";
+		Cursor cursor = mDatabase.query(MYFOODS_TABLE_NAME, columns, selection, null, null, null, MYFOODS_COLUMN_NAME);
+		return cursor.moveToFirst();
+    }
+    
     private void deleteDbIfItAlreadyExists(Context context) {
 		File db = context.getDatabasePath(DATABASE_NAME);
 		if (db.exists()) {
