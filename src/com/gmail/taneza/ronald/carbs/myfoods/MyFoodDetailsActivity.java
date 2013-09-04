@@ -34,6 +34,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gmail.taneza.ronald.carbs.R;
 import com.gmail.taneza.ronald.carbs.common.CarbsApp;
@@ -174,6 +175,11 @@ public class MyFoodDetailsActivity extends ActionBarActivity {
 	    		data.putExtra(MY_FOOD_ITEM_RESULT, (Parcelable)mFoodItem);
 	    	    setResult(MY_FOOD_RESULT_REMOVE, data);
 	    		finish();
+
+	        	Toast.makeText(getApplicationContext(),
+	        			getText(R.string.food_removed_from_my_foods),
+	        			Toast.LENGTH_SHORT)
+	        		 .show();
 	        }
 	     })
 	    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

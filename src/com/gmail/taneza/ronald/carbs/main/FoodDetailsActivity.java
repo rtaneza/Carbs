@@ -34,6 +34,7 @@ import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gmail.taneza.ronald.carbs.R;
 import com.gmail.taneza.ronald.carbs.common.CarbsApp;
@@ -63,6 +64,7 @@ public class FoodDetailsActivity extends ActionBarActivity {
 	private TextView mNumCarbsTextView;
 	private Mode mMode;
 	private int mRemoveItemConfirmationStringId;
+	private int mItemRemovedMessageId;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -105,8 +107,10 @@ public class FoodDetailsActivity extends ActionBarActivity {
 			Button okButton = (Button) findViewById(R.id.food_details_ok_button);
 			okButton.setText(R.string.save_food_details);
 			mRemoveItemConfirmationStringId = R.string.remove_item_from_meal_confirmation;
+			mItemRemovedMessageId = R.string.food_removed_from_meal;
 		} else if (mode == Mode.RecentFood) {
 			mRemoveItemConfirmationStringId = R.string.remove_item_from_recent_foods_confirmation;
+			mItemRemovedMessageId = R.string.food_removed_from_recent;
 		}
 		
 		addWeightTextListener();
@@ -182,6 +186,11 @@ public class FoodDetailsActivity extends ActionBarActivity {
 	    		data.putExtra(FOOD_ITEM_RESULT, (Parcelable)mFoodItemInfo.getFoodItem());
 	    	    setResult(FOOD_DETAILS_RESULT_REMOVE, data);
 	    		finish();
+
+	        	Toast.makeText(getApplicationContext(),
+	        			getText(mItemRemovedMessageId),
+	        			Toast.LENGTH_SHORT)
+	        		 .show();
 	        }
 	     })
 	    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

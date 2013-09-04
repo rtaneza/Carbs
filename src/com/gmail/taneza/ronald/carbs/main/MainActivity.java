@@ -18,14 +18,18 @@ package com.gmail.taneza.ronald.carbs.main;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.pig.impl.util.ObjectSerializer;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -40,6 +44,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gmail.taneza.ronald.carbs.R;
 import com.gmail.taneza.ronald.carbs.common.CarbsApp;
@@ -78,8 +83,9 @@ public class MainActivity extends ActionBarActivity implements
     private ViewPager mViewPager;
     private MainPagerAdapter mPagerAdapter;
     private Menu mOptionsMenu;
-    
     private int mEditFoodItemIndex;
+    
+    private Intent mCalculatorIntent;
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -88,6 +94,8 @@ public class MainActivity extends ActionBarActivity implements
 
 		//Log.i("Carbs", this.getClass().getSimpleName() + " onCreate");
 		
+        initializeCalculatorIntent();
+        
  		// Restore preferences
  		SharedPreferences prefs = getPreferences(0);
  		mLanguage = Language.values()[prefs.getInt(PREF_LANGUAGE, Language.DUTCH.ordinal())];
@@ -225,6 +233,11 @@ public class MainActivity extends ActionBarActivity implements
         
         mOptionsMenu = menu;
 		getMenuInflater().inflate(R.menu.menu_main, menu);
+		
+		if (mCalculatorIntent == null) {
+			MenuItem openCalculatorMenuItem = mOptionsMenu.findItem(R.id.menu_open_calculator);
+			openCalculatorMenuItem.setVisible(false);
+		}
 
 		setLanguageTextInOptionsMenu(mLanguage);
 		
@@ -250,6 +263,18 @@ public class MainActivity extends ActionBarActivity implements
 	        case R.id.menu_clear_meal:
         		clearMeal();
 	        	break;
+	        case R.id.menu_copy_meal_total:
+	        	copyMealTotalToClipboard();
+	        	break;
+	        case R.id.menu_open_calculator:
+	        	if (mCalculatorIntent != null) {
+	        		// The default calculator does not accept any intent data,
+	        		// so for now: copy to clipboard, open calculator, then
+	        		// the user should manually paste the value to the calculator.
+	        		copyMealTotalToClipboard();
+	        		startActivity(mCalculatorIntent);
+	        	}
+	        	break;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
@@ -257,7 +282,7 @@ public class MainActivity extends ActionBarActivity implements
         return true;
     }
     
-    private void startMyFoodsActivity() {
+	private void startMyFoodsActivity() {
     	Intent intent = new Intent(this, MyFoodsActivity.class);
     	startActivityForResult(intent, REQUEST_CODE_SHOW_MY_FOODS);
     }
@@ -551,5 +576,35 @@ public class MainActivity extends ActionBarActivity implements
 				i++;
 			}
 		}
+	}
+	
+	private void initializeCalculatorIntent() {
+	    PackageManager packageManager = getPackageManager();
+		List<PackageInfo> packages = packageManager.getInstalledPackages(0);  
+		for (PackageInfo pi : packages) {
+			if (pi.packageName.toString().toLowerCase().contains("calcul")){
+			    mCalculatorIntent = packageManager.getLaunchIntentForPackage(pi.packageName);
+			    return;
+			 }
+		}
+	}
+
+    @SuppressWarnings("deprecation")
+    private void copyMealTotalToClipboard() {
+    	String mealTotalValue = mTotalCarbsTextView.getText().toString().replace("g", "").trim();
+
+    	if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+    	    android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+    	    android.content.ClipData clip = android.content.ClipData.newPlainText("Carbs meal total", mealTotalValue);
+            clipboard.setPrimaryClip(clip);
+    	} else {
+			android.text.ClipboardManager clipboard = (android.text.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+    	    clipboard.setText(mealTotalValue);
+    	}
+    	
+    	Toast.makeText(getApplicationContext(),
+    			getText(R.string.meal_total_copied_to_clipboard),
+    			Toast.LENGTH_SHORT)
+    		 .show();
 	}
 }

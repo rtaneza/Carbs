@@ -38,6 +38,16 @@
         android:title="@string/clear_meal"/>
     
     <item
+        android:id="@+id/menu_copy_meal_total"
+        carbs:showAsAction="never"
+        android:title="@string/copy_meal_total"/>
+    
+    <item
+        android:id="@+id/menu_open_calculator"
+        carbs:showAsAction="never"
+        android:title="@string/open_calculator"/>
+    
+    <item
         android:id="@+id/menu_main_settings"
         carbs:showAsAction="never"
         android:title="@string/settings"/>

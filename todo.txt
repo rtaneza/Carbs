@@ -13,7 +13,7 @@ ok // use index in removeFoodItemFromMeal() because there may be multiple equal 
 ok // confirm with user before clearing recent and meal
 // change meal total background color
 ok // protect access to mFilteredList with mutex -> no need after changing BaseAdaptor
-// add toast msg after removing item
+ok // add toast msg after removing item
 // replace food list serialization with simpler save/restore of each FoodItem field
 -> serialization also fails if class name is changed, or if class is moved to a subfolder
 // remove recent foods and meal item lists and save to database tables instead
