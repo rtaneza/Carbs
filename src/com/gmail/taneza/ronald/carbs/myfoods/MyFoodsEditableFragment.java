@@ -163,8 +163,8 @@ public class MyFoodsEditableFragment extends ListFragment
             csvWriter = new CsvListWriter(sw, CsvPreference.EXCEL_PREFERENCE);
                 
             csvWriter.writeHeader(new String[] {
-    			FoodDbAdapter.MYFOODS_COLUMN_ID,
     			FoodDbAdapter.MYFOODS_COLUMN_NAME,
+    			FoodDbAdapter.MYFOODS_COLUMN_ID,
     			FoodDbAdapter.MYFOODS_COLUMN_WEIGHT_PER_UNIT,
     			FoodDbAdapter.MYFOODS_COLUMN_UNIT_TEXT,
     			FoodDbAdapter.MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT });
@@ -172,8 +172,8 @@ public class MyFoodsEditableFragment extends ListFragment
 			ArrayList<FoodItemInfo> myFoodsList = mFoodDbAdapter.getAllMyFoods();
 			for (FoodItemInfo info : myFoodsList) {
 				csvWriter.write(new String[] {
-	        		String.format("%d", info.getFoodItem().getId()),
 					info.getName(),
+	        		String.format("%d", info.getFoodItem().getId()),
 					String.format("%d", info.getWeightPerUnit()),
 					info.getUnitText(),
 					String.format("%.1f", info.getNumCarbsInGramsPerUnit()) });
