@@ -18,14 +18,9 @@ package com.gmail.taneza.ronald.carbs.common;
 
 import java.util.ArrayList;
 
-import com.gmail.taneza.ronald.carbs.R;
-import com.gmail.taneza.ronald.carbs.R.layout;
-
 import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+
+import com.gmail.taneza.ronald.carbs.R;
 
 // TODO: Currently not used. Add date info and use this from RecentFoodsFragment.
 

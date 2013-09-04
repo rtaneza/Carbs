@@ -21,19 +21,6 @@ import java.util.ArrayList;
 
 import org.apache.pig.impl.util.ObjectSerializer;
 
-import com.gmail.taneza.ronald.carbs.R;
-import com.gmail.taneza.ronald.carbs.R.id;
-import com.gmail.taneza.ronald.carbs.R.layout;
-import com.gmail.taneza.ronald.carbs.R.menu;
-import com.gmail.taneza.ronald.carbs.R.string;
-import com.gmail.taneza.ronald.carbs.common.CarbsApp;
-import com.gmail.taneza.ronald.carbs.common.FoodDbAdapter;
-import com.gmail.taneza.ronald.carbs.common.FoodItem;
-import com.gmail.taneza.ronald.carbs.common.FoodItemInfo;
-import com.gmail.taneza.ronald.carbs.common.Language;
-import com.gmail.taneza.ronald.carbs.main.FoodDetailsActivity.Mode;
-import com.gmail.taneza.ronald.carbs.myfoods.MyFoodsActivity;
-
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -52,8 +39,15 @@ import android.support.v7.app.ActionBar.Tab;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
+
+import com.gmail.taneza.ronald.carbs.R;
+import com.gmail.taneza.ronald.carbs.common.CarbsApp;
+import com.gmail.taneza.ronald.carbs.common.FoodDbAdapter;
+import com.gmail.taneza.ronald.carbs.common.FoodItem;
+import com.gmail.taneza.ronald.carbs.common.FoodItemInfo;
+import com.gmail.taneza.ronald.carbs.common.Language;
+import com.gmail.taneza.ronald.carbs.myfoods.MyFoodsActivity;
 
 public class MainActivity extends ActionBarActivity implements
         ActionBar.TabListener,

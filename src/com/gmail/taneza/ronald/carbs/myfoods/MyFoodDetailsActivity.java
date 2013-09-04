@@ -16,17 +16,6 @@
 
 package com.gmail.taneza.ronald.carbs.myfoods;
 
-import com.gmail.taneza.ronald.carbs.R;
-import com.gmail.taneza.ronald.carbs.R.array;
-import com.gmail.taneza.ronald.carbs.R.id;
-import com.gmail.taneza.ronald.carbs.R.layout;
-import com.gmail.taneza.ronald.carbs.R.menu;
-import com.gmail.taneza.ronald.carbs.R.string;
-import com.gmail.taneza.ronald.carbs.common.CarbsApp;
-import com.gmail.taneza.ronald.carbs.common.FoodDbAdapter;
-import com.gmail.taneza.ronald.carbs.common.FoodItem;
-import com.gmail.taneza.ronald.carbs.common.FoodItemInfo;
-
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -45,6 +34,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.gmail.taneza.ronald.carbs.R;
+import com.gmail.taneza.ronald.carbs.common.CarbsApp;
+import com.gmail.taneza.ronald.carbs.common.FoodDbAdapter;
+import com.gmail.taneza.ronald.carbs.common.FoodItem;
+import com.gmail.taneza.ronald.carbs.common.FoodItemInfo;
 
 public class MyFoodDetailsActivity extends ActionBarActivity {
 

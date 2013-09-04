@@ -22,5 +22,7 @@ ok // In Food Details, add "x g carbs per y g" under the food name
 ok // clear my foods -> are you sure?
 ok // ClearableEditableText's delete icon disappears when moving from the Meal tab to any of the other 3 tabs
       -> all tabs now have this search text field, so this problem does not occur anymore.
-// Test on emulator v8
+// Test on emulator API v8
 ok // when removing a MyFood, also update the recent and meal lists
+// Android API v8 Alert dialog has different button order: Remove|Cancel
+// Check for duplicate name when adding new MyFood

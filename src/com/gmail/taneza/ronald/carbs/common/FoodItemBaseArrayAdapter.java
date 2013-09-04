@@ -42,7 +42,10 @@ public class FoodItemBaseArrayAdapter extends ArrayAdapter<FoodItem> {
 	public void setValues(ArrayList<FoodItem> values) {
 	    mFilteredValues = new ArrayList<FoodItem>(values);
 	    clear();
-	    addAll(mFilteredValues);
+	    // addAll() is only available starting in API level 11, but we want to support older API versions
+	    for (FoodItem item : mFilteredValues) {
+	    	add(item);
+	    }
 	}
     
     @Override

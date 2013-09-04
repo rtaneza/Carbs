@@ -16,17 +16,14 @@
 
 package com.gmail.taneza.ronald.carbs.myfoods;
 
-import com.gmail.taneza.ronald.carbs.R;
-import com.gmail.taneza.ronald.carbs.R.id;
-import com.gmail.taneza.ronald.carbs.R.layout;
-import com.gmail.taneza.ronald.carbs.R.menu;
-
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.gmail.taneza.ronald.carbs.R;
 
 public class MyFoodsActivity extends ActionBarActivity
 	implements MyFoodsActivityNotifier {

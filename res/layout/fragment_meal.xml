@@ -3,23 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AllFoodsFragment">
-	    
-	<LinearLayout
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent"
-	    android:orientation="vertical" >
+    
+	<ListView android:id="@id/android:list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fastScrollEnabled="true"/>
 	
-		<ListView android:id="@id/android:list"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:fastScrollEnabled="true"/>
-		
-	  	<TextView android:id="@id/android:empty"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="@string/meal_no_items"
-			android:enabled="false"/>
+  	<TextView android:id="@id/android:empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/meal_no_items"
+		android:enabled="false"/>
 	        
-	</LinearLayout>
-
 </FrameLayout>

@@ -23,13 +23,17 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
+import android.annotation.TargetApi;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
+import android.os.Build;
 import android.util.Log;
+import android.view.Menu;
 
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
@@ -70,7 +74,8 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
 	public void open() {
 		mDatabase = getWritableDatabase();
     }
-	
+
+	@SuppressWarnings("deprecation")
     public String getQueryStringAllFoods(String foodName) {
 		SQLiteQueryBuilder foodQb = new SQLiteQueryBuilder();
 
@@ -82,8 +87,9 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
 		String foodWhereClause = getFoodNameColumnName() + " like '%" + foodName + "%'";
 		
 		foodQb.setTables(NEVO_TABLE_NAME);
+		// This method was deprecated in API level 11, but we still would like to support older API versions.
 		String foodSubQuery = foodQb.buildUnionSubQuery(COLUMN_TABLE_NAME, foodSqlSelect, null, foodSqlSelect.length, 
-				NEVO_TABLE_NAME, foodWhereClause, null, null);
+				NEVO_TABLE_NAME, foodWhereClause, null, null, null);
 		
 		SQLiteQueryBuilder myFoodsQb = new SQLiteQueryBuilder();
 		// Both select statements must have the same number of columns, so we repeat the "Name" column here
@@ -93,8 +99,9 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
 		String myFoodsWhereClause = MYFOODS_COLUMN_NAME + " like '%" + foodName + "%'";
 		
 		myFoodsQb.setTables(MYFOODS_TABLE_NAME);
+		// This method was deprecated in API level 11, but we still would like to support older API versions.
 		String myFoodsSubQuery = myFoodsQb.buildUnionSubQuery(COLUMN_TABLE_NAME, myFoodsSqlSelect, null, myFoodsSqlSelect.length, 
-				MYFOODS_TABLE_NAME, myFoodsWhereClause, null, null);
+				MYFOODS_TABLE_NAME, myFoodsWhereClause, null, null, null);
 
 		SQLiteQueryBuilder unionQb = new SQLiteQueryBuilder();
 		String queryString = unionQb.buildUnionQuery(new String[] { foodSubQuery, myFoodsSubQuery }, getFoodNameColumnName(), null);
@@ -103,6 +110,7 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
 		return queryString;
     }
 
+	@SuppressWarnings("deprecation")
     public String getQueryStringMyFoods(String foodName) {
 		SQLiteQueryBuilder myFoodsQb = new SQLiteQueryBuilder();
 		String [] myFoodsSqlSelect = {"0 _id", String.format("\"%s\" AS %s", MYFOODS_TABLE_NAME, COLUMN_TABLE_NAME),
@@ -111,7 +119,8 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
 		String myFoodsWhereClause = MYFOODS_COLUMN_NAME + " like '%" + foodName + "%'";
 		
 		myFoodsQb.setTables(MYFOODS_TABLE_NAME);
-		String queryString = myFoodsQb.buildQuery(myFoodsSqlSelect, myFoodsWhereClause, null, null, MYFOODS_COLUMN_NAME, null);
+		// This method was deprecated in API level 11, but we still would like to support older API versions.
+		String queryString = myFoodsQb.buildQuery(myFoodsSqlSelect, myFoodsWhereClause, null, null, null, MYFOODS_COLUMN_NAME, null);
 		
 		//Log.i("Carbs", "MyFoods query string: " + queryString);
 		return queryString;
@@ -147,6 +156,7 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     
     public void setLanguage(Language language) {
     	mLanguage = language;
+    	mFoodItemCache.clear();
     }
     
     public String getFoodNameColumnName() {

@@ -3,7 +3,7 @@ package com.gmail.taneza.ronald.carbs.common;
 import android.database.Cursor;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.SimpleCursorAdapter.ViewBinder;
+import android.support.v4.widget.SimpleCursorAdapter.ViewBinder;
 
 public class FoodItemViewBinder implements ViewBinder {
 

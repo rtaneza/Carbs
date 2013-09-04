@@ -18,14 +18,12 @@ package com.gmail.taneza.ronald.carbs.common;
 
 import java.util.ArrayList;
 
-import com.gmail.taneza.ronald.carbs.R;
-import com.gmail.taneza.ronald.carbs.R.id;
-import com.gmail.taneza.ronald.carbs.R.layout;
-
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.gmail.taneza.ronald.carbs.R;
 
 public class FoodItemArrayAdapter extends FoodItemBaseArrayAdapter {
 	public FoodItemArrayAdapter(Context context, FoodDbAdapter foodDbAdapter, ArrayList<FoodItem> values) {
