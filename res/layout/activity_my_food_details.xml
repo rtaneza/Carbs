@@ -120,15 +120,6 @@
 		android:weightSum="1.0" >
 	    
 	    <Button
-	        android:id="@+id/my_food_cancel_button"
-	        android:layout_width="0dp"
-	        android:layout_height="wrap_content"
-	        android:layout_weight="0.5"
-	        android:textSize="@dimen/text_size"
-	        android:text="@string/cancel"
-	        android:onClick="cancel" />
-	    
-	    <Button
 	        android:id="@+id/my_food_ok_button"
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
@@ -137,6 +128,15 @@
 	        android:text="@string/my_foods_add"
 	        android:onClick="addOrUpdate" />
     
+	    <Button
+	        android:id="@+id/my_food_cancel_button"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="0.5"
+	        android:textSize="@dimen/text_size"
+	        android:text="@string/cancel"
+	        android:onClick="cancel" />
+	    
     </LinearLayout>
 	    
 </RelativeLayout>

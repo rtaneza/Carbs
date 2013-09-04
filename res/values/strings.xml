@@ -41,7 +41,7 @@
     <string name="title_activity_my_foods">My foods</string>
     <string name="title_activity_my_food_details">Add my food</string>
     <string name="title_activity_my_food_edit">Edit my food</string>
-    <string name="clear_recent_foods_confirmation">Are you sure you want to clear the recent foods history?</string>
+    <string name="clear_recent_foods_confirmation">Are you sure you want to clear all items in the recent foods history?</string>
     <string name="clear_meal_confirmation">Are you sure you want to clear all items in the meal?</string>
     <string name="clear_my_foods_confirmation">Are you sure you want to clear all items in My Foods? These items will also be removed from the Recent and Meal lists.</string>
     <string name="menu_export_my_foods">Export my foods</string>
