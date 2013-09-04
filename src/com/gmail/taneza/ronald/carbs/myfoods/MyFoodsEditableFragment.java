@@ -120,8 +120,9 @@ public class MyFoodsEditableFragment extends ListFragment
 
 	public void clearMyFoods() {
 		new AlertDialog.Builder(getActivity())
+		.setTitle(R.string.clear_my_foods_question)
 	    .setMessage(R.string.clear_my_foods_confirmation)
-	    .setPositiveButton(R.string.menu_clear_my_foods, new DialogInterface.OnClickListener() {
+	    .setPositiveButton(R.string.clear_my_foods, new DialogInterface.OnClickListener() {
 	        public void onClick(DialogInterface dialog, int which) { 
 	    		mFoodDbAdapter.removeAllMyFoods();
 	    		restartLoader();

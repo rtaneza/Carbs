@@ -364,7 +364,7 @@ public class MainActivity extends ActionBarActivity implements
 	
 	private void setLanguageTextInOptionsMenu(Language language) {
 		int languageId = (language == Language.ENGLISH) ?
-				R.string.menu_language_english : R.string.menu_language_dutch;
+				R.string.language_english : R.string.language_dutch;
 		MenuItem languageMenuItem = mOptionsMenu.findItem(R.id.menu_language);
     	languageMenuItem.setTitle(languageId);
 	}
@@ -449,8 +449,9 @@ public class MainActivity extends ActionBarActivity implements
 
 	private void clearRecentFoods() {
 		new AlertDialog.Builder(this)
+		.setTitle(R.string.clear_recent_foods_question)
 	    .setMessage(R.string.clear_recent_foods_confirmation)
-	    .setPositiveButton(R.string.menu_clear_recent_foods, new DialogInterface.OnClickListener() {
+	    .setPositiveButton(R.string.clear_recent_foods, new DialogInterface.OnClickListener() {
 	        public void onClick(DialogInterface dialog, int which) { 
 	            // continue with the clear
 	    		mRecentFoodsList.clear();
@@ -467,8 +468,9 @@ public class MainActivity extends ActionBarActivity implements
 	
 	private void clearMeal() {
 		new AlertDialog.Builder(this)
+		.setTitle(R.string.clear_meal_question)
 	    .setMessage(R.string.clear_meal_confirmation)
-	    .setPositiveButton(R.string.menu_clear_meal, new DialogInterface.OnClickListener() {
+	    .setPositiveButton(R.string.clear_meal, new DialogInterface.OnClickListener() {
 	        public void onClick(DialogInterface dialog, int which) { 
 	            // continue with the clear
 	    		mFoodItemsList.clear();
