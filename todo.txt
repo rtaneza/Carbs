@@ -27,3 +27,4 @@ ok // when removing a MyFood, also update the recent and meal lists
 ok // Android API v8 Alert dialog has different button order: Remove|Cancel
 ok // Check for duplicate name when adding new MyFood
 // clear MyFoods table in production db
+// add capability to accept plain text data intent -> this should be imported to MyFoods list
