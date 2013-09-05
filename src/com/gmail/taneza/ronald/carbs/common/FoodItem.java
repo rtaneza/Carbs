@@ -16,30 +16,20 @@
 
 package com.gmail.taneza.ronald.carbs.common;
 
-import java.io.Serializable;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class FoodItem implements Parcelable, Serializable {
-
-	private static final long serialVersionUID = 6139044679990035504L;
-
-	/* 
-	 * Do not change, rename, or remove existing fields! 
-	 * New fields may be added without needing to change serialVersionUID.
-	 * More info on serialization:
-	 * http://macchiato.com/columns/Durable4.html
-	 * http://developer.android.com/reference/java/io/Serializable.html
-	 */
+public class FoodItem implements Parcelable {
+	
 	private String mTableName;
 	private int mId;
 	private int mWeight;
 	
 	public FoodItem(String tableName, int id, int weight) {
+		FoodItemListSerializer.verifyTableNameIsValidOrThrow(tableName);		
 		mTableName = tableName;
 		mId = id;
 		mWeight = weight;

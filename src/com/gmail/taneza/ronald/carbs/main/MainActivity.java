@@ -16,11 +16,8 @@
 
 package com.gmail.taneza.ronald.carbs.main;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.pig.impl.util.ObjectSerializer;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
@@ -51,6 +48,7 @@ import com.gmail.taneza.ronald.carbs.common.CarbsApp;
 import com.gmail.taneza.ronald.carbs.common.FoodDbAdapter;
 import com.gmail.taneza.ronald.carbs.common.FoodItem;
 import com.gmail.taneza.ronald.carbs.common.FoodItemInfo;
+import com.gmail.taneza.ronald.carbs.common.FoodItemListSerializer;
 import com.gmail.taneza.ronald.carbs.common.Language;
 import com.gmail.taneza.ronald.carbs.myfoods.MyFoodsActivity;
 
@@ -87,7 +85,6 @@ public class MainActivity extends ActionBarActivity implements
     
     private Intent mCalculatorIntent;
 
-	@SuppressWarnings("unchecked")
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,20 +97,9 @@ public class MainActivity extends ActionBarActivity implements
  		SharedPreferences prefs = getPreferences(0);
  		mLanguage = Language.values()[prefs.getInt(PREF_LANGUAGE, Language.DUTCH.ordinal())];
  		
- 		mFoodItemsList = new ArrayList<FoodItem>();
- 		mRecentFoodsList = new ArrayList<FoodItem>();
+ 		mFoodItemsList = FoodItemListSerializer.getListFromString(prefs.getString(PREF_FOOD_ITEMS_LIST, ""));
+ 		mRecentFoodsList = FoodItemListSerializer.getListFromString(prefs.getString(PREF_RECENT_FOODS_LIST, ""));
  		
- 		try {
- 			mFoodItemsList = (ArrayList<FoodItem>) ObjectSerializer.deserialize(
- 					prefs.getString(PREF_FOOD_ITEMS_LIST, ObjectSerializer.serialize(new ArrayList<FoodItem>())));
- 			mRecentFoodsList = (ArrayList<FoodItem>) ObjectSerializer.deserialize(
- 					prefs.getString(PREF_RECENT_FOODS_LIST, ObjectSerializer.serialize(new ArrayList<FoodItem>())));
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
 		mFoodDbAdapter = ((CarbsApp)getApplication()).getFoodDbAdapter();
 		mFoodDbAdapter.setLanguage(mLanguage);
 
@@ -153,25 +139,21 @@ public class MainActivity extends ActionBarActivity implements
     }
 	
 	@Override
-    protected void onStop(){
+    protected void onDestroy(){
 		pruneRecentAndFoodLists();
 		
 		// We need an Editor object to make preference changes.
 		// All objects are from android.context.Context
 		SharedPreferences prefs = getPreferences(0);
 		SharedPreferences.Editor editor = prefs.edit();
-		editor.putInt(PREF_LANGUAGE, mLanguage.ordinal());
-		try {
-		  editor.putString(PREF_FOOD_ITEMS_LIST, ObjectSerializer.serialize(mFoodItemsList));
-		  editor.putString(PREF_RECENT_FOODS_LIST, ObjectSerializer.serialize(mRecentFoodsList));
-		} catch (IOException e) {
-		  e.printStackTrace();
-		}
+		editor.putInt(PREF_LANGUAGE, mLanguage.ordinal());		
+		editor.putString(PREF_FOOD_ITEMS_LIST, FoodItemListSerializer.getStringFromList(mFoodItemsList));
+		editor.putString(PREF_RECENT_FOODS_LIST, FoodItemListSerializer.getStringFromList(mRecentFoodsList));
 
 		// Commit the edits!
 		editor.commit();
 
-		super.onStop();
+		super.onDestroy();
     }
 	
     @Override
