@@ -395,7 +395,7 @@ public class MainActivity extends ActionBarActivity implements
 	private void updateMealTabText() {
 		final ActionBar actionBar = getSupportActionBar();
         Tab mealTab = actionBar.getTabAt(MEAL_TAB_INDEX);
-        String origTitle = getResources().getString(R.string.title_activity_meal);
+        String origTitle = getResources().getString(R.string.title_meal);
         
         int numFoodItems = mFoodItemsList.size();
         if (numFoodItems > 0) {
