@@ -5,7 +5,7 @@ ok // save last used weight per food
 
 // better handling of remove: remove multiple items at once
 ok // move meal list to SharedPreferences
-// start calculator intent? to be able to add carbs manually
+ok // start calculator intent? to be able to add carbs manually
 ok // add my food list 
 ok  -> should be separate from MainActivity so we can differentiate between editing a food and adding it to a meal
 ok // search recent food list
@@ -27,4 +27,8 @@ ok // when removing a MyFood, also update the recent and meal lists
 ok // Android API v8 Alert dialog has different button order: Remove|Cancel
 ok // Check for duplicate name when adding new MyFood
 // clear MyFoods table in production db
-// add capability to accept plain text data intent -> this should be imported to MyFoods list
+ok // add capability to accept plain text data intent -> this should be imported to MyFoods list
+// Align buttons in FoodDetailsActivity -> especially with dutch text
+// translate confirmation and import messages to dutch
+ng // Add search icon to search edit text
+ok // change clear icon of clearable edit text

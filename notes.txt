@@ -104,3 +104,27 @@ http://opencsv.sourceforge.net/
 
 v2.1.0
 http://supercsv.sourceforge.net/index.html
+
+
+-----
+
+clearabledittext clear icon needs to be smaller
+otherwise, the edit text height grows bigger when the clear icon appears
+
+normal icon
+48
+72
+96
+
+menu icon
+32
+48
+64
+
+clear icon
+mdpi: 21
+hdpi: 31.5 -> 31
+xhdpi: 42
+
+
+
