@@ -8,10 +8,13 @@
     <string name="search_text_hint">Search</string>
     <string name="my_foods">My foods</string>
     <string name="clear_recent_foods">Clear recent&#8230;</string>
+    <string name="clear_recent_foods_do_clear">Clear recent</string>
     <string name="clear_recent_foods_question">Clear recent?</string>
     <string name="clear_meal">Clear meal&#8230;</string>
+    <string name="clear_meal_do_clear">Clear meal</string>
     <string name="clear_meal_question">Clear meal?</string>
     <string name="clear_my_foods">Clear my foods&#8230;</string>
+    <string name="clear_my_foods_do_clear">Clear my foods</string>
     <string name="clear_my_foods_question">Clear my foods?</string>
     <string name="settings">Settings</string>
     <string name="add_my_food">Add</string>
@@ -24,6 +27,7 @@
     <string name="food_details_weight">Weight:</string>
     <string name="food_details_carbs">Carbs:</string>
     <string name="unit_grams">g</string>
+    <string name="unit_ml">ml</string>
     <string name="add_to_meal">Add to meal</string>
     <string name="save_food_details">Save</string>
     <string name="title_all_foods">All</string>
@@ -42,7 +46,7 @@
     <string name="my_food_carbs_per_unit">Carbs per unit:</string>
     <string name="my_foods_add">Add food</string>
     <string name="my_food_name_exists_error">Name already exists</string>
-    <string name="title_activity_my_foods">My foods</string>
+    <string name="title_activity_my_foods">Carbs My foods</string>
     <string name="title_activity_my_food_details">Add my food</string>
     <string name="title_activity_my_food_edit">Edit my food</string>
     <string name="clear_recent_foods_confirmation">Are you sure you want to clear all items in the recent foods history?</string>
@@ -55,9 +59,16 @@
     <string name="food_removed_from_meal">Food removed from meal.</string>
     <string name="food_removed_from_recent">Food removed from history.</string>
     <string name="food_removed_from_my_foods">Food removed from My Foods.</string>
+    <string name="my_foods_import_menu">Import my foods from clipboard&#8230;</string>
+    <string name="my_foods_import_title">Import My Foods?</string>
+    <string name="my_foods_import_message">Are you sure you want to add the following items into your My Foods list? No items will be removed from your current list.\n\n%1$s</string>
+    <string name="my_foods_import_do_import">Import my foods</string>
+    <string name="my_foods_import_invalid_format">Invalid data format, no items imported.</string>
+    <string name="my_foods_import_no_data_to_import">There is no available clipboard data to import.</string>
+    <string name="my_foods_import_finished">%1$d items imported.</string>
     
     <string-array name="weight_unit_text_array">
-        <item>g</item>
-        <item>ml</item>
+        <item>@string/unit_grams</item>
+        <item>@string/unit_ml</item>
     </string-array>
 </resources>

@@ -72,7 +72,7 @@ public class FoodItemInfo implements Parcelable {
 	public void setWeight(int weight) {
 		mFoodItem.setWeight(weight);
 	}
-
+	
 	private FoodItemInfo(Parcel parcel) {
 		mFoodItem = parcel.readParcelable(FoodItem.class.getClassLoader());
 		mName = parcel.readString();

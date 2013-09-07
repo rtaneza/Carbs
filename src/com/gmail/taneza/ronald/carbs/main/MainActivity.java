@@ -452,7 +452,7 @@ public class MainActivity extends ActionBarActivity implements
 		new AlertDialog.Builder(this)
 		.setTitle(R.string.clear_recent_foods_question)
 	    .setMessage(R.string.clear_recent_foods_confirmation)
-	    .setPositiveButton(R.string.clear_recent_foods, new DialogInterface.OnClickListener() {
+	    .setPositiveButton(R.string.clear_recent_foods_do_clear, new DialogInterface.OnClickListener() {
 	        public void onClick(DialogInterface dialog, int which) { 
 	            // continue with the clear
 	    		mRecentFoodsList.clear();
@@ -471,7 +471,7 @@ public class MainActivity extends ActionBarActivity implements
 		new AlertDialog.Builder(this)
 		.setTitle(R.string.clear_meal_question)
 	    .setMessage(R.string.clear_meal_confirmation)
-	    .setPositiveButton(R.string.clear_meal, new DialogInterface.OnClickListener() {
+	    .setPositiveButton(R.string.clear_meal_do_clear, new DialogInterface.OnClickListener() {
 	        public void onClick(DialogInterface dialog, int which) { 
 	            // continue with the clear
 	    		mFoodItemsList.clear();

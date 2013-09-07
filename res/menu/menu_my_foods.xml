@@ -19,6 +19,11 @@
         android:title="@string/clear_my_foods"/>
 
     <item
+        android:id="@+id/menu_import_my_foods"
+        carbs:showAsAction="never"
+        android:title="@string/my_foods_import_menu"/>
+    
+    <item
         android:id="@+id/menu_export_my_foods"
         carbs:showAsAction="never"
         android:title="@string/export_my_foods"/>

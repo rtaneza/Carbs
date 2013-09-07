@@ -8,10 +8,13 @@
     <string name="search_text_hint">Zoeken</string>
     <string name="my_foods">Mijn eten</string>
     <string name="clear_recent_foods">Geschiedenis wissen&#8230;</string>
+    <string name="clear_recent_foods_do_clear">Geschiedenis wissen</string>
     <string name="clear_recent_foods_question">Geschiedenis wissen?</string>
     <string name="clear_meal">Maaltijd wissen&#8230;</string>
+    <string name="clear_meal_do_clear">Maaltijd wissen</string>
     <string name="clear_meal_question">Maaltijd wissen?</string>
     <string name="clear_my_foods">Mijn eten wissen&#8230;</string>
+    <string name="clear_my_foods_do_clear">Mijn eten wissen</string>
     <string name="clear_my_foods_question">Mijn eten wissen?</string>
     <string name="settings">Instellingen</string>
     <string name="add_my_food">Toevoegen</string>
@@ -24,6 +27,7 @@
     <string name="food_details_weight">Gewicht:</string>
     <string name="food_details_carbs">Koolhydraten:</string>
     <string name="unit_grams">g</string>
+    <string name="unit_ml">ml</string>
     <string name="add_to_meal">Toevoegen aan maaltijd</string>
     <string name="save_food_details">Opslaan</string>
     <string name="title_all_foods">Alles</string>
@@ -42,7 +46,7 @@
     <string name="my_food_carbs_per_unit">Koolhydraten per eenheid:</string>
     <string name="my_foods_add">Voedsel toevoegen</string>
     <string name="my_food_name_exists_error">Naam al bestaat</string>
-    <string name="title_activity_my_foods">Mijn eten</string>
+    <string name="title_activity_my_foods">Carbs Mijn eten</string>
     <string name="title_activity_my_food_details">Mijn eten toevoegen</string>
     <string name="title_activity_my_food_edit">Mijn eten bejwerken</string>
     <string name="clear_recent_foods_confirmation">Are you sure you want to clear all items in the recent foods history?</string>
@@ -57,7 +61,7 @@
     <string name="food_removed_from_my_foods">Voedsel verwijderd uit Mijn Eten.</string>
     
     <string-array name="weight_unit_text_array">
-        <item>g</item>
-        <item>ml</item>
+        <item>@string/unit_grams</item>
+        <item>@string/unit_ml</item>
     </string-array>
 </resources>

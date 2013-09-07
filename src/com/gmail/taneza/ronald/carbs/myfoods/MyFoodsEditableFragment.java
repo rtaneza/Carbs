@@ -16,14 +16,7 @@
 
 package com.gmail.taneza.ronald.carbs.myfoods;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.util.ArrayList;
-
 import org.droidparts.widget.ClearableEditText;
-import org.supercsv.io.CsvListWriter;
-import org.supercsv.io.ICsvListWriter;
-import org.supercsv.prefs.CsvPreference;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -57,7 +50,7 @@ import com.gmail.taneza.ronald.carbs.common.FoodItemViewBinder;
 
 public class MyFoodsEditableFragment extends ListFragment 
     implements LoaderManager.LoaderCallbacks<Cursor> {
-
+	
 	private MyFoodsActivityNotifier mMyFoodsActivityNotifier;
 	private SimpleCursorAdapter mCursorAdapter;
 	private FoodDbAdapter mFoodDbAdapter;
@@ -88,6 +81,20 @@ public class MyFoodsEditableFragment extends ListFragment
         addSearchTextListener(searchEditText);
         
         initListAdapter();
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		
+		// If the Carbs app is already open with the MyFoods activity visible, 
+		// then the user opens another app and shares / imports MyFoods data to the Carbs app,
+		// Android seems to open another instance of the Carbs MyFoods activity.
+		// After the data is successfully imported, and the user goes back 
+		// to the Carbs app that was already running before the import,
+		// then the newly-imported MyFoods data is not shown.
+		// So we refresh the the food list every time this activity is resumed.
+		refreshMyFoods();
 	}
 	
 	@Override
@@ -122,7 +129,7 @@ public class MyFoodsEditableFragment extends ListFragment
 		new AlertDialog.Builder(getActivity())
 		.setTitle(R.string.clear_my_foods_question)
 	    .setMessage(R.string.clear_my_foods_confirmation)
-	    .setPositiveButton(R.string.clear_my_foods, new DialogInterface.OnClickListener() {
+	    .setPositiveButton(R.string.clear_my_foods_do_clear, new DialogInterface.OnClickListener() {
 	        public void onClick(DialogInterface dialog, int which) { 
 	    		mFoodDbAdapter.removeAllMyFoods();
 	    		restartLoader();
@@ -136,58 +143,11 @@ public class MyFoodsEditableFragment extends ListFragment
 	     })
 	    .show();
 	}
-
-	public void exportMyFoods() {
-		String myFoodsCsv = getMyFoodsCsv();
-		
-		Intent sendIntent = new Intent();
-		sendIntent.setAction(Intent.ACTION_SEND);
-		sendIntent.putExtra(Intent.EXTRA_TEXT, myFoodsCsv);
-		sendIntent.setType("text/plain");
-		startActivity(sendIntent);
-	}
 	
-	private String getMyFoodsCsv() {
-		StringWriter sw = new StringWriter();
-		
-		sw.append("Carbs MyFoods");
-		sw.append(String.format("%n")); // platform-independent newline
-		
-		ICsvListWriter csvWriter = null;
-        try {
-        	// EXCEL_PREFERENCE is:
-        	//   quote char:     "
-        	//   delimeter char: ,
-        	//   end of line:    \n
-        	// QuoteMode is the default NormalQuoteMode: 
-        	//   quotes are only applied if required to escape special characters (per RFC4180)
-            csvWriter = new CsvListWriter(sw, CsvPreference.EXCEL_PREFERENCE);
-                
-            csvWriter.writeHeader(new String[] {
-    			FoodDbAdapter.MYFOODS_COLUMN_NAME,
-    			FoodDbAdapter.MYFOODS_COLUMN_WEIGHT_PER_UNIT,
-    			FoodDbAdapter.MYFOODS_COLUMN_UNIT_TEXT,
-    			FoodDbAdapter.MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT });
-
-			ArrayList<FoodItemInfo> myFoodsList = mFoodDbAdapter.getAllMyFoods();
-			for (FoodItemInfo info : myFoodsList) {
-				csvWriter.write(new String[] {
-					info.getName(),
-					String.format("%d", info.getWeightPerUnit()),
-					info.getUnitText(),
-					String.format("%.1f", info.getNumCarbsInGramsPerUnit()) });
-			}
-			
-			csvWriter.close();
-			
-		} catch (IOException e) {
-			// We don't write to a file, but just to an in-memory stringWriter,
-			// so an IOException is very unlikely to occur.
-        }
-        
-        return sw.toString();
+	public void refreshMyFoods() {
+		restartLoader();
 	}
-	
+
     @Override 
     public void onListItemClick(ListView l, View v, int position, long id) {
     	SQLiteCursor cursor = (SQLiteCursor)l.getItemAtPosition(position);

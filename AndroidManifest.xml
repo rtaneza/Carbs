@@ -36,6 +36,12 @@
             android:name="com.gmail.taneza.ronald.carbs.myfoods.MyFoodsActivity"
             android:label="@string/title_activity_my_foods"
             android:parentActivityName="com.gmail.taneza.ronald.carbs.main.MainActivity" >
+            <intent-filter>
+		        <action android:name="android.intent.action.SEND" />
+		        <category android:name="android.intent.category.DEFAULT" />
+		        <data android:mimeType="text/plain" />
+		        <data android:mimeType="text/html" />
+		    </intent-filter>
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.gmail.taneza.ronald.carbs.main.MainActivity" />
