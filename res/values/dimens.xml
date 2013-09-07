@@ -1,5 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <dimen name="padding_horizontal">16sp</dimen>
     <dimen name="padding_horizontal_half">8sp</dimen>
     <dimen name="padding_vertical">8sp</dimen>
@@ -7,5 +7,4 @@
     <dimen name="padding_vertical_double">16sp</dimen>
     <dimen name="text_size_small">14sp</dimen>
     <dimen name="text_size">16sp</dimen>
-    
 </resources>

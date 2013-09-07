@@ -13,13 +13,15 @@
 			
 	    <TextView android:id="@+id/meal_total_carbs_label"
 	        android:text="@string/meal_total_carbs"
-	        android:textStyle="bold"
+	        android:textColor="@color/total_carbs_text_color"
+    		android:textStyle="bold"
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
 	        android:layout_weight="0.6" />
 	    
 	    <TextView android:id="@+id/meal_total_carbs_text"
-	        android:textStyle="bold"
+	        android:textColor="@color/total_carbs_text_color"
+    		android:textStyle="bold"
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
 	        android:layout_weight="0.4"
