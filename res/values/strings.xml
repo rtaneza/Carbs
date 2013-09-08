@@ -34,7 +34,7 @@
     <string name="title_my_foods">Mine</string>
     <string name="title_recent_foods">Recent</string>
     <string name="title_meal">Meal</string>
-    <string name="recent_foods_no_items">No recent items</string>
+    <string name="recent_foods_no_items">No items</string>
     <string name="meal_no_items">No items</string>
     <string name="remove_item_from_meal_confirmation">Are you sure you want to remove this item from the meal?</string>
     <string name="remove_item_from_recent_foods_confirmation">Are you sure you want to remove this item from the history?</string>

@@ -19,6 +19,8 @@ package com.gmail.taneza.ronald.carbs.main;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.droidparts.widget.ClearableEditText;
+
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -81,6 +83,7 @@ public class MainActivity extends ActionBarActivity implements
     private ViewPager mViewPager;
     private MainPagerAdapter mPagerAdapter;
     private Menu mOptionsMenu;
+    private ClearableEditText mSearchEditText;
     private int mEditFoodItemIndex;
     
     private Intent mCalculatorIntent;
@@ -108,6 +111,7 @@ public class MainActivity extends ActionBarActivity implements
         setContentView(R.layout.activity_main);
 
  		mTotalCarbsTextView = (TextView)findViewById(R.id.meal_total_carbs_text);
+		mSearchEditText = (ClearableEditText)findViewById(R.id.search_text);
  		
         mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.pager);
@@ -300,6 +304,7 @@ public class MainActivity extends ActionBarActivity implements
 	            	case FoodDetailsActivity.FOOD_DETAILS_RESULT_OK:
 	            		foodItem = data.getParcelableExtra(FoodDetailsActivity.FOOD_ITEM_RESULT);
 	    	    		addFoodItemToMeal(foodItem);
+	    	    		clearSearchText();
 	    	    		break;
 	    	    		
 	            	case FoodDetailsActivity.FOOD_DETAILS_RESULT_REMOVE:
@@ -316,6 +321,7 @@ public class MainActivity extends ActionBarActivity implements
 	            	case FoodDetailsActivity.FOOD_DETAILS_RESULT_OK:
 	            		foodItem = data.getParcelableExtra(FoodDetailsActivity.FOOD_ITEM_RESULT);
 	    	    		replaceFoodItemInMeal(mEditFoodItemIndex, foodItem);
+	    	    		clearSearchText();
 	    	    		break;
 	    	    		
 	            	case FoodDetailsActivity.FOOD_DETAILS_RESULT_REMOVE:
@@ -583,4 +589,8 @@ public class MainActivity extends ActionBarActivity implements
     			Toast.LENGTH_SHORT)
     		 .show();
 	}
+    
+    private void clearSearchText() {
+    	mSearchEditText.setText("");
+    }
 }
