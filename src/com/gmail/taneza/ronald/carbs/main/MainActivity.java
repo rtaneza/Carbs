@@ -138,7 +138,7 @@ public class MainActivity extends ActionBarActivity implements
 
         actionBar.setHomeButtonEnabled(false);
         
- 		updateRecentFoodsAndMealData();
+        refreshAllTabsAndMealTotal();
  		
  		mEditFoodItemIndex = -1;
     }
