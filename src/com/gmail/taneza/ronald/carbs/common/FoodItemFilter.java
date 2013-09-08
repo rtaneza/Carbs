@@ -17,6 +17,7 @@
 package com.gmail.taneza.ronald.carbs.common;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import android.widget.Filter;
 
@@ -35,7 +36,7 @@ public class FoodItemFilter extends Filter {
 	@Override
 	protected FilterResults performFiltering(CharSequence constraint) {
 		FilterResults results = new FilterResults();
-        String searchText = constraint.toString().toLowerCase();
+        String searchText = constraint.toString().toLowerCase(Locale.getDefault());
         
         if (searchText.trim().length() == 0) {
             results.values = mOriginalValues;
@@ -49,7 +50,7 @@ public class FoodItemFilter extends Filter {
             for (int i = 0; i < count; i++) {
                 final FoodItem foodItem = originalList.get(i);
                 final FoodItemInfo foodItemInfo = mFoodDbAdapter.getFoodItemInfo(foodItem);
-                if (foodItemInfo.getName().toLowerCase().contains(searchText)) {
+                if (foodItemInfo.getName().toLowerCase(Locale.getDefault()).contains(searchText)) {
                 	filteredList.add(foodItem);
                 }
             }

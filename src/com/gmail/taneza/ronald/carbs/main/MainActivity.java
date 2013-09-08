@@ -18,6 +18,7 @@ package com.gmail.taneza.ronald.carbs.main;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.droidparts.widget.ClearableEditText;
 
@@ -563,7 +564,7 @@ public class MainActivity extends ActionBarActivity implements
 	    PackageManager packageManager = getPackageManager();
 		List<PackageInfo> packages = packageManager.getInstalledPackages(0);  
 		for (PackageInfo pi : packages) {
-			if (pi.packageName.toString().toLowerCase().contains("calcul")){
+			if (pi.packageName.toString().toLowerCase(Locale.getDefault()).contains("calcul")){
 			    mCalculatorIntent = packageManager.getLaunchIntentForPackage(pi.packageName);
 			    return;
 			 }

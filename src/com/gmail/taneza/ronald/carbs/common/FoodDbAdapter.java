@@ -21,6 +21,7 @@ import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map.Entry;
 
 import android.content.ContentValues;
@@ -177,7 +178,7 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     	if (tableName.equals(NEVO_TABLE_NAME)) {
     		String[] columns = { getFoodNameColumnName(), NEVO_COLUMN_WEIGHT_PER_UNIT, 
     				NEVO_COLUMN_CARBS_GRAMS_PER_UNIT, NEVO_COLUMN_UNIT_TEXT };
-    		String selection = String.format("%s = %d", NEVO_COLUMN_PRODUCT_CODE, foodItem.getId());
+    		String selection = String.format(Locale.US, "%s = %d", NEVO_COLUMN_PRODUCT_CODE, foodItem.getId());
     		Cursor cursor = mDatabase.query(tableName, columns, selection, null, null, null, getFoodNameColumnName());
     		if (cursor.moveToFirst()) {
 	    		foodItemInfo = new FoodItemInfo(
@@ -193,7 +194,7 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     	} else if (tableName.equals(MYFOODS_TABLE_NAME)) {
     		String[] columns = { MYFOODS_COLUMN_NAME, MYFOODS_COLUMN_WEIGHT_PER_UNIT, 
     				MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT, MYFOODS_COLUMN_UNIT_TEXT };
-    		String selection = String.format("%s = %d", MYFOODS_COLUMN_ID, foodItem.getId());
+    		String selection = String.format(Locale.US, "%s = %d", MYFOODS_COLUMN_ID, foodItem.getId());
     		Cursor cursor = mDatabase.query(tableName, columns, selection, null, null, null, MYFOODS_COLUMN_NAME);
     		if (cursor.moveToFirst()) {
 	    		foodItemInfo = new FoodItemInfo(
@@ -207,7 +208,7 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     		}
     		
     	} else {
-    		throw new InvalidParameterException(String.format("Invalid tableName: %s", tableName));
+    		throw new InvalidParameterException(String.format(Locale.US, "Invalid tableName: %s", tableName));
     	}
 
     	if (foodItemInfo != null) {

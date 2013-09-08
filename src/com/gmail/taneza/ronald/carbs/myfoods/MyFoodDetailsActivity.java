@@ -16,6 +16,8 @@
 
 package com.gmail.taneza.ronald.carbs.myfoods;
 
+import java.util.Locale;
+
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -123,9 +125,9 @@ public class MyFoodDetailsActivity extends ActionBarActivity {
 		String numCarbsString;
 		float numCarbs = foodItemInfo.getNumCarbsInGrams();
 		if (numCarbs == (int)numCarbs) {
-			numCarbsString = String.format("%.0f", numCarbs);
+			numCarbsString = String.format(Locale.getDefault(), "%.0f", numCarbs);
 		} else {
-			numCarbsString = String.format("%.1f", numCarbs);
+			numCarbsString = String.format(Locale.getDefault(), "%.1f", numCarbs);
 		}
 		mNumCarbsTextView.setText(numCarbsString);
 	}

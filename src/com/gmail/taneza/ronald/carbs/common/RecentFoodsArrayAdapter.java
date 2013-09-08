@@ -17,9 +17,9 @@
 package com.gmail.taneza.ronald.carbs.common;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 import android.content.Context;
 import android.view.View;
@@ -45,7 +45,7 @@ public class RecentFoodsArrayAdapter extends FoodItemBaseArrayAdapter {
 
     	String foodType = "";
     	if (foodItemInfo.getTableName().equals(FoodDbAdapter.MYFOODS_TABLE_NAME)) {
-    		foodType = String.format("%s ", FoodItemInfo.MY_FOOD_TEXT);
+    		foodType = String.format(Locale.getDefault(), "%s ", FoodItemInfo.MY_FOOD_TEXT);
     	}
     	
     	Date dateAdded = foodItemInfo.getDateAdded();
@@ -55,11 +55,11 @@ public class RecentFoodsArrayAdapter extends FoodItemBaseArrayAdapter {
     	String dateAndTimeAdded = dateFormat.format(dateAdded);
     	
 	    TextView nameExtraTextView = (TextView) rowView.findViewById(R.id.meal_item_name_extra);
-	    String foodTypeAndWeight = String.format("%s:  %s(%d %s)", dateAndTimeAdded, foodType, foodItemInfo.getWeight(), foodItemInfo.getUnitText());
+	    String foodTypeAndWeight = String.format(Locale.getDefault(), "%s:  %s(%d %s)", dateAndTimeAdded, foodType, foodItemInfo.getWeight(), foodItemInfo.getUnitText());
 	    nameExtraTextView.setText(foodTypeAndWeight);
 	    
 	    TextView carbsTextView = (TextView) rowView.findViewById(R.id.meal_item_carbs);
-	    carbsTextView.setText(String.format("%.1f", foodItemInfo.getNumCarbsInGrams()));
+	    carbsTextView.setText(String.format(Locale.getDefault(), "%.1f", foodItemInfo.getNumCarbsInGrams()));
 
 	    return rowView;
 	}
