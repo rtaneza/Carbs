@@ -48,8 +48,8 @@
         android:title="@string/open_calculator"/>
     
     <item
-        android:id="@+id/menu_main_settings"
+        android:id="@+id/menu_main_about"
         carbs:showAsAction="never"
-        android:title="@string/settings"/>
+        android:title="@string/about"/>
 
 </menu>

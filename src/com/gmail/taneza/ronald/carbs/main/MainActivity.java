@@ -30,6 +30,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -260,6 +261,9 @@ public class MainActivity extends ActionBarActivity implements
 	        		copyMealTotalToClipboard();
 	        		startActivity(mCalculatorIntent);
 	        	}
+	        	break;
+	        case R.id.menu_main_about:
+	        	showAboutDialog();
 	        	break;
 	        default:
 	            return super.onOptionsItemSelected(item);
@@ -592,5 +596,31 @@ public class MainActivity extends ActionBarActivity implements
     
     private void clearSearchText() {
     	mSearchEditText.setText("");
+    }
+    
+    private void showAboutDialog() {
+    	StringBuilder sb = new StringBuilder();
+    	sb.append(String.format(Locale.getDefault(), "%s%n", getText(R.string.app_name)));
+    	sb.append(String.format(Locale.getDefault(), "Version: %s%n%n", getVersion()));
+    	sb.append(String.format(Locale.getDefault(), "Contact: ronald.taneza@gmail.com"));
+
+		new AlertDialog.Builder(this)
+		.setTitle(R.string.about)
+	    .setMessage(sb.toString())
+	    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int which) { 
+	            // do nothing
+	        }
+		})
+	    .show();
+    }
+    
+    private String getVersion() {
+    	String version = "Unknown";
+    	try {
+    		version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+    	} catch (NameNotFoundException e) {
+    	}
+    	return version;
     }
 }

@@ -16,7 +16,8 @@
     <string name="clear_my_foods">Clear my foods&#8230;</string>
     <string name="clear_my_foods_do_clear">Clear my foods</string>
     <string name="clear_my_foods_question">Clear my foods?</string>
-    <string name="settings">Settings</string>
+    <string name="about">About</string>
+    <string name="ok">OK</string>
     <string name="add_my_food">Add</string>
     <string name="language_english">EN</string>
     <string name="language_dutch">NL</string>
