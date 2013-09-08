@@ -143,11 +143,10 @@ public class MainActivity extends ActionBarActivity implements
     }
 	
 	@Override
-    protected void onDestroy(){
+    protected void onStop() {
 		pruneRecentAndFoodLists();
 		
 		// We need an Editor object to make preference changes.
-		// All objects are from android.context.Context
 		SharedPreferences prefs = getPreferences(0);
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putInt(PREF_LANGUAGE, mLanguage.ordinal());		
@@ -157,7 +156,7 @@ public class MainActivity extends ActionBarActivity implements
 		// Commit the edits!
 		editor.commit();
 
-		super.onDestroy();
+		super.onStop();
     }
 	
     @Override
@@ -496,7 +495,7 @@ public class MainActivity extends ActionBarActivity implements
 		// remove any duplicate from the list
 		for (int i = 0; i < mRecentFoodsList.size(); i++) {
 			FoodItem item = mRecentFoodsList.get(i);
-			if (item.equals(foodItem)) {
+			if (item.equalsExceptTimeAdded(foodItem)) {
 				mRecentFoodsList.remove(i);
 				break;
 			}

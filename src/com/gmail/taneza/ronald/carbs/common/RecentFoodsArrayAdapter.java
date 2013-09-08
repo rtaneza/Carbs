@@ -16,33 +16,51 @@
 
 package com.gmail.taneza.ronald.carbs.common;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import android.content.Context;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.gmail.taneza.ronald.carbs.R;
-
-// TODO: Currently not used. Add date info and use this from RecentFoodsFragment.
 
 public class RecentFoodsArrayAdapter extends FoodItemBaseArrayAdapter {
 	public RecentFoodsArrayAdapter(Context context, FoodDbAdapter foodDbAdapter, ArrayList<FoodItem> values) {
 	    super(context, foodDbAdapter, R.layout.fragment_recent_foods, values);
 	}
     
-//	@Override
-//	public View getView(int position, View convertView, ViewGroup parent) {
-//	    LayoutInflater inflater = (LayoutInflater) mContext
-//	        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//	    View rowView = inflater.inflate(R.layout.meal_item, parent, false);
-//	    
-//	    FoodItem foodItem = getItem(position);
-//	    TextView nameTextView = (TextView) rowView.findViewById(R.id.meal_item_name);
-//	    String foodNameAndWeight = String.format("%s (%d g)", foodItem.getName(), foodItem.getWeight());
-//	    nameTextView.setText(foodNameAndWeight);
-//
-//	    TextView carbsTextView = (TextView) rowView.findViewById(R.id.meal_item_carbs);
-//	    carbsTextView.setText(String.format("%.1f", foodItem.getNumCarbsInGrams()));
-//
-//	    return rowView;
-//	}
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+	    View rowView = mInflater.inflate(R.layout.meal_item, parent, false);
+	    
+	    final FoodItem foodItem = getItem(position);
+	    final FoodItemInfo foodItemInfo = mFoodDbAdapter.getFoodItemInfo(foodItem);
+	    
+	    TextView nameTextView = (TextView) rowView.findViewById(R.id.meal_item_name);
+	    nameTextView.setText(foodItemInfo.getName());
+
+    	String foodType = "";
+    	if (foodItemInfo.getTableName().equals(FoodDbAdapter.MYFOODS_TABLE_NAME)) {
+    		foodType = String.format("%s ", FoodItemInfo.MY_FOOD_TEXT);
+    	}
+    	
+    	Date dateAdded = foodItemInfo.getDateAdded();
+    	// This returns a dateFormat that depends on the locale.
+    	// For example: Sep 8, 2013 6:53 PM
+    	DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT);
+    	String dateAndTimeAdded = dateFormat.format(dateAdded);
+    	
+	    TextView nameExtraTextView = (TextView) rowView.findViewById(R.id.meal_item_name_extra);
+	    String foodTypeAndWeight = String.format("%s:  %s(%d %s)", dateAndTimeAdded, foodType, foodItemInfo.getWeight(), foodItemInfo.getUnitText());
+	    nameExtraTextView.setText(foodTypeAndWeight);
+	    
+	    TextView carbsTextView = (TextView) rowView.findViewById(R.id.meal_item_carbs);
+	    carbsTextView.setText(String.format("%.1f", foodItemInfo.getNumCarbsInGrams()));
+
+	    return rowView;
+	}
 }

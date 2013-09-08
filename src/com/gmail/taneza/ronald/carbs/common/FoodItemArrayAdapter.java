@@ -40,8 +40,6 @@ public class FoodItemArrayAdapter extends FoodItemBaseArrayAdapter {
 	    TextView nameTextView = (TextView) rowView.findViewById(R.id.meal_item_name);
 	    nameTextView.setText(foodItemInfo.getName());
 
-	    //Log.i("Carbs", String.format("[%s] %d: %s", foodItem.mTableName, foodItem.mProductCode, getFoodName(foodItem)));
-	    
     	String foodType = "";
     	if (foodItemInfo.getTableName().equals(FoodDbAdapter.MYFOODS_TABLE_NAME)) {
     		foodType = String.format("%s ", FoodItemInfo.MY_FOOD_TEXT);

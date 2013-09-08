@@ -16,6 +16,8 @@
 
 package com.gmail.taneza.ronald.carbs.common;
 
+import java.util.Date;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -71,6 +73,11 @@ public class FoodItemInfo implements Parcelable {
 	
 	public void setWeight(int weight) {
 		mFoodItem.setWeight(weight);
+	}
+	
+	public Date getDateAdded() {
+		long timeAddedMsec = mFoodItem.getTimeAddedMsec();
+		return new Date(timeAddedMsec);
 	}
 	
 	private FoodItemInfo(Parcel parcel) {

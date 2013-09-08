@@ -126,5 +126,27 @@ mdpi: 21
 hdpi: 31.5 -> 31
 xhdpi: 42
 
+---
+
+Adobo
+[2013-09-08  6:03 PM]  My Food (100 g)
+
+Loempia bereid
+[2013-09-08  1:03 PM]  (100 g)
+
+Adobo
+2013-09-08  6:03 PM:  My Food (100 g)
+
+Loempia bereid
+2013-09-08  1:03 PM:  (100 g)
+
+
+Adobo
+My Food (100 g) [2013-09-08 6:03 PM] 
+
+Loempia bereid
+(100 g) [2013-09-087 1:03 PM] 
+
+
 
 

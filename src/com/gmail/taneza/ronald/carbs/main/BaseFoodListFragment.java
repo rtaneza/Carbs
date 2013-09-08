@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 import org.droidparts.widget.ClearableEditText;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -30,16 +31,19 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 import com.gmail.taneza.ronald.carbs.R;
+import com.gmail.taneza.ronald.carbs.common.FoodDbAdapter;
 import com.gmail.taneza.ronald.carbs.common.FoodItem;
 import com.gmail.taneza.ronald.carbs.common.FoodItemArrayAdapter;
+import com.gmail.taneza.ronald.carbs.common.FoodItemBaseArrayAdapter;
 
 public abstract class BaseFoodListFragment extends BaseListFragment {
 
 	protected ClearableEditText mSearchEditText;
-	protected FoodItemArrayAdapter mFoodItemArrayAdapter;
+	protected FoodItemBaseArrayAdapter mFoodItemArrayAdapter;
 
 	protected abstract ArrayList<FoodItem> getFoodList();
 	protected abstract void startActivityToAddOrEditFood(FoodItem foodItem, int foodItemIndex);
+	protected abstract FoodItemBaseArrayAdapter createFoodItemArrayAdapter(Context context, FoodDbAdapter foodDbAdapter, ArrayList<FoodItem> values);
 	
 	@Override
 	public void onActivityCreated (Bundle savedInstanceState) {
@@ -49,7 +53,7 @@ public abstract class BaseFoodListFragment extends BaseListFragment {
         addSearchTextListener(mSearchEditText);
 
 		ArrayList<FoodItem> recentFoodsList = getFoodList();
-		mFoodItemArrayAdapter = new FoodItemArrayAdapter(getActivity(), mFoodDbAdapter, recentFoodsList);
+		mFoodItemArrayAdapter = createFoodItemArrayAdapter(getActivity(), mFoodDbAdapter, recentFoodsList);
 		setListAdapter(mFoodItemArrayAdapter);
 	}
 	

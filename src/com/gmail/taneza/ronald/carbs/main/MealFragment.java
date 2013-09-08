@@ -18,13 +18,18 @@ package com.gmail.taneza.ronald.carbs.main;
 
 import java.util.ArrayList;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.gmail.taneza.ronald.carbs.R;
+import com.gmail.taneza.ronald.carbs.common.FoodDbAdapter;
 import com.gmail.taneza.ronald.carbs.common.FoodItem;
+import com.gmail.taneza.ronald.carbs.common.FoodItemArrayAdapter;
+import com.gmail.taneza.ronald.carbs.common.FoodItemBaseArrayAdapter;
+import com.gmail.taneza.ronald.carbs.common.RecentFoodsArrayAdapter;
 
 public class MealFragment extends BaseFoodListFragment {
 	
@@ -42,5 +47,10 @@ public class MealFragment extends BaseFoodListFragment {
 	@Override
 	public void startActivityToAddOrEditFood(FoodItem foodItem, int foodItemIndex) {
     	mMainActivityNotifier.startActivityToEditFoodInMeal(foodItem, foodItemIndex);
+	}
+	
+	@Override
+	public FoodItemBaseArrayAdapter createFoodItemArrayAdapter(Context context, FoodDbAdapter foodDbAdapter, ArrayList<FoodItem> values) {
+		return new FoodItemArrayAdapter(context, foodDbAdapter, values);
 	}
 }

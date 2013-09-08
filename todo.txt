@@ -11,7 +11,7 @@ ok  -> should be separate from MainActivity so we can differentiate between edit
 ok // search recent food list
 ok // use index in removeFoodItemFromMeal() because there may be multiple equal foodItems there
 ok // confirm with user before clearing recent and meal
-// change meal total background color
+ok // change meal total background color -> changed the text instead
 ok // protect access to mFilteredList with mutex -> no need after changing BaseAdaptor
 ok // add toast msg after removing item
 ok // replace food list serialization with simpler save/restore of each FoodItem field
@@ -32,3 +32,5 @@ ok // add capability to accept plain text data intent -> this should be imported
 // translate confirmation and import messages to dutch
 ng // Add search icon to search edit text
 ok // change clear icon of clearable edit text
+// remove "Settings" in menu
+// add About in menu

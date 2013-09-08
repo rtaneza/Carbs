@@ -16,6 +16,8 @@
 
 package com.gmail.taneza.ronald.carbs.common;
 
+import java.util.Date;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -27,12 +29,18 @@ public class FoodItem implements Parcelable {
 	private String mTableName;
 	private int mId;
 	private int mWeight;
+	private long mTimeAddedMsec;
 	
-	public FoodItem(String tableName, int id, int weight) {
+	public FoodItem(String tableName, int id, int weight, long timeAddedMsec) {
 		FoodItemListSerializer.verifyTableNameIsValidOrThrow(tableName);		
 		mTableName = tableName;
 		mId = id;
 		mWeight = weight;
+		mTimeAddedMsec = timeAddedMsec;
+	}
+
+	public FoodItem(String tableName, int id, int weight) {
+		this(tableName, id, weight, (new Date()).getTime());
 	}
 
 	public String getTableName() {
@@ -51,10 +59,15 @@ public class FoodItem implements Parcelable {
 		mWeight = weight;
 	}
 	
+	public long getTimeAddedMsec() {
+		return mTimeAddedMsec;
+	}
+	
 	private FoodItem(Parcel parcel) {
 		mTableName = parcel.readString();
 		mId = parcel.readInt();
 		mWeight = parcel.readInt();
+		mTimeAddedMsec = parcel.readLong();
     }
 
 	public static final Creator<FoodItem> CREATOR = new Creator<FoodItem>() {
@@ -80,6 +93,7 @@ public class FoodItem implements Parcelable {
 		dest.writeString(mTableName);
 		dest.writeInt(mId);
 		dest.writeInt(mWeight);
+		dest.writeLong(mTimeAddedMsec);
 	}
 	
 	public boolean equals(Object obj) {
@@ -88,6 +102,23 @@ public class FoodItem implements Parcelable {
 		if (obj.getClass() != getClass()) {
 		  return false;
 		}
+		
+		FoodItem rhs = (FoodItem) obj;
+		return new EqualsBuilder()
+        	.append(mTableName, rhs.mTableName)
+        	.append(mId, rhs.mId)
+            .append(mWeight, rhs.mWeight)
+            .append(mTimeAddedMsec, rhs.mTimeAddedMsec)
+            .isEquals();
+	}
+
+	public boolean equalsExceptTimeAdded(Object obj) {
+		if (obj == null) { return false; }
+		if (obj == this) { return true; }
+		if (obj.getClass() != getClass()) {
+		  return false;
+		}
+		
 		FoodItem rhs = (FoodItem) obj;
 		return new EqualsBuilder()
         	.append(mTableName, rhs.mTableName)
@@ -97,11 +128,12 @@ public class FoodItem implements Parcelable {
 	}
 	
 	public int hashCode() {
-	     // random odd number constants
-	     return new HashCodeBuilder(12127, 9847)
+	    // random odd number constants
+	    return new HashCodeBuilder(12127, 9847)
 	     	.append(mTableName)
 	     	.append(mId)
 	     	.append(mWeight)
+	     	.append(mTimeAddedMsec)
 	        .toHashCode();
 	}
 }
