@@ -54,6 +54,7 @@ import com.gmail.taneza.ronald.carbs.common.FoodItem;
 import com.gmail.taneza.ronald.carbs.common.FoodItemInfo;
 import com.gmail.taneza.ronald.carbs.common.FoodItemListSerializer;
 import com.gmail.taneza.ronald.carbs.common.Language;
+import com.gmail.taneza.ronald.carbs.delete.DeleteItemsActivity;
 import com.gmail.taneza.ronald.carbs.myfoods.MyFoodsActivity;
 
 public class MainActivity extends ActionBarActivity implements
@@ -249,6 +250,9 @@ public class MainActivity extends ActionBarActivity implements
 	        	break;
 	        case R.id.menu_clear_meal:
         		clearMeal();
+	        	break;
+	        case R.id.menu_delete_meal_items:
+        		deleteMealItems();
 	        	break;
 	        case R.id.menu_copy_meal_total:
 	        	copyMealTotalToClipboard();
@@ -622,5 +626,10 @@ public class MainActivity extends ActionBarActivity implements
     	} catch (NameNotFoundException e) {
     	}
     	return version;
+    }
+    
+    private void deleteMealItems() {
+    	Intent intent = new Intent(this, DeleteItemsActivity.class);
+    	startActivity(intent);
     }
 }

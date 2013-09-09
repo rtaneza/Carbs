@@ -54,6 +54,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.gmail.taneza.ronald.carbs.myfoods.MyFoodsActivity" />
         </activity>
+        <activity
+            android:name="com.gmail.taneza.ronald.carbs.delete.DeleteItemsActivity"
+            android:label="@string/title_activity_delete_items"
+            android:parentActivityName="com.gmail.taneza.ronald.carbs.main.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.gmail.taneza.ronald.carbs.main.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -30,6 +30,7 @@ public class FoodItem implements Parcelable {
 	private int mId;
 	private int mWeight;
 	private long mTimeAddedMsec;
+	private boolean mChecked;
 	
 	public FoodItem(String tableName, int id, int weight, long timeAddedMsec) {
 		FoodItemListSerializer.verifyTableNameIsValidOrThrow(tableName);		
@@ -61,6 +62,14 @@ public class FoodItem implements Parcelable {
 	
 	public long getTimeAddedMsec() {
 		return mTimeAddedMsec;
+	}
+	
+	public boolean getChecked() {
+		return mChecked;
+	}
+
+	public void toggleChecked() {
+		mChecked = !mChecked;
 	}
 	
 	private FoodItem(Parcel parcel) {

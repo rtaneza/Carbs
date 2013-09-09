@@ -38,6 +38,11 @@
         android:title="@string/clear_meal"/>
     
     <item
+        android:id="@+id/menu_delete_meal_items"
+        carbs:showAsAction="never"
+        android:title="@string/delete_meal_items"/>
+    
+    <item
         android:id="@+id/menu_copy_meal_total"
         carbs:showAsAction="never"
         android:title="@string/copy_meal_total"/>
