@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,5 +52,15 @@ public class MealFragment extends BaseFoodListFragment {
 	@Override
 	public FoodItemBaseArrayAdapter createFoodItemArrayAdapter(Context context, FoodDbAdapter foodDbAdapter, ArrayList<FoodItem> values) {
 		return new FoodItemArrayAdapter(context, foodDbAdapter, values);
+	}
+
+	@Override
+	protected void setRemoveItemsMode(boolean enable) {
+		mMainActivityNotifier.setRemoveFoodItemsMode(enable);
+	}
+
+	@Override
+	protected void removeFromList(SparseBooleanArray itemsToRemove) {
+		mMainActivityNotifier.removeFromFoodItemsList(itemsToRemove);
 	}
 }

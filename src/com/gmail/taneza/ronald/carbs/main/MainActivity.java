@@ -95,6 +95,7 @@ public class MainActivity extends ActionBarActivity implements
     private Intent mCalculatorIntent;
     
     private ActionBar mActionBar;
+    private boolean removeItemsFromRecentFoodsMode;
     private boolean removeItemsFromMealMode;
     private Handler mHandler;
 
@@ -178,17 +179,29 @@ public class MainActivity extends ActionBarActivity implements
 	
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-    	if (removeItemsFromMealMode) {
-    		// Do not allow switching tabs.
-    		// Re-select the Meal tab if the user tries to click another tab.
-    		// We need to use a Handler for this. Otherwise, the other tabs are still selectable.
-    		// See: http://stackoverflow.com/questions/9585538/enable-disable-android-actionbar-tab
+    	
+		// Do not allow switching tabs when in the "removing items" mode.
+		// Re-select the Meal tab if the user tries to click another tab.
+		// We need to use a Handler for this. Otherwise, the other tabs are still selectable.
+		// See: http://stackoverflow.com/questions/9585538/enable-disable-android-actionbar-tab
+    	
+    	if (removeItemsFromRecentFoodsMode) {
+            mHandler.postAtFrontOfQueue(new Runnable() {
+				@Override
+				public void run() {
+		            mActionBar.setSelectedNavigationItem(RECENT_FOODS_TAB_INDEX);
+				}
+			});
+    	}
+    	
+    	else if (removeItemsFromMealMode) {
             mHandler.postAtFrontOfQueue(new Runnable() {
 				@Override
 				public void run() {
 		            mActionBar.setSelectedNavigationItem(MEAL_TAB_INDEX);
 				}
 			});
+            
     	} else {
             mViewPager.setCurrentItem(tab.getPosition());
     	}
@@ -399,6 +412,18 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	@Override
+	public void setRemoveRecentFoodItemsMode(boolean enable) {
+		removeItemsFromRecentFoodsMode = enable;
+        mViewPager.setPagingEnabled(!enable);
+        mSearchEditText.setEnabled(!enable);
+	}
+	
+	@Override
+	public void removeFromRecentFoodItemsList(SparseBooleanArray itemsToRemove) {
+		removeFromFoodList(mRecentFoodsList, itemsToRemove);
+	}
+
+	@Override
 	public void setRemoveFoodItemsMode(boolean enable) {
 		removeItemsFromMealMode = enable;
         mViewPager.setPagingEnabled(!enable);
@@ -407,13 +432,17 @@ public class MainActivity extends ActionBarActivity implements
 	
 	@Override
 	public void removeFromFoodItemsList(SparseBooleanArray itemsToRemove) {
+		removeFromFoodList(mFoodItemsList, itemsToRemove);
+	}
+	
+	private void removeFromFoodList(ArrayList<FoodItem> foodList, SparseBooleanArray itemsToRemove) {
 		int numItemsToRemove = itemsToRemove.size();
 		if (itemsToRemove.size() <= 0) {
 			return;
 		}
 		
-		if (numItemsToRemove > mFoodItemsList.size()) {
-			throw new IllegalArgumentException("numItemsToRemove is larger than the size of mFoodItemsList");
+		if (numItemsToRemove > foodList.size()) {
+			throw new IllegalArgumentException("numItemsToRemove is larger than the foodList size");
 		}
 		
 		// Each item in 'itemsToRemove' has a key and a value.
@@ -425,7 +454,7 @@ public class MainActivity extends ActionBarActivity implements
 		for (int n = (numItemsToRemove-1); n >= 0; n--) {
 			int index = itemsToRemove.keyAt(n);
 			if (itemsToRemove.get(index)) {
-				mFoodItemsList.remove(index);
+				foodList.remove(index);
 			}
 		}
 		

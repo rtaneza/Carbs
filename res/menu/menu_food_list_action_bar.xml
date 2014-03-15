@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" 
+      xmlns:carbs="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_food_list_remove"
+        carbs:showAsAction="always|withText"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:title="@string/remove"/>
+
+</menu>

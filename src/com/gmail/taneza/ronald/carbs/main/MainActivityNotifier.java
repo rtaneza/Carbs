@@ -32,6 +32,9 @@ public interface MainActivityNotifier {
 	
 	public ArrayList<FoodItem> getFoodItemsList();
 	public ArrayList<FoodItem> getRecentFoodsList();
+
+	public void setRemoveRecentFoodItemsMode(boolean enable);
+	public void removeFromRecentFoodItemsList(SparseBooleanArray itemsToRemove);
 	
 	public void setRemoveFoodItemsMode(boolean enable);
 	public void removeFromFoodItemsList(SparseBooleanArray itemsToRemove);

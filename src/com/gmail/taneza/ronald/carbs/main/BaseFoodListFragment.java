@@ -28,6 +28,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -71,67 +72,6 @@ public abstract class BaseFoodListFragment extends BaseListFragment {
 		ArrayList<FoodItem> recentFoodsList = getFoodList();
 		mFoodItemArrayAdapter = createFoodItemArrayAdapter(getActivity(), mFoodDbAdapter, recentFoodsList);
 		setListAdapter(mFoodItemArrayAdapter);
-		
-		
-//		ListView listView = getListView();
-//		listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-//		listView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
-//
-//            private int mNumSelected = 0;
-//            
-//		    @Override
-//		    public void onItemCheckedStateChanged(ActionMode mode, int position,
-//		                                          long id, boolean checked) {
-//		        // Here you can do something when items are selected/de-selected,
-//		        // such as update the title in the CAB
-//                if (checked) {
-//                	mNumSelected++;
-//                    mFoodItemArrayAdapter.setNewSelection(position, checked);                   
-//                } else {
-//                	mNumSelected--;
-//                	mFoodItemArrayAdapter.removeSelection(position);                
-//                }
-//                mode.setTitle(mNumSelected + " selected");
-//		    }
-//
-//		    @Override
-//		    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-//		        // Respond to clicks on the actions in the CAB
-//		        switch (item.getItemId()) {
-//		            case R.id.menu_food_details_remove:
-//		            	mNumSelected = 0;
-//		            	mFoodItemArrayAdapter.clearSelection();
-//		                mode.finish(); // Action picked, so close the CAB
-//		                return true;
-//		            default:
-//		                return false;
-//		        }
-//		    }
-//
-//		    @Override
-//		    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-//		        // Inflate the menu for the CAB
-//		    	mNumSelected = 0;
-//		        MenuInflater inflater = mode.getMenuInflater();
-//		        inflater.inflate(R.menu.menu_food_details, menu);
-//		        return true;
-//		    }
-//
-//		    @Override
-//		    public void onDestroyActionMode(ActionMode mode) {
-//		        // Here you can make any necessary updates to the activity when
-//		        // the CAB is removed. By default, selected items are deselected/unchecked.
-//		    	mFoodItemArrayAdapter.clearSelection();
-//		    }
-//
-//		    @Override
-//		    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-//		        // Here you can perform updates to the CAB due to
-//		        // an invalidate() request
-//		        return false;
-//		    }
-//		});
-
 
 		mOnItemClickListenerDefault = getListView().getOnItemClickListener();
 		
@@ -154,8 +94,6 @@ public abstract class BaseFoodListFragment extends BaseListFragment {
 					return true;
 				}
 			});
-		
-		
 	}
 	
 	private void onItemClickInActionMode(AdapterView<?> parent, View view, int position, long id) {
@@ -224,59 +162,62 @@ public abstract class BaseFoodListFragment extends BaseListFragment {
     private void filterListBasedOnSearchText() {
 		mFoodItemArrayAdapter.getFilter().filter(mSearchEditText.getText().toString());
     }
-    
-    class ActionBarCallBack implements ActionMode.Callback {    	
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-	        switch (item.getItemId()) {
-            case R.id.menu_food_details_remove:
-            	new AlertDialog.Builder(getActivity())
-        	    .setMessage("Remove selected items?") // TODO
-        	    .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
-        	        public void onClick(DialogInterface dialog, int which) { 
-        	            // continue with remove
-                    	mMainActivityNotifier.removeFromFoodItemsList(mFoodItemArrayAdapter.getSelection());
-                        mActionMode.finish();
 
-//        	        	Toast.makeText(getApplicationContext(),
-//        	        			getText(mItemRemovedMessageId),
-//        	        			Toast.LENGTH_SHORT)
-//        	        		 .show();
-        	        }
-        	     })
-        	    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-        	        public void onClick(DialogInterface dialog, int which) { 
-        	            // do nothing
-        	        }
-        	     })
-        	    .show();            	
-                return true;
-                
-            default:
-                return false;
+	protected abstract void setRemoveItemsMode(boolean enable);
+	protected abstract void removeFromList(SparseBooleanArray itemsToRemove);
+    
+    private class ActionBarCallBack implements ActionMode.Callback {
+	    @Override
+	    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+	        switch (item.getItemId()) {
+	        case R.id.menu_food_list_remove:
+	        	new AlertDialog.Builder(getActivity())
+	    	    .setMessage(R.string.remove_selected_items)
+	    	    .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
+	    	        public void onClick(DialogInterface dialog, int which) { 
+	    	            // continue with remove
+	    	        	removeFromList(mFoodItemArrayAdapter.getSelection());
+	                    mActionMode.finish();
+	
+	    	        	Toast.makeText(getActivity().getApplicationContext(),
+	    	        			getText(R.string.items_removed),
+	    	        			Toast.LENGTH_SHORT)
+	    	        		 .show();
+	    	        }
+	    	     })
+	    	    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+	    	        public void onClick(DialogInterface dialog, int which) { 
+	    	            // do nothing
+	    	        }
+	    	     })
+	    	    .show();            	
+	            return true;
+	            
+	        default:
+	            return false;
 	        }
-        }
- 
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-        	mMainActivityNotifier.setRemoveFoodItemsMode(true);
-        	
+	    }
+	    
+	    @Override
+	    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+	    	setRemoveItemsMode(true);
+	    	
 	        MenuInflater inflater = mode.getMenuInflater();
-	        inflater.inflate(R.menu.menu_food_details, menu);
+	        inflater.inflate(R.menu.menu_food_list_action_bar, menu);
 	        return true;
-        }
- 
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
+	    }
+	
+	    @Override
+	    public void onDestroyActionMode(ActionMode mode) {
 	    	mFoodItemArrayAdapter.clearSelection();
 			getListView().setOnItemClickListener(mOnItemClickListenerDefault);
-
-        	mMainActivityNotifier.setRemoveFoodItemsMode(false);
-        }
- 
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
-        }
+	
+			setRemoveItemsMode(false);
+	    }
+	
+	    @Override
+	    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+	        return false;
+	    }
     }
 }
