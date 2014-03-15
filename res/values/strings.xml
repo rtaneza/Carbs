@@ -63,6 +63,7 @@
     <string name="food_removed_from_recent">Food removed from history.</string>
     <string name="food_removed_from_my_foods">Food removed from My Foods.</string>
     <string name="items_removed">Items removed.</string>
+    <string name="selected">selected.</string>
     <string name="my_foods_import_menu">Import my foods from clipboard&#8230;</string>
     <string name="my_foods_import_title">Import My Foods?</string>
     <string name="my_foods_import_message">Are you sure you want to add the following items into your My Foods list? No items will be removed from your current list.\n\n%1$s</string>

@@ -16,6 +16,8 @@
 
 package com.gmail.taneza.ronald.carbs.myfoods;
 
+import java.util.ArrayList;
+
 import org.droidparts.widget.ClearableEditText;
 
 import android.app.Activity;
@@ -32,17 +34,27 @@ import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.SparseBooleanArray;
+import android.view.ActionMode;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.TextView.OnEditorActionListener;
 
 import com.commonsware.cwac.loaderex.acl.SQLiteCursorLoader;
 import com.gmail.taneza.ronald.carbs.R;
 import com.gmail.taneza.ronald.carbs.common.CarbsApp;
+import com.gmail.taneza.ronald.carbs.common.CustomSimpleCursorAdapter;
 import com.gmail.taneza.ronald.carbs.common.FoodDbAdapter;
 import com.gmail.taneza.ronald.carbs.common.FoodItem;
 import com.gmail.taneza.ronald.carbs.common.FoodItemInfo;
@@ -51,9 +63,15 @@ import com.gmail.taneza.ronald.carbs.common.FoodItemViewBinder;
 public class MyFoodsEditableFragment extends ListFragment 
     implements LoaderManager.LoaderCallbacks<Cursor> {
 	
+	private ClearableEditText mSearchEditText;
+	
 	private MyFoodsActivityNotifier mMyFoodsActivityNotifier;
-	private SimpleCursorAdapter mCursorAdapter;
+	private CustomSimpleCursorAdapter mCursorAdapter;
 	private FoodDbAdapter mFoodDbAdapter;
+
+	private ActionMode mActionMode;
+	private OnItemClickListener mOnItemClickListenerDefault;
+	private OnItemClickListener mOnItemClickListenerActionMode;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -77,10 +95,39 @@ public class MyFoodsEditableFragment extends ListFragment
 
 		mFoodDbAdapter = ((CarbsApp)getActivity().getApplication()).getFoodDbAdapter();
 		
-		ClearableEditText searchEditText = (ClearableEditText) getActivity().findViewById(R.id.my_foods_search_text);
-        addSearchTextListener(searchEditText);
+		mSearchEditText = (ClearableEditText) getActivity().findViewById(R.id.my_foods_search_text);
+        addSearchTextListener(mSearchEditText);
         
         initListAdapter();
+
+		mOnItemClickListenerDefault = getListView().getOnItemClickListener();
+		
+		mOnItemClickListenerActionMode = new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				onItemClickInActionMode(parent, view, position, id);
+			}
+		};
+			
+		getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+					mCursorAdapter.clearSelection();
+		    		
+					mActionMode = getActivity().startActionMode(new ActionBarCallBack());
+					onItemClickInActionMode(parent, view, position, id);
+					
+					getListView().setOnItemClickListener(mOnItemClickListenerActionMode);
+					return true;
+				}
+			});
+	}
+	
+	private void onItemClickInActionMode(AdapterView<?> parent, View view, int position, long id) {
+		mCursorAdapter.toggleSelection(position);
+		
+        String selectedText = getResources().getString(R.string.selected);
+        mActionMode.setTitle(String.format("%d %s", mCursorAdapter.getNumSelected(), selectedText));
 	}
 
 	@Override
@@ -150,14 +197,17 @@ public class MyFoodsEditableFragment extends ListFragment
 
     @Override 
     public void onListItemClick(ListView l, View v, int position, long id) {
+    	FoodItem foodItem = getFoodItemAtPosition(l, position);
+    	startMyFoodDetailsActivity(foodItem, MyFoodDetailsActivity.Mode.EditFood);
+    }
+
+    private FoodItem getFoodItemAtPosition(ListView l, int position) {
     	SQLiteCursor cursor = (SQLiteCursor)l.getItemAtPosition(position);
 
-    	FoodItem foodItem = new FoodItem(
+    	return new FoodItem(
 				cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_TABLE_NAME)),
 				cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_ID)),
 				cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_WEIGHT_PER_UNIT)));
-    	
-    	startMyFoodDetailsActivity(foodItem, MyFoodDetailsActivity.Mode.EditFood);
     }
     
     private void startMyFoodDetailsActivity(FoodItem foodItem, MyFoodDetailsActivity.Mode mode) {
@@ -184,7 +234,7 @@ public class MyFoodsEditableFragment extends ListFragment
 	        	
     		case MyFoodDetailsActivity.MY_FOOD_RESULT_REMOVE:
     			FoodItem foodItem = data.getParcelableExtra(MyFoodDetailsActivity.MY_FOOD_ITEM_RESULT);
-    			mFoodDbAdapter.removeMyFoodItemInfo(foodItem);
+    			mFoodDbAdapter.removeMyFoodItem(foodItem);
 	    		restartLoader();
 	        	mMyFoodsActivityNotifier.setItemRemoved();
     			break;
@@ -196,7 +246,7 @@ public class MyFoodsEditableFragment extends ListFragment
         int[] to = new int[] { R.id.food_item_name, R.id.food_item_name_extra, R.id.food_item_carbs };
         
         // Create an empty adapter we will use to display the loaded data.
-        mCursorAdapter = new SimpleCursorAdapter(getActivity(), R.layout.food_item, null, from, to, 0);
+        mCursorAdapter = new CustomSimpleCursorAdapter(getActivity(), R.layout.food_item, null, from, to, 0);
         
         // We set the view binder for the adapter to our own FoodItemViewBinder.
         mCursorAdapter.setViewBinder(new FoodItemViewBinder(
@@ -234,5 +284,75 @@ public class MyFoodsEditableFragment extends ListFragment
 				return true;
 			}
 		});
+	}
+	
+    private class ActionBarCallBack implements ActionMode.Callback {
+	    @Override
+	    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+	        switch (item.getItemId()) {
+	        case R.id.menu_food_list_remove:
+	        	new AlertDialog.Builder(getActivity())
+	    	    .setMessage(R.string.remove_selected_items)
+	    	    .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
+	    	        public void onClick(DialogInterface dialog, int which) { 
+	    	            // continue with remove
+	    	        	removeFromList(mCursorAdapter.getSelection());
+	                    mActionMode.finish();
+	
+	    	        	Toast.makeText(getActivity().getApplicationContext(),
+	    	        			getText(R.string.items_removed),
+	    	        			Toast.LENGTH_SHORT)
+	    	        		 .show();
+	    	        }
+	    	     })
+	    	    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+	    	        public void onClick(DialogInterface dialog, int which) { 
+	    	            // do nothing
+	    	        }
+	    	     })
+	    	    .show();            	
+	            return true;
+	            
+	        default:
+	            return false;
+	        }
+	    }
+	    
+	    @Override
+	    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+	    	setRemoveItemsMode(true);
+	    	
+	        MenuInflater inflater = mode.getMenuInflater();
+	        inflater.inflate(R.menu.menu_food_list_action_bar, menu);
+	        return true;
+	    }
+	
+	    @Override
+	    public void onDestroyActionMode(ActionMode mode) {
+	    	mCursorAdapter.clearSelection();
+			getListView().setOnItemClickListener(mOnItemClickListenerDefault);
+	
+			setRemoveItemsMode(false);
+	    }
+	
+	    @Override
+	    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+	        return false;
+	    }
+    }
+    
+    private void setRemoveItemsMode(boolean enable) {
+    	mSearchEditText.setEnabled(!enable);
+    }
+
+	private void removeFromList(SparseBooleanArray selection) {
+		ArrayList<FoodItem> itemsToRemove = new ArrayList<FoodItem>();
+		for (int i = 0; i < selection.size(); i++) {
+			itemsToRemove.add(getFoodItemAtPosition(getListView(), selection.keyAt(i)));
+		}
+		
+		mFoodDbAdapter.removeMyFoodItems(itemsToRemove);
+		restartLoader();
+		mMyFoodsActivityNotifier.setItemRemoved();
 	}
 }

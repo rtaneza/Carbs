@@ -30,6 +30,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
@@ -243,17 +244,39 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     	removeMyFoodItemFromCache(foodItemInfo.getFoodItem());
     }
     
-    public void removeMyFoodItemInfo(FoodItem foodItem) {
+    public void removeMyFoodItem(FoodItem foodItem) {
     	String whereClause = String.format("%s = %s", MYFOODS_COLUMN_ID, foodItem.getId());
     	mDatabase.delete(MYFOODS_TABLE_NAME, whereClause, null);
     	removeMyFoodItemFromCache(foodItem);
     }
-    
+
+    public void removeMyFoodItems(ArrayList<FoodItem> itemsToRemove) {
+    	
+		if (itemsToRemove.size() <= 0) {
+			return;
+		}
+		
+		StringBuilder whereClause = new StringBuilder();
+		
+		for (int i = 0; i < itemsToRemove.size(); i++) {
+			FoodItem foodItem = itemsToRemove.get(i);
+			
+			if (whereClause.length() > 0) {
+				whereClause.append(" OR ");
+			}
+	    	whereClause.append(String.format("%s = %s", MYFOODS_COLUMN_ID, foodItem.getId()));
+	    	
+	    	removeMyFoodItemFromCache(foodItem);
+		}
+
+    	mDatabase.delete(MYFOODS_TABLE_NAME, whereClause.toString(), null);
+	}
+	
     public void removeAllMyFoods() {
     	mDatabase.delete(MYFOODS_TABLE_NAME, null, null);
     	removeAllMyFoodsFromCache();
     }
-    
+
     // Returns true if MyFood table already contains item with 'foodName' and ID not equal to 'exceptId'
     public boolean myFoodNameExists(String foodName, int exceptId) {
 		String[] columns = { MYFOODS_COLUMN_NAME, MYFOODS_COLUMN_ID };

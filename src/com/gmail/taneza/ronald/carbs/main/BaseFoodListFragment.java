@@ -98,7 +98,9 @@ public abstract class BaseFoodListFragment extends BaseListFragment {
 	
 	private void onItemClickInActionMode(AdapterView<?> parent, View view, int position, long id) {
 		mFoodItemArrayAdapter.toggleSelection(position);
-        mActionMode.setTitle(mFoodItemArrayAdapter.getNumSelected() + " selected"); //TODO
+
+		String selectedText = getResources().getString(R.string.selected);
+        mActionMode.setTitle(String.format("%d %d", mFoodItemArrayAdapter.getNumSelected(), selectedText));
 	}
 	
 	@Override
