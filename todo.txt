@@ -34,3 +34,7 @@ ng // Add search icon to search edit text
 ok // change clear icon of clearable edit text
 // remove "Settings" in menu
 // add About in menu
+
+March 2014
+// Add contextual action mode for deleting multiple items
+ok // Remove auto-keyboard pop-up

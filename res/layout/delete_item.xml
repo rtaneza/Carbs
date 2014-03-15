@@ -59,7 +59,6 @@
 		android:paddingBottom="0dp"
         android:clickable="false"
         android:focusable="false"
-    	android:button="@drawable/btn_check"
 	    />
 	
 </RelativeLayout>

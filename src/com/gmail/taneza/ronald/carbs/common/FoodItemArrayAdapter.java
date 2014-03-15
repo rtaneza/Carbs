@@ -27,12 +27,13 @@ import android.widget.TextView;
 import com.gmail.taneza.ronald.carbs.R;
 
 public class FoodItemArrayAdapter extends FoodItemBaseArrayAdapter {
+	
 	public FoodItemArrayAdapter(Context context, FoodDbAdapter foodDbAdapter, ArrayList<FoodItem> values) {
 	    super(context, foodDbAdapter, R.layout.fragment_meal, values);
 	}
     
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getRowView(int position, View convertView, ViewGroup parent) {
 	    View rowView = mInflater.inflate(R.layout.meal_item, parent, false);
 	    
 	    final FoodItem foodItem = getItem(position);

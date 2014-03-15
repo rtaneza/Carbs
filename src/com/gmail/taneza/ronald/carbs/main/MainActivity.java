@@ -33,6 +33,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -42,6 +43,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.Tab;
 import android.support.v7.app.ActionBarActivity;
+import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -49,6 +51,7 @@ import android.widget.Toast;
 
 import com.gmail.taneza.ronald.carbs.R;
 import com.gmail.taneza.ronald.carbs.common.CarbsApp;
+import com.gmail.taneza.ronald.carbs.common.CustomViewPager;
 import com.gmail.taneza.ronald.carbs.common.FoodDbAdapter;
 import com.gmail.taneza.ronald.carbs.common.FoodItem;
 import com.gmail.taneza.ronald.carbs.common.FoodItemInfo;
@@ -83,13 +86,17 @@ public class MainActivity extends ActionBarActivity implements
     private ArrayList<FoodItem> mRecentFoodsList;
 	
 	private TextView mTotalCarbsTextView;
-    private ViewPager mViewPager;
+    private CustomViewPager mViewPager;
     private MainPagerAdapter mPagerAdapter;
     private Menu mOptionsMenu;
     private ClearableEditText mSearchEditText;
     private int mEditFoodItemIndex;
     
     private Intent mCalculatorIntent;
+    
+    private ActionBar mActionBar;
+    private boolean removeItemsFromMealMode;
+    private Handler mHandler;
 
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,33 +124,40 @@ public class MainActivity extends ActionBarActivity implements
 		mSearchEditText = (ClearableEditText)findViewById(R.id.search_text);
  		
         mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
-        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mViewPager = (CustomViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mPagerAdapter);
         mViewPager.setOnPageChangeListener(this);
 
-        final ActionBar actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        actionBar.addTab(actionBar.newTab()
-                .setText(R.string.title_all_foods)
-                .setTabListener(this));
-        actionBar.addTab(actionBar.newTab()
-                .setText(R.string.title_my_foods)
-                .setTabListener(this));
-        actionBar.addTab(actionBar.newTab()
-                .setText(R.string.title_recent_foods)
-                .setTabListener(this));
-        actionBar.addTab(actionBar.newTab()
-                .setText(R.string.title_meal)
-                .setTabListener(this));
+        mActionBar = getSupportActionBar();
+        mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        addActionBarTabs();
         
         mViewPager.setCurrentItem(ALL_FOODS_TAB_INDEX);
 
-        actionBar.setHomeButtonEnabled(false);
+        mActionBar.setHomeButtonEnabled(false);
+
+        mHandler = new Handler();
         
         refreshAllTabsAndMealTotal();
  		
  		mEditFoodItemIndex = -1;
     }
+	
+	private void addActionBarTabs() {
+		ActionBar.Tab tab;
+		
+		tab = mActionBar.newTab().setText(R.string.title_all_foods).setTabListener(this);
+        mActionBar.addTab(tab, ALL_FOODS_TAB_INDEX);
+        
+		tab = mActionBar.newTab().setText(R.string.title_my_foods).setTabListener(this);
+        mActionBar.addTab(tab, MY_FOODS_TAB_INDEX);
+        
+		tab = mActionBar.newTab().setText(R.string.title_recent_foods).setTabListener(this);
+        mActionBar.addTab(tab, RECENT_FOODS_TAB_INDEX);
+        
+		tab = mActionBar.newTab().setText(R.string.title_meal).setTabListener(this);
+        mActionBar.addTab(tab, MEAL_TAB_INDEX);
+	}
 	
 	@Override
     protected void onStop() {
@@ -164,7 +178,20 @@ public class MainActivity extends ActionBarActivity implements
 	
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-        mViewPager.setCurrentItem(tab.getPosition());
+    	if (removeItemsFromMealMode) {
+    		// Do not allow switching tabs.
+    		// Re-select the Meal tab if the user tries to click another tab.
+    		// We need to use a Handler for this. Otherwise, the other tabs are still selectable.
+    		// See: http://stackoverflow.com/questions/9585538/enable-disable-android-actionbar-tab
+            mHandler.postAtFrontOfQueue(new Runnable() {
+				@Override
+				public void run() {
+		            mActionBar.setSelectedNavigationItem(MEAL_TAB_INDEX);
+				}
+			});
+    	} else {
+            mViewPager.setCurrentItem(tab.getPosition());
+    	}
     }
 
     @Override
@@ -204,8 +231,9 @@ public class MainActivity extends ActionBarActivity implements
                     return new RecentFoodsFragment();
                 case MEAL_TAB_INDEX:
                 	return new MealFragment();
+            	default:
+            		throw new IllegalArgumentException("Invalid position");
             }
-            return null;
         }
 
         @Override
@@ -369,6 +397,40 @@ public class MainActivity extends ActionBarActivity implements
 	public ArrayList<FoodItem> getRecentFoodsList() {
 		return mRecentFoodsList;
 	}
+
+	@Override
+	public void setRemoveFoodItemsMode(boolean enable) {
+		removeItemsFromMealMode = enable;
+        mViewPager.setPagingEnabled(!enable);
+        mSearchEditText.setEnabled(!enable);
+	}
+	
+	@Override
+	public void removeFromFoodItemsList(SparseBooleanArray itemsToRemove) {
+		int numItemsToRemove = itemsToRemove.size();
+		if (itemsToRemove.size() <= 0) {
+			return;
+		}
+		
+		if (numItemsToRemove > mFoodItemsList.size()) {
+			throw new IllegalArgumentException("numItemsToRemove is larger than the size of mFoodItemsList");
+		}
+		
+		// Each item in 'itemsToRemove' has a key and a value.
+		// The key is an index to 'mFoodItemsList'.
+		// The value is a boolean: true means that the item should be removed.
+		// Start from the end of the list, because items in the list will be shifted after each 'remove' call.
+		// Keys are guaranteed to be sorted in ascending order,
+		// e.g., keyAt(0) will return the smallest key and keyAt(size()-1) will return the largest key.
+		for (int n = (numItemsToRemove-1); n >= 0; n--) {
+			int index = itemsToRemove.keyAt(n);
+			if (itemsToRemove.get(index)) {
+				mFoodItemsList.remove(index);
+			}
+		}
+		
+		updateRecentFoodsAndMealData();
+	}
 	
 	private void setLanguage(Language language) {
 	    if (language != mLanguage) {
@@ -418,7 +480,6 @@ public class MainActivity extends ActionBarActivity implements
         	mealTab.setText(origTitle);
         }
 	}
-	
 
 	private void refreshAllTabs() {
 		refreshAllFoodsAndMyFoodsTabs();
@@ -629,7 +690,9 @@ public class MainActivity extends ActionBarActivity implements
     }
     
     private void deleteMealItems() {
-    	Intent intent = new Intent(this, DeleteItemsActivity.class);
-    	startActivity(intent);
+    	MealFragment mealFragment = (MealFragment)getFragment(MEAL_TAB_INDEX);
+    	if (mealFragment != null) {
+    		mealFragment.StartDeleteItemsMode();
+    	}
     }
 }

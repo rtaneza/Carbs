@@ -17,6 +17,7 @@
         <activity
             android:name="com.gmail.taneza.ronald.carbs.main.MainActivity"
             android:label="@string/app_name" 
+            android:windowSoftInputMode="stateAlwaysHidden"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,6 +36,7 @@
         <activity
             android:name="com.gmail.taneza.ronald.carbs.myfoods.MyFoodsActivity"
             android:label="@string/title_activity_my_foods"
+            android:windowSoftInputMode="stateAlwaysHidden"
             android:parentActivityName="com.gmail.taneza.ronald.carbs.main.MainActivity" >
             <intent-filter>
 		        <action android:name="android.intent.action.SEND" />

@@ -17,24 +17,33 @@
 package com.gmail.taneza.ronald.carbs.common;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.content.Context;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 
-public class FoodItemBaseArrayAdapter extends ArrayAdapter<FoodItem> {
+public abstract class FoodItemBaseArrayAdapter extends ArrayAdapter<FoodItem> {
 	protected final LayoutInflater mInflater;
 	protected final FoodDbAdapter mFoodDbAdapter;
 	private final ArrayList<FoodItem> mOriginalValues;
 	private ArrayList<FoodItem> mFilteredValues;
 	private Filter mFilter;
+	private Context mContext;
+	private SparseBooleanArray mSelection;
+	private int mNumSelected = 0;
 	  
 	public FoodItemBaseArrayAdapter(Context context, FoodDbAdapter foodDbAdapter, int layoutResourceId, ArrayList<FoodItem> values) {
 	    super(context, layoutResourceId);
 	    mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	    mFoodDbAdapter = foodDbAdapter;
 	    mOriginalValues = values;
+	    mContext = context;
+	    mSelection = new SparseBooleanArray();
 	    
 	    setValues(values);
 	}
@@ -46,6 +55,8 @@ public class FoodItemBaseArrayAdapter extends ArrayAdapter<FoodItem> {
 	    for (FoodItem item : mFilteredValues) {
 	    	add(item);
 	    }
+	    
+	    clearSelection();
 	}
     
     @Override
@@ -55,4 +66,57 @@ public class FoodItemBaseArrayAdapter extends ArrayAdapter<FoodItem> {
         }
         return mFilter;
     }
+    
+    public void clearSelection() {
+        mSelection.clear();
+        mNumSelected = 0;
+        notifyDataSetChanged();
+    }
+    
+    public SparseBooleanArray getSelection() {
+    	return mSelection;
+    }
+    
+    public int getNumSelected() {
+    	return mNumSelected;
+    }
+
+    public void toggleSelection(int position) {
+        if (!isPositionSelected(position)) {
+        	setNewSelection(position);
+        } else {
+        	removeSelection(position);
+        }
+    }
+
+    private void setNewSelection(int position) {
+    	mSelection.put(position, true);
+    	mNumSelected++;
+    	notifyDataSetChanged();
+    }
+
+    private void removeSelection(int position) {
+        mSelection.delete(position);
+        mNumSelected--;
+        notifyDataSetChanged();
+    }
+
+    private boolean isPositionSelected(int position) {
+        return mSelection.get(position);
+    }
+    
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+        View v = getRowView(position, convertView, parent);
+
+        //TODO: make this theme-independent
+        v.setBackgroundColor(mContext.getResources().getColor(android.R.color.background_light)); //default color        
+        if (isPositionSelected(position)) {
+        	v.setBackgroundColor(mContext.getResources().getColor(android.R.color.holo_blue_light));// this is a selected position so make it red
+        }
+        
+        return v;
+	}
+	
+	abstract View getRowView(int position, View convertView, ViewGroup parent);
 }

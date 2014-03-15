@@ -18,6 +18,8 @@ package com.gmail.taneza.ronald.carbs.main;
 
 import java.util.ArrayList;
 
+import android.util.SparseBooleanArray;
+
 import com.gmail.taneza.ronald.carbs.common.FoodItem;
 import com.gmail.taneza.ronald.carbs.common.Language;
 
@@ -30,4 +32,7 @@ public interface MainActivityNotifier {
 	
 	public ArrayList<FoodItem> getFoodItemsList();
 	public ArrayList<FoodItem> getRecentFoodsList();
+	
+	public void setRemoveFoodItemsMode(boolean enable);
+	public void removeFromFoodItemsList(SparseBooleanArray itemsToRemove);
 }

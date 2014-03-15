@@ -34,7 +34,7 @@ public class RecentFoodsArrayAdapter extends FoodItemBaseArrayAdapter {
 	}
     
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getRowView(int position, View convertView, ViewGroup parent) {
 	    View rowView = mInflater.inflate(R.layout.meal_item, parent, false);
 	    
 	    final FoodItem foodItem = getItem(position);

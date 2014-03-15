@@ -20,14 +20,27 @@ import java.util.ArrayList;
 
 import org.droidparts.widget.ClearableEditText;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.ActionMode;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView.MultiChoiceModeListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.TextView.OnEditorActionListener;
 
 import com.gmail.taneza.ronald.carbs.R;
@@ -43,6 +56,10 @@ public abstract class BaseFoodListFragment extends BaseListFragment {
 	protected abstract ArrayList<FoodItem> getFoodList();
 	protected abstract void startActivityToAddOrEditFood(FoodItem foodItem, int foodItemIndex);
 	protected abstract FoodItemBaseArrayAdapter createFoodItemArrayAdapter(Context context, FoodDbAdapter foodDbAdapter, ArrayList<FoodItem> values);
+
+	private ActionMode mActionMode;
+	private OnItemClickListener mOnItemClickListenerDefault;
+	private OnItemClickListener mOnItemClickListenerActionMode;
 	
 	@Override
 	public void onActivityCreated (Bundle savedInstanceState) {
@@ -54,6 +71,96 @@ public abstract class BaseFoodListFragment extends BaseListFragment {
 		ArrayList<FoodItem> recentFoodsList = getFoodList();
 		mFoodItemArrayAdapter = createFoodItemArrayAdapter(getActivity(), mFoodDbAdapter, recentFoodsList);
 		setListAdapter(mFoodItemArrayAdapter);
+		
+		
+//		ListView listView = getListView();
+//		listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+//		listView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
+//
+//            private int mNumSelected = 0;
+//            
+//		    @Override
+//		    public void onItemCheckedStateChanged(ActionMode mode, int position,
+//		                                          long id, boolean checked) {
+//		        // Here you can do something when items are selected/de-selected,
+//		        // such as update the title in the CAB
+//                if (checked) {
+//                	mNumSelected++;
+//                    mFoodItemArrayAdapter.setNewSelection(position, checked);                   
+//                } else {
+//                	mNumSelected--;
+//                	mFoodItemArrayAdapter.removeSelection(position);                
+//                }
+//                mode.setTitle(mNumSelected + " selected");
+//		    }
+//
+//		    @Override
+//		    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+//		        // Respond to clicks on the actions in the CAB
+//		        switch (item.getItemId()) {
+//		            case R.id.menu_food_details_remove:
+//		            	mNumSelected = 0;
+//		            	mFoodItemArrayAdapter.clearSelection();
+//		                mode.finish(); // Action picked, so close the CAB
+//		                return true;
+//		            default:
+//		                return false;
+//		        }
+//		    }
+//
+//		    @Override
+//		    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+//		        // Inflate the menu for the CAB
+//		    	mNumSelected = 0;
+//		        MenuInflater inflater = mode.getMenuInflater();
+//		        inflater.inflate(R.menu.menu_food_details, menu);
+//		        return true;
+//		    }
+//
+//		    @Override
+//		    public void onDestroyActionMode(ActionMode mode) {
+//		        // Here you can make any necessary updates to the activity when
+//		        // the CAB is removed. By default, selected items are deselected/unchecked.
+//		    	mFoodItemArrayAdapter.clearSelection();
+//		    }
+//
+//		    @Override
+//		    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+//		        // Here you can perform updates to the CAB due to
+//		        // an invalidate() request
+//		        return false;
+//		    }
+//		});
+
+
+		mOnItemClickListenerDefault = getListView().getOnItemClickListener();
+		
+		mOnItemClickListenerActionMode = new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				onItemClickInActionMode(parent, view, position, id);
+			}
+		};
+			
+		getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+		    		mFoodItemArrayAdapter.clearSelection();
+		    		
+					mActionMode = getActivity().startActionMode(new ActionBarCallBack());
+					onItemClickInActionMode(parent, view, position, id);
+					
+					getListView().setOnItemClickListener(mOnItemClickListenerActionMode);
+					return true;
+				}
+			});
+		
+		
+	}
+	
+	private void onItemClickInActionMode(AdapterView<?> parent, View view, int position, long id) {
+		mFoodItemArrayAdapter.toggleSelection(position);
+        mActionMode.setTitle(mFoodItemArrayAdapter.getNumSelected() + " selected"); //TODO
 	}
 	
 	@Override
@@ -81,6 +188,12 @@ public abstract class BaseFoodListFragment extends BaseListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
     	FoodItem foodItem = (FoodItem)l.getItemAtPosition(position);
     	startActivityToAddOrEditFood(foodItem, position);
+    }
+    
+    public void StartDeleteItemsMode() {
+		mActionMode = getActivity().startActionMode(new ActionBarCallBack());
+		mActionMode.setTitle("Select items to delete");
+		getListView().setOnItemClickListener(mOnItemClickListenerActionMode);
     }
 
 	private void addSearchTextListener(ClearableEditText searchEditText) {
@@ -110,5 +223,60 @@ public abstract class BaseFoodListFragment extends BaseListFragment {
 	
     private void filterListBasedOnSearchText() {
 		mFoodItemArrayAdapter.getFilter().filter(mSearchEditText.getText().toString());
+    }
+    
+    class ActionBarCallBack implements ActionMode.Callback {    	
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+	        switch (item.getItemId()) {
+            case R.id.menu_food_details_remove:
+            	new AlertDialog.Builder(getActivity())
+        	    .setMessage("Remove selected items?") // TODO
+        	    .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
+        	        public void onClick(DialogInterface dialog, int which) { 
+        	            // continue with remove
+                    	mMainActivityNotifier.removeFromFoodItemsList(mFoodItemArrayAdapter.getSelection());
+                        mActionMode.finish();
+
+//        	        	Toast.makeText(getApplicationContext(),
+//        	        			getText(mItemRemovedMessageId),
+//        	        			Toast.LENGTH_SHORT)
+//        	        		 .show();
+        	        }
+        	     })
+        	    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+        	        public void onClick(DialogInterface dialog, int which) { 
+        	            // do nothing
+        	        }
+        	     })
+        	    .show();            	
+                return true;
+                
+            default:
+                return false;
+	        }
+        }
+ 
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+        	mMainActivityNotifier.setRemoveFoodItemsMode(true);
+        	
+	        MenuInflater inflater = mode.getMenuInflater();
+	        inflater.inflate(R.menu.menu_food_details, menu);
+	        return true;
+        }
+ 
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+	    	mFoodItemArrayAdapter.clearSelection();
+			getListView().setOnItemClickListener(mOnItemClickListenerDefault);
+
+        	mMainActivityNotifier.setRemoveFoodItemsMode(false);
+        }
+ 
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
     }
 }
