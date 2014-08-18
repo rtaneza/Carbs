@@ -100,7 +100,7 @@ public abstract class BaseFoodListFragment extends BaseListFragment {
 		mFoodItemArrayAdapter.toggleSelection(position);
 
 		String selectedText = getResources().getString(R.string.selected);
-        mActionMode.setTitle(String.format("%d %d", mFoodItemArrayAdapter.getNumSelected(), selectedText));
+        mActionMode.setTitle(String.format("%d %s", mFoodItemArrayAdapter.getNumSelected(), selectedText));
 	}
 	
 	@Override
