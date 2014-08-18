@@ -10,14 +10,6 @@ http://www.rivm.nl/Onderwerpen/Onderwerpen/N/Nederlands_Voedingsstoffenbestand),
 
 The latest version is available at <https://github.com/rtaneza/Carbs>.
 
-TODO
-----
-
-- Add ability to input food's weight in grams and get the corresponding amount of carbohydrates 
-- Add option to input standard portion sizes
-- Add option to input own foods
-- Add "most recently searched items" list
-
 
 Credits
 -------

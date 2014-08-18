@@ -74,9 +74,17 @@
     <string name="delete_meal_items">Delete meal items&#8230;</string>
     <string name="delete_recent_items">Delete recent items&#8230;</string>
     <string name="delete_items_no_items">No items</string>
+    <string name="search_all_foods">All</string>
+    <string name="search_builtin_foods">Built-in</string>
+    <string name="search_my_foods">My foods</string>
     
     <string-array name="weight_unit_text_array">
         <item>@string/unit_grams</item>
         <item>@string/unit_ml</item>
+    </string-array>
+    <string-array name="search_options_array">
+        <item>@string/search_all_foods</item>
+        <item>@string/search_builtin_foods</item>
+        <item>@string/search_my_foods</item>
     </string-array>
 </resources>

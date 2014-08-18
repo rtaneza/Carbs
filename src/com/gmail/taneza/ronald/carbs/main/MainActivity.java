@@ -46,6 +46,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -90,6 +92,7 @@ public class MainActivity extends ActionBarActivity implements
     private MainPagerAdapter mPagerAdapter;
     private Menu mOptionsMenu;
     private ClearableEditText mSearchEditText;
+    private Spinner mSearchOptionsSpinner;
     private int mEditFoodItemIndex;
     
     private Intent mCalculatorIntent;
@@ -124,6 +127,17 @@ public class MainActivity extends ActionBarActivity implements
  		mTotalCarbsTextView = (TextView)findViewById(R.id.meal_total_carbs_text);
 		mSearchEditText = (ClearableEditText)findViewById(R.id.search_text);
  		
+		mSearchOptionsSpinner = (Spinner) findViewById(R.id.search_options_spinner);
+		// Create an ArrayAdapter using the string array and a default spinner layout
+		ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this,
+		        R.array.search_options_array, android.R.layout.simple_spinner_item);
+		// Specify the layout to use when the list of choices appears
+		arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		// Apply the adapter to the spinner
+		mSearchOptionsSpinner.setAdapter(arrayAdapter);
+		//TODO: save/restore selection
+		mSearchOptionsSpinner.setSelection(0);
+		
         mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
         mViewPager = (CustomViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mPagerAdapter);

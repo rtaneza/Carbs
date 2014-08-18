@@ -8,18 +8,41 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     
-    <org.droidparts.widget.ClearableEditText android:id="@+id/search_text"
-    	android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:hint="@string/search_text_hint" 
-	    android:drawableRight="@drawable/ic_clear"
-        android:textSize="@dimen/text_size"
-		android:paddingLeft="16dp"
-		android:paddingRight="16dp"
-		android:paddingTop="12dp"
-		android:paddingBottom="12dp"
-	    />
+    <LinearLayout android:id="@+id/search_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+		android:orientation="horizontal"
+   		android:paddingLeft="@dimen/padding_horizontal_half"
+   		android:paddingRight="@dimen/padding_horizontal_half"
+    	android:paddingTop="@dimen/padding_vertical_half"
+    	android:paddingBottom="@dimen/padding_vertical_half"
+		android:weightSum="1.0" >
+		
+	    <org.droidparts.widget.ClearableEditText android:id="@+id/search_text"
+	    	android:layout_width="0dp"
+		    android:layout_height="wrap_content"
+		    android:hint="@string/search_text_hint" 
+		    android:drawableRight="@drawable/ic_clear"
+	        android:textSize="@dimen/text_size"
+	        android:layout_weight="0.70"
+    		android:paddingLeft="@dimen/padding_horizontal_half"
+    		android:paddingRight="0dp"
+	    	android:paddingTop="0dp"
+	    	android:paddingBottom="@dimen/padding_vertical_half"
+		    />
     
+	    <Spinner android:id="@+id/search_options_spinner"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content" 
+	        android:layout_weight="0.30"
+    		android:paddingLeft="0dp"
+    		android:paddingRight="0dp"
+	    	android:paddingTop="0dp"
+	    	android:paddingBottom="0dp"
+    		/>
+	    
+	</LinearLayout>
+	    
     <com.gmail.taneza.ronald.carbs.common.CustomViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
