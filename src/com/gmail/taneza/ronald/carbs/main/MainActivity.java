@@ -48,7 +48,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gmail.taneza.ronald.carbs.R;
@@ -59,7 +58,6 @@ import com.gmail.taneza.ronald.carbs.common.FoodItem;
 import com.gmail.taneza.ronald.carbs.common.FoodItemInfo;
 import com.gmail.taneza.ronald.carbs.common.FoodItemListSerializer;
 import com.gmail.taneza.ronald.carbs.common.Language;
-import com.gmail.taneza.ronald.carbs.delete.DeleteItemsActivity;
 import com.gmail.taneza.ronald.carbs.myfoods.MyFoodsActivity;
 
 public class MainActivity extends ActionBarActivity implements
@@ -73,10 +71,9 @@ public class MainActivity extends ActionBarActivity implements
 
 	public final static int RECENT_FOODS_LIST_MAX_SIZE = 50;
 	
-	public final static int ALL_FOODS_TAB_INDEX = 0;
-	public final static int MY_FOODS_TAB_INDEX = 1;
-	public final static int RECENT_FOODS_TAB_INDEX = 2;
-	public final static int MEAL_TAB_INDEX = 3;
+	public final static int FOODS_TAB_INDEX = 0;
+	public final static int RECENT_FOODS_TAB_INDEX = 1;
+	public final static int MEAL_TAB_INDEX = 2;
 
 	public final static int REQUEST_CODE_ADD_FOOD_TO_MEAL = 0;
 	public final static int REQUEST_CODE_EDIT_FOOD_IN_MEAL = 1;
@@ -87,12 +84,11 @@ public class MainActivity extends ActionBarActivity implements
     private ArrayList<FoodItem> mFoodItemsList;
     private ArrayList<FoodItem> mRecentFoodsList;
 	
-	private TextView mTotalCarbsTextView;
     private CustomViewPager mViewPager;
     private MainPagerAdapter mPagerAdapter;
     private Menu mOptionsMenu;
     private ClearableEditText mSearchEditText;
-    private Spinner mSearchOptionsSpinner;
+    private Spinner mSearchOptionSpinner;
     private int mEditFoodItemIndex;
     
     private Intent mCalculatorIntent;
@@ -102,6 +98,8 @@ public class MainActivity extends ActionBarActivity implements
     private boolean removeItemsFromMealMode;
     private Handler mHandler;
 
+	private float mTotalCarbsInGrams = 0;
+	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,19 +122,18 @@ public class MainActivity extends ActionBarActivity implements
 		
         setContentView(R.layout.activity_main);
 
- 		mTotalCarbsTextView = (TextView)findViewById(R.id.meal_total_carbs_text);
 		mSearchEditText = (ClearableEditText)findViewById(R.id.search_text);
  		
-		mSearchOptionsSpinner = (Spinner) findViewById(R.id.search_options_spinner);
+		mSearchOptionSpinner = (Spinner) findViewById(R.id.search_option_spinner);
 		// Create an ArrayAdapter using the string array and a default spinner layout
 		ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this,
 		        R.array.search_options_array, android.R.layout.simple_spinner_item);
 		// Specify the layout to use when the list of choices appears
 		arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		// Apply the adapter to the spinner
-		mSearchOptionsSpinner.setAdapter(arrayAdapter);
+		mSearchOptionSpinner.setAdapter(arrayAdapter);
 		//TODO: save/restore selection
-		mSearchOptionsSpinner.setSelection(0);
+		mSearchOptionSpinner.setSelection(0);
 		
         mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
         mViewPager = (CustomViewPager) findViewById(R.id.pager);
@@ -147,7 +144,7 @@ public class MainActivity extends ActionBarActivity implements
         mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         addActionBarTabs();
         
-        mViewPager.setCurrentItem(ALL_FOODS_TAB_INDEX);
+        mViewPager.setCurrentItem(FOODS_TAB_INDEX);
 
         mActionBar.setHomeButtonEnabled(false);
 
@@ -161,11 +158,8 @@ public class MainActivity extends ActionBarActivity implements
 	private void addActionBarTabs() {
 		ActionBar.Tab tab;
 		
-		tab = mActionBar.newTab().setText(R.string.title_all_foods).setTabListener(this);
-        mActionBar.addTab(tab, ALL_FOODS_TAB_INDEX);
-        
-		tab = mActionBar.newTab().setText(R.string.title_my_foods).setTabListener(this);
-        mActionBar.addTab(tab, MY_FOODS_TAB_INDEX);
+		tab = mActionBar.newTab().setText(R.string.title_foods).setTabListener(this);
+        mActionBar.addTab(tab, FOODS_TAB_INDEX);
         
 		tab = mActionBar.newTab().setText(R.string.title_recent_foods).setTabListener(this);
         mActionBar.addTab(tab, RECENT_FOODS_TAB_INDEX);
@@ -195,7 +189,7 @@ public class MainActivity extends ActionBarActivity implements
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
     	
 		// Do not allow switching tabs when in the "removing items" mode.
-		// Re-select the Meal tab if the user tries to click another tab.
+		// Re-select the tab if the user tries to click another tab.
 		// We need to use a Handler for this. Otherwise, the other tabs are still selectable.
 		// See: http://stackoverflow.com/questions/9585538/enable-disable-android-actionbar-tab
     	
@@ -250,10 +244,8 @@ public class MainActivity extends ActionBarActivity implements
         @Override
         public Fragment getItem(int position) {
             switch (position) {
-                case ALL_FOODS_TAB_INDEX:
-                    return new AllFoodsFragment();
-                case MY_FOODS_TAB_INDEX:
-                    return new MyFoodsMainFragment();
+                case FOODS_TAB_INDEX:
+                    return new FoodsFragment();
                 case RECENT_FOODS_TAB_INDEX:
                     return new RecentFoodsFragment();
                 case MEAL_TAB_INDEX:
@@ -265,7 +257,7 @@ public class MainActivity extends ActionBarActivity implements
 
         @Override
         public int getCount() {
-            return 4;
+            return 3;
         }
     }
 
@@ -500,17 +492,6 @@ public class MainActivity extends ActionBarActivity implements
 	    return "android:switcher:" + R.id.pager + ":" + index;
 	}
 	
-	private void updateTotalCarbsText() {
-		float totalCarbsInGrams = 0;
-		
-		for (FoodItem item : mFoodItemsList) {
-			final FoodItemInfo info = mFoodDbAdapter.getFoodItemInfo(item);
-			totalCarbsInGrams += info.getNumCarbsInGrams();
-		}
-		
-		mTotalCarbsTextView.setText(String.format("%.1f g", totalCarbsInGrams));
-	}
-	
 	private void updateMealTabText() {
 		final ActionBar actionBar = getSupportActionBar();
         Tab mealTab = actionBar.getTabAt(MEAL_TAB_INDEX);
@@ -518,32 +499,34 @@ public class MainActivity extends ActionBarActivity implements
         
         int numFoodItems = mFoodItemsList.size();
         if (numFoodItems > 0) {
-        	mealTab.setText(String.format("%s (%d)", origTitle, numFoodItems));
+        	mTotalCarbsInGrams = 0;
+    		for (FoodItem item : mFoodItemsList) {
+    			final FoodItemInfo info = mFoodDbAdapter.getFoodItemInfo(item);
+    			mTotalCarbsInGrams += info.getNumCarbsInGrams();
+    		}
+    		
+    		mealTab.setText(String.format("%s (%.1f g)", origTitle, mTotalCarbsInGrams));
+    		
         } else {
         	mealTab.setText(origTitle);
         }
 	}
 
 	private void refreshAllTabs() {
-		refreshAllFoodsAndMyFoodsTabs();
+		refreshFoodsTab();
 		refreshRecentFoodsAndMealTabs();	
 	}
 
 	private void refreshAllTabsAndMealTotal() {
-		refreshAllFoodsAndMyFoodsTabs();
+		refreshFoodsTab();
 		updateRecentFoodsAndMealData();	
 	}
 	
-	private void refreshAllFoodsAndMyFoodsTabs() {
+	private void refreshFoodsTab() {
 		// During an orientation change, the fragment may still be null
-    	AllFoodsFragment allFoodsFragment = (AllFoodsFragment)getFragment(ALL_FOODS_TAB_INDEX);
+    	FoodsFragment allFoodsFragment = (FoodsFragment)getFragment(FOODS_TAB_INDEX);
     	if (allFoodsFragment != null) {
     		allFoodsFragment.refreshList();
-    	}
-    	
-    	MyFoodsMainFragment myFoodsFragment = (MyFoodsMainFragment)getFragment(MY_FOODS_TAB_INDEX);
-    	if (myFoodsFragment != null) {
-    		myFoodsFragment.refreshList();
     	}
 	}
 
@@ -561,8 +544,7 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	private void updateRecentFoodsAndMealData() {
-		updateTotalCarbsText();
-    	updateMealTabText();
+		updateMealTabText();
     	refreshRecentFoodsAndMealTabs();
 	}
 
@@ -685,7 +667,7 @@ public class MainActivity extends ActionBarActivity implements
 
     @SuppressWarnings("deprecation")
     private void copyMealTotalToClipboard() {
-    	String mealTotalValue = mTotalCarbsTextView.getText().toString().replace("g", "").trim();
+    	String mealTotalValue = String.format("%.1f", mTotalCarbsInGrams);
 
     	if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
     	    android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);

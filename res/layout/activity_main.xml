@@ -3,11 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     
-    <fragment android:name="com.gmail.taneza.ronald.carbs.main.MealTotalFragment"
-        android:id="@+id/fragment_meal_total"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    
     <LinearLayout android:id="@+id/search_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,7 +26,7 @@
 	    	android:paddingBottom="@dimen/padding_vertical_half"
 		    />
     
-	    <Spinner android:id="@+id/search_options_spinner"
+	    <Spinner android:id="@+id/search_option_spinner"
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content" 
 	        android:layout_weight="0.30"

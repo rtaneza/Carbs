@@ -108,8 +108,28 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     }
 
 	@SuppressWarnings("deprecation")
+    public String getQueryStringBuiltinFoods(String foodName) {
+		SQLiteQueryBuilder foodQb = new SQLiteQueryBuilder();
+
+		// All sql queries in this class map the table name to COLUMN_TABLE_NAME.
+		String [] foodSqlSelect = {"0 _id", String.format("\"%s\" AS %s", getFoodNameColumnName(), COLUMN_TABLE_NAME), 
+				NEVO_COLUMN_DUTCH_NAME, NEVO_COLUMN_ENGLISH_NAME, 
+				NEVO_COLUMN_WEIGHT_PER_UNIT, NEVO_COLUMN_UNIT_TEXT, 
+				NEVO_COLUMN_CARBS_GRAMS_PER_UNIT, NEVO_COLUMN_PRODUCT_CODE}; 
+		String foodWhereClause = getFoodNameColumnName() + " like '%" + foodName + "%'";
+		
+		foodQb.setTables(NEVO_TABLE_NAME);
+		String queryString = foodQb.buildQuery(foodSqlSelect, foodWhereClause, null, null, null, getFoodNameColumnName(), null);
+		
+		//Log.i("Carbs", "BuiltinFoods query string: " + queryString);
+		return queryString;
+    }
+
+	@SuppressWarnings("deprecation")
     public String getQueryStringMyFoods(String foodName) {
 		SQLiteQueryBuilder myFoodsQb = new SQLiteQueryBuilder();
+
+		// All sql queries in this class map the table name to COLUMN_TABLE_NAME.
 		String [] myFoodsSqlSelect = {"0 _id", String.format("\"%s\" AS %s", MYFOODS_TABLE_NAME, COLUMN_TABLE_NAME),
 				MYFOODS_COLUMN_NAME, MYFOODS_COLUMN_WEIGHT_PER_UNIT, MYFOODS_COLUMN_UNIT_TEXT, 
 				MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT, MYFOODS_COLUMN_ID}; 

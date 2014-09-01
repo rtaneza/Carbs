@@ -31,8 +31,7 @@
     <string name="unit_ml">ml</string>
     <string name="add_to_meal">Add to meal</string>
     <string name="save_food_details">Save</string>
-    <string name="title_all_foods">All</string>
-    <string name="title_my_foods">Mine</string>
+    <string name="title_foods">Foods</string>
     <string name="title_recent_foods">Recent</string>
     <string name="title_meal">Meal</string>
     <string name="recent_foods_no_items">No items</string>

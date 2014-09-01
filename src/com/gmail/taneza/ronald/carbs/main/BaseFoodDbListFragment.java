@@ -40,16 +40,15 @@ import com.gmail.taneza.ronald.carbs.common.FoodItemViewBinder;
 
 public abstract class BaseFoodDbListFragment extends BaseListFragment 
     implements LoaderManager.LoaderCallbacks<Cursor> {
-
-	protected String mWeightPerUnitColumnName;
-	protected String mUnitTextColumnName;
-	protected String mCarbsColumnName;
 	
 	protected SimpleCursorAdapter mCursorAdapter;
 
 	protected abstract String getQueryString(String searchText);
 	protected abstract FoodItem createFoodItemFromCursor(SQLiteCursor cursor);
 	protected abstract String getFoodNameColumnName();
+	public abstract String getWeightPerUnitColumnName();
+	public abstract String getUnitTextColumnName();
+	public abstract String getCarbsColumnName();
 	
 	@Override
 	public void onActivityCreated (Bundle savedInstanceState) {
@@ -98,14 +97,14 @@ public abstract class BaseFoodDbListFragment extends BaseListFragment
     }
     
 	private void initListAdapter() {
-		String[] from = { getFoodNameColumnName(), FoodDbAdapter.COLUMN_TABLE_NAME, mCarbsColumnName };
+		String[] from = { getFoodNameColumnName(), FoodDbAdapter.COLUMN_TABLE_NAME, getCarbsColumnName() };
         int[] to = new int[] { R.id.food_item_name, R.id.food_item_name_extra, R.id.food_item_carbs };
         
         // Create an empty adapter we will use to display the loaded data.
         mCursorAdapter = new SimpleCursorAdapter(getActivity(), R.layout.food_item, null, from, to, 0);
         
         // We set the view binder for the adapter to our own FoodItemViewBinder.
-        mCursorAdapter.setViewBinder(new FoodItemViewBinder(mWeightPerUnitColumnName, mUnitTextColumnName));
+        mCursorAdapter.setViewBinder(new FoodItemViewBinder(getWeightPerUnitColumnName(), getUnitTextColumnName()));
         
         setListAdapter(mCursorAdapter);
         
