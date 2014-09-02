@@ -38,7 +38,7 @@ ok // add About in menu
 March 2014
 ok // Add contextual action mode for deleting multiple items
 ok // Remove auto-keyboard pop-up
-// Delete old "DeleteItems" activity and xml
+ok // Delete old "DeleteItems" activity and xml
 
 Aug 2014
 ok // "ml" label in MyFoods is not fully visible
