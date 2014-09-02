@@ -132,7 +132,7 @@ public abstract class BaseFoodListFragment extends BaseListFragment {
     
     public void StartDeleteItemsMode() {
 		mActionMode = getActivity().startActionMode(new ActionBarCallBack());
-		mActionMode.setTitle("Select items to delete");
+		mActionMode.setTitle(R.string.select_items_to_delete);
 		getListView().setOnItemClickListener(mOnItemClickListenerActionMode);
     }
 

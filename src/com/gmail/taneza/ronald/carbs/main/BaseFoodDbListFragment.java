@@ -34,6 +34,7 @@ import android.widget.TextView.OnEditorActionListener;
 
 import com.commonsware.cwac.loaderex.acl.SQLiteCursorLoader;
 import com.gmail.taneza.ronald.carbs.R;
+import com.gmail.taneza.ronald.carbs.common.CustomSimpleCursorAdapter;
 import com.gmail.taneza.ronald.carbs.common.FoodDbAdapter;
 import com.gmail.taneza.ronald.carbs.common.FoodItem;
 import com.gmail.taneza.ronald.carbs.common.FoodItemViewBinder;
@@ -101,7 +102,8 @@ public abstract class BaseFoodDbListFragment extends BaseListFragment
         int[] to = new int[] { R.id.food_item_name, R.id.food_item_name_extra, R.id.food_item_carbs };
         
         // Create an empty adapter we will use to display the loaded data.
-        mCursorAdapter = new SimpleCursorAdapter(getActivity(), R.layout.food_item, null, from, to, 0);
+        // Use custom adapter so that we have the same background color for all lists.
+        mCursorAdapter = new CustomSimpleCursorAdapter(getActivity(), R.layout.food_item, null, from, to, 0);
         
         // We set the view binder for the adapter to our own FoodItemViewBinder.
         mCursorAdapter.setViewBinder(new FoodItemViewBinder(getWeightPerUnitColumnName(), getUnitTextColumnName()));

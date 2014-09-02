@@ -117,8 +117,6 @@ public class FoodsFragment extends BaseFoodDbListFragment implements OnItemSelec
 
 	@Override
 	public void onNothingSelected(AdapterView<?> parent) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	private class AllFoodsSearchAdapter implements FoodSearchAdapter {

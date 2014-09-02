@@ -48,6 +48,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.gmail.taneza.ronald.carbs.main.MainActivity" />
         </activity>
+        <activity
+            android:name="com.gmail.taneza.ronald.carbs.myfoods.MyFoodDetailsActivity"
+            android:label="@string/title_activity_my_food_details"
+            android:parentActivityName="com.gmail.taneza.ronald.carbs.myfoods.MyFoodsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.gmail.taneza.ronald.carbs.myfoods.MyFoodsActivity" />
+        </activity>
     </application>
 
 </manifest>
