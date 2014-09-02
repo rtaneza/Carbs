@@ -7,20 +7,20 @@
     See: http://developer.android.com/guide/topics/ui/actionbar.html#ActionItems
      -->
      
-	<item
+    <item
         android:id="@+id/menu_language"
         android:title="@string/language_dutch"
         carbs:showAsAction="always|withText">
-	    <menu>
-	        <item
-	            android:id="@+id/menu_language_option_english"
-	            android:title="@string/language_option_english" />
-	        <item
-	            android:id="@+id/menu_language_option_dutch"
-	            android:title="@string/language_option_dutch" />
-	    </menu>
-	</item>
-	
+        <menu>
+            <item
+                android:id="@+id/menu_language_option_english"
+                android:title="@string/language_option_english" />
+            <item
+                android:id="@+id/menu_language_option_dutch"
+                android:title="@string/language_option_dutch" />
+        </menu>
+    </item>
+    
     <item
         android:id="@+id/menu_my_foods"
         carbs:showAsAction="always|withText"

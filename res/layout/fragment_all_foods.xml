@@ -4,15 +4,15 @@
     android:layout_height="match_parent"
     tools:context=".AllFoodsFragment">
     
-	<ListView android:id="@id/android:list"
+    <ListView android:id="@id/android:list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fastScrollEnabled="true"/>
-	
-  	<TextView android:id="@id/android:empty"
+    
+      <TextView android:id="@id/android:empty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/no_items"
-		android:enabled="false"/>
-	        
+        android:enabled="false"/>
+            
 </FrameLayout>

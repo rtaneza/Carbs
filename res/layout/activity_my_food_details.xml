@@ -9,69 +9,70 @@
     tools:context=".MyFoodDetailsActivity" >
 
     <!-- name -->
-	<RelativeLayout android:id="@+id/my_food_name_group"
+    <RelativeLayout android:id="@+id/my_food_name_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-		android:orientation="horizontal" 
-   		android:paddingTop="@dimen/padding_vertical"
-   		android:paddingBottom="@dimen/padding_vertical">
-		
-	    <TextView android:id="@+id/my_food_name_label"
-	        android:text="@string/my_food_name_label"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content" 
-        	android:layout_alignParentLeft="true"
-    		android:paddingLeft="@dimen/padding_horizontal_half"
-    		android:paddingRight="@dimen/padding_horizontal_half" />
-			
-	    <EditText android:id="@+id/my_food_name"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-        	android:layout_toRightOf="@+id/my_food_name_label"
-        	android:layout_alignParentRight="true"
-    		android:paddingLeft="@dimen/padding_horizontal_half"
-    		android:paddingRight="@dimen/padding_horizontal_half"
-	        android:inputType="textCapSentences"
-	        android:textSize="@dimen/text_size"
-	        android:gravity="left"
-	        android:selectAllOnFocus="true" />
-	
-	</RelativeLayout>
-	
+        android:orientation="horizontal" 
+           android:paddingTop="@dimen/padding_vertical"
+           android:paddingBottom="@dimen/padding_vertical">
+        
+        <TextView android:id="@+id/my_food_name_label"
+            android:text="@string/my_food_name_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" 
+            android:layout_alignParentLeft="true"
+            android:paddingLeft="@dimen/padding_horizontal_half"
+            android:paddingRight="@dimen/padding_horizontal_half" />
+            
+        <EditText android:id="@+id/my_food_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/my_food_name_label"
+            android:layout_alignParentRight="true"
+            android:paddingLeft="@dimen/padding_horizontal_half"
+            android:paddingRight="@dimen/padding_horizontal_half"
+            android:inputType="textCapSentences"
+            android:textSize="@dimen/text_size"
+            android:gravity="left"
+            android:selectAllOnFocus="true" />
+    
+    </RelativeLayout>
+    
     <!-- weight -->
     <LinearLayout android:id="@+id/my_food_weight_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/my_food_name_group"
-		android:orientation="horizontal"
-    	android:paddingTop="@dimen/padding_vertical"
-		android:weightSum="1.0" >
-	    
-	    <TextView android:id="@+id/my_food_weight_label"
-	        android:text="@string/my_food_weight_per_unit"
-	        android:layout_width="0dp"
-	        android:layout_height="wrap_content"
-	        android:layout_weight="0.4" 
-    		android:paddingLeft="@dimen/padding_horizontal_half"
-    		android:paddingRight="@dimen/padding_horizontal_half" />
-	    
-	    <EditText android:id="@+id/my_food_weight_edit"
-	        android:layout_width="0dp"
-	        android:layout_height="wrap_content"
-	        android:layout_weight="0.42"
-	        android:inputType="number"
-	        android:textSize="@dimen/text_size"
-	        android:gravity="right" />
-	    
-	    <Spinner android:id="@+id/my_food_weight_unit_spinner"
-	        android:layout_width="0dp"
-	        android:layout_height="wrap_content" 
-	        android:layout_weight="0.18"
-    		android:paddingLeft="@dimen/padding_horizontal_half"
-    		android:paddingRight="@dimen/padding_horizontal_half"
-    		android:paddingTop="0dp"
-    		android:paddingBottom="0dp" />
-	    
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/padding_vertical"
+        android:weightSum="1.0" >
+        
+        <TextView android:id="@+id/my_food_weight_label"
+            android:text="@string/my_food_weight_per_unit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.4" 
+            android:paddingLeft="@dimen/padding_horizontal_half"
+            android:paddingRight="@dimen/padding_horizontal_half" />
+        
+        <EditText android:id="@+id/my_food_weight_edit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.4"
+            android:inputType="number"
+            android:textSize="@dimen/text_size"
+            android:gravity="right" />
+        
+        <Spinner android:id="@+id/my_food_weight_unit_spinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" 
+            android:layout_weight="0.2"
+            android:paddingLeft="@dimen/padding_horizontal_half"
+            android:paddingRight="@dimen/padding_horizontal_half"
+            android:paddingTop="0dp"
+            android:paddingBottom="0dp"
+            android:gravity="left" />
+        
     </LinearLayout>
     
     <!-- carbs -->
@@ -79,35 +80,35 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/my_food_weight_group"
-		android:orientation="horizontal"
-    	android:paddingBottom="@dimen/padding_vertical"
-		android:weightSum="1.0" >
-	    
-	    <TextView android:id="@+id/my_food_carbs_label"
-	        android:text="@string/my_food_carbs_per_unit"
-	        android:layout_width="0dp"
-	        android:layout_height="wrap_content"
-	        android:layout_weight="0.4" 
-    		android:paddingLeft="@dimen/padding_horizontal_half"
-    		android:paddingRight="@dimen/padding_horizontal_half"/>
-	    
-	    <EditText android:id="@+id/my_food_carbs"
-	        android:layout_width="0dp"
-	        android:layout_height="wrap_content"
-	        android:layout_weight="0.42"
-	        android:inputType="numberDecimal"
-	        android:textSize="@dimen/text_size"
-	        android:gravity="right" />
-	    
-	    <TextView android:id="@+id/my_food_carbs_unit"
-	        android:text="@string/unit_grams"
-	        android:layout_width="0dp"
-	        android:layout_height="wrap_content" 
-	        android:layout_weight="0.18"
-    		android:paddingLeft="@dimen/padding_horizontal"
-    		android:paddingRight="@dimen/padding_horizontal"
-	        android:gravity="left"/>
-	    
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/padding_vertical"
+        android:weightSum="1.0" >
+        
+        <TextView android:id="@+id/my_food_carbs_label"
+            android:text="@string/my_food_carbs_per_unit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.4" 
+            android:paddingLeft="@dimen/padding_horizontal_half"
+            android:paddingRight="@dimen/padding_horizontal_half"/>
+        
+        <EditText android:id="@+id/my_food_carbs"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.4"
+            android:inputType="numberDecimal"
+            android:textSize="@dimen/text_size"
+            android:gravity="right" />
+        
+        <TextView android:id="@+id/my_food_carbs_unit"
+            android:text="@string/unit_grams"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" 
+            android:layout_weight="0.2"
+            android:paddingLeft="@dimen/padding_horizontal"
+            android:paddingRight="@dimen/padding_horizontal"
+            android:gravity="left"/>
+        
     </LinearLayout>
     
     <!-- buttons -->
@@ -115,28 +116,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/my_food_carbs_group"
-    	android:paddingTop="@dimen/padding_vertical"
-		android:orientation="horizontal"
-		android:weightSum="1.0" >
-	    
-	    <Button
-	        android:id="@+id/my_food_ok_button"
-	        android:layout_width="0dp"
-	        android:layout_height="wrap_content"
-	        android:layout_weight="0.5"
-	        android:textSize="@dimen/text_size"
-	        android:text="@string/my_foods_add"
-	        android:onClick="addOrUpdate" />
+        android:paddingTop="@dimen/padding_vertical"
+        android:orientation="horizontal"
+        android:weightSum="1.0" >
+        
+        <Button
+            android:id="@+id/my_food_ok_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:textSize="@dimen/text_size"
+            android:text="@string/my_foods_add"
+            android:onClick="addOrUpdate" />
     
-	    <Button
-	        android:id="@+id/my_food_cancel_button"
-	        android:layout_width="0dp"
-	        android:layout_height="wrap_content"
-	        android:layout_weight="0.5"
-	        android:textSize="@dimen/text_size"
-	        android:text="@string/cancel"
-	        android:onClick="cancel" />
-	    
+        <Button
+            android:id="@+id/my_food_cancel_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:textSize="@dimen/text_size"
+            android:text="@string/cancel"
+            android:onClick="cancel" />
+        
     </LinearLayout>
-	    
+        
 </RelativeLayout>
