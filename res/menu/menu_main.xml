@@ -48,11 +48,6 @@
         android:title="@string/copy_meal_total"/>
     
     <item
-        android:id="@+id/menu_open_calculator"
-        carbs:showAsAction="never"
-        android:title="@string/open_calculator"/>
-    
-    <item
         android:id="@+id/menu_main_about"
         carbs:showAsAction="never"
         android:title="@string/about"/>

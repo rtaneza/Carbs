@@ -43,7 +43,7 @@ ok // Delete old "DeleteItems" activity and xml
 Aug 2014
 ok // "ml" label in MyFoods is not fully visible
 // white background on lists is not the same as the default background
-// Remove "Open calculator"
+ok // Remove "Open calculator"
 // Move "My foods" to "text" menu
 // Add "Delete recent items..."
 // Replace "meal" with "Total"

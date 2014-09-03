@@ -65,25 +65,25 @@ public class MainActivity extends ActionBarActivity implements
         ViewPager.OnPageChangeListener,
         MainActivityNotifier {
 
-	public final static String PREF_LANGUAGE = "PREF_LANGUAGE";
-	public final static String PREF_RECENT_FOODS_LIST = "PREF_RECENT_FOODS_LIST";
-	public final static String PREF_FOOD_ITEMS_LIST = "PREF_FOOD_ITEMS_LIST";
+    public final static String PREF_LANGUAGE = "PREF_LANGUAGE";
+    public final static String PREF_RECENT_FOODS_LIST = "PREF_RECENT_FOODS_LIST";
+    public final static String PREF_FOOD_ITEMS_LIST = "PREF_FOOD_ITEMS_LIST";
 
-	public final static int RECENT_FOODS_LIST_MAX_SIZE = 50;
-	
-	public final static int FOODS_TAB_INDEX = 0;
-	public final static int RECENT_FOODS_TAB_INDEX = 1;
-	public final static int MEAL_TAB_INDEX = 2;
+    public final static int RECENT_FOODS_LIST_MAX_SIZE = 50;
+    
+    public final static int FOODS_TAB_INDEX = 0;
+    public final static int RECENT_FOODS_TAB_INDEX = 1;
+    public final static int MEAL_TAB_INDEX = 2;
 
-	public final static int REQUEST_CODE_ADD_FOOD_TO_MEAL = 0;
-	public final static int REQUEST_CODE_EDIT_FOOD_IN_MEAL = 1;
-	public final static int REQUEST_CODE_SHOW_MY_FOODS = 2;
-	
-	private Language mLanguage;
-	private FoodDbAdapter mFoodDbAdapter;
+    public final static int REQUEST_CODE_ADD_FOOD_TO_MEAL = 0;
+    public final static int REQUEST_CODE_EDIT_FOOD_IN_MEAL = 1;
+    public final static int REQUEST_CODE_SHOW_MY_FOODS = 2;
+    
+    private Language mLanguage;
+    private FoodDbAdapter mFoodDbAdapter;
     private ArrayList<FoodItem> mFoodItemsList;
     private ArrayList<FoodItem> mRecentFoodsList;
-	
+    
     private CustomViewPager mViewPager;
     private MainPagerAdapter mPagerAdapter;
     private Menu mOptionsMenu;
@@ -91,50 +91,46 @@ public class MainActivity extends ActionBarActivity implements
     private Spinner mSearchOptionSpinner;
     private int mEditFoodItemIndex;
     
-    private Intent mCalculatorIntent;
-    
     private ActionBar mActionBar;
     private boolean removeItemsFromRecentFoodsMode;
     private boolean removeItemsFromMealMode;
     private Handler mHandler;
 
-	private float mTotalCarbsInGrams = 0;
-	
-	@Override
+    private float mTotalCarbsInGrams = 0;
+    
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-		//Log.i("Carbs", this.getClass().getSimpleName() + " onCreate");
-		
-        initializeCalculatorIntent();
-        
- 		// Restore preferences
- 		SharedPreferences prefs = getPreferences(0);
- 		mLanguage = Language.values()[prefs.getInt(PREF_LANGUAGE, Language.DUTCH.ordinal())];
- 		
- 		mFoodItemsList = FoodItemListSerializer.getListFromString(prefs.getString(PREF_FOOD_ITEMS_LIST, ""));
- 		mRecentFoodsList = FoodItemListSerializer.getListFromString(prefs.getString(PREF_RECENT_FOODS_LIST, ""));
- 		
-		mFoodDbAdapter = ((CarbsApp)getApplication()).getFoodDbAdapter();
-		mFoodDbAdapter.setLanguage(mLanguage);
+        //Log.i("Carbs", this.getClass().getSimpleName() + " onCreate");
+              
+        // Restore preferences
+        SharedPreferences prefs = getPreferences(0);
+        mLanguage = Language.values()[prefs.getInt(PREF_LANGUAGE, Language.DUTCH.ordinal())];
+         
+        mFoodItemsList = FoodItemListSerializer.getListFromString(prefs.getString(PREF_FOOD_ITEMS_LIST, ""));
+        mRecentFoodsList = FoodItemListSerializer.getListFromString(prefs.getString(PREF_RECENT_FOODS_LIST, ""));
+         
+        mFoodDbAdapter = ((CarbsApp)getApplication()).getFoodDbAdapter();
+        mFoodDbAdapter.setLanguage(mLanguage);
 
-		pruneRecentAndFoodLists();
-		
+        pruneRecentAndFoodLists();
+        
         setContentView(R.layout.activity_main);
 
-		mSearchEditText = (ClearableEditText)findViewById(R.id.search_text);
- 		
-		mSearchOptionSpinner = (Spinner) findViewById(R.id.search_option_spinner);
-		// Create an ArrayAdapter using the string array and a default spinner layout
-		ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this,
-		        R.array.search_options_array, android.R.layout.simple_spinner_item);
-		// Specify the layout to use when the list of choices appears
-		arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		// Apply the adapter to the spinner
-		mSearchOptionSpinner.setAdapter(arrayAdapter);
-		//TODO: save/restore selection
-		mSearchOptionSpinner.setSelection(0);
-		
+        mSearchEditText = (ClearableEditText)findViewById(R.id.search_text);
+         
+        mSearchOptionSpinner = (Spinner) findViewById(R.id.search_option_spinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this,
+                R.array.search_options_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        mSearchOptionSpinner.setAdapter(arrayAdapter);
+        //TODO: save/restore selection
+        mSearchOptionSpinner.setSelection(0);
+        
         mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
         mViewPager = (CustomViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mPagerAdapter);
@@ -151,68 +147,68 @@ public class MainActivity extends ActionBarActivity implements
         mHandler = new Handler();
         
         refreshAllTabsAndMealTotal();
- 		
- 		mEditFoodItemIndex = -1;
+         
+         mEditFoodItemIndex = -1;
     }
-	
-	private void addActionBarTabs() {
-		ActionBar.Tab tab;
-		
-		tab = mActionBar.newTab().setText(R.string.title_foods).setTabListener(this);
+    
+    private void addActionBarTabs() {
+        ActionBar.Tab tab;
+        
+        tab = mActionBar.newTab().setText(R.string.title_foods).setTabListener(this);
         mActionBar.addTab(tab, FOODS_TAB_INDEX);
         
-		tab = mActionBar.newTab().setText(R.string.title_recent_foods).setTabListener(this);
+        tab = mActionBar.newTab().setText(R.string.title_recent_foods).setTabListener(this);
         mActionBar.addTab(tab, RECENT_FOODS_TAB_INDEX);
         
-		tab = mActionBar.newTab().setText(R.string.title_meal).setTabListener(this);
+        tab = mActionBar.newTab().setText(R.string.title_meal).setTabListener(this);
         mActionBar.addTab(tab, MEAL_TAB_INDEX);
-	}
-	
-	@Override
-    protected void onStop() {
-		pruneRecentAndFoodLists();
-		
-		// We need an Editor object to make preference changes.
-		SharedPreferences prefs = getPreferences(0);
-		SharedPreferences.Editor editor = prefs.edit();
-		editor.putInt(PREF_LANGUAGE, mLanguage.ordinal());		
-		editor.putString(PREF_FOOD_ITEMS_LIST, FoodItemListSerializer.getStringFromList(mFoodItemsList));
-		editor.putString(PREF_RECENT_FOODS_LIST, FoodItemListSerializer.getStringFromList(mRecentFoodsList));
-
-		// Commit the edits!
-		editor.commit();
-
-		super.onStop();
     }
-	
+    
+    @Override
+    protected void onStop() {
+        pruneRecentAndFoodLists();
+        
+        // We need an Editor object to make preference changes.
+        SharedPreferences prefs = getPreferences(0);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt(PREF_LANGUAGE, mLanguage.ordinal());        
+        editor.putString(PREF_FOOD_ITEMS_LIST, FoodItemListSerializer.getStringFromList(mFoodItemsList));
+        editor.putString(PREF_RECENT_FOODS_LIST, FoodItemListSerializer.getStringFromList(mRecentFoodsList));
+
+        // Commit the edits!
+        editor.commit();
+
+        super.onStop();
+    }
+    
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-    	
-		// Do not allow switching tabs when in the "removing items" mode.
-		// Re-select the tab if the user tries to click another tab.
-		// We need to use a Handler for this. Otherwise, the other tabs are still selectable.
-		// See: http://stackoverflow.com/questions/9585538/enable-disable-android-actionbar-tab
-    	
-    	if (removeItemsFromRecentFoodsMode) {
+        
+        // Do not allow switching tabs when in the "removing items" mode.
+        // Re-select the tab if the user tries to click another tab.
+        // We need to use a Handler for this. Otherwise, the other tabs are still selectable.
+        // See: http://stackoverflow.com/questions/9585538/enable-disable-android-actionbar-tab
+        
+        if (removeItemsFromRecentFoodsMode) {
             mHandler.postAtFrontOfQueue(new Runnable() {
-				@Override
-				public void run() {
-		            mActionBar.setSelectedNavigationItem(RECENT_FOODS_TAB_INDEX);
-				}
-			});
-    	}
-    	
-    	else if (removeItemsFromMealMode) {
+                @Override
+                public void run() {
+                    mActionBar.setSelectedNavigationItem(RECENT_FOODS_TAB_INDEX);
+                }
+            });
+        }
+        
+        else if (removeItemsFromMealMode) {
             mHandler.postAtFrontOfQueue(new Runnable() {
-				@Override
-				public void run() {
-		            mActionBar.setSelectedNavigationItem(MEAL_TAB_INDEX);
-				}
-			});
+                @Override
+                public void run() {
+                    mActionBar.setSelectedNavigationItem(MEAL_TAB_INDEX);
+                }
+            });
             
-    	} else {
+        } else {
             mViewPager.setCurrentItem(tab.getPosition());
-    	}
+        }
     }
 
     @Override
@@ -249,9 +245,9 @@ public class MainActivity extends ActionBarActivity implements
                 case RECENT_FOODS_TAB_INDEX:
                     return new RecentFoodsFragment();
                 case MEAL_TAB_INDEX:
-                	return new MealFragment();
-            	default:
-            		throw new IllegalArgumentException("Invalid position");
+                    return new MealFragment();
+                default:
+                    throw new IllegalArgumentException("Invalid position");
             }
         }
 
@@ -267,457 +263,432 @@ public class MainActivity extends ActionBarActivity implements
         super.onCreateOptionsMenu(menu);
         
         mOptionsMenu = menu;
-		getMenuInflater().inflate(R.menu.menu_main, menu);
-		
-		if (mCalculatorIntent == null) {
-			MenuItem openCalculatorMenuItem = mOptionsMenu.findItem(R.id.menu_open_calculator);
-			openCalculatorMenuItem.setVisible(false);
-		}
-
-		setLanguageTextInOptionsMenu(mLanguage);
-		
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+    
+        setLanguageTextInOptionsMenu(mLanguage);
+        
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-	    // Handle presses on the action bar items
-	    switch (item.getItemId()) {
-	    	case R.id.menu_my_foods:
-	    		startMyFoodsActivity();
-	    		break;
-	        case R.id.menu_language_option_english:
-	        	setLanguage(Language.ENGLISH);
-	        	break;
-	        case R.id.menu_language_option_dutch:
-	        	setLanguage(Language.DUTCH);
-	        	break;
-	        case R.id.menu_clear_recent_foods:
-	        	clearRecentFoods();
-	        	break;
-	        case R.id.menu_clear_meal:
-        		clearMeal();
-	        	break;
-	        case R.id.menu_delete_meal_items:
-        		deleteMealItems();
-	        	break;
-	        case R.id.menu_copy_meal_total:
-	        	copyMealTotalToClipboard();
-	        	break;
-	        case R.id.menu_open_calculator:
-	        	if (mCalculatorIntent != null) {
-	        		// The default calculator does not accept any intent data,
-	        		// so for now: copy to clipboard, open calculator, then
-	        		// the user should manually paste the value to the calculator.
-	        		copyMealTotalToClipboard();
-	        		startActivity(mCalculatorIntent);
-	        	}
-	        	break;
-	        case R.id.menu_main_about:
-	        	showAboutDialog();
-	        	break;
-	        default:
-	            return super.onOptionsItemSelected(item);
-	    }
-	    
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.menu_my_foods:
+                startMyFoodsActivity();
+                break;
+            case R.id.menu_language_option_english:
+                setLanguage(Language.ENGLISH);
+                break;
+            case R.id.menu_language_option_dutch:
+                setLanguage(Language.DUTCH);
+                break;
+            case R.id.menu_clear_recent_foods:
+                clearRecentFoods();
+                break;
+            case R.id.menu_clear_meal:
+                clearMeal();
+                break;
+            case R.id.menu_delete_meal_items:
+                deleteMealItems();
+                break;
+            case R.id.menu_copy_meal_total:
+                copyMealTotalToClipboard();
+                break;
+            case R.id.menu_main_about:
+                showAboutDialog();
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        
         return true;
     }
     
-	private void startMyFoodsActivity() {
-    	Intent intent = new Intent(this, MyFoodsActivity.class);
-    	startActivityForResult(intent, REQUEST_CODE_SHOW_MY_FOODS);
+    private void startMyFoodsActivity() {
+        Intent intent = new Intent(this, MyFoodsActivity.class);
+        startActivityForResult(intent, REQUEST_CODE_SHOW_MY_FOODS);
     }
     
-	public void startActivityToAddFoodToMeal(FoodItem foodItem) {
-    	startFoodDetailsActivityForResult(foodItem, FoodDetailsActivity.Mode.NewFood, REQUEST_CODE_ADD_FOOD_TO_MEAL);
-	}
-
-	public void startActivityToAddRecentFoodToMeal(FoodItem foodItem) {
-    	startFoodDetailsActivityForResult(foodItem, FoodDetailsActivity.Mode.RecentFood, REQUEST_CODE_ADD_FOOD_TO_MEAL);
-	}
-	
-	public void startActivityToEditFoodInMeal(FoodItem foodItem, int foodItemIndex) {
-    	mEditFoodItemIndex = foodItemIndex;
-    	startFoodDetailsActivityForResult(foodItem, FoodDetailsActivity.Mode.EditFoodInMeal, REQUEST_CODE_EDIT_FOOD_IN_MEAL);
-	}
-	
-	private void startFoodDetailsActivityForResult(FoodItem foodItem, FoodDetailsActivity.Mode mode, int requestCode) {
-    	Intent intent = new Intent(this, FoodDetailsActivity.class);
-    	intent.putExtra(FoodDetailsActivity.FOOD_ITEM_MESSAGE, (Parcelable)foodItem);
-    	intent.putExtra(FoodDetailsActivity.ACTIVITY_MODE_MESSAGE, mode.ordinal());
-
-    	startActivityForResult(intent, requestCode);
-	}
-	
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		FoodItem foodItem;
-		
-    	switch (requestCode) {
-	    	case REQUEST_CODE_ADD_FOOD_TO_MEAL:
-	            switch (resultCode) {
-	            	case FoodDetailsActivity.FOOD_DETAILS_RESULT_OK:
-	            		foodItem = data.getParcelableExtra(FoodDetailsActivity.FOOD_ITEM_RESULT);
-	    	    		addFoodItemToMeal(foodItem);
-	    	    		clearSearchText();
-	    	    		break;
-	    	    		
-	            	case FoodDetailsActivity.FOOD_DETAILS_RESULT_REMOVE:
-	            		foodItem = data.getParcelableExtra(FoodDetailsActivity.FOOD_ITEM_RESULT);
-	    	    		removeFoodItemFromRecentFoods(foodItem);
-	    	    		break;
-	            }
-	            break;
-	            
-	    	case REQUEST_CODE_EDIT_FOOD_IN_MEAL:
-	    		// The food item list in the meal is not filterable, and can contain duplicate foodItems, 
-	    		// so we need the index to remove the correct foodItem.
-	            switch (resultCode) {
-	            	case FoodDetailsActivity.FOOD_DETAILS_RESULT_OK:
-	            		foodItem = data.getParcelableExtra(FoodDetailsActivity.FOOD_ITEM_RESULT);
-	    	    		replaceFoodItemInMeal(mEditFoodItemIndex, foodItem);
-	    	    		clearSearchText();
-	    	    		break;
-	    	    		
-	            	case FoodDetailsActivity.FOOD_DETAILS_RESULT_REMOVE:
-	            		foodItem = data.getParcelableExtra(FoodDetailsActivity.FOOD_ITEM_RESULT);
-	    	    		removeFoodItemFromMeal(mEditFoodItemIndex);
-	    	    		break;
-	            }
-	            mEditFoodItemIndex = -1;
-	    		break;
-	    		
-	    	case REQUEST_CODE_SHOW_MY_FOODS:
-	            switch (resultCode) {
-	            	case MyFoodsActivity.MY_FOODS_RESULT_ITEM_CHANGED:
-	            		refreshAllTabsAndMealTotal();
-	            		break;
-
-	            	case MyFoodsActivity.MY_FOODS_RESULT_ITEM_REMOVED:
-	            		pruneRecentAndFoodLists();
-	            		refreshAllTabsAndMealTotal();
-	            		break;
-	            }
-	    		break;
-    	}
+    public void startActivityToAddFoodToMeal(FoodItem foodItem) {
+        startFoodDetailsActivityForResult(foodItem, FoodDetailsActivity.Mode.NewFood, REQUEST_CODE_ADD_FOOD_TO_MEAL);
     }
 
-	@Override
-	public Language getLanguage() {
-		return mLanguage;
-	}
-	
-	@Override
-	public ArrayList<FoodItem> getFoodItemsList() {
-		return mFoodItemsList;
-	}
+    public void startActivityToAddRecentFoodToMeal(FoodItem foodItem) {
+        startFoodDetailsActivityForResult(foodItem, FoodDetailsActivity.Mode.RecentFood, REQUEST_CODE_ADD_FOOD_TO_MEAL);
+    }
+    
+    public void startActivityToEditFoodInMeal(FoodItem foodItem, int foodItemIndex) {
+        mEditFoodItemIndex = foodItemIndex;
+        startFoodDetailsActivityForResult(foodItem, FoodDetailsActivity.Mode.EditFoodInMeal, REQUEST_CODE_EDIT_FOOD_IN_MEAL);
+    }
+    
+    private void startFoodDetailsActivityForResult(FoodItem foodItem, FoodDetailsActivity.Mode mode, int requestCode) {
+        Intent intent = new Intent(this, FoodDetailsActivity.class);
+        intent.putExtra(FoodDetailsActivity.FOOD_ITEM_MESSAGE, (Parcelable)foodItem);
+        intent.putExtra(FoodDetailsActivity.ACTIVITY_MODE_MESSAGE, mode.ordinal());
 
-	@Override
-	public ArrayList<FoodItem> getRecentFoodsList() {
-		return mRecentFoodsList;
-	}
+        startActivityForResult(intent, requestCode);
+    }
+    
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        FoodItem foodItem;
+        
+        switch (requestCode) {
+            case REQUEST_CODE_ADD_FOOD_TO_MEAL:
+                switch (resultCode) {
+                    case FoodDetailsActivity.FOOD_DETAILS_RESULT_OK:
+                        foodItem = data.getParcelableExtra(FoodDetailsActivity.FOOD_ITEM_RESULT);
+                        addFoodItemToMeal(foodItem);
+                        clearSearchText();
+                        break;
+                        
+                    case FoodDetailsActivity.FOOD_DETAILS_RESULT_REMOVE:
+                        foodItem = data.getParcelableExtra(FoodDetailsActivity.FOOD_ITEM_RESULT);
+                        removeFoodItemFromRecentFoods(foodItem);
+                        break;
+                }
+                break;
+                
+            case REQUEST_CODE_EDIT_FOOD_IN_MEAL:
+                // The food item list in the meal is not filterable, and can contain duplicate foodItems, 
+                // so we need the index to remove the correct foodItem.
+                switch (resultCode) {
+                    case FoodDetailsActivity.FOOD_DETAILS_RESULT_OK:
+                        foodItem = data.getParcelableExtra(FoodDetailsActivity.FOOD_ITEM_RESULT);
+                        replaceFoodItemInMeal(mEditFoodItemIndex, foodItem);
+                        clearSearchText();
+                        break;
+                        
+                    case FoodDetailsActivity.FOOD_DETAILS_RESULT_REMOVE:
+                        foodItem = data.getParcelableExtra(FoodDetailsActivity.FOOD_ITEM_RESULT);
+                        removeFoodItemFromMeal(mEditFoodItemIndex);
+                        break;
+                }
+                mEditFoodItemIndex = -1;
+                break;
+                
+            case REQUEST_CODE_SHOW_MY_FOODS:
+                switch (resultCode) {
+                    case MyFoodsActivity.MY_FOODS_RESULT_ITEM_CHANGED:
+                        refreshAllTabsAndMealTotal();
+                        break;
 
-	@Override
-	public void setRemoveRecentFoodItemsMode(boolean enable) {
-		removeItemsFromRecentFoodsMode = enable;
+                    case MyFoodsActivity.MY_FOODS_RESULT_ITEM_REMOVED:
+                        pruneRecentAndFoodLists();
+                        refreshAllTabsAndMealTotal();
+                        break;
+                }
+                break;
+        }
+    }
+
+    @Override
+    public Language getLanguage() {
+        return mLanguage;
+    }
+    
+    @Override
+    public ArrayList<FoodItem> getFoodItemsList() {
+        return mFoodItemsList;
+    }
+
+    @Override
+    public ArrayList<FoodItem> getRecentFoodsList() {
+        return mRecentFoodsList;
+    }
+
+    @Override
+    public void setRemoveRecentFoodItemsMode(boolean enable) {
+        removeItemsFromRecentFoodsMode = enable;
         mViewPager.setPagingEnabled(!enable);
         mSearchEditText.setEnabled(!enable);
-	}
-	
-	@Override
-	public void removeFromRecentFoodItemsList(SparseBooleanArray itemsToRemove) {
-		removeFromFoodList(mRecentFoodsList, itemsToRemove);
-	}
+    }
+    
+    @Override
+    public void removeFromRecentFoodItemsList(SparseBooleanArray itemsToRemove) {
+        removeFromFoodList(mRecentFoodsList, itemsToRemove);
+    }
 
-	@Override
-	public void setRemoveFoodItemsMode(boolean enable) {
-		removeItemsFromMealMode = enable;
+    @Override
+    public void setRemoveFoodItemsMode(boolean enable) {
+        removeItemsFromMealMode = enable;
         mViewPager.setPagingEnabled(!enable);
         mSearchEditText.setEnabled(!enable);
-	}
-	
-	@Override
-	public void removeFromFoodItemsList(SparseBooleanArray itemsToRemove) {
-		removeFromFoodList(mFoodItemsList, itemsToRemove);
-	}
-	
-	private void removeFromFoodList(ArrayList<FoodItem> foodList, SparseBooleanArray itemsToRemove) {
-		int numItemsToRemove = itemsToRemove.size();
-		if (itemsToRemove.size() <= 0) {
-			return;
-		}
-		
-		if (numItemsToRemove > foodList.size()) {
-			throw new IllegalArgumentException("numItemsToRemove is larger than the foodList size");
-		}
-		
-		// Each item in 'itemsToRemove' has a key and a value.
-		// The key is an index to 'mFoodItemsList'.
-		// The value is a boolean: true means that the item should be removed.
-		// Start from the end of the list, because items in the list will be shifted after each 'remove' call.
-		// Keys are guaranteed to be sorted in ascending order,
-		// e.g., keyAt(0) will return the smallest key and keyAt(size()-1) will return the largest key.
-		for (int n = (numItemsToRemove-1); n >= 0; n--) {
-			int index = itemsToRemove.keyAt(n);
-			if (itemsToRemove.get(index)) {
-				foodList.remove(index);
-			}
-		}
-		
-		updateRecentFoodsAndMealData();
-	}
-	
-	private void setLanguage(Language language) {
-	    if (language != mLanguage) {
-	    	mLanguage = language;
+    }
+    
+    @Override
+    public void removeFromFoodItemsList(SparseBooleanArray itemsToRemove) {
+        removeFromFoodList(mFoodItemsList, itemsToRemove);
+    }
+    
+    private void removeFromFoodList(ArrayList<FoodItem> foodList, SparseBooleanArray itemsToRemove) {
+        int numItemsToRemove = itemsToRemove.size();
+        if (itemsToRemove.size() <= 0) {
+            return;
+        }
+        
+        if (numItemsToRemove > foodList.size()) {
+            throw new IllegalArgumentException("numItemsToRemove is larger than the foodList size");
+        }
+        
+        // Each item in 'itemsToRemove' has a key and a value.
+        // The key is an index to 'mFoodItemsList'.
+        // The value is a boolean: true means that the item should be removed.
+        // Start from the end of the list, because items in the list will be shifted after each 'remove' call.
+        // Keys are guaranteed to be sorted in ascending order,
+        // e.g., keyAt(0) will return the smallest key and keyAt(size()-1) will return the largest key.
+        for (int n = (numItemsToRemove-1); n >= 0; n--) {
+            int index = itemsToRemove.keyAt(n);
+            if (itemsToRemove.get(index)) {
+                foodList.remove(index);
+            }
+        }
+        
+        updateRecentFoodsAndMealData();
+    }
+    
+    private void setLanguage(Language language) {
+        if (language != mLanguage) {
+            mLanguage = language;
 
-	    	setLanguageTextInOptionsMenu(language);
+            setLanguageTextInOptionsMenu(language);
 
-	    	mFoodDbAdapter.setLanguage(language);
-	    	
-	    	refreshAllTabs();
-	    }
-	}
-	
-	private void setLanguageTextInOptionsMenu(Language language) {
-		int languageId = (language == Language.ENGLISH) ?
-				R.string.language_english : R.string.language_dutch;
-		MenuItem languageMenuItem = mOptionsMenu.findItem(R.id.menu_language);
-    	languageMenuItem.setTitle(languageId);
-	}
-	
-	private static String getFragmentTag(int index)
-	{
-		// Reference: http://stackoverflow.com/questions/6976027/reusing-fragments-in-a-fragmentpageradapter
-	    return "android:switcher:" + R.id.pager + ":" + index;
-	}
-	
-	private void updateMealTabText() {
-		final ActionBar actionBar = getSupportActionBar();
+            mFoodDbAdapter.setLanguage(language);
+            
+            refreshAllTabs();
+        }
+    }
+    
+    private void setLanguageTextInOptionsMenu(Language language) {
+        int languageId = (language == Language.ENGLISH) ?
+                R.string.language_english : R.string.language_dutch;
+        MenuItem languageMenuItem = mOptionsMenu.findItem(R.id.menu_language);
+        languageMenuItem.setTitle(languageId);
+    }
+    
+    private static String getFragmentTag(int index)
+    {
+        // Reference: http://stackoverflow.com/questions/6976027/reusing-fragments-in-a-fragmentpageradapter
+        return "android:switcher:" + R.id.pager + ":" + index;
+    }
+    
+    private void updateMealTabText() {
+        final ActionBar actionBar = getSupportActionBar();
         Tab mealTab = actionBar.getTabAt(MEAL_TAB_INDEX);
         String origTitle = getResources().getString(R.string.title_meal);
         
         int numFoodItems = mFoodItemsList.size();
         if (numFoodItems > 0) {
-        	mTotalCarbsInGrams = 0;
-    		for (FoodItem item : mFoodItemsList) {
-    			final FoodItemInfo info = mFoodDbAdapter.getFoodItemInfo(item);
-    			mTotalCarbsInGrams += info.getNumCarbsInGrams();
-    		}
-    		
-    		mealTab.setText(String.format("%s (%.1f g)", origTitle, mTotalCarbsInGrams));
-    		
+            mTotalCarbsInGrams = 0;
+            for (FoodItem item : mFoodItemsList) {
+                final FoodItemInfo info = mFoodDbAdapter.getFoodItemInfo(item);
+                mTotalCarbsInGrams += info.getNumCarbsInGrams();
+            }
+            
+            mealTab.setText(String.format("%s (%.1f g)", origTitle, mTotalCarbsInGrams));
+            
         } else {
-        	mealTab.setText(origTitle);
+            mealTab.setText(origTitle);
         }
-	}
+    }
 
-	private void refreshAllTabs() {
-		refreshFoodsTab();
-		refreshRecentFoodsAndMealTabs();	
-	}
+    private void refreshAllTabs() {
+        refreshFoodsTab();
+        refreshRecentFoodsAndMealTabs();    
+    }
 
-	private void refreshAllTabsAndMealTotal() {
-		refreshFoodsTab();
-		updateRecentFoodsAndMealData();	
-	}
-	
-	private void refreshFoodsTab() {
-		// During an orientation change, the fragment may still be null
-    	FoodsFragment allFoodsFragment = (FoodsFragment)getFragment(FOODS_TAB_INDEX);
-    	if (allFoodsFragment != null) {
-    		allFoodsFragment.refreshList();
-    	}
-	}
+    private void refreshAllTabsAndMealTotal() {
+        refreshFoodsTab();
+        updateRecentFoodsAndMealData();    
+    }
+    
+    private void refreshFoodsTab() {
+        // During an orientation change, the fragment may still be null
+        FoodsFragment allFoodsFragment = (FoodsFragment)getFragment(FOODS_TAB_INDEX);
+        if (allFoodsFragment != null) {
+            allFoodsFragment.refreshList();
+        }
+    }
 
-	private void refreshRecentFoodsAndMealTabs() {
-		// During an orientation change, the fragment is still null
-    	RecentFoodsFragment recentFoodsFragment = (RecentFoodsFragment)getFragment(RECENT_FOODS_TAB_INDEX);
-    	if (recentFoodsFragment != null) {
-    		recentFoodsFragment.setFoodItemList(mRecentFoodsList);
-    	}
-    	
-    	MealFragment mealFragment = (MealFragment)getFragment(MEAL_TAB_INDEX);
-    	if (mealFragment != null) {
-    		mealFragment.setFoodItemList(mFoodItemsList);
-    	}
-	}
+    private void refreshRecentFoodsAndMealTabs() {
+        // During an orientation change, the fragment is still null
+        RecentFoodsFragment recentFoodsFragment = (RecentFoodsFragment)getFragment(RECENT_FOODS_TAB_INDEX);
+        if (recentFoodsFragment != null) {
+            recentFoodsFragment.setFoodItemList(mRecentFoodsList);
+        }
+        
+        MealFragment mealFragment = (MealFragment)getFragment(MEAL_TAB_INDEX);
+        if (mealFragment != null) {
+            mealFragment.setFoodItemList(mFoodItemsList);
+        }
+    }
 
-	private void updateRecentFoodsAndMealData() {
-		updateMealTabText();
-    	refreshRecentFoodsAndMealTabs();
-	}
+    private void updateRecentFoodsAndMealData() {
+        updateMealTabText();
+        refreshRecentFoodsAndMealTabs();
+    }
 
-	private void clearRecentFoods() {
-		new AlertDialog.Builder(this)
-		.setTitle(R.string.clear_recent_foods_question)
-	    .setMessage(R.string.clear_recent_foods_confirmation)
-	    .setPositiveButton(R.string.clear_recent_foods_do_clear, new DialogInterface.OnClickListener() {
-	        public void onClick(DialogInterface dialog, int which) { 
-	            // continue with the clear
-	    		mRecentFoodsList.clear();
-	    		updateRecentFoodsAndMealData();
-	        }
-	     })
-	    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-	        public void onClick(DialogInterface dialog, int which) { 
-	            // do nothing
-	        }
-	     })
-	    .show();
-	}
-	
-	private void clearMeal() {
-		new AlertDialog.Builder(this)
-		.setTitle(R.string.clear_meal_question)
-	    .setMessage(R.string.clear_meal_confirmation)
-	    .setPositiveButton(R.string.clear_meal_do_clear, new DialogInterface.OnClickListener() {
-	        public void onClick(DialogInterface dialog, int which) { 
-	            // continue with the clear
-	    		mFoodItemsList.clear();
-	    		updateRecentFoodsAndMealData();
-	        }
-	     })
-	    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-	        public void onClick(DialogInterface dialog, int which) { 
-	            // do nothing
-	        }
-	     })
-	    .show();
-	}
-	
-	private void addFoodItemtoRecentFoodsList(FoodItem foodItem) {
-		// remove any duplicate from the list
-		for (int i = 0; i < mRecentFoodsList.size(); i++) {
-			FoodItem item = mRecentFoodsList.get(i);
-			if (item.equalsExceptTimeAdded(foodItem)) {
-				mRecentFoodsList.remove(i);
-				break;
-			}
-		}
-		
-		// insert into the start of the mRecentFoodsList if not yet present
-		if (mRecentFoodsList.size() >= RECENT_FOODS_LIST_MAX_SIZE) {
-			mRecentFoodsList.remove(RECENT_FOODS_LIST_MAX_SIZE - 1);
-		}
-		
-    	mRecentFoodsList.add(0, foodItem);
-	}
-	
-	public void addFoodItemToMeal(FoodItem foodItem) {
-		mFoodItemsList.add(foodItem);
-		
-		addFoodItemtoRecentFoodsList(foodItem);
-		updateRecentFoodsAndMealData();
-	}
+    private void clearRecentFoods() {
+        new AlertDialog.Builder(this)
+        .setTitle(R.string.clear_recent_foods_question)
+        .setMessage(R.string.clear_recent_foods_confirmation)
+        .setPositiveButton(R.string.clear_recent_foods_do_clear, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) { 
+                // continue with the clear
+                mRecentFoodsList.clear();
+                updateRecentFoodsAndMealData();
+            }
+         })
+        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) { 
+                // do nothing
+            }
+         })
+        .show();
+    }
+    
+    private void clearMeal() {
+        new AlertDialog.Builder(this)
+        .setTitle(R.string.clear_meal_question)
+        .setMessage(R.string.clear_meal_confirmation)
+        .setPositiveButton(R.string.clear_meal_do_clear, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) { 
+                // continue with the clear
+                mFoodItemsList.clear();
+                updateRecentFoodsAndMealData();
+            }
+         })
+        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) { 
+                // do nothing
+            }
+         })
+        .show();
+    }
+    
+    private void addFoodItemtoRecentFoodsList(FoodItem foodItem) {
+        // remove any duplicate from the list
+        for (int i = 0; i < mRecentFoodsList.size(); i++) {
+            FoodItem item = mRecentFoodsList.get(i);
+            if (item.equalsExceptTimeAdded(foodItem)) {
+                mRecentFoodsList.remove(i);
+                break;
+            }
+        }
+        
+        // insert into the start of the mRecentFoodsList if not yet present
+        if (mRecentFoodsList.size() >= RECENT_FOODS_LIST_MAX_SIZE) {
+            mRecentFoodsList.remove(RECENT_FOODS_LIST_MAX_SIZE - 1);
+        }
+        
+        mRecentFoodsList.add(0, foodItem);
+    }
+    
+    public void addFoodItemToMeal(FoodItem foodItem) {
+        mFoodItemsList.add(foodItem);
+        
+        addFoodItemtoRecentFoodsList(foodItem);
+        updateRecentFoodsAndMealData();
+    }
 
-	public void replaceFoodItemInMeal(int index, FoodItem foodItem) {
-		mFoodItemsList.remove(index);
-		mFoodItemsList.add(index, foodItem);
+    public void replaceFoodItemInMeal(int index, FoodItem foodItem) {
+        mFoodItemsList.remove(index);
+        mFoodItemsList.add(index, foodItem);
 
-		addFoodItemtoRecentFoodsList(foodItem);
-		updateRecentFoodsAndMealData();
-	}
+        addFoodItemtoRecentFoodsList(foodItem);
+        updateRecentFoodsAndMealData();
+    }
 
-	public void removeFoodItemFromMeal(int index) {
-		mFoodItemsList.remove(index);
-		updateRecentFoodsAndMealData();
-	}
+    public void removeFoodItemFromMeal(int index) {
+        mFoodItemsList.remove(index);
+        updateRecentFoodsAndMealData();
+    }
 
-	public void removeFoodItemFromRecentFoods(FoodItem foodItem) {
-		mRecentFoodsList.remove(foodItem);
-		updateRecentFoodsAndMealData();
-	}
-	
-	private Fragment getFragment(int index) {
-		String fragmentTag = getFragmentTag(index);
-    	return getSupportFragmentManager().findFragmentByTag(fragmentTag);
-	}
+    public void removeFoodItemFromRecentFoods(FoodItem foodItem) {
+        mRecentFoodsList.remove(foodItem);
+        updateRecentFoodsAndMealData();
+    }
+    
+    private Fragment getFragment(int index) {
+        String fragmentTag = getFragmentTag(index);
+        return getSupportFragmentManager().findFragmentByTag(fragmentTag);
+    }
 
-	private void pruneRecentAndFoodLists() {
-		for (int i = 0; i < mRecentFoodsList.size();) {
-			FoodItem foodItem = mRecentFoodsList.get(i);
-			if (mFoodDbAdapter.getFoodItemInfo(foodItem) == null) {
-				mRecentFoodsList.remove(i);
-			} else {
-				i++;
-			}
-		}
+    private void pruneRecentAndFoodLists() {
+        for (int i = 0; i < mRecentFoodsList.size();) {
+            FoodItem foodItem = mRecentFoodsList.get(i);
+            if (mFoodDbAdapter.getFoodItemInfo(foodItem) == null) {
+                mRecentFoodsList.remove(i);
+            } else {
+                i++;
+            }
+        }
 
-		for (int i = 0; i < mFoodItemsList.size();) {
-			FoodItem foodItem = mFoodItemsList.get(i);
-			if (mFoodDbAdapter.getFoodItemInfo(foodItem) == null) {
-				mFoodItemsList.remove(i);
-			} else {
-				i++;
-			}
-		}
-	}
-	
-	private void initializeCalculatorIntent() {
-	    PackageManager packageManager = getPackageManager();
-		List<PackageInfo> packages = packageManager.getInstalledPackages(0);  
-		for (PackageInfo pi : packages) {
-			if (pi.packageName.toString().toLowerCase(Locale.getDefault()).contains("calcul")){
-			    mCalculatorIntent = packageManager.getLaunchIntentForPackage(pi.packageName);
-			    return;
-			 }
-		}
-	}
+        for (int i = 0; i < mFoodItemsList.size();) {
+            FoodItem foodItem = mFoodItemsList.get(i);
+            if (mFoodDbAdapter.getFoodItemInfo(foodItem) == null) {
+                mFoodItemsList.remove(i);
+            } else {
+                i++;
+            }
+        }
+    }
 
     @SuppressWarnings("deprecation")
     private void copyMealTotalToClipboard() {
-    	String mealTotalValue = String.format("%.1f", mTotalCarbsInGrams);
+        String mealTotalValue = String.format("%.1f", mTotalCarbsInGrams);
 
-    	if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
-    	    android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-    	    android.content.ClipData clip = android.content.ClipData.newPlainText("Carbs meal total", mealTotalValue);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+            android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            android.content.ClipData clip = android.content.ClipData.newPlainText("Carbs meal total", mealTotalValue);
             clipboard.setPrimaryClip(clip);
-    	} else {
-			android.text.ClipboardManager clipboard = (android.text.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-    	    clipboard.setText(mealTotalValue);
-    	}
-    	
-    	Toast.makeText(getApplicationContext(),
-    			getText(R.string.meal_total_copied_to_clipboard),
-    			Toast.LENGTH_SHORT)
-    		 .show();
-	}
+        } else {
+            android.text.ClipboardManager clipboard = (android.text.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            clipboard.setText(mealTotalValue);
+        }
+        
+        Toast.makeText(getApplicationContext(),
+                getText(R.string.meal_total_copied_to_clipboard),
+                Toast.LENGTH_SHORT)
+             .show();
+    }
     
     private void clearSearchText() {
-    	mSearchEditText.setText("");
+        mSearchEditText.setText("");
     }
     
     private void showAboutDialog() {
-    	StringBuilder sb = new StringBuilder();
-    	sb.append(String.format(Locale.getDefault(), "%s%n", getText(R.string.app_name)));
-    	sb.append(String.format(Locale.getDefault(), "Version: %s%n%n", getVersion()));
-    	sb.append(String.format(Locale.getDefault(), "Contact: ronald.taneza@gmail.com"));
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format(Locale.getDefault(), "%s%n", getText(R.string.app_name)));
+        sb.append(String.format(Locale.getDefault(), "Version: %s%n%n", getVersion()));
+        sb.append(String.format(Locale.getDefault(), "Contact: ronald.taneza@gmail.com"));
 
-		new AlertDialog.Builder(this)
-		.setTitle(R.string.about)
-	    .setMessage(sb.toString())
-	    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-	        public void onClick(DialogInterface dialog, int which) { 
-	            // do nothing
-	        }
-		})
-	    .show();
+        new AlertDialog.Builder(this)
+        .setTitle(R.string.about)
+        .setMessage(sb.toString())
+        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) { 
+                // do nothing
+            }
+        })
+        .show();
     }
     
     private String getVersion() {
-    	String version = "Unknown";
-    	try {
-    		version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-    	} catch (NameNotFoundException e) {
-    	}
-    	return version;
+        String version = "Unknown";
+        try {
+            version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+        } catch (NameNotFoundException e) {
+        }
+        return version;
     }
     
     private void deleteMealItems() {
-    	MealFragment mealFragment = (MealFragment)getFragment(MEAL_TAB_INDEX);
-    	if (mealFragment != null) {
-    		mealFragment.StartDeleteItemsMode();
-    	}
+        MealFragment mealFragment = (MealFragment)getFragment(MEAL_TAB_INDEX);
+        if (mealFragment != null) {
+            mealFragment.StartDeleteItemsMode();
+        }
     }
 }
