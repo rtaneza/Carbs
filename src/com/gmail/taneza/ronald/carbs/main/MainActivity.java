@@ -43,11 +43,15 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.Tab;
 import android.support.v7.app.ActionBarActivity;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gmail.taneza.ronald.carbs.R;
@@ -663,14 +667,21 @@ public class MainActivity extends ActionBarActivity implements
     }
     
     private void showAboutDialog() {
+    	//todo: use strings.xml
         StringBuilder sb = new StringBuilder();
         sb.append(String.format(Locale.getDefault(), "%s%n", getText(R.string.app_name)));
         sb.append(String.format(Locale.getDefault(), "Version: %s%n%n", getVersion()));
-        sb.append(String.format(Locale.getDefault(), "Contact: ronald.taneza@gmail.com"));
+        sb.append(String.format(Locale.getDefault(), "%s", getText(R.string.about_contact_info)));
+        
+    	TextView message = new TextView(this);
+    	SpannableString s = new SpannableString(sb.toString());
+    	Linkify.addLinks(s, Linkify.WEB_URLS | Linkify.EMAIL_ADDRESSES);
+    	message.setText(s);
+    	message.setMovementMethod(LinkMovementMethod.getInstance());    	  
 
         new AlertDialog.Builder(this)
         .setTitle(R.string.about)
-        .setMessage(sb.toString())
+        .setView(message)
         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) { 
                 // do nothing
@@ -691,7 +702,7 @@ public class MainActivity extends ActionBarActivity implements
     private void deleteRecentItems() {
         RecentFoodsFragment recentFoodsFragment = (RecentFoodsFragment)getFragment(RECENT_FOODS_TAB_INDEX);
         if (recentFoodsFragment != null) {
-        	recentFoodsFragment.StartDeleteItemsMode();
+            recentFoodsFragment.StartDeleteItemsMode();
         }
     }
     

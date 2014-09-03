@@ -75,7 +75,8 @@
     <string name="search_all_foods">All</string>
     <string name="search_builtin_foods">Built-in</string>
     <string name="search_my_foods">My foods</string>
-    <string name="select_items_to_delete">Select items to delete</string>
+    <string name="select_items_to_delete">Select items to delete</string>    
+    <string name="about_contact_info">https://github.com/rtaneza/Carbs\n\nronald.taneza@gmail.com</string>
     
     <string-array name="weight_unit_text_array">
         <item>@string/unit_grams</item>
