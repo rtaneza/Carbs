@@ -289,6 +289,9 @@ public class MainActivity extends ActionBarActivity implements
             case R.id.menu_clear_meal:
                 clearMeal();
                 break;
+            case R.id.menu_delete_recent_items:
+                deleteRecentItems();
+                break;
             case R.id.menu_delete_meal_items:
                 deleteMealItems();
                 break;
@@ -683,6 +686,13 @@ public class MainActivity extends ActionBarActivity implements
         } catch (NameNotFoundException e) {
         }
         return version;
+    }
+    
+    private void deleteRecentItems() {
+        RecentFoodsFragment recentFoodsFragment = (RecentFoodsFragment)getFragment(RECENT_FOODS_TAB_INDEX);
+        if (recentFoodsFragment != null) {
+        	recentFoodsFragment.StartDeleteItemsMode();
+        }
     }
     
     private void deleteMealItems() {
