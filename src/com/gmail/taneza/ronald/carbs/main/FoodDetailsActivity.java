@@ -79,8 +79,11 @@ public class FoodDetailsActivity extends ActionBarActivity {
 		FoodItem foodItem = intent.getParcelableExtra(FOOD_ITEM_MESSAGE);
 		Mode mode = Mode.values()[intent.getIntExtra(ACTIVITY_MODE_MESSAGE, Mode.NewFood.ordinal())];
 
+		// Create a copy of the foodItemInfo returned by foodDbAdapter,
+		// because the user may modify the weight value, and then cancel his changes.
 		FoodDbAdapter foodDbAdapter = ((CarbsApp)getApplication()).getFoodDbAdapter();
-		mFoodItemInfo = foodDbAdapter.getFoodItemInfo(foodItem);
+		FoodItemInfo foodItemInfo = foodDbAdapter.getFoodItemInfo(foodItem);
+		mFoodItemInfo = new FoodItemInfo(foodItem, foodItemInfo.getName(), foodItemInfo.getWeightPerUnit(), foodItemInfo.getNumCarbsInGramsPerUnit(), foodItemInfo.getUnitText());
 		
 		TextView foodNameTextView = (TextView) findViewById(R.id.food_details_name);
 		foodNameTextView.setText(mFoodItemInfo.getName());
