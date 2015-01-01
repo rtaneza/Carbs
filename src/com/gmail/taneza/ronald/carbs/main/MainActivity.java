@@ -23,6 +23,7 @@ import java.util.Locale;
 import org.droidparts.widget.ClearableEditText;
 
 import android.annotation.TargetApi;
+import android.app.ActionBar.LayoutParams;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -51,6 +52,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -102,6 +104,9 @@ public class MainActivity extends ActionBarActivity implements
 
     private float mTotalCarbsInGrams = 0;
     
+    private LinearLayout.LayoutParams mSearchEditTextOrigLayoutParams;
+    private LinearLayout.LayoutParams mSearchEditTextFullWidthLayoutParams;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,6 +129,10 @@ public class MainActivity extends ActionBarActivity implements
 
         mSearchEditText = (ClearableEditText)findViewById(R.id.search_text);
         
+		mSearchEditTextOrigLayoutParams = (LinearLayout.LayoutParams)mSearchEditText.getLayoutParams();
+		mSearchEditTextFullWidthLayoutParams = new LinearLayout.LayoutParams(mSearchEditTextOrigLayoutParams);
+		mSearchEditTextFullWidthLayoutParams.weight = 1.0f;
+		
         mSearchOptionSpinner = (Spinner) findViewById(R.id.search_option_spinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this,
@@ -233,10 +242,14 @@ public class MainActivity extends ActionBarActivity implements
         // So hide the spinner in the other tabs.
     	if (position == FOODS_TAB_INDEX) {
     		mSearchOptionSpinner.setVisibility(View.VISIBLE);
+    		mSearchEditText.setLayoutParams(mSearchEditTextOrigLayoutParams);
+    		
     	} else {
     		mSearchOptionSpinner.setVisibility(View.GONE);
+    		// Let the search edit text field take the whole width.
+    		mSearchEditText.setLayoutParams(mSearchEditTextFullWidthLayoutParams);
     	}
-        
+		
         getSupportActionBar().setSelectedNavigationItem(position);
     }
 
