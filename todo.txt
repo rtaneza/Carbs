@@ -29,7 +29,8 @@ ok // Check for duplicate name when adding new MyFood
 ok // clear MyFoods table in production db
 ok // add capability to accept plain text data intent -> this should be imported to MyFoods list
 // Align buttons in FoodDetailsActivity -> especially with dutch text
-// translate confirmation and import messages to dutch
+ng // translate confirmation and import messages to dutch
+   -> just support english
 ng // Add search icon to search edit text
 ok // change clear icon of clearable edit text
 ok // remove "Settings" in menu
@@ -44,9 +45,12 @@ Aug 2014
 ok // "ml" label in MyFoods is not fully visible
 // white background on lists is not the same as the default background
 ok // Remove "Open calculator"
-// Move "My foods" to "text" menu
+ok // Move "My foods" to "text" menu
 ok // Add "Delete recent items..."
 // Replace "meal" with "Total"
 // "Delete meal items" crashes if another tab (Foods/recent) is active
 ok // Make e-mail clickable in About dialog
 // Disable search option spinner in Meal tab
+
+Jan 2015
+// Add help info for export/import of My foods

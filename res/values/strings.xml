@@ -6,7 +6,7 @@
     <string name="no_items">No items found</string>
     <string name="meal_total_carbs">Total carbs in meal:</string>
     <string name="search_text_hint">Search</string>
-    <string name="my_foods">My foods</string>
+    <string name="my_foods">My foods&#8230;</string>
     <string name="clear_recent_foods">Clear recent&#8230;</string>
     <string name="clear_recent_foods_do_clear">Clear recent</string>
     <string name="clear_recent_foods_question">Clear recent?</string>

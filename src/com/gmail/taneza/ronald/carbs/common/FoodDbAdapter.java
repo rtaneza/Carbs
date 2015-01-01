@@ -62,7 +62,7 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     
     public FoodDbAdapter(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        //Enable this only during development, if there's a new db with the same version as the previous one.
+        //Enable the following line only during development. It's intended to replace an existing db on the device, if there's a new db with the same version as the previous one.
         //deleteDbIfItAlreadyExists(context);
         
         mFoodItemCache = new HashMap<FoodItem, FoodItemInfo>();
