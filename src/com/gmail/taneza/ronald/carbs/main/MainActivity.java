@@ -72,9 +72,8 @@ public class MainActivity extends ActionBarActivity implements
     public final static String PREF_LANGUAGE = "PREF_LANGUAGE";
     public final static String PREF_RECENT_FOODS_LIST = "PREF_RECENT_FOODS_LIST";
     public final static String PREF_FOOD_ITEMS_LIST = "PREF_FOOD_ITEMS_LIST";
+    public final static String PREF_SEARCH_OPTION = "PREF_SEARCH_OPTION";
 
-    public final static int RECENT_FOODS_LIST_MAX_SIZE = 50;
-    
     public final static int FOODS_TAB_INDEX = 0;
     public final static int RECENT_FOODS_TAB_INDEX = 1;
     public final static int MEAL_TAB_INDEX = 2;
@@ -132,8 +131,7 @@ public class MainActivity extends ActionBarActivity implements
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         mSearchOptionSpinner.setAdapter(arrayAdapter);
-        //TODO: save/restore selection
-        mSearchOptionSpinner.setSelection(0);
+        mSearchOptionSpinner.setSelection(prefs.getInt(PREF_SEARCH_OPTION, FoodsFragment.SEARCH_ALL_FOODS));
         
         mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
         mViewPager = (CustomViewPager) findViewById(R.id.pager);
@@ -152,7 +150,7 @@ public class MainActivity extends ActionBarActivity implements
         
         refreshAllTabsAndMealTotal();
          
-         mEditFoodItemIndex = -1;
+        mEditFoodItemIndex = -1;
     }
     
     private void addActionBarTabs() {
@@ -178,7 +176,8 @@ public class MainActivity extends ActionBarActivity implements
         editor.putInt(PREF_LANGUAGE, mLanguage.ordinal());        
         editor.putString(PREF_FOOD_ITEMS_LIST, FoodItemListSerializer.getStringFromList(mFoodItemsList));
         editor.putString(PREF_RECENT_FOODS_LIST, FoodItemListSerializer.getStringFromList(mRecentFoodsList));
-
+        editor.putInt(PREF_SEARCH_OPTION, mSearchOptionSpinner.getSelectedItemPosition());
+        
         // Commit the edits!
         editor.commit();
 
@@ -585,11 +584,6 @@ public class MainActivity extends ActionBarActivity implements
             }
         }
         
-        // insert into the start of the mRecentFoodsList if not yet present
-        if (mRecentFoodsList.size() >= RECENT_FOODS_LIST_MAX_SIZE) {
-            mRecentFoodsList.remove(RECENT_FOODS_LIST_MAX_SIZE - 1);
-        }
-        
         mRecentFoodsList.add(0, foodItem);
     }
     
@@ -667,10 +661,9 @@ public class MainActivity extends ActionBarActivity implements
     }
     
     private void showAboutDialog() {
-    	//todo: use strings.xml
         StringBuilder sb = new StringBuilder();
         sb.append(String.format(Locale.getDefault(), "%s%n", getText(R.string.app_name)));
-        sb.append(String.format(Locale.getDefault(), "Version: %s%n%n", getVersion()));
+        sb.append(String.format(Locale.getDefault(), "%s: %s%n%n", getText(R.string.about_version_label), getVersion()));
         sb.append(String.format(Locale.getDefault(), "%s", getText(R.string.about_contact_info)));
         
     	TextView message = new TextView(this);
@@ -702,6 +695,7 @@ public class MainActivity extends ActionBarActivity implements
     private void deleteRecentItems() {
         RecentFoodsFragment recentFoodsFragment = (RecentFoodsFragment)getFragment(RECENT_FOODS_TAB_INDEX);
         if (recentFoodsFragment != null) {
+            mViewPager.setCurrentItem(RECENT_FOODS_TAB_INDEX);            
             recentFoodsFragment.StartDeleteItemsMode();
         }
     }
@@ -709,6 +703,7 @@ public class MainActivity extends ActionBarActivity implements
     private void deleteMealItems() {
         MealFragment mealFragment = (MealFragment)getFragment(MEAL_TAB_INDEX);
         if (mealFragment != null) {
+            mViewPager.setCurrentItem(MEAL_TAB_INDEX); 
             mealFragment.StartDeleteItemsMode();
         }
     }

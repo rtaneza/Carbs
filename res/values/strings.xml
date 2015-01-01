@@ -77,6 +77,7 @@
     <string name="search_my_foods">My foods</string>
     <string name="select_items_to_delete">Select items to delete</string>    
     <string name="about_contact_info">https://github.com/rtaneza/Carbs\n\nronald.taneza@gmail.com</string>
+    <string name="about_version_label">Version</string>    
     
     <string-array name="weight_unit_text_array">
         <item>@string/unit_grams</item>

@@ -48,9 +48,10 @@ ok // Remove "Open calculator"
 ok // Move "My foods" to "text" menu
 ok // Add "Delete recent items..."
 // Replace "meal" with "Total"
-// "Delete meal items" crashes if another tab (Foods/recent) is active
+ok // "Delete meal items" crashes if another tab (Foods/recent) is active
 ok // Make e-mail clickable in About dialog
 // Disable search option spinner in Meal tab
 
 Jan 2015
 // Add help info for export/import of My foods
+// In Meal/Recent food info, pressing 'cancel' still performs the same function as 'ok' or 'save'
