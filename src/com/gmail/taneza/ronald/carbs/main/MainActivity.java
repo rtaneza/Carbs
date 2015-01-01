@@ -49,6 +49,7 @@ import android.text.util.Linkify;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -122,11 +123,11 @@ public class MainActivity extends ActionBarActivity implements
         setContentView(R.layout.activity_main);
 
         mSearchEditText = (ClearableEditText)findViewById(R.id.search_text);
-         
+        
         mSearchOptionSpinner = (Spinner) findViewById(R.id.search_option_spinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this,
-                R.array.search_options_array, android.R.layout.simple_spinner_item);
+                R.array.search_options_array, android.R.layout.simple_spinner_item);        
         // Specify the layout to use when the list of choices appears
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
@@ -228,6 +229,14 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public void onPageSelected(int position) {
+        // The search options spinner is only used in the "Foods" tab.
+        // So hide the spinner in the other tabs.
+    	if (position == FOODS_TAB_INDEX) {
+    		mSearchOptionSpinner.setVisibility(View.VISIBLE);
+    	} else {
+    		mSearchOptionSpinner.setVisibility(View.GONE);
+    	}
+        
         getSupportActionBar().setSelectedNavigationItem(position);
     }
 
@@ -484,15 +493,14 @@ public class MainActivity extends ActionBarActivity implements
         final ActionBar actionBar = getSupportActionBar();
         Tab mealTab = actionBar.getTabAt(MEAL_TAB_INDEX);
         String origTitle = getResources().getString(R.string.title_meal);
-        
+
+        mTotalCarbsInGrams = 0;
         int numFoodItems = mFoodItemsList.size();
         if (numFoodItems > 0) {
-            mTotalCarbsInGrams = 0;
             for (FoodItem item : mFoodItemsList) {
                 final FoodItemInfo info = mFoodDbAdapter.getFoodItemInfo(item);
                 mTotalCarbsInGrams += info.getNumCarbsInGrams();
-            }
-            
+            }            
             mealTab.setText(String.format("%s (%.1f g)", origTitle, mTotalCarbsInGrams));
             
         } else {
@@ -650,10 +658,8 @@ public class MainActivity extends ActionBarActivity implements
             clipboard.setText(mealTotalValue);
         }
         
-        Toast.makeText(getApplicationContext(),
-                getText(R.string.meal_total_copied_to_clipboard),
-                Toast.LENGTH_SHORT)
-             .show();
+        String message = String.format(Locale.US, getResources().getString(R.string.meal_total_copied_to_clipboard), mealTotalValue);
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
     
     private void clearSearchText() {
@@ -696,7 +702,7 @@ public class MainActivity extends ActionBarActivity implements
         RecentFoodsFragment recentFoodsFragment = (RecentFoodsFragment)getFragment(RECENT_FOODS_TAB_INDEX);
         if (recentFoodsFragment != null) {
             mViewPager.setCurrentItem(RECENT_FOODS_TAB_INDEX);            
-            recentFoodsFragment.StartDeleteItemsMode();
+            recentFoodsFragment.startDeleteItemsMode();
         }
     }
     
@@ -704,7 +710,7 @@ public class MainActivity extends ActionBarActivity implements
         MealFragment mealFragment = (MealFragment)getFragment(MEAL_TAB_INDEX);
         if (mealFragment != null) {
             mViewPager.setCurrentItem(MEAL_TAB_INDEX); 
-            mealFragment.StartDeleteItemsMode();
+            mealFragment.startDeleteItemsMode();
         }
     }
 }

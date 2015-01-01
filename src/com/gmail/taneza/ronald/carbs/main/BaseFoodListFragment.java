@@ -51,175 +51,175 @@ import com.gmail.taneza.ronald.carbs.common.FoodItemBaseArrayAdapter;
 
 public abstract class BaseFoodListFragment extends BaseListFragment {
 
-	protected ClearableEditText mSearchEditText;
-	protected FoodItemBaseArrayAdapter mFoodItemArrayAdapter;
+    protected ClearableEditText mSearchEditText;
+    protected FoodItemBaseArrayAdapter mFoodItemArrayAdapter;
 
-	protected abstract ArrayList<FoodItem> getFoodList();
-	protected abstract void startActivityToAddOrEditFood(FoodItem foodItem, int foodItemIndex);
-	protected abstract FoodItemBaseArrayAdapter createFoodItemArrayAdapter(Context context, FoodDbAdapter foodDbAdapter, ArrayList<FoodItem> values);
+    protected abstract ArrayList<FoodItem> getFoodList();
+    protected abstract void startActivityToAddOrEditFood(FoodItem foodItem, int foodItemIndex);
+    protected abstract FoodItemBaseArrayAdapter createFoodItemArrayAdapter(Context context, FoodDbAdapter foodDbAdapter, ArrayList<FoodItem> values);
 
-	private ActionMode mActionMode;
-	private OnItemClickListener mOnItemClickListenerDefault;
-	private OnItemClickListener mOnItemClickListenerActionMode;
-	
-	@Override
-	public void onActivityCreated (Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		
-		mSearchEditText = (ClearableEditText) getActivity().findViewById(R.id.search_text);
+    private ActionMode mActionMode;
+    private OnItemClickListener mOnItemClickListenerDefault;
+    private OnItemClickListener mOnItemClickListenerActionMode;
+    
+    @Override
+    public void onActivityCreated (Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        
+        mSearchEditText = (ClearableEditText) getActivity().findViewById(R.id.search_text);
         addSearchTextListener(mSearchEditText);
 
-		ArrayList<FoodItem> recentFoodsList = getFoodList();
-		mFoodItemArrayAdapter = createFoodItemArrayAdapter(getActivity(), mFoodDbAdapter, recentFoodsList);
-		setListAdapter(mFoodItemArrayAdapter);
+        ArrayList<FoodItem> recentFoodsList = getFoodList();
+        mFoodItemArrayAdapter = createFoodItemArrayAdapter(getActivity(), mFoodDbAdapter, recentFoodsList);
+        setListAdapter(mFoodItemArrayAdapter);
 
-		mOnItemClickListenerDefault = getListView().getOnItemClickListener();
-		
-		mOnItemClickListenerActionMode = new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				onItemClickInActionMode(parent, view, position, id);
-			}
-		};
-			
-		getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
-			@Override
-			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-		    		mFoodItemArrayAdapter.clearSelection();
-		    		
-					mActionMode = getActivity().startActionMode(new ActionBarCallBack());
-					onItemClickInActionMode(parent, view, position, id);
-					
-					getListView().setOnItemClickListener(mOnItemClickListenerActionMode);
-					return true;
-				}
-			});
-	}
-	
-	private void onItemClickInActionMode(AdapterView<?> parent, View view, int position, long id) {
-		mFoodItemArrayAdapter.toggleSelection(position);
+        mOnItemClickListenerDefault = getListView().getOnItemClickListener();
+        
+        mOnItemClickListenerActionMode = new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                onItemClickInActionMode(parent, view, position, id);
+            }
+        };
+            
+        getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                    mFoodItemArrayAdapter.clearSelection();
+                    
+                    mActionMode = getActivity().startActionMode(new ActionBarCallBack());
+                    onItemClickInActionMode(parent, view, position, id);
+                    
+                    getListView().setOnItemClickListener(mOnItemClickListenerActionMode);
+                    return true;
+                }
+            });
+    }
+    
+    private void onItemClickInActionMode(AdapterView<?> parent, View view, int position, long id) {
+        mFoodItemArrayAdapter.toggleSelection(position);
 
-		String selectedText = getResources().getString(R.string.selected);
+        String selectedText = getResources().getString(R.string.selected);
         mActionMode.setTitle(String.format("%d %s", mFoodItemArrayAdapter.getNumSelected(), selectedText));
-	}
-	
-	@Override
-	public void onStart() {
-		// This is called when the fragment is visible to the user.
-		super.onStart();
-		filterListBasedOnSearchText();
-	}
-	
-	public void setFoodItemList(ArrayList<FoodItem> foodItemList) {
-		if (mFoodItemArrayAdapter != null) {
-			// During an orientation change, the MainActivity onCreate() calls setFoodItemList()
-			// _before_ onCreateView(), so mFoodItemArrayAdapter is still null
-			mFoodItemArrayAdapter.setValues(foodItemList);
-		}
-	}
-	
-	public void refreshList() {
-		if (mFoodItemArrayAdapter != null) {
-			mFoodItemArrayAdapter.notifyDataSetChanged();
-		}
+    }
+    
+    @Override
+    public void onStart() {
+        // This is called when the fragment is visible to the user.
+        super.onStart();
+        filterListBasedOnSearchText();
+    }
+    
+    public void setFoodItemList(ArrayList<FoodItem> foodItemList) {
+        if (mFoodItemArrayAdapter != null) {
+            // During an orientation change, the MainActivity onCreate() calls setFoodItemList()
+            // _before_ onCreateView(), so mFoodItemArrayAdapter is still null
+            mFoodItemArrayAdapter.setValues(foodItemList);
+        }
+    }
+    
+    public void refreshList() {
+        if (mFoodItemArrayAdapter != null) {
+            mFoodItemArrayAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override 
     public void onListItemClick(ListView l, View v, int position, long id) {
-    	FoodItem foodItem = (FoodItem)l.getItemAtPosition(position);
-    	startActivityToAddOrEditFood(foodItem, position);
+        FoodItem foodItem = (FoodItem)l.getItemAtPosition(position);
+        startActivityToAddOrEditFood(foodItem, position);
     }
     
-    public void StartDeleteItemsMode() {
-		mActionMode = getActivity().startActionMode(new ActionBarCallBack());
-		mActionMode.setTitle(R.string.select_items_to_delete);
-		getListView().setOnItemClickListener(mOnItemClickListenerActionMode);
+    public void startDeleteItemsMode() {
+        mActionMode = getActivity().startActionMode(new ActionBarCallBack());
+        mActionMode.setTitle(R.string.select_items_to_delete);
+        getListView().setOnItemClickListener(mOnItemClickListenerActionMode);
     }
 
-	private void addSearchTextListener(ClearableEditText searchEditText) {
-		
-		searchEditText.addTextChangedListener(new TextWatcher() {
-			public void afterTextChanged(Editable s) {
-			}
+    private void addSearchTextListener(ClearableEditText searchEditText) {
+        
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+            }
 
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-			}
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                    int after) {
+            }
 
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				filterListBasedOnSearchText();
-			}
-		});
-		
-		// This listener is called when the Enter key is pressed
-		searchEditText.setOnEditorActionListener(new OnEditorActionListener() {
-			@Override
-			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-				// Ignore the Enter key because we already do the processing every time the text changes
-				return true;
-			}
-		});
-	}
-	
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterListBasedOnSearchText();
+            }
+        });
+        
+        // This listener is called when the Enter key is pressed
+        searchEditText.setOnEditorActionListener(new OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                // Ignore the Enter key because we already do the processing every time the text changes
+                return true;
+            }
+        });
+    }
+    
     private void filterListBasedOnSearchText() {
-		mFoodItemArrayAdapter.getFilter().filter(mSearchEditText.getText().toString());
+        mFoodItemArrayAdapter.getFilter().filter(mSearchEditText.getText().toString());
     }
 
-	protected abstract void setRemoveItemsMode(boolean enable);
-	protected abstract void removeFromList(SparseBooleanArray itemsToRemove);
+    protected abstract void setRemoveItemsMode(boolean enable);
+    protected abstract void removeFromList(SparseBooleanArray itemsToRemove);
     
     private class ActionBarCallBack implements ActionMode.Callback {
-	    @Override
-	    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-	        switch (item.getItemId()) {
-	        case R.id.menu_food_list_remove:
-	        	new AlertDialog.Builder(getActivity())
-	    	    .setMessage(R.string.remove_selected_items)
-	    	    .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
-	    	        public void onClick(DialogInterface dialog, int which) { 
-	    	            // continue with remove
-	    	        	removeFromList(mFoodItemArrayAdapter.getSelection());
-	                    mActionMode.finish();
-	
-	    	        	Toast.makeText(getActivity().getApplicationContext(),
-	    	        			getText(R.string.items_removed),
-	    	        			Toast.LENGTH_SHORT)
-	    	        		 .show();
-	    	        }
-	    	     })
-	    	    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-	    	        public void onClick(DialogInterface dialog, int which) { 
-	    	            // do nothing
-	    	        }
-	    	     })
-	    	    .show();            	
-	            return true;
-	            
-	        default:
-	            return false;
-	        }
-	    }
-	    
-	    @Override
-	    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-	    	setRemoveItemsMode(true);
-	    	
-	        MenuInflater inflater = mode.getMenuInflater();
-	        inflater.inflate(R.menu.menu_food_list_action_bar, menu);
-	        return true;
-	    }
-	
-	    @Override
-	    public void onDestroyActionMode(ActionMode mode) {
-	    	mFoodItemArrayAdapter.clearSelection();
-			getListView().setOnItemClickListener(mOnItemClickListenerDefault);
-	
-			setRemoveItemsMode(false);
-	    }
-	
-	    @Override
-	    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-	        return false;
-	    }
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            switch (item.getItemId()) {
+            case R.id.menu_food_list_remove:
+                new AlertDialog.Builder(getActivity())
+                .setMessage(R.string.remove_selected_items)
+                .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) { 
+                        // continue with remove
+                        removeFromList(mFoodItemArrayAdapter.getSelection());
+                        mActionMode.finish();
+    
+                        Toast.makeText(getActivity().getApplicationContext(),
+                                getText(R.string.items_removed),
+                                Toast.LENGTH_SHORT)
+                             .show();
+                    }
+                 })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) { 
+                        // do nothing
+                    }
+                 })
+                .show();                
+                return true;
+                
+            default:
+                return false;
+            }
+        }
+        
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            setRemoveItemsMode(true);
+            
+            MenuInflater inflater = mode.getMenuInflater();
+            inflater.inflate(R.menu.menu_food_list_action_bar, menu);
+            return true;
+        }
+    
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            mFoodItemArrayAdapter.clearSelection();
+            getListView().setOnItemClickListener(mOnItemClickListenerDefault);
+    
+            setRemoveItemsMode(false);
+        }
+    
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
     }
 }

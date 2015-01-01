@@ -56,7 +56,7 @@
     <string name="clear_my_foods_confirmation">Are you sure you want to clear all items in My Foods? These items will also be removed from the Recent and Meal lists.</string>
     <string name="export_my_foods">Export my foods&#8230;</string>
     <string name="copy_meal_total">Copy total carbs</string>
-    <string name="meal_total_copied_to_clipboard">Total carbs value copied to clipboard.</string>
+    <string name="meal_total_copied_to_clipboard">Total carbs value (%1$s) copied to clipboard.</string>
     <string name="food_removed_from_meal">Food removed from meal.</string>
     <string name="food_removed_from_recent">Food removed from history.</string>
     <string name="food_removed_from_my_foods">Food removed from My Foods.</string>

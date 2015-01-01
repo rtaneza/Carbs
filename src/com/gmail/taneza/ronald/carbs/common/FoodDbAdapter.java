@@ -112,7 +112,7 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
 		SQLiteQueryBuilder foodQb = new SQLiteQueryBuilder();
 
 		// All sql queries in this class map the table name to COLUMN_TABLE_NAME.
-		String [] foodSqlSelect = {"0 _id", String.format("\"%s\" AS %s", getFoodNameColumnName(), COLUMN_TABLE_NAME), 
+		String [] foodSqlSelect = {"0 _id", String.format("\"%s\" AS %s", NEVO_TABLE_NAME, COLUMN_TABLE_NAME), 
 				NEVO_COLUMN_DUTCH_NAME, NEVO_COLUMN_ENGLISH_NAME, 
 				NEVO_COLUMN_WEIGHT_PER_UNIT, NEVO_COLUMN_UNIT_TEXT, 
 				NEVO_COLUMN_CARBS_GRAMS_PER_UNIT, NEVO_COLUMN_PRODUCT_CODE}; 
