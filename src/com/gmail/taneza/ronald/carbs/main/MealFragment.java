@@ -32,35 +32,35 @@ import com.gmail.taneza.ronald.carbs.common.FoodItemArrayAdapter;
 import com.gmail.taneza.ronald.carbs.common.FoodItemBaseArrayAdapter;
 
 public class MealFragment extends BaseFoodListFragment {
-	
-	@Override
+    
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
              Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.fragment_meal, container, false);
-	}
+        return inflater.inflate(R.layout.fragment_meal, container, false);
+    }
 
-	@Override
-	public ArrayList<FoodItem> getFoodList() {
-		return mMainActivityNotifier.getFoodItemsList();
-	}
-	
-	@Override
-	public void startActivityToAddOrEditFood(FoodItem foodItem, int foodItemIndex) {
-    	mMainActivityNotifier.startActivityToEditFoodInMeal(foodItem, foodItemIndex);
-	}
-	
-	@Override
-	public FoodItemBaseArrayAdapter createFoodItemArrayAdapter(Context context, FoodDbAdapter foodDbAdapter, ArrayList<FoodItem> values) {
-		return new FoodItemArrayAdapter(context, foodDbAdapter, values);
-	}
+    @Override
+    public ArrayList<FoodItem> getFoodList() {
+        return mMainActivityNotifier.getFoodItemsList();
+    }
+    
+    @Override
+    public void startActivityToAddOrEditFood(FoodItem foodItem, int foodItemIndex) {
+        mMainActivityNotifier.startActivityToEditFoodInMeal(foodItem, foodItemIndex);
+    }
+    
+    @Override
+    public FoodItemBaseArrayAdapter createFoodItemArrayAdapter(Context context, FoodDbAdapter foodDbAdapter, ArrayList<FoodItem> values) {
+        return new FoodItemArrayAdapter(context, foodDbAdapter, values);
+    }
 
-	@Override
-	protected void setRemoveItemsMode(boolean enable) {
-		mMainActivityNotifier.setRemoveFoodItemsMode(enable);
-	}
+    @Override
+    protected void setDeleteItemsMode(boolean enable) {
+        mMainActivityNotifier.setDeleteFoodItemsMode(enable);
+    }
 
-	@Override
-	protected void removeFromList(SparseBooleanArray itemsToRemove) {
-		mMainActivityNotifier.removeFromFoodItemsList(itemsToRemove);
-	}
+    @Override
+    protected void deleteFromList(SparseBooleanArray itemsToDelete) {
+        mMainActivityNotifier.deleteFromFoodItemsList(itemsToDelete);
+    }
 }

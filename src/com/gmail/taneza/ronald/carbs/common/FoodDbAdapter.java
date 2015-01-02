@@ -35,23 +35,23 @@ import android.util.SparseBooleanArray;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 public class FoodDbAdapter extends SQLiteAssetHelper {
-	public static final String COLUMN_TABLE_NAME = "TableName";
+    public static final String COLUMN_TABLE_NAME = "TableName";
 
-	public static final String NEVO_TABLE_NAME = "Food";
-	public static final String NEVO_COLUMN_DUTCH_NAME = "Product_omschrijving";
-	public static final String NEVO_COLUMN_ENGLISH_NAME = "EnglishName";
-	public static final String NEVO_COLUMN_WEIGHT_PER_UNIT = "Hoeveelheid";
-	public static final String NEVO_COLUMN_UNIT_TEXT = "Meeteenheid";
-	public static final String NEVO_COLUMN_CARBS_GRAMS_PER_UNIT = "_05001";
-	public static final String NEVO_COLUMN_PRODUCT_CODE = "Productcode";
+    public static final String NEVO_TABLE_NAME = "Food";
+    public static final String NEVO_COLUMN_DUTCH_NAME = "Product_omschrijving";
+    public static final String NEVO_COLUMN_ENGLISH_NAME = "EnglishName";
+    public static final String NEVO_COLUMN_WEIGHT_PER_UNIT = "Hoeveelheid";
+    public static final String NEVO_COLUMN_UNIT_TEXT = "Meeteenheid";
+    public static final String NEVO_COLUMN_CARBS_GRAMS_PER_UNIT = "_05001";
+    public static final String NEVO_COLUMN_PRODUCT_CODE = "Productcode";
 
-	public static final String MYFOODS_TABLE_NAME = "MyFoods";
-	public static final String MYFOODS_COLUMN_NAME = "Name";
-	public static final String MYFOODS_COLUMN_WEIGHT_PER_UNIT = "WeightPerUnit";
-	public static final String MYFOODS_COLUMN_UNIT_TEXT = "UnitText";
-	public static final String MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT = "CarbsGramsPerUnit";
-	public static final String MYFOODS_COLUMN_ID = "Id";
-	
+    public static final String MYFOODS_TABLE_NAME = "MyFoods";
+    public static final String MYFOODS_COLUMN_NAME = "Name";
+    public static final String MYFOODS_COLUMN_WEIGHT_PER_UNIT = "WeightPerUnit";
+    public static final String MYFOODS_COLUMN_UNIT_TEXT = "UnitText";
+    public static final String MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT = "CarbsGramsPerUnit";
+    public static final String MYFOODS_COLUMN_ID = "Id";
+    
     private static final String DATABASE_NAME = "NevoFoodListWithEnglishNamesAndMyFoods";
     private static final int DATABASE_VERSION = 1;
     
@@ -68,279 +68,279 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
         mFoodItemCache = new HashMap<FoodItem, FoodItemInfo>();
     }
     
-	public void open() {
-		mDatabase = getWritableDatabase();
+    public void open() {
+        mDatabase = getWritableDatabase();
     }
 
-	@SuppressWarnings("deprecation")
+    @SuppressWarnings("deprecation")
     public String getQueryStringAllFoods(String foodName) {
-		SQLiteQueryBuilder foodQb = new SQLiteQueryBuilder();
+        SQLiteQueryBuilder foodQb = new SQLiteQueryBuilder();
 
-		// Cursor requires an "_id" column
-		// todo: find out what "0" really means
-		String [] foodSqlSelect = {"0 _id", COLUMN_TABLE_NAME, NEVO_COLUMN_DUTCH_NAME, NEVO_COLUMN_ENGLISH_NAME, 
-				NEVO_COLUMN_WEIGHT_PER_UNIT, NEVO_COLUMN_UNIT_TEXT, 
-				NEVO_COLUMN_CARBS_GRAMS_PER_UNIT, NEVO_COLUMN_PRODUCT_CODE}; 
-		String foodWhereClause = getFoodNameColumnName() + " like '%" + foodName + "%'";
-		
-		foodQb.setTables(NEVO_TABLE_NAME);
-		// This method was deprecated in API level 11, but we still would like to support older API versions.
-		String foodSubQuery = foodQb.buildUnionSubQuery(COLUMN_TABLE_NAME, foodSqlSelect, null, foodSqlSelect.length, 
-				NEVO_TABLE_NAME, foodWhereClause, null, null, null);
-		
-		SQLiteQueryBuilder myFoodsQb = new SQLiteQueryBuilder();
-		// Both select statements must have the same number of columns, so we repeat the "Name" column here
-		String [] myFoodsSqlSelect = {"0 _id", COLUMN_TABLE_NAME, MYFOODS_COLUMN_NAME, MYFOODS_COLUMN_NAME, 
-				MYFOODS_COLUMN_WEIGHT_PER_UNIT, MYFOODS_COLUMN_UNIT_TEXT, 
-				MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT, MYFOODS_COLUMN_ID}; 
-		String myFoodsWhereClause = MYFOODS_COLUMN_NAME + " like '%" + foodName + "%'";
-		
-		myFoodsQb.setTables(MYFOODS_TABLE_NAME);
-		// This method was deprecated in API level 11, but we still would like to support older API versions.
-		String myFoodsSubQuery = myFoodsQb.buildUnionSubQuery(COLUMN_TABLE_NAME, myFoodsSqlSelect, null, myFoodsSqlSelect.length, 
-				MYFOODS_TABLE_NAME, myFoodsWhereClause, null, null, null);
+        // Cursor requires an "_id" column
+        // todo: find out what "0" really means
+        String [] foodSqlSelect = {"0 _id", COLUMN_TABLE_NAME, NEVO_COLUMN_DUTCH_NAME, NEVO_COLUMN_ENGLISH_NAME, 
+                NEVO_COLUMN_WEIGHT_PER_UNIT, NEVO_COLUMN_UNIT_TEXT, 
+                NEVO_COLUMN_CARBS_GRAMS_PER_UNIT, NEVO_COLUMN_PRODUCT_CODE}; 
+        String foodWhereClause = getFoodNameColumnName() + " like '%" + foodName + "%'";
+        
+        foodQb.setTables(NEVO_TABLE_NAME);
+        // This method was deprecated in API level 11, but we still would like to support older API versions.
+        String foodSubQuery = foodQb.buildUnionSubQuery(COLUMN_TABLE_NAME, foodSqlSelect, null, foodSqlSelect.length, 
+                NEVO_TABLE_NAME, foodWhereClause, null, null, null);
+        
+        SQLiteQueryBuilder myFoodsQb = new SQLiteQueryBuilder();
+        // Both select statements must have the same number of columns, so we repeat the "Name" column here
+        String [] myFoodsSqlSelect = {"0 _id", COLUMN_TABLE_NAME, MYFOODS_COLUMN_NAME, MYFOODS_COLUMN_NAME, 
+                MYFOODS_COLUMN_WEIGHT_PER_UNIT, MYFOODS_COLUMN_UNIT_TEXT, 
+                MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT, MYFOODS_COLUMN_ID}; 
+        String myFoodsWhereClause = MYFOODS_COLUMN_NAME + " like '%" + foodName + "%'";
+        
+        myFoodsQb.setTables(MYFOODS_TABLE_NAME);
+        // This method was deprecated in API level 11, but we still would like to support older API versions.
+        String myFoodsSubQuery = myFoodsQb.buildUnionSubQuery(COLUMN_TABLE_NAME, myFoodsSqlSelect, null, myFoodsSqlSelect.length, 
+                MYFOODS_TABLE_NAME, myFoodsWhereClause, null, null, null);
 
-		SQLiteQueryBuilder unionQb = new SQLiteQueryBuilder();
-		String queryString = unionQb.buildUnionQuery(new String[] { foodSubQuery, myFoodsSubQuery }, getFoodNameColumnName(), null);
-		
-		//Log.i("Carbs", "Query string: " + queryString);
-		return queryString;
+        SQLiteQueryBuilder unionQb = new SQLiteQueryBuilder();
+        String queryString = unionQb.buildUnionQuery(new String[] { foodSubQuery, myFoodsSubQuery }, getFoodNameColumnName(), null);
+        
+        //Log.i("Carbs", "Query string: " + queryString);
+        return queryString;
     }
 
-	@SuppressWarnings("deprecation")
+    @SuppressWarnings("deprecation")
     public String getQueryStringBuiltinFoods(String foodName) {
-		SQLiteQueryBuilder foodQb = new SQLiteQueryBuilder();
+        SQLiteQueryBuilder foodQb = new SQLiteQueryBuilder();
 
-		// All sql queries in this class map the table name to COLUMN_TABLE_NAME.
-		String [] foodSqlSelect = {"0 _id", String.format("\"%s\" AS %s", NEVO_TABLE_NAME, COLUMN_TABLE_NAME), 
-				NEVO_COLUMN_DUTCH_NAME, NEVO_COLUMN_ENGLISH_NAME, 
-				NEVO_COLUMN_WEIGHT_PER_UNIT, NEVO_COLUMN_UNIT_TEXT, 
-				NEVO_COLUMN_CARBS_GRAMS_PER_UNIT, NEVO_COLUMN_PRODUCT_CODE}; 
-		String foodWhereClause = getFoodNameColumnName() + " like '%" + foodName + "%'";
-		
-		foodQb.setTables(NEVO_TABLE_NAME);
-		String queryString = foodQb.buildQuery(foodSqlSelect, foodWhereClause, null, null, null, getFoodNameColumnName(), null);
-		
-		//Log.i("Carbs", "BuiltinFoods query string: " + queryString);
-		return queryString;
+        // All sql queries in this class map the table name to COLUMN_TABLE_NAME.
+        String [] foodSqlSelect = {"0 _id", String.format("\"%s\" AS %s", NEVO_TABLE_NAME, COLUMN_TABLE_NAME), 
+                NEVO_COLUMN_DUTCH_NAME, NEVO_COLUMN_ENGLISH_NAME, 
+                NEVO_COLUMN_WEIGHT_PER_UNIT, NEVO_COLUMN_UNIT_TEXT, 
+                NEVO_COLUMN_CARBS_GRAMS_PER_UNIT, NEVO_COLUMN_PRODUCT_CODE}; 
+        String foodWhereClause = getFoodNameColumnName() + " like '%" + foodName + "%'";
+        
+        foodQb.setTables(NEVO_TABLE_NAME);
+        String queryString = foodQb.buildQuery(foodSqlSelect, foodWhereClause, null, null, null, getFoodNameColumnName(), null);
+        
+        //Log.i("Carbs", "BuiltinFoods query string: " + queryString);
+        return queryString;
     }
 
-	@SuppressWarnings("deprecation")
+    @SuppressWarnings("deprecation")
     public String getQueryStringMyFoods(String foodName) {
-		SQLiteQueryBuilder myFoodsQb = new SQLiteQueryBuilder();
+        SQLiteQueryBuilder myFoodsQb = new SQLiteQueryBuilder();
 
-		// All sql queries in this class map the table name to COLUMN_TABLE_NAME.
-		String [] myFoodsSqlSelect = {"0 _id", String.format("\"%s\" AS %s", MYFOODS_TABLE_NAME, COLUMN_TABLE_NAME),
-				MYFOODS_COLUMN_NAME, MYFOODS_COLUMN_WEIGHT_PER_UNIT, MYFOODS_COLUMN_UNIT_TEXT, 
-				MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT, MYFOODS_COLUMN_ID}; 
-		String myFoodsWhereClause = MYFOODS_COLUMN_NAME + " like '%" + foodName + "%'";
-		
-		myFoodsQb.setTables(MYFOODS_TABLE_NAME);
-		// This method was deprecated in API level 11, but we still would like to support older API versions.
-		String queryString = myFoodsQb.buildQuery(myFoodsSqlSelect, myFoodsWhereClause, null, null, null, MYFOODS_COLUMN_NAME, null);
-		
-		//Log.i("Carbs", "MyFoods query string: " + queryString);
-		return queryString;
+        // All sql queries in this class map the table name to COLUMN_TABLE_NAME.
+        String [] myFoodsSqlSelect = {"0 _id", String.format("\"%s\" AS %s", MYFOODS_TABLE_NAME, COLUMN_TABLE_NAME),
+                MYFOODS_COLUMN_NAME, MYFOODS_COLUMN_WEIGHT_PER_UNIT, MYFOODS_COLUMN_UNIT_TEXT, 
+                MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT, MYFOODS_COLUMN_ID}; 
+        String myFoodsWhereClause = MYFOODS_COLUMN_NAME + " like '%" + foodName + "%'";
+        
+        myFoodsQb.setTables(MYFOODS_TABLE_NAME);
+        // This method was deprecated in API level 11, but we still would like to support older API versions.
+        String queryString = myFoodsQb.buildQuery(myFoodsSqlSelect, myFoodsWhereClause, null, null, null, MYFOODS_COLUMN_NAME, null);
+        
+        //Log.i("Carbs", "MyFoods query string: " + queryString);
+        return queryString;
     }
     
     public ArrayList<FoodItemInfo> getAllMyFoods() {
-    	String [] columns = {"0 _id", 
-				MYFOODS_COLUMN_NAME, MYFOODS_COLUMN_WEIGHT_PER_UNIT, MYFOODS_COLUMN_UNIT_TEXT, 
-				MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT, MYFOODS_COLUMN_ID};
-    	Cursor cursor = mDatabase.query(MYFOODS_TABLE_NAME, columns, null, null, null, null, MYFOODS_COLUMN_NAME);
-    	
-    	ArrayList<FoodItemInfo> list = new ArrayList<FoodItemInfo>();
-    	cursor.moveToFirst();
-    	while (!cursor.isAfterLast()) {
-    		FoodItem foodItem = new FoodItem(
-    				MYFOODS_TABLE_NAME,
-    				cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_ID)),
-    				cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_WEIGHT_PER_UNIT)));
-    		FoodItemInfo foodItemInfo = new FoodItemInfo(foodItem, 
-    				cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_NAME)),
-    				cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_WEIGHT_PER_UNIT)),
-    				cursor.getFloat(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT)),
-    				cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_UNIT_TEXT)));
-    	     
-    		list.add(foodItemInfo);
-    	    cursor.moveToNext();
-    	}
-    	
-    	return list;
+        String [] columns = {"0 _id", 
+                MYFOODS_COLUMN_NAME, MYFOODS_COLUMN_WEIGHT_PER_UNIT, MYFOODS_COLUMN_UNIT_TEXT, 
+                MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT, MYFOODS_COLUMN_ID};
+        Cursor cursor = mDatabase.query(MYFOODS_TABLE_NAME, columns, null, null, null, null, MYFOODS_COLUMN_NAME);
+        
+        ArrayList<FoodItemInfo> list = new ArrayList<FoodItemInfo>();
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            FoodItem foodItem = new FoodItem(
+                    MYFOODS_TABLE_NAME,
+                    cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_ID)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_WEIGHT_PER_UNIT)));
+            FoodItemInfo foodItemInfo = new FoodItemInfo(foodItem, 
+                    cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_NAME)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_WEIGHT_PER_UNIT)),
+                    cursor.getFloat(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_UNIT_TEXT)));
+             
+            list.add(foodItemInfo);
+            cursor.moveToNext();
+        }
+        
+        return list;
     }
     
     public void setLanguage(Language language) {
-    	mLanguage = language;
-    	mFoodItemCache.clear();
+        mLanguage = language;
+        mFoodItemCache.clear();
     }
     
     public String getFoodNameColumnName() {
-    	switch (mLanguage) {
-    		case ENGLISH:
-    			return NEVO_COLUMN_ENGLISH_NAME;
-    		case DUTCH:
-    			return NEVO_COLUMN_DUTCH_NAME;
-    		default:
-    			return null;
-    	}
+        switch (mLanguage) {
+            case ENGLISH:
+                return NEVO_COLUMN_ENGLISH_NAME;
+            case DUTCH:
+                return NEVO_COLUMN_DUTCH_NAME;
+            default:
+                return null;
+        }
     }
     
     public FoodItemInfo getFoodItemInfo(FoodItem foodItem) {
-    	FoodItemInfo foodItemInfo;
-    	
-    	if (mFoodItemCache.containsKey(foodItem)) {
-    		foodItemInfo = mFoodItemCache.get(foodItem);
-    		//Log.i("Carbs", String.format("Get from cache [%d] %s - %d - %s", mFoodItemHashMap.size(), foodItem.getTableName(), foodItem.getId(), foodItemInfo.getName()));
-    		return foodItemInfo;
-    	}
-    	
-    	String tableName = foodItem.getTableName();
-    	
-    	if (tableName.equals(NEVO_TABLE_NAME)) {
-    		String[] columns = { getFoodNameColumnName(), NEVO_COLUMN_WEIGHT_PER_UNIT, 
-    				NEVO_COLUMN_CARBS_GRAMS_PER_UNIT, NEVO_COLUMN_UNIT_TEXT };
-    		String selection = String.format(Locale.US, "%s = %d", NEVO_COLUMN_PRODUCT_CODE, foodItem.getId());
-    		Cursor cursor = mDatabase.query(tableName, columns, selection, null, null, null, getFoodNameColumnName());
-    		if (cursor.moveToFirst()) {
-	    		foodItemInfo = new FoodItemInfo(
-	    				foodItem,
-	    				cursor.getString(cursor.getColumnIndexOrThrow(getFoodNameColumnName())),
-	    				cursor.getInt(cursor.getColumnIndexOrThrow(NEVO_COLUMN_WEIGHT_PER_UNIT)),
-	    				cursor.getFloat(cursor.getColumnIndexOrThrow(NEVO_COLUMN_CARBS_GRAMS_PER_UNIT)),
-	    				cursor.getString(cursor.getColumnIndexOrThrow(NEVO_COLUMN_UNIT_TEXT)));
-    		} else {
-    			foodItemInfo = null;
-    		}
-    		
-    	} else if (tableName.equals(MYFOODS_TABLE_NAME)) {
-    		String[] columns = { MYFOODS_COLUMN_NAME, MYFOODS_COLUMN_WEIGHT_PER_UNIT, 
-    				MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT, MYFOODS_COLUMN_UNIT_TEXT };
-    		String selection = String.format(Locale.US, "%s = %d", MYFOODS_COLUMN_ID, foodItem.getId());
-    		Cursor cursor = mDatabase.query(tableName, columns, selection, null, null, null, MYFOODS_COLUMN_NAME);
-    		if (cursor.moveToFirst()) {
-	    		foodItemInfo = new FoodItemInfo(
-	    				foodItem,
-	    				cursor.getString(cursor.getColumnIndexOrThrow(MYFOODS_COLUMN_NAME)),
-	    				cursor.getInt(cursor.getColumnIndexOrThrow(MYFOODS_COLUMN_WEIGHT_PER_UNIT)),
-	    				cursor.getFloat(cursor.getColumnIndexOrThrow(MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT)),
-	    				cursor.getString(cursor.getColumnIndexOrThrow(MYFOODS_COLUMN_UNIT_TEXT)));
-    		} else {
-    			foodItemInfo = null;
-    		}
-    		
-    	} else {
-    		throw new InvalidParameterException(String.format(Locale.US, "Invalid tableName: %s", tableName));
-    	}
+        FoodItemInfo foodItemInfo;
+        
+        if (mFoodItemCache.containsKey(foodItem)) {
+            foodItemInfo = mFoodItemCache.get(foodItem);
+            //Log.i("Carbs", String.format("Get from cache [%d] %s - %d - %s", mFoodItemHashMap.size(), foodItem.getTableName(), foodItem.getId(), foodItemInfo.getName()));
+            return foodItemInfo;
+        }
+        
+        String tableName = foodItem.getTableName();
+        
+        if (tableName.equals(NEVO_TABLE_NAME)) {
+            String[] columns = { getFoodNameColumnName(), NEVO_COLUMN_WEIGHT_PER_UNIT, 
+                    NEVO_COLUMN_CARBS_GRAMS_PER_UNIT, NEVO_COLUMN_UNIT_TEXT };
+            String selection = String.format(Locale.US, "%s = %d", NEVO_COLUMN_PRODUCT_CODE, foodItem.getId());
+            Cursor cursor = mDatabase.query(tableName, columns, selection, null, null, null, getFoodNameColumnName());
+            if (cursor.moveToFirst()) {
+                foodItemInfo = new FoodItemInfo(
+                        foodItem,
+                        cursor.getString(cursor.getColumnIndexOrThrow(getFoodNameColumnName())),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(NEVO_COLUMN_WEIGHT_PER_UNIT)),
+                        cursor.getFloat(cursor.getColumnIndexOrThrow(NEVO_COLUMN_CARBS_GRAMS_PER_UNIT)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(NEVO_COLUMN_UNIT_TEXT)));
+            } else {
+                foodItemInfo = null;
+            }
+            
+        } else if (tableName.equals(MYFOODS_TABLE_NAME)) {
+            String[] columns = { MYFOODS_COLUMN_NAME, MYFOODS_COLUMN_WEIGHT_PER_UNIT, 
+                    MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT, MYFOODS_COLUMN_UNIT_TEXT };
+            String selection = String.format(Locale.US, "%s = %d", MYFOODS_COLUMN_ID, foodItem.getId());
+            Cursor cursor = mDatabase.query(tableName, columns, selection, null, null, null, MYFOODS_COLUMN_NAME);
+            if (cursor.moveToFirst()) {
+                foodItemInfo = new FoodItemInfo(
+                        foodItem,
+                        cursor.getString(cursor.getColumnIndexOrThrow(MYFOODS_COLUMN_NAME)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(MYFOODS_COLUMN_WEIGHT_PER_UNIT)),
+                        cursor.getFloat(cursor.getColumnIndexOrThrow(MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(MYFOODS_COLUMN_UNIT_TEXT)));
+            } else {
+                foodItemInfo = null;
+            }
+            
+        } else {
+            throw new InvalidParameterException(String.format(Locale.US, "Invalid tableName: %s", tableName));
+        }
 
-    	if (foodItemInfo != null) {
-    		mFoodItemCache.put(foodItem, foodItemInfo);
-    		//Log.i("Carbs", String.format("Add to cache [%d] %s - %d - %s",  mFoodItemHashMap.size(), foodItem.getTableName(), foodItem.getId(), foodItemInfo.getName()));
-    	}
-    	
-    	return foodItemInfo;
+        if (foodItemInfo != null) {
+            mFoodItemCache.put(foodItem, foodItemInfo);
+            //Log.i("Carbs", String.format("Add to cache [%d] %s - %d - %s",  mFoodItemHashMap.size(), foodItem.getTableName(), foodItem.getId(), foodItemInfo.getName()));
+        }
+        
+        return foodItemInfo;
     }
 
     public void addMyFoodItemInfo(FoodItemInfo foodItemInfo) {
-    	ContentValues values = new ContentValues();
-    	values.put(MYFOODS_COLUMN_NAME, foodItemInfo.getName());
-    	values.put(MYFOODS_COLUMN_WEIGHT_PER_UNIT, foodItemInfo.getWeightPerUnit());
-    	values.put(MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT, foodItemInfo.getNumCarbsInGramsPerUnit());
-    	values.put(MYFOODS_COLUMN_UNIT_TEXT, foodItemInfo.getUnitText());
-    	
-    	mDatabase.insertOrThrow(MYFOODS_TABLE_NAME, null, values);
+        ContentValues values = new ContentValues();
+        values.put(MYFOODS_COLUMN_NAME, foodItemInfo.getName());
+        values.put(MYFOODS_COLUMN_WEIGHT_PER_UNIT, foodItemInfo.getWeightPerUnit());
+        values.put(MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT, foodItemInfo.getNumCarbsInGramsPerUnit());
+        values.put(MYFOODS_COLUMN_UNIT_TEXT, foodItemInfo.getUnitText());
+        
+        mDatabase.insertOrThrow(MYFOODS_TABLE_NAME, null, values);
     }
     
     public void updateMyFoodItemInfo(FoodItemInfo foodItemInfo) {
-    	ContentValues values = new ContentValues();
-    	values.put(MYFOODS_COLUMN_ID, foodItemInfo.getFoodItem().getId());
-    	values.put(MYFOODS_COLUMN_NAME, foodItemInfo.getName());
-    	values.put(MYFOODS_COLUMN_WEIGHT_PER_UNIT, foodItemInfo.getWeightPerUnit());
-    	values.put(MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT, foodItemInfo.getNumCarbsInGramsPerUnit());
-    	values.put(MYFOODS_COLUMN_UNIT_TEXT, foodItemInfo.getUnitText());
-    	
-    	mDatabase.replaceOrThrow(MYFOODS_TABLE_NAME, null, values);
+        ContentValues values = new ContentValues();
+        values.put(MYFOODS_COLUMN_ID, foodItemInfo.getFoodItem().getId());
+        values.put(MYFOODS_COLUMN_NAME, foodItemInfo.getName());
+        values.put(MYFOODS_COLUMN_WEIGHT_PER_UNIT, foodItemInfo.getWeightPerUnit());
+        values.put(MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT, foodItemInfo.getNumCarbsInGramsPerUnit());
+        values.put(MYFOODS_COLUMN_UNIT_TEXT, foodItemInfo.getUnitText());
+        
+        mDatabase.replaceOrThrow(MYFOODS_TABLE_NAME, null, values);
 
-    	//Log.i("Carbs", String.format("Remove %d: %s", foodItemInfo.getFoodItem().getId(), foodItemInfo.getName()));
-    	removeMyFoodItemFromCache(foodItemInfo.getFoodItem());
+        //Log.i("Carbs", String.format("Delete %d: %s", foodItemInfo.getFoodItem().getId(), foodItemInfo.getName()));
+        deleteMyFoodItemFromCache(foodItemInfo.getFoodItem());
     }
     
-    public void removeMyFoodItem(FoodItem foodItem) {
-    	String whereClause = String.format("%s = %s", MYFOODS_COLUMN_ID, foodItem.getId());
-    	mDatabase.delete(MYFOODS_TABLE_NAME, whereClause, null);
-    	removeMyFoodItemFromCache(foodItem);
+    public void deleteMyFoodItem(FoodItem foodItem) {
+        String whereClause = String.format("%s = %s", MYFOODS_COLUMN_ID, foodItem.getId());
+        mDatabase.delete(MYFOODS_TABLE_NAME, whereClause, null);
+        deleteMyFoodItemFromCache(foodItem);
     }
 
-    public void removeMyFoodItems(ArrayList<FoodItem> itemsToRemove) {
-    	
-		if (itemsToRemove.size() <= 0) {
-			return;
-		}
-		
-		StringBuilder whereClause = new StringBuilder();
-		
-		for (int i = 0; i < itemsToRemove.size(); i++) {
-			FoodItem foodItem = itemsToRemove.get(i);
-			
-			if (whereClause.length() > 0) {
-				whereClause.append(" OR ");
-			}
-	    	whereClause.append(String.format("%s = %s", MYFOODS_COLUMN_ID, foodItem.getId()));
-	    	
-	    	removeMyFoodItemFromCache(foodItem);
-		}
+    public void deleteMyFoodItems(ArrayList<FoodItem> itemsToDelete) {
+        
+        if (itemsToDelete.size() <= 0) {
+            return;
+        }
+        
+        StringBuilder whereClause = new StringBuilder();
+        
+        for (int i = 0; i < itemsToDelete.size(); i++) {
+            FoodItem foodItem = itemsToDelete.get(i);
+            
+            if (whereClause.length() > 0) {
+                whereClause.append(" OR ");
+            }
+            whereClause.append(String.format("%s = %s", MYFOODS_COLUMN_ID, foodItem.getId()));
+            
+            deleteMyFoodItemFromCache(foodItem);
+        }
 
-    	mDatabase.delete(MYFOODS_TABLE_NAME, whereClause.toString(), null);
-	}
-	
-    public void removeAllMyFoods() {
-    	mDatabase.delete(MYFOODS_TABLE_NAME, null, null);
-    	removeAllMyFoodsFromCache();
+        mDatabase.delete(MYFOODS_TABLE_NAME, whereClause.toString(), null);
+    }
+    
+    public void deleteAllMyFoods() {
+        mDatabase.delete(MYFOODS_TABLE_NAME, null, null);
+        deleteAllMyFoodsFromCache();
     }
 
     // Returns true if MyFood table already contains item with 'foodName' and ID not equal to 'exceptId'
     public boolean myFoodNameExists(String foodName, int exceptId) {
-		String[] columns = { MYFOODS_COLUMN_NAME, MYFOODS_COLUMN_ID };
-		String selection = MYFOODS_COLUMN_NAME + " like '" + foodName + "'";
-		
-		Cursor cursor = mDatabase.query(MYFOODS_TABLE_NAME, columns, selection, null, null, null, MYFOODS_COLUMN_NAME);
-    	cursor.moveToFirst();
-    	while (!cursor.isAfterLast()) {
-			int id = cursor.getInt(cursor.getColumnIndexOrThrow(MYFOODS_COLUMN_ID));
-			if (id != exceptId) {
-				return true;
-			}
-			cursor.moveToNext();
-    	}
-    	return false;
+        String[] columns = { MYFOODS_COLUMN_NAME, MYFOODS_COLUMN_ID };
+        String selection = MYFOODS_COLUMN_NAME + " like '" + foodName + "'";
+        
+        Cursor cursor = mDatabase.query(MYFOODS_TABLE_NAME, columns, selection, null, null, null, MYFOODS_COLUMN_NAME);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            int id = cursor.getInt(cursor.getColumnIndexOrThrow(MYFOODS_COLUMN_ID));
+            if (id != exceptId) {
+                return true;
+            }
+            cursor.moveToNext();
+        }
+        return false;
     }
 
-    private void removeMyFoodItemFromCache(FoodItem foodItem) {
-    	// Remove all FoodItem's that have the same TableName and ID, regardless of the weight.
+    private void deleteMyFoodItemFromCache(FoodItem foodItem) {
+        // Delete all FoodItem's that have the same TableName and ID, regardless of the weight.
         Iterator<Entry<FoodItem, FoodItemInfo>> it = mFoodItemCache.entrySet().iterator();
         while (it.hasNext()) {
             FoodItem item = it.next().getKey();
             if ((item.getTableName().equals(foodItem.getTableName())) &&
-            	(item.getId() == foodItem.getId())) {
-            	it.remove(); // avoids a ConcurrentModificationException
-    		}
+                (item.getId() == foodItem.getId())) {
+                it.remove(); // avoids a ConcurrentModificationException
+            }
         }
     }
 
-    private void removeAllMyFoodsFromCache() {
+    private void deleteAllMyFoodsFromCache() {
         Iterator<Entry<FoodItem, FoodItemInfo>> it = mFoodItemCache.entrySet().iterator();
         while (it.hasNext()) {
             FoodItem foodItem = it.next().getKey();
             if (foodItem.getTableName().equals(MYFOODS_TABLE_NAME)) {
-            	it.remove(); // avoids a ConcurrentModificationException
-    		}
+                it.remove(); // avoids a ConcurrentModificationException
+            }
         }
     }
 
     private void deleteDbIfItAlreadyExists(Context context) {
-		File db = context.getDatabasePath(DATABASE_NAME);
-		if (db.exists()) {
-			Log.i("Carbs", String.format("Deleted db %s", db.toString()));
-			db.delete();			
-		}
-	}
+        File db = context.getDatabasePath(DATABASE_NAME);
+        if (db.exists()) {
+            Log.i("Carbs", String.format("Deleted db %s", db.toString()));
+            db.delete();            
+        }
+    }
 }

@@ -8,14 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public class CustomSimpleCursorAdapter extends SimpleCursorAdapter {
-	private SparseBooleanArray mSelection;
-	private int mNumSelected;
+    private SparseBooleanArray mSelection;
+    private int mNumSelected;
 
-	public CustomSimpleCursorAdapter(Context context, int layout, Cursor c,
-			String[] from, int[] to, int flags) {
-		super(context, layout, c, from, to, flags);
-	    mSelection = new SparseBooleanArray();
-	}
+    public CustomSimpleCursorAdapter(Context context, int layout, Cursor c,
+            String[] from, int[] to, int flags) {
+        super(context, layout, c, from, to, flags);
+        mSelection = new SparseBooleanArray();
+    }
 
     public void clearSelection() {
         mSelection.clear();
@@ -24,28 +24,28 @@ public class CustomSimpleCursorAdapter extends SimpleCursorAdapter {
     }
     
     public SparseBooleanArray getSelection() {
-    	return mSelection;
+        return mSelection;
     }
     
     public int getNumSelected() {
-    	return mNumSelected;
+        return mNumSelected;
     }
 
     public void toggleSelection(int position) {
         if (!isPositionSelected(position)) {
-        	setNewSelection(position);
+            setNewSelection(position);
         } else {
-        	removeSelection(position);
+            deleteSelection(position);
         }
     }
 
     private void setNewSelection(int position) {
-    	mSelection.put(position, true);
-    	mNumSelected++;
-    	notifyDataSetChanged();
+        mSelection.put(position, true);
+        mNumSelected++;
+        notifyDataSetChanged();
     }
 
-    private void removeSelection(int position) {
+    private void deleteSelection(int position) {
         mSelection.delete(position);
         mNumSelected--;
         notifyDataSetChanged();
@@ -55,16 +55,16 @@ public class CustomSimpleCursorAdapter extends SimpleCursorAdapter {
         return mSelection.get(position);
     }
     
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
         View v = super.getView(position, convertView, parent);
 
         //TODO: make this theme-independent
         v.setBackgroundColor(mContext.getResources().getColor(android.R.color.background_light)); //default color        
         if (isPositionSelected(position)) {
-        	v.setBackgroundColor(mContext.getResources().getColor(android.R.color.holo_blue_light));// this is a selected position so make it red
+            v.setBackgroundColor(mContext.getResources().getColor(android.R.color.holo_blue_light));// this is a selected position so make it red
         }
         
         return v;
-	}
+    }
 }

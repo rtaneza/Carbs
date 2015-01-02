@@ -44,179 +44,179 @@ import com.gmail.taneza.ronald.carbs.common.FoodItemInfo;
 
 public class FoodDetailsActivity extends ActionBarActivity {
 
-	public enum Mode {
-		NewFood,
-		RecentFood,
-		EditFoodInMeal
-	}
+    public enum Mode {
+        NewFood,
+        RecentFood,
+        EditFoodInMeal
+    }
 
-	public final static int FOOD_DETAILS_RESULT_OK = RESULT_OK;
-	public final static int FOOD_DETAILS_RESULT_CANCELED = RESULT_CANCELED;
-	public final static int FOOD_DETAILS_RESULT_REPLACE = RESULT_FIRST_USER;
-	public final static int FOOD_DETAILS_RESULT_REMOVE = RESULT_FIRST_USER + 1;
-	
-	public final static String FOOD_ITEM_MESSAGE = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_MESSAGE";
-	public final static String FOOD_ITEM_RESULT = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_RESULT";
-	public final static String ACTIVITY_MODE_MESSAGE = "com.gmail.taneza.ronald.carbs.ACTIVITY_MODE_MESSAGE";
-	
-	private FoodItemInfo mFoodItemInfo;
-	private EditText mWeightEditText;
-	private TextView mNumCarbsTextView;
-	private Mode mMode;
-	private int mRemoveItemConfirmationStringId;
-	private int mItemRemovedMessageId;
-	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    public final static int FOOD_DETAILS_RESULT_OK = RESULT_OK;
+    public final static int FOOD_DETAILS_RESULT_CANCELED = RESULT_CANCELED;
+    public final static int FOOD_DETAILS_RESULT_REPLACE = RESULT_FIRST_USER;
+    public final static int FOOD_DETAILS_RESULT_DELETE = RESULT_FIRST_USER + 1;
+    
+    public final static String FOOD_ITEM_MESSAGE = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_MESSAGE";
+    public final static String FOOD_ITEM_RESULT = "com.gmail.taneza.ronald.carbs.FOOD_ITEM_RESULT";
+    public final static String ACTIVITY_MODE_MESSAGE = "com.gmail.taneza.ronald.carbs.ACTIVITY_MODE_MESSAGE";
+    
+    private FoodItemInfo mFoodItemInfo;
+    private EditText mWeightEditText;
+    private TextView mNumCarbsTextView;
+    private Mode mMode;
+    private int mDeleteItemConfirmationStringId;
+    private int mItemDeletedMessageId;
+    
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.activity_food_details);
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setContentView(R.layout.activity_food_details);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-		// Get the message from the intent
-		Intent intent = getIntent();
+        // Get the message from the intent
+        Intent intent = getIntent();
 
-		FoodItem foodItem = intent.getParcelableExtra(FOOD_ITEM_MESSAGE);
-		Mode mode = Mode.values()[intent.getIntExtra(ACTIVITY_MODE_MESSAGE, Mode.NewFood.ordinal())];
+        FoodItem foodItem = intent.getParcelableExtra(FOOD_ITEM_MESSAGE);
+        Mode mode = Mode.values()[intent.getIntExtra(ACTIVITY_MODE_MESSAGE, Mode.NewFood.ordinal())];
 
-		// Create a copy of the foodItemInfo returned by foodDbAdapter,
-		// because the user may modify the weight value, and then cancel his changes.
-		FoodDbAdapter foodDbAdapter = ((CarbsApp)getApplication()).getFoodDbAdapter();
-		FoodItemInfo foodItemInfo = foodDbAdapter.getFoodItemInfo(foodItem);
-		mFoodItemInfo = new FoodItemInfo(foodItem, foodItemInfo.getName(), foodItemInfo.getWeightPerUnit(), foodItemInfo.getNumCarbsInGramsPerUnit(), foodItemInfo.getUnitText());
-		
-		TextView foodNameTextView = (TextView) findViewById(R.id.food_details_name);
-		foodNameTextView.setText(mFoodItemInfo.getName());
-		
-		TextView foodNameExtraTextView = (TextView) findViewById(R.id.food_details_name_extra);
-		foodNameExtraTextView.setText(String.format("(%.1f g carbs per %d %s)", 
-				mFoodItemInfo.getNumCarbsInGramsPerUnit(), mFoodItemInfo.getWeightPerUnit(), mFoodItemInfo.getUnitText()));
-		
-		mWeightEditText = (EditText) findViewById(R.id.food_details_weight_edit);
-		mWeightEditText.setText(Integer.toString(mFoodItemInfo.getWeight()));
-		// Request focus and show soft keyboard automatically
-		mWeightEditText.requestFocus();
+        // Create a copy of the foodItemInfo returned by foodDbAdapter,
+        // because the user may modify the weight value, and then cancel his changes.
+        FoodDbAdapter foodDbAdapter = ((CarbsApp)getApplication()).getFoodDbAdapter();
+        FoodItemInfo foodItemInfo = foodDbAdapter.getFoodItemInfo(foodItem);
+        mFoodItemInfo = new FoodItemInfo(foodItem, foodItemInfo.getName(), foodItemInfo.getWeightPerUnit(), foodItemInfo.getNumCarbsInGramsPerUnit(), foodItemInfo.getUnitText());
+        
+        TextView foodNameTextView = (TextView) findViewById(R.id.food_details_name);
+        foodNameTextView.setText(mFoodItemInfo.getName());
+        
+        TextView foodNameExtraTextView = (TextView) findViewById(R.id.food_details_name_extra);
+        foodNameExtraTextView.setText(String.format("(%.1f g carbs per %d %s)", 
+                mFoodItemInfo.getNumCarbsInGramsPerUnit(), mFoodItemInfo.getWeightPerUnit(), mFoodItemInfo.getUnitText()));
+        
+        mWeightEditText = (EditText) findViewById(R.id.food_details_weight_edit);
+        mWeightEditText.setText(Integer.toString(mFoodItemInfo.getWeight()));
+        // Request focus and show soft keyboard automatically
+        mWeightEditText.requestFocus();
         getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE); 
 
-		TextView weightUnitTextView = (TextView) findViewById(R.id.food_details_weight_unit);
-		weightUnitTextView.setText(mFoodItemInfo.getUnitText());
+        TextView weightUnitTextView = (TextView) findViewById(R.id.food_details_weight_unit);
+        weightUnitTextView.setText(mFoodItemInfo.getUnitText());
         
-		mNumCarbsTextView = (TextView) findViewById(R.id.food_details_carbs_text);
-		updateCarbsText();
-		
-		mMode = mode;
-		if (mode == Mode.EditFoodInMeal) {			
-			setTitle(R.string.title_activity_food_details_edit);
-			Button okButton = (Button) findViewById(R.id.food_details_ok_button);
-			okButton.setText(R.string.save_food_details);
-			mRemoveItemConfirmationStringId = R.string.remove_item_from_meal_confirmation;
-			mItemRemovedMessageId = R.string.food_removed_from_meal;
-		} else if (mode == Mode.RecentFood) {
-			mRemoveItemConfirmationStringId = R.string.remove_item_from_recent_foods_confirmation;
-			mItemRemovedMessageId = R.string.food_removed_from_recent;
-		}
-		
-		addWeightTextListener();
-	}
+        mNumCarbsTextView = (TextView) findViewById(R.id.food_details_carbs_text);
+        updateCarbsText();
+        
+        mMode = mode;
+        if (mode == Mode.EditFoodInMeal) {            
+            setTitle(R.string.title_activity_food_details_edit);
+            Button okButton = (Button) findViewById(R.id.food_details_ok_button);
+            okButton.setText(R.string.save_food_details);
+            mDeleteItemConfirmationStringId = R.string.delete_item_from_meal_confirmation;
+            mItemDeletedMessageId = R.string.food_deleted_from_meal;
+        } else if (mode == Mode.RecentFood) {
+            mDeleteItemConfirmationStringId = R.string.delete_item_from_recent_foods_confirmation;
+            mItemDeletedMessageId = R.string.food_deleted_from_recent;
+        }
+        
+        addWeightTextListener();
+    }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-    	getMenuInflater().inflate(R.menu.menu_food_details, menu);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_food_details, menu);
 
-    	if (mMode == Mode.NewFood) {
-    		MenuItem menuItem = menu.findItem(R.id.menu_food_details_remove);
-    		menuItem.setVisible(false);
-    	}
-    	
-		return true;
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.menu_food_details_remove:
-			removeItem();
-			return true;
-		case android.R.id.home:
-			// This ID represents the Home or Up button. In the case of this
-			// activity, the Up button is shown. Use NavUtils to allow users
-			// to navigate up one level in the application structure. For
-			// more details, see the Navigation pattern on Android Design:
-			//
-			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
-			//
-			NavUtils.navigateUpFromSameTask(this);
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-	
-	private void addWeightTextListener() {
-		mWeightEditText.addTextChangedListener(new TextWatcher() {
-			public void afterTextChanged(Editable s) {
-				// Abstract Method of TextWatcher Interface.
-			}
+        if (mMode == Mode.NewFood) {
+            MenuItem menuItem = menu.findItem(R.id.menu_food_details_delete);
+            menuItem.setVisible(false);
+        }
+        
+        return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.menu_food_details_delete:
+            deleteItem();
+            return true;
+        case android.R.id.home:
+            // This ID represents the Home or Up button. In the case of this
+            // activity, the Up button is shown. Use NavUtils to allow users
+            // to navigate up one level in the application structure. For
+            // more details, see the Navigation pattern on Android Design:
+            //
+            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
+            //
+            NavUtils.navigateUpFromSameTask(this);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    
+    private void addWeightTextListener() {
+        mWeightEditText.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+                // Abstract Method of TextWatcher Interface.
+            }
 
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-				// Abstract Method of TextWatcher Interface.
-			}
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                    int after) {
+                // Abstract Method of TextWatcher Interface.
+            }
 
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				Integer weight = 0;
-				try {
-					weight = Integer.parseInt(mWeightEditText.getText().toString());
-				}
-				catch (NumberFormatException e) {
-					// ignore invalid weight string
-				}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Integer weight = 0;
+                try {
+                    weight = Integer.parseInt(mWeightEditText.getText().toString());
+                }
+                catch (NumberFormatException e) {
+                    // ignore invalid weight string
+                }
 
-				mFoodItemInfo.setWeight(weight);
-				updateCarbsText();
-			}
-		});
-	}
+                mFoodItemInfo.setWeight(weight);
+                updateCarbsText();
+            }
+        });
+    }
 
-	public void removeItem() {
-		new AlertDialog.Builder(this)
-	    .setMessage(mRemoveItemConfirmationStringId)
-	    .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
-	        public void onClick(DialogInterface dialog, int which) { 
-	            // continue with remove
-	    		Intent data = getIntent();
-	    		data.putExtra(FOOD_ITEM_RESULT, (Parcelable)mFoodItemInfo.getFoodItem());
-	    	    setResult(FOOD_DETAILS_RESULT_REMOVE, data);
-	    		finish();
+    public void deleteItem() {
+        new AlertDialog.Builder(this)
+        .setMessage(mDeleteItemConfirmationStringId)
+        .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) { 
+                // continue with delete
+                Intent data = getIntent();
+                data.putExtra(FOOD_ITEM_RESULT, (Parcelable)mFoodItemInfo.getFoodItem());
+                setResult(FOOD_DETAILS_RESULT_DELETE, data);
+                finish();
 
-	        	Toast.makeText(getApplicationContext(),
-	        			getText(mItemRemovedMessageId),
-	        			Toast.LENGTH_SHORT)
-	        		 .show();
-	        }
-	     })
-	    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-	        public void onClick(DialogInterface dialog, int which) { 
-	            // do nothing
-	        }
-	     })
-	    .show();
-	}
+                Toast.makeText(getApplicationContext(),
+                        getText(mItemDeletedMessageId),
+                        Toast.LENGTH_SHORT)
+                     .show();
+            }
+         })
+        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) { 
+                // do nothing
+            }
+         })
+        .show();
+    }
 
-	public void cancel(View v) {
-	    setResult(FOOD_DETAILS_RESULT_CANCELED);
-		finish();
-	}
-	
-	public void addToMealOrUpdate(View v) {
-		Intent data = getIntent();
-		data.putExtra(FOOD_ITEM_RESULT, (Parcelable)mFoodItemInfo.getFoodItem());
-	    setResult(FOOD_DETAILS_RESULT_OK, data);
-		finish();
-	}
-	
-	private void updateCarbsText() {
-		mNumCarbsTextView.setText(String.format("%.1f", mFoodItemInfo.getNumCarbsInGrams()));
-	}
+    public void cancel(View v) {
+        setResult(FOOD_DETAILS_RESULT_CANCELED);
+        finish();
+    }
+    
+    public void addToMealOrUpdate(View v) {
+        Intent data = getIntent();
+        data.putExtra(FOOD_ITEM_RESULT, (Parcelable)mFoodItemInfo.getFoodItem());
+        setResult(FOOD_DETAILS_RESULT_OK, data);
+        finish();
+    }
+    
+    private void updateCarbsText() {
+        mNumCarbsTextView.setText(String.format("%.1f", mFoodItemInfo.getNumCarbsInGrams()));
+    }
 }

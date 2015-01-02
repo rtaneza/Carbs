@@ -46,177 +46,177 @@ import com.gmail.taneza.ronald.carbs.common.FoodItemInfo;
 
 public class MyFoodDetailsActivity extends ActionBarActivity {
 
-	public static final String NEW_FOOD_DEFAULT_NAME = "My food"; 
-	public static final String NEW_FOOD_DEFAULT_UNIT_TEXT = "g"; 
-	public static final int NEW_FOOD_DEFAULT_WEIGHT_PER_UNIT = 100;
-	public static final int NEW_FOOD_DEFAULT_CARBS = 0;
-	
-	public enum Mode {
-		NewFood,
-		EditFood
-	}
+    public static final String NEW_FOOD_DEFAULT_NAME = "My food"; 
+    public static final String NEW_FOOD_DEFAULT_UNIT_TEXT = "g"; 
+    public static final int NEW_FOOD_DEFAULT_WEIGHT_PER_UNIT = 100;
+    public static final int NEW_FOOD_DEFAULT_CARBS = 0;
+    
+    public enum Mode {
+        NewFood,
+        EditFood
+    }
 
-	public final static int MY_FOOD_RESULT_OK = RESULT_OK;
-	public final static int MY_FOOD_RESULT_CANCELED = RESULT_CANCELED;
-	public final static int MY_FOOD_RESULT_REMOVE = RESULT_FIRST_USER;
-	
-	public final static String MY_FOOD_ITEM_MESSAGE = "com.gmail.taneza.ronald.carbs.MY_FOOD_ITEM_MESSAGE";
-	public final static String MY_FOOD_ITEM_INFO_RESULT = "com.gmail.taneza.ronald.carbs.MY_FOOD_ITEM_INFO_RESULT";
-	public final static String MY_FOOD_ITEM_RESULT = "com.gmail.taneza.ronald.carbs.MY_FOOD_ITEM_RESULT";
-	public final static String MY_FOOD_ACTIVITY_MODE_MESSAGE = "com.gmail.taneza.ronald.carbs.MY_FOOD_ACTIVITY_MODE_MESSAGE";
-	
-	private FoodDbAdapter mFoodDbAdapter;
-	private FoodItem mFoodItem;
-	private TextView mFoodNameTextView;
-	private EditText mWeightEditText;
-	private TextView mNumCarbsTextView;
-	private Spinner mWeightUnitTextSpinner;
-	private Mode mMode;
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    public final static int MY_FOOD_RESULT_OK = RESULT_OK;
+    public final static int MY_FOOD_RESULT_CANCELED = RESULT_CANCELED;
+    public final static int MY_FOOD_RESULT_DELETE = RESULT_FIRST_USER;
+    
+    public final static String MY_FOOD_ITEM_MESSAGE = "com.gmail.taneza.ronald.carbs.MY_FOOD_ITEM_MESSAGE";
+    public final static String MY_FOOD_ITEM_INFO_RESULT = "com.gmail.taneza.ronald.carbs.MY_FOOD_ITEM_INFO_RESULT";
+    public final static String MY_FOOD_ITEM_RESULT = "com.gmail.taneza.ronald.carbs.MY_FOOD_ITEM_RESULT";
+    public final static String MY_FOOD_ACTIVITY_MODE_MESSAGE = "com.gmail.taneza.ronald.carbs.MY_FOOD_ACTIVITY_MODE_MESSAGE";
+    
+    private FoodDbAdapter mFoodDbAdapter;
+    private FoodItem mFoodItem;
+    private TextView mFoodNameTextView;
+    private EditText mWeightEditText;
+    private TextView mNumCarbsTextView;
+    private Spinner mWeightUnitTextSpinner;
+    private Mode mMode;
+    
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.activity_my_food_details);
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		
-		mFoodDbAdapter = ((CarbsApp)getApplication()).getFoodDbAdapter();
-		
-		// Get the message from the intent
-		Intent intent = getIntent();
+        setContentView(R.layout.activity_my_food_details);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        
+        mFoodDbAdapter = ((CarbsApp)getApplication()).getFoodDbAdapter();
+        
+        // Get the message from the intent
+        Intent intent = getIntent();
 
-		mFoodItem = intent.getParcelableExtra(MY_FOOD_ITEM_MESSAGE);
-		FoodItemInfo foodItemInfo;
-		
-		Mode mode = Mode.values()[intent.getIntExtra(MY_FOOD_ACTIVITY_MODE_MESSAGE, Mode.NewFood.ordinal())];
-		mMode = mode;
-		if (mode == Mode.NewFood) {
-			foodItemInfo = new FoodItemInfo(mFoodItem, NEW_FOOD_DEFAULT_NAME, NEW_FOOD_DEFAULT_WEIGHT_PER_UNIT, NEW_FOOD_DEFAULT_CARBS, NEW_FOOD_DEFAULT_UNIT_TEXT);
-		} else {
-			foodItemInfo = mFoodDbAdapter.getFoodItemInfo(mFoodItem);
+        mFoodItem = intent.getParcelableExtra(MY_FOOD_ITEM_MESSAGE);
+        FoodItemInfo foodItemInfo;
+        
+        Mode mode = Mode.values()[intent.getIntExtra(MY_FOOD_ACTIVITY_MODE_MESSAGE, Mode.NewFood.ordinal())];
+        mMode = mode;
+        if (mode == Mode.NewFood) {
+            foodItemInfo = new FoodItemInfo(mFoodItem, NEW_FOOD_DEFAULT_NAME, NEW_FOOD_DEFAULT_WEIGHT_PER_UNIT, NEW_FOOD_DEFAULT_CARBS, NEW_FOOD_DEFAULT_UNIT_TEXT);
+        } else {
+            foodItemInfo = mFoodDbAdapter.getFoodItemInfo(mFoodItem);
 
-			setTitle(R.string.title_activity_my_food_edit);
-			Button okButton = (Button) findViewById(R.id.my_food_ok_button);
-			okButton.setText(R.string.save_food_details);
-		}
-		
-		mFoodNameTextView = (TextView) findViewById(R.id.my_food_name);
-		mFoodNameTextView.setText(foodItemInfo.getName());
-		// Request focus and show soft keyboard automatically
-		mFoodNameTextView.requestFocus();
+            setTitle(R.string.title_activity_my_food_edit);
+            Button okButton = (Button) findViewById(R.id.my_food_ok_button);
+            okButton.setText(R.string.save_food_details);
+        }
+        
+        mFoodNameTextView = (TextView) findViewById(R.id.my_food_name);
+        mFoodNameTextView.setText(foodItemInfo.getName());
+        // Request focus and show soft keyboard automatically
+        mFoodNameTextView.requestFocus();
         getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE); 
-		
-		mWeightEditText = (EditText) findViewById(R.id.my_food_weight_edit);
-		mWeightEditText.setText(Integer.toString(foodItemInfo.getWeightPerUnit()));
+        
+        mWeightEditText = (EditText) findViewById(R.id.my_food_weight_edit);
+        mWeightEditText.setText(Integer.toString(foodItemInfo.getWeightPerUnit()));
 
-		mWeightUnitTextSpinner = (Spinner) findViewById(R.id.my_food_weight_unit_spinner);
-		// Create an ArrayAdapter using the string array and a default spinner layout
-		ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this,
-		        R.array.weight_unit_text_array, android.R.layout.simple_spinner_item);
-		// Specify the layout to use when the list of choices appears
-		arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		// Apply the adapter to the spinner
-		mWeightUnitTextSpinner.setAdapter(arrayAdapter);
-		mWeightUnitTextSpinner.setSelection(arrayAdapter.getPosition(foodItemInfo.getUnitText()));
-		
-		mNumCarbsTextView = (TextView) findViewById(R.id.my_food_carbs);
-		
-		// Display decimal place only when non-zero, so it's easier to edit
-		String numCarbsString;
-		float numCarbs = foodItemInfo.getNumCarbsInGrams();
-		if (numCarbs == (int)numCarbs) {
-			numCarbsString = String.format(Locale.getDefault(), "%.0f", numCarbs);
-		} else {
-			numCarbsString = String.format(Locale.getDefault(), "%.1f", numCarbs);
-		}
-		mNumCarbsTextView.setText(numCarbsString);
-	}
-	
+        mWeightUnitTextSpinner = (Spinner) findViewById(R.id.my_food_weight_unit_spinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this,
+                R.array.weight_unit_text_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        mWeightUnitTextSpinner.setAdapter(arrayAdapter);
+        mWeightUnitTextSpinner.setSelection(arrayAdapter.getPosition(foodItemInfo.getUnitText()));
+        
+        mNumCarbsTextView = (TextView) findViewById(R.id.my_food_carbs);
+        
+        // Display decimal place only when non-zero, so it's easier to edit
+        String numCarbsString;
+        float numCarbs = foodItemInfo.getNumCarbsInGrams();
+        if (numCarbs == (int)numCarbs) {
+            numCarbsString = String.format(Locale.getDefault(), "%.0f", numCarbs);
+        } else {
+            numCarbsString = String.format(Locale.getDefault(), "%.1f", numCarbs);
+        }
+        mNumCarbsTextView.setText(numCarbsString);
+    }
+    
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-    	getMenuInflater().inflate(R.menu.menu_my_food_details, menu);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_my_food_details, menu);
 
-    	if (mMode == Mode.NewFood) {
-    		MenuItem menuItem = menu.findItem(R.id.menu_my_food_remove);
-    		menuItem.setVisible(false);
-    	}
-    	
-		return true;
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.menu_my_food_remove:
-			removeItem();
-			return true;
-			
-		case android.R.id.home:
-			// This ID represents the Home or Up button. In the case of this
-			// activity, the Up button is shown. Use NavUtils to allow users
-			// to navigate up one level in the application structure. For
-			// more details, see the Navigation pattern on Android Design:
-			//
-			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
-			//
-			NavUtils.navigateUpFromSameTask(this);
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
+        if (mMode == Mode.NewFood) {
+            MenuItem menuItem = menu.findItem(R.id.menu_my_food_delete);
+            menuItem.setVisible(false);
+        }
+        
+        return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.menu_my_food_delete:
+            deleteItem();
+            return true;
+            
+        case android.R.id.home:
+            // This ID represents the Home or Up button. In the case of this
+            // activity, the Up button is shown. Use NavUtils to allow users
+            // to navigate up one level in the application structure. For
+            // more details, see the Navigation pattern on Android Design:
+            //
+            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
+            //
+            NavUtils.navigateUpFromSameTask(this);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
-	public void removeItem() {
-		new AlertDialog.Builder(this)
-	    .setMessage(R.string.remove_item_from_my_foods)
-	    .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
-	        public void onClick(DialogInterface dialog, int which) { 
-	            // continue with remove
-	    		Intent data = getIntent();
-	    		data.putExtra(MY_FOOD_ITEM_RESULT, (Parcelable)mFoodItem);
-	    	    setResult(MY_FOOD_RESULT_REMOVE, data);
-	    		finish();
+    public void deleteItem() {
+        new AlertDialog.Builder(this)
+        .setMessage(R.string.delete_item_from_my_foods)
+        .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) { 
+                // continue with delete
+                Intent data = getIntent();
+                data.putExtra(MY_FOOD_ITEM_RESULT, (Parcelable)mFoodItem);
+                setResult(MY_FOOD_RESULT_DELETE, data);
+                finish();
 
-	        	Toast.makeText(getApplicationContext(),
-	        			getText(R.string.food_removed_from_my_foods),
-	        			Toast.LENGTH_SHORT)
-	        		 .show();
-	        }
-	     })
-	    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-	        public void onClick(DialogInterface dialog, int which) { 
-	            // do nothing
-	        }
-	     })
-	    .show();
-	}
+                Toast.makeText(getApplicationContext(),
+                        getText(R.string.food_deleted_from_my_foods),
+                        Toast.LENGTH_SHORT)
+                     .show();
+            }
+         })
+        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) { 
+                // do nothing
+            }
+         })
+        .show();
+    }
 
-	public void cancel(View v) {
-	    setResult(MY_FOOD_RESULT_CANCELED);
-		finish();
-	}
-	
-	public void addOrUpdate(View v) {
-		String foodName = mFoodNameTextView.getText().toString().trim();
-		int exceptId = 0;
-		if (mMode == Mode.EditFood) {
-			exceptId = mFoodItem.getId();
-		}
-		if (mFoodDbAdapter.myFoodNameExists(foodName, exceptId)) {
-			mFoodNameTextView.setError(getText(R.string.my_food_name_exists_error));
-			return;
-		}
-		
-		FoodItemInfo foodItemInfo = new FoodItemInfo(mFoodItem, 
-				foodName,
-				Integer.parseInt(mWeightEditText.getText().toString()),
-				Float.parseFloat(mNumCarbsTextView.getText().toString()),
-				mWeightUnitTextSpinner.getSelectedItem().toString());
-		
-		Intent data = getIntent();
-		data.putExtra(MY_FOOD_ITEM_INFO_RESULT, (Parcelable)foodItemInfo);
-	    setResult(MY_FOOD_RESULT_OK, data);
-		finish();
-	}
+    public void cancel(View v) {
+        setResult(MY_FOOD_RESULT_CANCELED);
+        finish();
+    }
+    
+    public void addOrUpdate(View v) {
+        String foodName = mFoodNameTextView.getText().toString().trim();
+        int exceptId = 0;
+        if (mMode == Mode.EditFood) {
+            exceptId = mFoodItem.getId();
+        }
+        if (mFoodDbAdapter.myFoodNameExists(foodName, exceptId)) {
+            mFoodNameTextView.setError(getText(R.string.my_food_name_exists_error));
+            return;
+        }
+        
+        FoodItemInfo foodItemInfo = new FoodItemInfo(mFoodItem, 
+                foodName,
+                Integer.parseInt(mWeightEditText.getText().toString()),
+                Float.parseFloat(mNumCarbsTextView.getText().toString()),
+                mWeightUnitTextSpinner.getSelectedItem().toString());
+        
+        Intent data = getIntent();
+        data.putExtra(MY_FOOD_ITEM_INFO_RESULT, (Parcelable)foodItemInfo);
+        setResult(MY_FOOD_RESULT_OK, data);
+        finish();
+    }
 }

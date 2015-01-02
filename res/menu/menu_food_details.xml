@@ -2,9 +2,9 @@
       xmlns:carbs="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_food_details_remove"
+        android:id="@+id/menu_food_details_delete"
         carbs:showAsAction="always|withText"
         android:icon="@android:drawable/ic_menu_delete"
-        android:title="@string/remove"/>
+        android:title="@string/delete"/>
 
 </menu>

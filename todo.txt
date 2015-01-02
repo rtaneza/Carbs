@@ -55,4 +55,5 @@ ok // Disable search option spinner in Meal tab
 Jan 2015
 // Add help info for export/import of My foods
 ok // In Meal/Recent food info, pressing 'cancel' still performs the same function as 'ok' or 'save'
-// make consistent: remove, delete
+ok // make consistent: remove, delete
+// add 'unit' or 'pc' as unit

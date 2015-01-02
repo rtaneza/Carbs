@@ -23,72 +23,72 @@ import android.os.Parcelable;
 
 public class FoodItemInfo implements Parcelable {
 
-	public static final String MY_FOOD_TEXT = "My Food";
-	
-	private FoodItem mFoodItem;
-	private String mName;
-	private int mWeightPerUnit; // e.g. 100 g
-	private float mNumCarbsInGramsPerUnit; // e.g. 30 g
-	private String mUnitText; // e.g. g or ml
-	
-	public FoodItemInfo(FoodItem foodItem, String name, int weightPerUnit, float numCarbsInGramsPerUnit, String unitText) {
-		mFoodItem = foodItem;
-		mName = name;
-		mWeightPerUnit = weightPerUnit;
-		mNumCarbsInGramsPerUnit = numCarbsInGramsPerUnit;
-		mUnitText = unitText;
-	}
-	
-	public FoodItem getFoodItem() {
-		return mFoodItem;
-	}
-
-	public String getName() {
-		return mName;
-	}
-
-	public int getWeightPerUnit() {
-		return mWeightPerUnit;
-	}
-
-	public float getNumCarbsInGramsPerUnit() {
-		return mNumCarbsInGramsPerUnit;
-	}
-
-	public String getUnitText() {
-		return mUnitText;
-	}
-	
-	public float getNumCarbsInGrams() {
-		return (getNumCarbsInGramsPerUnit() * mFoodItem.getWeight()) / getWeightPerUnit();
-	}
-
-	public String getTableName() {
-		return mFoodItem.getTableName();
-	}
-	
-	public int getWeight() {
-		return mFoodItem.getWeight();
-	}
-	
-	public void setWeight(int weight) {
-		mFoodItem.setWeight(weight);
-	}
-	
-	public Date getDateAdded() {
-		long timeAddedMsec = mFoodItem.getTimeAddedMsec();
-		return new Date(timeAddedMsec);
-	}
-	
-	private FoodItemInfo(Parcel parcel) {
-		mFoodItem = parcel.readParcelable(FoodItem.class.getClassLoader());
-		mName = parcel.readString();
-		mWeightPerUnit = parcel.readInt();
-		mNumCarbsInGramsPerUnit = parcel.readFloat();
-		mUnitText = parcel.readString();
+    public static final String MY_FOOD_TEXT = "My Food";
+    
+    private FoodItem mFoodItem;
+    private String mName;
+    private int mWeightPerUnit; // e.g. 100 g
+    private float mNumCarbsInGramsPerUnit; // e.g. 30 g
+    private String mUnitText; // e.g. g or ml
+    
+    public FoodItemInfo(FoodItem foodItem, String name, int weightPerUnit, float numCarbsInGramsPerUnit, String unitText) {
+        mFoodItem = foodItem;
+        mName = name;
+        mWeightPerUnit = weightPerUnit;
+        mNumCarbsInGramsPerUnit = numCarbsInGramsPerUnit;
+        mUnitText = unitText;
     }
-	
-	public static final Creator<FoodItemInfo> CREATOR = new Creator<FoodItemInfo>() {
+    
+    public FoodItem getFoodItem() {
+        return mFoodItem;
+    }
+
+    public String getName() {
+        return mName;
+    }
+
+    public int getWeightPerUnit() {
+        return mWeightPerUnit;
+    }
+
+    public float getNumCarbsInGramsPerUnit() {
+        return mNumCarbsInGramsPerUnit;
+    }
+
+    public String getUnitText() {
+        return mUnitText;
+    }
+    
+    public float getNumCarbsInGrams() {
+        return (getNumCarbsInGramsPerUnit() * mFoodItem.getWeight()) / getWeightPerUnit();
+    }
+
+    public String getTableName() {
+        return mFoodItem.getTableName();
+    }
+    
+    public int getWeight() {
+        return mFoodItem.getWeight();
+    }
+    
+    public void setWeight(int weight) {
+        mFoodItem.setWeight(weight);
+    }
+    
+    public Date getDateAdded() {
+        long timeAddedMsec = mFoodItem.getTimeAddedMsec();
+        return new Date(timeAddedMsec);
+    }
+    
+    private FoodItemInfo(Parcel parcel) {
+        mFoodItem = parcel.readParcelable(FoodItem.class.getClassLoader());
+        mName = parcel.readString();
+        mWeightPerUnit = parcel.readInt();
+        mNumCarbsInGramsPerUnit = parcel.readFloat();
+        mUnitText = parcel.readString();
+    }
+    
+    public static final Creator<FoodItemInfo> CREATOR = new Creator<FoodItemInfo>() {
 
         @Override
         public FoodItemInfo createFromParcel(Parcel parcel) {
@@ -101,18 +101,18 @@ public class FoodItemInfo implements Parcelable {
         }
     };
     
-	@Override 
-	public int describeContents() { 
-		return 0; 
-	}
-	
-	@Override 
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeParcelable(mFoodItem, flags);
-		dest.writeString(mName);
-		dest.writeInt(mWeightPerUnit);
-		dest.writeFloat(mNumCarbsInGramsPerUnit);
-		dest.writeString(mUnitText);
-	}
-	
+    @Override 
+    public int describeContents() { 
+        return 0; 
+    }
+    
+    @Override 
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(mFoodItem, flags);
+        dest.writeString(mName);
+        dest.writeInt(mWeightPerUnit);
+        dest.writeFloat(mNumCarbsInGramsPerUnit);
+        dest.writeString(mUnitText);
+    }
+    
 }

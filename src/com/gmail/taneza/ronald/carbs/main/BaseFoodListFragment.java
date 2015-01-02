@@ -165,24 +165,24 @@ public abstract class BaseFoodListFragment extends BaseListFragment {
         mFoodItemArrayAdapter.getFilter().filter(mSearchEditText.getText().toString());
     }
 
-    protected abstract void setRemoveItemsMode(boolean enable);
-    protected abstract void removeFromList(SparseBooleanArray itemsToRemove);
+    protected abstract void setDeleteItemsMode(boolean enable);
+    protected abstract void deleteFromList(SparseBooleanArray itemsToDelete);
     
     private class ActionBarCallBack implements ActionMode.Callback {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
-            case R.id.menu_food_list_remove:
+            case R.id.menu_food_list_delete:
                 new AlertDialog.Builder(getActivity())
-                .setMessage(R.string.remove_selected_items)
-                .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
+                .setMessage(R.string.delete_selected_items)
+                .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) { 
-                        // continue with remove
-                        removeFromList(mFoodItemArrayAdapter.getSelection());
+                        // continue with delete
+                        deleteFromList(mFoodItemArrayAdapter.getSelection());
                         mActionMode.finish();
     
                         Toast.makeText(getActivity().getApplicationContext(),
-                                getText(R.string.items_removed),
+                                getText(R.string.items_deleted),
                                 Toast.LENGTH_SHORT)
                              .show();
                     }
@@ -202,7 +202,7 @@ public abstract class BaseFoodListFragment extends BaseListFragment {
         
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            setRemoveItemsMode(true);
+            setDeleteItemsMode(true);
             
             MenuInflater inflater = mode.getMenuInflater();
             inflater.inflate(R.menu.menu_food_list_action_bar, menu);
@@ -214,7 +214,7 @@ public abstract class BaseFoodListFragment extends BaseListFragment {
             mFoodItemArrayAdapter.clearSelection();
             getListView().setOnItemClickListener(mOnItemClickListenerDefault);
     
-            setRemoveItemsMode(false);
+            setDeleteItemsMode(false);
         }
     
         @Override

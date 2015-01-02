@@ -24,18 +24,18 @@ import com.gmail.taneza.ronald.carbs.common.FoodItem;
 import com.gmail.taneza.ronald.carbs.common.Language;
 
 public interface MainActivityNotifier {
-	public Language getLanguage();
-	
-	public void startActivityToAddFoodToMeal(FoodItem foodItem);
-	public void startActivityToAddRecentFoodToMeal(FoodItem foodItem);
-	public void startActivityToEditFoodInMeal(FoodItem foodItem, int foodItemIndex);
-	
-	public ArrayList<FoodItem> getFoodItemsList();
-	public ArrayList<FoodItem> getRecentFoodsList();
+    public Language getLanguage();
+    
+    public void startActivityToAddFoodToMeal(FoodItem foodItem);
+    public void startActivityToAddRecentFoodToMeal(FoodItem foodItem);
+    public void startActivityToEditFoodInMeal(FoodItem foodItem, int foodItemIndex);
+    
+    public ArrayList<FoodItem> getFoodItemsList();
+    public ArrayList<FoodItem> getRecentFoodsList();
 
-	public void setRemoveRecentFoodItemsMode(boolean enable);
-	public void removeFromRecentFoodItemsList(SparseBooleanArray itemsToRemove);
-	
-	public void setRemoveFoodItemsMode(boolean enable);
-	public void removeFromFoodItemsList(SparseBooleanArray itemsToRemove);
+    public void setDeleteRecentFoodItemsMode(boolean enable);
+    public void deleteFromRecentFoodItemsList(SparseBooleanArray itemsToDelete);
+    
+    public void setDeleteFoodItemsMode(boolean enable);
+    public void deleteFromFoodItemsList(SparseBooleanArray itemsToDelete);
 }

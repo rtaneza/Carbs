@@ -25,61 +25,61 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class FoodItem implements Parcelable {
-	
-	private String mTableName;
-	private int mId;
-	private int mWeight;
-	private long mTimeAddedMsec;
-	private boolean mChecked;
-	
-	public FoodItem(String tableName, int id, int weight, long timeAddedMsec) {
-		FoodItemListSerializer.verifyTableNameIsValidOrThrow(tableName);		
-		mTableName = tableName;
-		mId = id;
-		mWeight = weight;
-		mTimeAddedMsec = timeAddedMsec;
-	}
-
-	public FoodItem(String tableName, int id, int weight) {
-		this(tableName, id, weight, (new Date()).getTime());
-	}
-
-	public String getTableName() {
-		return mTableName;
-	}
-	
-	public int getId() {
-		return mId;
-	}
-	
-	public int getWeight() {
-		return mWeight;
-	}
-	
-	public void setWeight(int weight) {
-		mWeight = weight;
-	}
-	
-	public long getTimeAddedMsec() {
-		return mTimeAddedMsec;
-	}
-	
-	public boolean getChecked() {
-		return mChecked;
-	}
-
-	public void toggleChecked() {
-		mChecked = !mChecked;
-	}
-	
-	private FoodItem(Parcel parcel) {
-		mTableName = parcel.readString();
-		mId = parcel.readInt();
-		mWeight = parcel.readInt();
-		mTimeAddedMsec = parcel.readLong();
+    
+    private String mTableName;
+    private int mId;
+    private int mWeight;
+    private long mTimeAddedMsec;
+    private boolean mChecked;
+    
+    public FoodItem(String tableName, int id, int weight, long timeAddedMsec) {
+        FoodItemListSerializer.verifyTableNameIsValidOrThrow(tableName);        
+        mTableName = tableName;
+        mId = id;
+        mWeight = weight;
+        mTimeAddedMsec = timeAddedMsec;
     }
 
-	public static final Creator<FoodItem> CREATOR = new Creator<FoodItem>() {
+    public FoodItem(String tableName, int id, int weight) {
+        this(tableName, id, weight, (new Date()).getTime());
+    }
+
+    public String getTableName() {
+        return mTableName;
+    }
+    
+    public int getId() {
+        return mId;
+    }
+    
+    public int getWeight() {
+        return mWeight;
+    }
+    
+    public void setWeight(int weight) {
+        mWeight = weight;
+    }
+    
+    public long getTimeAddedMsec() {
+        return mTimeAddedMsec;
+    }
+    
+    public boolean getChecked() {
+        return mChecked;
+    }
+
+    public void toggleChecked() {
+        mChecked = !mChecked;
+    }
+    
+    private FoodItem(Parcel parcel) {
+        mTableName = parcel.readString();
+        mId = parcel.readInt();
+        mWeight = parcel.readInt();
+        mTimeAddedMsec = parcel.readLong();
+    }
+
+    public static final Creator<FoodItem> CREATOR = new Creator<FoodItem>() {
 
         @Override
         public FoodItem createFromParcel(Parcel parcel) {
@@ -92,57 +92,57 @@ public class FoodItem implements Parcelable {
         }
     };
     
-	@Override 
-	public int describeContents() { 
-		return 0; 
-	}
-	
-	@Override 
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeString(mTableName);
-		dest.writeInt(mId);
-		dest.writeInt(mWeight);
-		dest.writeLong(mTimeAddedMsec);
-	}
-	
-	public boolean equals(Object obj) {
-		if (obj == null) { return false; }
-		if (obj == this) { return true; }
-		if (obj.getClass() != getClass()) {
-		  return false;
-		}
-		
-		FoodItem rhs = (FoodItem) obj;
-		return new EqualsBuilder()
-        	.append(mTableName, rhs.mTableName)
-        	.append(mId, rhs.mId)
+    @Override 
+    public int describeContents() { 
+        return 0; 
+    }
+    
+    @Override 
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mTableName);
+        dest.writeInt(mId);
+        dest.writeInt(mWeight);
+        dest.writeLong(mTimeAddedMsec);
+    }
+    
+    public boolean equals(Object obj) {
+        if (obj == null) { return false; }
+        if (obj == this) { return true; }
+        if (obj.getClass() != getClass()) {
+          return false;
+        }
+        
+        FoodItem rhs = (FoodItem) obj;
+        return new EqualsBuilder()
+            .append(mTableName, rhs.mTableName)
+            .append(mId, rhs.mId)
             .append(mWeight, rhs.mWeight)
             .append(mTimeAddedMsec, rhs.mTimeAddedMsec)
             .isEquals();
-	}
+    }
 
-	public boolean equalsExceptTimeAdded(Object obj) {
-		if (obj == null) { return false; }
-		if (obj == this) { return true; }
-		if (obj.getClass() != getClass()) {
-		  return false;
-		}
-		
-		FoodItem rhs = (FoodItem) obj;
-		return new EqualsBuilder()
-        	.append(mTableName, rhs.mTableName)
-        	.append(mId, rhs.mId)
+    public boolean equalsExceptTimeAdded(Object obj) {
+        if (obj == null) { return false; }
+        if (obj == this) { return true; }
+        if (obj.getClass() != getClass()) {
+          return false;
+        }
+        
+        FoodItem rhs = (FoodItem) obj;
+        return new EqualsBuilder()
+            .append(mTableName, rhs.mTableName)
+            .append(mId, rhs.mId)
             .append(mWeight, rhs.mWeight)
             .isEquals();
-	}
-	
-	public int hashCode() {
-	    // random odd number constants
-	    return new HashCodeBuilder(12127, 9847)
-	     	.append(mTableName)
-	     	.append(mId)
-	     	.append(mWeight)
-	     	.append(mTimeAddedMsec)
-	        .toHashCode();
-	}
+    }
+    
+    public int hashCode() {
+        // random odd number constants
+        return new HashCodeBuilder(12127, 9847)
+             .append(mTableName)
+             .append(mId)
+             .append(mWeight)
+             .append(mTimeAddedMsec)
+            .toHashCode();
+    }
 }

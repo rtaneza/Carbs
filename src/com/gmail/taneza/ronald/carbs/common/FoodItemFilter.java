@@ -23,19 +23,19 @@ import android.widget.Filter;
 
 public class FoodItemFilter extends Filter {
 
-	private FoodItemBaseArrayAdapter mAdapter;
-	private FoodDbAdapter mFoodDbAdapter;
-	private ArrayList<FoodItem> mOriginalValues;
-	
-	public FoodItemFilter(FoodItemBaseArrayAdapter adapter, FoodDbAdapter foodDbAdapter, ArrayList<FoodItem> originalValues) {
-		mAdapter = adapter;
-		mFoodDbAdapter = foodDbAdapter;
-		mOriginalValues = originalValues;
+    private FoodItemBaseArrayAdapter mAdapter;
+    private FoodDbAdapter mFoodDbAdapter;
+    private ArrayList<FoodItem> mOriginalValues;
+    
+    public FoodItemFilter(FoodItemBaseArrayAdapter adapter, FoodDbAdapter foodDbAdapter, ArrayList<FoodItem> originalValues) {
+        mAdapter = adapter;
+        mFoodDbAdapter = foodDbAdapter;
+        mOriginalValues = originalValues;
     }
-	 
-	@Override
-	protected FilterResults performFiltering(CharSequence constraint) {
-		FilterResults results = new FilterResults();
+     
+    @Override
+    protected FilterResults performFiltering(CharSequence constraint) {
+        FilterResults results = new FilterResults();
         String searchText = constraint.toString().toLowerCase(Locale.getDefault());
         
         if (searchText.trim().length() == 0) {
@@ -43,7 +43,7 @@ public class FoodItemFilter extends Filter {
             results.count = mOriginalValues.size();
             
         } else {
-        	final ArrayList<FoodItem> originalList = new ArrayList<FoodItem>(mOriginalValues);
+            final ArrayList<FoodItem> originalList = new ArrayList<FoodItem>(mOriginalValues);
             final ArrayList<FoodItem> filteredList = new ArrayList<FoodItem>();
             
             int count = originalList.size();
@@ -51,7 +51,7 @@ public class FoodItemFilter extends Filter {
                 final FoodItem foodItem = originalList.get(i);
                 final FoodItemInfo foodItemInfo = mFoodDbAdapter.getFoodItemInfo(foodItem);
                 if (foodItemInfo.getName().toLowerCase(Locale.getDefault()).contains(searchText)) {
-                	filteredList.add(foodItem);
+                    filteredList.add(foodItem);
                 }
             }
             
@@ -60,11 +60,11 @@ public class FoodItemFilter extends Filter {
         }
         
         return results;
-	}
+    }
 
-	@SuppressWarnings("unchecked")
-	@Override
+    @SuppressWarnings("unchecked")
+    @Override
     protected void publishResults(CharSequence constraint, FilterResults results) {
-    	mAdapter.setValues((ArrayList<FoodItem>)results.values);
+        mAdapter.setValues((ArrayList<FoodItem>)results.values);
     }
 }

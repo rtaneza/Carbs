@@ -98,8 +98,8 @@ public class MainActivity extends ActionBarActivity implements
     private int mEditFoodItemIndex;
     
     private ActionBar mActionBar;
-    private boolean removeItemsFromRecentFoodsMode;
-    private boolean removeItemsFromMealMode;
+    private boolean deleteItemsFromRecentFoodsMode;
+    private boolean deleteItemsFromMealMode;
     private Handler mHandler;
 
     private float mTotalCarbsInGrams = 0;
@@ -129,10 +129,10 @@ public class MainActivity extends ActionBarActivity implements
 
         mSearchEditText = (ClearableEditText)findViewById(R.id.search_text);
         
-		mSearchEditTextOrigLayoutParams = (LinearLayout.LayoutParams)mSearchEditText.getLayoutParams();
-		mSearchEditTextFullWidthLayoutParams = new LinearLayout.LayoutParams(mSearchEditTextOrigLayoutParams);
-		mSearchEditTextFullWidthLayoutParams.weight = 1.0f;
-		
+        mSearchEditTextOrigLayoutParams = (LinearLayout.LayoutParams)mSearchEditText.getLayoutParams();
+        mSearchEditTextFullWidthLayoutParams = new LinearLayout.LayoutParams(mSearchEditTextOrigLayoutParams);
+        mSearchEditTextFullWidthLayoutParams.weight = 1.0f;
+        
         mSearchOptionSpinner = (Spinner) findViewById(R.id.search_option_spinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this,
@@ -202,7 +202,7 @@ public class MainActivity extends ActionBarActivity implements
         // We need to use a Handler for this. Otherwise, the other tabs are still selectable.
         // See: http://stackoverflow.com/questions/9585538/enable-disable-android-actionbar-tab
         
-        if (removeItemsFromRecentFoodsMode) {
+        if (deleteItemsFromRecentFoodsMode) {
             mHandler.postAtFrontOfQueue(new Runnable() {
                 @Override
                 public void run() {
@@ -211,7 +211,7 @@ public class MainActivity extends ActionBarActivity implements
             });
         }
         
-        else if (removeItemsFromMealMode) {
+        else if (deleteItemsFromMealMode) {
             mHandler.postAtFrontOfQueue(new Runnable() {
                 @Override
                 public void run() {
@@ -240,16 +240,16 @@ public class MainActivity extends ActionBarActivity implements
     public void onPageSelected(int position) {
         // The search options spinner is only used in the "Foods" tab.
         // So hide the spinner in the other tabs.
-    	if (position == FOODS_TAB_INDEX) {
-    		mSearchOptionSpinner.setVisibility(View.VISIBLE);
-    		mSearchEditText.setLayoutParams(mSearchEditTextOrigLayoutParams);
-    		
-    	} else {
-    		mSearchOptionSpinner.setVisibility(View.GONE);
-    		// Let the search edit text field take the whole width.
-    		mSearchEditText.setLayoutParams(mSearchEditTextFullWidthLayoutParams);
-    	}
-		
+        if (position == FOODS_TAB_INDEX) {
+            mSearchOptionSpinner.setVisibility(View.VISIBLE);
+            mSearchEditText.setLayoutParams(mSearchEditTextOrigLayoutParams);
+            
+        } else {
+            mSearchOptionSpinner.setVisibility(View.GONE);
+            // Let the search edit text field take the whole width.
+            mSearchEditText.setLayoutParams(mSearchEditTextFullWidthLayoutParams);
+        }
+        
         getSupportActionBar().setSelectedNavigationItem(position);
     }
 
@@ -380,16 +380,16 @@ public class MainActivity extends ActionBarActivity implements
                         clearSearchText();
                         break;
                         
-                    case FoodDetailsActivity.FOOD_DETAILS_RESULT_REMOVE:
+                    case FoodDetailsActivity.FOOD_DETAILS_RESULT_DELETE:
                         foodItem = data.getParcelableExtra(FoodDetailsActivity.FOOD_ITEM_RESULT);
-                        removeFoodItemFromRecentFoods(foodItem);
+                        deleteFoodItemFromRecentFoods(foodItem);
                         break;
                 }
                 break;
                 
             case REQUEST_CODE_EDIT_FOOD_IN_MEAL:
                 // The food item list in the meal is not filterable, and can contain duplicate foodItems, 
-                // so we need the index to remove the correct foodItem.
+                // so we need the index to delete the correct foodItem.
                 switch (resultCode) {
                     case FoodDetailsActivity.FOOD_DETAILS_RESULT_OK:
                         foodItem = data.getParcelableExtra(FoodDetailsActivity.FOOD_ITEM_RESULT);
@@ -397,9 +397,9 @@ public class MainActivity extends ActionBarActivity implements
                         clearSearchText();
                         break;
                         
-                    case FoodDetailsActivity.FOOD_DETAILS_RESULT_REMOVE:
+                    case FoodDetailsActivity.FOOD_DETAILS_RESULT_DELETE:
                         foodItem = data.getParcelableExtra(FoodDetailsActivity.FOOD_ITEM_RESULT);
-                        removeFoodItemFromMeal(mEditFoodItemIndex);
+                        deleteFoodItemFromMeal(mEditFoodItemIndex);
                         break;
                 }
                 mEditFoodItemIndex = -1;
@@ -411,7 +411,7 @@ public class MainActivity extends ActionBarActivity implements
                         refreshAllTabsAndMealTotal();
                         break;
 
-                    case MyFoodsActivity.MY_FOODS_RESULT_ITEM_REMOVED:
+                    case MyFoodsActivity.MY_FOODS_RESULT_ITEM_DELETED:
                         pruneRecentAndFoodLists();
                         refreshAllTabsAndMealTotal();
                         break;
@@ -436,48 +436,48 @@ public class MainActivity extends ActionBarActivity implements
     }
 
     @Override
-    public void setRemoveRecentFoodItemsMode(boolean enable) {
-        removeItemsFromRecentFoodsMode = enable;
+    public void setDeleteRecentFoodItemsMode(boolean enable) {
+        deleteItemsFromRecentFoodsMode = enable;
         mViewPager.setPagingEnabled(!enable);
         mSearchEditText.setEnabled(!enable);
     }
     
     @Override
-    public void removeFromRecentFoodItemsList(SparseBooleanArray itemsToRemove) {
-        removeFromFoodList(mRecentFoodsList, itemsToRemove);
+    public void deleteFromRecentFoodItemsList(SparseBooleanArray itemsToDelete) {
+        deleteFromFoodList(mRecentFoodsList, itemsToDelete);
     }
 
     @Override
-    public void setRemoveFoodItemsMode(boolean enable) {
-        removeItemsFromMealMode = enable;
+    public void setDeleteFoodItemsMode(boolean enable) {
+        deleteItemsFromMealMode = enable;
         mViewPager.setPagingEnabled(!enable);
         mSearchEditText.setEnabled(!enable);
     }
     
     @Override
-    public void removeFromFoodItemsList(SparseBooleanArray itemsToRemove) {
-        removeFromFoodList(mFoodItemsList, itemsToRemove);
+    public void deleteFromFoodItemsList(SparseBooleanArray itemsToDelete) {
+        deleteFromFoodList(mFoodItemsList, itemsToDelete);
     }
     
-    private void removeFromFoodList(ArrayList<FoodItem> foodList, SparseBooleanArray itemsToRemove) {
-        int numItemsToRemove = itemsToRemove.size();
-        if (itemsToRemove.size() <= 0) {
+    private void deleteFromFoodList(ArrayList<FoodItem> foodList, SparseBooleanArray itemsToDelete) {
+        int numItemsToDelete = itemsToDelete.size();
+        if (itemsToDelete.size() <= 0) {
             return;
         }
         
-        if (numItemsToRemove > foodList.size()) {
-            throw new IllegalArgumentException("numItemsToRemove is larger than the foodList size");
+        if (numItemsToDelete > foodList.size()) {
+            throw new IllegalArgumentException("numItemsToDelete is larger than the foodList size");
         }
         
-        // Each item in 'itemsToRemove' has a key and a value.
+        // Each item in 'itemsToDelete' has a key and a value.
         // The key is an index to 'mFoodItemsList'.
-        // The value is a boolean: true means that the item should be removed.
-        // Start from the end of the list, because items in the list will be shifted after each 'remove' call.
+        // The value is a boolean: true means that the item should be deleted.
+        // Start from the end of the list, because items in the list will be shifted after each 'delete' call.
         // Keys are guaranteed to be sorted in ascending order,
         // e.g. keyAt(0) will return the smallest key and keyAt(size()-1) will return the largest key.
-        for (int n = (numItemsToRemove-1); n >= 0; n--) {
-            int index = itemsToRemove.keyAt(n);
-            if (itemsToRemove.get(index)) {
+        for (int n = (numItemsToDelete-1); n >= 0; n--) {
+            int index = itemsToDelete.keyAt(n);
+            if (itemsToDelete.get(index)) {
                 foodList.remove(index);
             }
         }
@@ -604,7 +604,7 @@ public class MainActivity extends ActionBarActivity implements
     }
     
     private void addFoodItemtoRecentFoodsList(FoodItem foodItem) {
-        // remove any duplicate from the list
+        // delete any duplicate from the list
         for (int i = 0; i < mRecentFoodsList.size(); i++) {
             FoodItem item = mRecentFoodsList.get(i);
             if (item.equalsExceptTimeAdded(foodItem)) {
@@ -631,12 +631,12 @@ public class MainActivity extends ActionBarActivity implements
         updateRecentFoodsAndMealData();
     }
 
-    public void removeFoodItemFromMeal(int index) {
+    public void deleteFoodItemFromMeal(int index) {
         mFoodItemsList.remove(index);
         updateRecentFoodsAndMealData();
     }
 
-    public void removeFoodItemFromRecentFoods(FoodItem foodItem) {
+    public void deleteFoodItemFromRecentFoods(FoodItem foodItem) {
         mRecentFoodsList.remove(foodItem);
         updateRecentFoodsAndMealData();
     }
@@ -693,11 +693,11 @@ public class MainActivity extends ActionBarActivity implements
         sb.append(String.format(Locale.getDefault(), "%s: %s%n%n", getText(R.string.about_version_label), getVersion()));
         sb.append(String.format(Locale.getDefault(), "%s", getText(R.string.about_contact_info)));
         
-    	TextView message = new TextView(this);
-    	SpannableString s = new SpannableString(sb.toString());
-    	Linkify.addLinks(s, Linkify.WEB_URLS | Linkify.EMAIL_ADDRESSES);
-    	message.setText(s);
-    	message.setMovementMethod(LinkMovementMethod.getInstance());    	  
+        TextView message = new TextView(this);
+        SpannableString s = new SpannableString(sb.toString());
+        Linkify.addLinks(s, Linkify.WEB_URLS | Linkify.EMAIL_ADDRESSES);
+        message.setText(s);
+        message.setMovementMethod(LinkMovementMethod.getInstance());          
 
         new AlertDialog.Builder(this)
         .setTitle(R.string.about)

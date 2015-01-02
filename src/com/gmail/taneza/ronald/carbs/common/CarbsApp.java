@@ -19,13 +19,13 @@ package com.gmail.taneza.ronald.carbs.common;
 import android.app.Application;
 
 public class CarbsApp extends Application {
-	private FoodDbAdapter mFoodDbAdapter;
+    private FoodDbAdapter mFoodDbAdapter;
 
     @Override
     public void onCreate() {
         super.onCreate(); 
         mFoodDbAdapter = new FoodDbAdapter(this);
-		mFoodDbAdapter.open();
+        mFoodDbAdapter.open();
 
     }
 

@@ -41,64 +41,64 @@ import com.gmail.taneza.ronald.carbs.common.FoodItemViewBinder;
 
 public abstract class BaseFoodDbListFragment extends BaseListFragment 
     implements LoaderManager.LoaderCallbacks<Cursor> {
-	
-	protected SimpleCursorAdapter mCursorAdapter;
+    
+    protected SimpleCursorAdapter mCursorAdapter;
 
-	protected abstract String getQueryString(String searchText);
-	protected abstract FoodItem createFoodItemFromCursor(SQLiteCursor cursor);
-	protected abstract String getFoodNameColumnName();
-	public abstract String getWeightPerUnitColumnName();
-	public abstract String getUnitTextColumnName();
-	public abstract String getCarbsColumnName();
-	
-	@Override
-	public void onActivityCreated (Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		
-		//Log.i("Carbs", this.getClass().getSimpleName() + " onActivityCreated");
-		
-		ClearableEditText searchEditText = (ClearableEditText) getActivity().findViewById(R.id.search_text);
+    protected abstract String getQueryString(String searchText);
+    protected abstract FoodItem createFoodItemFromCursor(SQLiteCursor cursor);
+    protected abstract String getFoodNameColumnName();
+    public abstract String getWeightPerUnitColumnName();
+    public abstract String getUnitTextColumnName();
+    public abstract String getCarbsColumnName();
+    
+    @Override
+    public void onActivityCreated (Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        
+        //Log.i("Carbs", this.getClass().getSimpleName() + " onActivityCreated");
+        
+        ClearableEditText searchEditText = (ClearableEditText) getActivity().findViewById(R.id.search_text);
         addSearchTextListener(searchEditText);
         
-		initListAdapter();
-	}
-	
-	@Override
-	public Loader<Cursor> onCreateLoader(int id, Bundle args) {		
-		ClearableEditText searchEditText = (ClearableEditText) getActivity().findViewById(R.id.search_text);
-		String searchText = searchEditText.getText().toString();
-		String queryString = getQueryString(searchText);
-		return new SQLiteCursorLoader(getActivity(), mFoodDbAdapter, queryString, null);
-	}
-	
-	@Override
-	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-		// Swap the new cursor in.  (The framework will take care of closing the
+        initListAdapter();
+    }
+    
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {        
+        ClearableEditText searchEditText = (ClearableEditText) getActivity().findViewById(R.id.search_text);
+        String searchText = searchEditText.getText().toString();
+        String queryString = getQueryString(searchText);
+        return new SQLiteCursorLoader(getActivity(), mFoodDbAdapter, queryString, null);
+    }
+    
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        // Swap the new cursor in.  (The framework will take care of closing the
         // old cursor once we return.)
         mCursorAdapter.swapCursor(data);
-	}
+    }
 
-	@Override
-	public void onLoaderReset(Loader<Cursor> loader) {
-		// This is called when the last Cursor provided to onLoadFinished()
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        // This is called when the last Cursor provided to onLoadFinished()
         // above is about to be closed.  We need to make sure we are no
         // longer using it.
-        mCursorAdapter.swapCursor(null);		
-	}
-	
+        mCursorAdapter.swapCursor(null);        
+    }
+    
     @Override 
     public void onListItemClick(ListView l, View v, int position, long id) {
-    	SQLiteCursor cursor = (SQLiteCursor)l.getItemAtPosition(position);
-    	FoodItem foodItem = createFoodItemFromCursor(cursor);
-    	mMainActivityNotifier.startActivityToAddFoodToMeal(foodItem);
+        SQLiteCursor cursor = (SQLiteCursor)l.getItemAtPosition(position);
+        FoodItem foodItem = createFoodItemFromCursor(cursor);
+        mMainActivityNotifier.startActivityToAddFoodToMeal(foodItem);
     }
     
     public void refreshList() {
-    	initListAdapter();
+        initListAdapter();
     }
     
-	private void initListAdapter() {
-		String[] from = { getFoodNameColumnName(), FoodDbAdapter.COLUMN_TABLE_NAME, getCarbsColumnName() };
+    private void initListAdapter() {
+        String[] from = { getFoodNameColumnName(), FoodDbAdapter.COLUMN_TABLE_NAME, getCarbsColumnName() };
         int[] to = new int[] { R.id.food_item_name, R.id.food_item_name_extra, R.id.food_item_carbs };
         
         // Create an empty adapter we will use to display the loaded data.
@@ -111,34 +111,34 @@ public abstract class BaseFoodDbListFragment extends BaseListFragment
         setListAdapter(mCursorAdapter);
         
         restartLoader();
-	}
-	
-	private void restartLoader() {
-		getLoaderManager().restartLoader(0, null, this);
-	}
-	
-	private void addSearchTextListener(ClearableEditText searchEditText) {
-		
-		searchEditText.addTextChangedListener(new TextWatcher() {
-			public void afterTextChanged(Editable s) {
-			}
+    }
+    
+    private void restartLoader() {
+        getLoaderManager().restartLoader(0, null, this);
+    }
+    
+    private void addSearchTextListener(ClearableEditText searchEditText) {
+        
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+            }
 
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-			}
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                    int after) {
+            }
 
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				restartLoader();
-			}
-		});
-		
-		// This listener is called when the Enter key is pressed
-		searchEditText.setOnEditorActionListener(new OnEditorActionListener() {
-			@Override
-			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-				// Ignore the Enter key because we already do the processing every time the text changes
-				return true;
-			}
-		});
-	}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                restartLoader();
+            }
+        });
+        
+        // This listener is called when the Enter key is pressed
+        searchEditText.setOnEditorActionListener(new OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                // Ignore the Enter key because we already do the processing every time the text changes
+                return true;
+            }
+        });
+    }
 }

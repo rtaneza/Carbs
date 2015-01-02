@@ -32,36 +32,36 @@ import com.gmail.taneza.ronald.carbs.common.FoodItemBaseArrayAdapter;
 import com.gmail.taneza.ronald.carbs.common.RecentFoodsArrayAdapter;
 
 public class RecentFoodsFragment extends BaseFoodListFragment {
-	
-	@Override
+    
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
              Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.fragment_recent_foods, container, false);
-	}
+        return inflater.inflate(R.layout.fragment_recent_foods, container, false);
+    }
 
-	@Override
-	public ArrayList<FoodItem> getFoodList() {
-		return mMainActivityNotifier.getRecentFoodsList();
-	}
+    @Override
+    public ArrayList<FoodItem> getFoodList() {
+        return mMainActivityNotifier.getRecentFoodsList();
+    }
 
-	@Override
-	public void startActivityToAddOrEditFood(FoodItem foodItem, int foodItemIndex) {
-		// foodItemIndex is not used
-    	mMainActivityNotifier.startActivityToAddRecentFoodToMeal(foodItem);
-	}
-	
-	@Override
-	public FoodItemBaseArrayAdapter createFoodItemArrayAdapter(Context context, FoodDbAdapter foodDbAdapter, ArrayList<FoodItem> values) {
-		return new RecentFoodsArrayAdapter(context, foodDbAdapter, values);
-	}
+    @Override
+    public void startActivityToAddOrEditFood(FoodItem foodItem, int foodItemIndex) {
+        // foodItemIndex is not used
+        mMainActivityNotifier.startActivityToAddRecentFoodToMeal(foodItem);
+    }
+    
+    @Override
+    public FoodItemBaseArrayAdapter createFoodItemArrayAdapter(Context context, FoodDbAdapter foodDbAdapter, ArrayList<FoodItem> values) {
+        return new RecentFoodsArrayAdapter(context, foodDbAdapter, values);
+    }
 
-	@Override
-	protected void setRemoveItemsMode(boolean enable) {
-		mMainActivityNotifier.setRemoveRecentFoodItemsMode(enable);
-	}
+    @Override
+    protected void setDeleteItemsMode(boolean enable) {
+        mMainActivityNotifier.setDeleteRecentFoodItemsMode(enable);
+    }
 
-	@Override
-	protected void removeFromList(SparseBooleanArray itemsToRemove) {
-		mMainActivityNotifier.removeFromRecentFoodItemsList(itemsToRemove);
-	}
+    @Override
+    protected void deleteFromList(SparseBooleanArray itemsToDelete) {
+        mMainActivityNotifier.deleteFromRecentFoodItemsList(itemsToDelete);
+    }
 }

@@ -17,6 +17,6 @@
 package com.gmail.taneza.ronald.carbs.myfoods;
 
 public interface MyFoodsActivityNotifier {
-	public void setItemChanged();
-	public void setItemRemoved();
+    public void setItemChanged();
+    public void setItemDeleted();
 }
