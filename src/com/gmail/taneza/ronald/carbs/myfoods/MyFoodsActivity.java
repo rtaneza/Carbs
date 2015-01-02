@@ -131,6 +131,10 @@ public class MyFoodsActivity extends ActionBarActivity
 			case R.id.menu_add_my_food:
 				fragment.addNewFood();
 				break;
+
+			case R.id.menu_delete_my_food_items:
+				fragment.deleteMyFoods();
+				break;
 				
 			case R.id.menu_clear_my_foods:
 				fragment.clearMyFoods();

@@ -72,6 +72,7 @@
     <string name="delete_meal_items">Delete meal items&#8230;</string>
     <string name="delete_recent_items">Delete recent items&#8230;</string>
     <string name="delete_items_no_items">No items</string>
+    <string name="delete_my_food_items">Delete my foods&#8230;</string>
     <string name="search_all_foods">All</string>
     <string name="search_builtin_foods">Built-in</string>
     <string name="search_my_foods">My foods</string>

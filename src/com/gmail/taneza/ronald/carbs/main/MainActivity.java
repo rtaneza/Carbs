@@ -302,27 +302,35 @@ public class MainActivity extends ActionBarActivity implements
             case R.id.menu_my_foods:
                 startMyFoodsActivity();
                 break;
+                
             case R.id.menu_language_option_english:
                 setLanguage(Language.ENGLISH);
                 break;
+                
             case R.id.menu_language_option_dutch:
                 setLanguage(Language.DUTCH);
                 break;
-            case R.id.menu_clear_recent_foods:
-                clearRecentFoods();
-                break;
-            case R.id.menu_clear_meal:
-                clearMeal();
-                break;
+                
             case R.id.menu_delete_recent_items:
                 deleteRecentItems();
                 break;
+                
             case R.id.menu_delete_meal_items:
                 deleteMealItems();
                 break;
+                
+            case R.id.menu_clear_recent_foods:
+                clearRecentFoods();
+                break;
+                
+            case R.id.menu_clear_meal:
+                clearMeal();
+                break;
+                
             case R.id.menu_copy_meal_total:
                 copyMealTotalToClipboard();
                 break;
+                
             case R.id.menu_main_about:
                 showAboutDialog();
                 break;
@@ -466,7 +474,7 @@ public class MainActivity extends ActionBarActivity implements
         // The value is a boolean: true means that the item should be removed.
         // Start from the end of the list, because items in the list will be shifted after each 'remove' call.
         // Keys are guaranteed to be sorted in ascending order,
-        // e.g., keyAt(0) will return the smallest key and keyAt(size()-1) will return the largest key.
+        // e.g. keyAt(0) will return the smallest key and keyAt(size()-1) will return the largest key.
         for (int n = (numItemsToRemove-1); n >= 0; n--) {
             int index = itemsToRemove.keyAt(n);
             if (itemsToRemove.get(index)) {

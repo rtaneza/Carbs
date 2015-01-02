@@ -9,10 +9,10 @@
         android:hint="@string/search_text_hint" 
         android:drawableRight="@drawable/ic_clear"
         android:textSize="@dimen/text_size"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="12dp"
-        android:paddingBottom="12dp"
+        android:paddingLeft="@dimen/padding_horizontal"
+        android:paddingRight="@dimen/padding_horizontal"
+        android:paddingTop="@dimen/padding_vertical_anderhalf"
+        android:paddingBottom="@dimen/padding_vertical_anderhalf" 
         />
 
     <fragment android:name="com.gmail.taneza.ronald.carbs.myfoods.MyFoodsEditableFragment"

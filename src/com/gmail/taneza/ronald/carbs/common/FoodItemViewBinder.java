@@ -34,8 +34,7 @@ public class FoodItemViewBinder implements ViewBinder {
         	return true;
         }
         
-        // For others, we simply return false so that the default binding
-        // happens.
+        // For others, we simply return false so that the default binding is used.
         return false;
     }
 

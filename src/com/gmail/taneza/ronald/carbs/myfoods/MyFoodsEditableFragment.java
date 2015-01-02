@@ -170,7 +170,13 @@ public class MyFoodsEditableFragment extends ListFragment
 		FoodItem foodItem = new FoodItem(FoodDbAdapter.MYFOODS_TABLE_NAME, 0, MyFoodDetailsActivity.NEW_FOOD_DEFAULT_WEIGHT_PER_UNIT);
     	startMyFoodDetailsActivity(foodItem, MyFoodDetailsActivity.Mode.NewFood);
 	}
-
+	
+    public void deleteMyFoods() {
+        mActionMode = getActivity().startActionMode(new ActionBarCallBack());
+        mActionMode.setTitle(R.string.select_items_to_delete);
+        getListView().setOnItemClickListener(mOnItemClickListenerActionMode);
+    }
+    
 	public void clearMyFoods() {
 		new AlertDialog.Builder(getActivity())
 		.setTitle(R.string.clear_my_foods_question)
