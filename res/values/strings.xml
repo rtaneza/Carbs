@@ -29,6 +29,7 @@
     <string name="food_details_carbs">Carbs:</string>
     <string name="unit_grams">g</string>
     <string name="unit_ml">ml</string>
+    <string name="unit_pc">pc</string>
     <string name="add_to_meal">Add to meal</string>
     <string name="save_food_details">Save</string>
     <string name="title_foods">Foods</string>
@@ -83,6 +84,7 @@
     <string-array name="weight_unit_text_array">
         <item>@string/unit_grams</item>
         <item>@string/unit_ml</item>
+        <item>@string/unit_pc</item>
     </string-array>
     <string-array name="search_options_array">
         <item>@string/search_all_foods</item>
