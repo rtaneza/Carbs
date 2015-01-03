@@ -19,8 +19,7 @@ Food data: <br/>
 [Nederlands Voedingsstoffenbestand (NEVO)](http://www.rivm.nl/Onderwerpen/Onderwerpen/N/Nederlands_Voedingsstoffenbestand) <br/>
 Copyright NEVO-online version 2011/3.0, RIVM, Bilthoven.
 
-Tools and Libraries:
-* [SQLite Database Browser](http://sourceforge.net/projects/sqlitebrowser)
+Libraries:
 * [Android SQLite Asset Helper](https://github.com/jgilfelt/android-sqlite-asset-helper)
 * [Fast CSV Reader](http://www.codeproject.com/Articles/9258/A-Fast-CSV-Reader)
 * [CWAC LoaderEx](https://github.com/commonsguy/cwac-loaderex)
@@ -29,5 +28,16 @@ Tools and Libraries:
 
 License
 -------
-The code in this project is licensed under the [Apache Software License 2.0](http://www.apache.org/licenses/LICENSE-2.0). <br/>
 Copyright (c) 2013 Ronald Tañeza &lt;<ronald.taneza@gmail.com>&gt;
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
