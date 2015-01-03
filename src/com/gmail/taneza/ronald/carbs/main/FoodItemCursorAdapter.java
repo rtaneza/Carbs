@@ -1,8 +1,6 @@
 package com.gmail.taneza.ronald.carbs.main;
 
 import com.gmail.taneza.ronald.carbs.R;
-import com.gmail.taneza.ronald.carbs.common.CarbsApp;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.widget.SimpleCursorAdapter;

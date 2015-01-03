@@ -19,7 +19,6 @@ package com.gmail.taneza.ronald.carbs.main;
 import java.util.ArrayList;
 
 import com.gmail.taneza.ronald.carbs.R;
-import com.gmail.taneza.ronald.carbs.common.CarbsApp;
 import com.gmail.taneza.ronald.carbs.common.FoodDbAdapter;
 import com.gmail.taneza.ronald.carbs.common.FoodItem;
 import com.gmail.taneza.ronald.carbs.common.FoodItemFilter;
@@ -38,7 +37,6 @@ public abstract class FoodItemBaseArrayAdapter extends ArrayAdapter<FoodItem> {
     private final ArrayList<FoodItem> mOriginalValues;
     private ArrayList<FoodItem> mFilteredValues;
     private Filter mFilter;
-    private Context mContext;
     private SparseBooleanArray mSelection;
     private int mNumSelected = 0;
       
@@ -47,7 +45,6 @@ public abstract class FoodItemBaseArrayAdapter extends ArrayAdapter<FoodItem> {
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mFoodDbAdapter = foodDbAdapter;
         mOriginalValues = values;
-        mContext = context;
         mSelection = new SparseBooleanArray();
         
         setValues(values);
