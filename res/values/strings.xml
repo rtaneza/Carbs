@@ -76,6 +76,37 @@
     <string name="select_items_to_delete">Select items to delete</string>    
     <string name="about_contact_info">https://github.com/rtaneza/Carbs\n\nronald.taneza@gmail.com</string>
     <string name="about_version_label">Version</string>
+    <string name="title_activity_help">Help</string>
+    <string name="menu_help">Help</string>
+    <string name="help_text">
+    Carbs shows carbohydrate information of various foods.
+    You can search the default food database or add your own food data.
+    I wrote this app because I have Type 1 Diabetes and constantly need to count how much carbohydrates I eat.\n
+
+    \nThe default food data is taken from NEVO-online version 2011/3.0, RIVM, Bilthoven.
+    This is the Nederlands Voedingsstoffenbestand (NEVO), the Dutch Food Composition Database.
+    It contains 2080 food items and is managed by the Rijksinstituut voor Volksgezondheid en Milieu (RIVM),
+    the Dutch National Institute for Public Health and the Environment.\n      
+    
+    \nClick \"EN\" (English) or \"NL\" (Nederlands) to toggle how food names from the NEVO database are shown.\n
+
+    \nYou can search for food items using the Search textbox. Click on a food item to show the Food Details.\n
+    
+    \nIn the Food Details screen, you can enter the food\'s weight to show the calculated amount of carbohydrates.
+    Click the \"Add to meal\" button to add the food to the Meal tab.\n
+    
+    \nThe Meal tab shows the list of foods you have added and the total amount of carbohydrates.
+    Click on any item on the Meal tab to edit the food\'s weight.\n
+    
+    \nThe Recent tab shows the list of recently added foods. Click on any item on the Recent tab to show the Food Details.\n
+    
+    \nClick \"Delete meal items...\" to select and delete meal items.\n
+    Click \"Clear meal...\" to delete all meal items.\n
+    Click \"Delete recent items...\" to select and delete items from the recent history.\n
+    Click \"Clear recent...\" to delete all items from the recent history.\n
+    
+    \nYou can add your own foods by clicking the \"My Foods\" icon on the action bar.\n
+    </string>
     
     <string-array name="weight_unit_text_array">
         <item>@string/unit_grams</item>

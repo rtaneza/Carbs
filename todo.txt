@@ -47,7 +47,7 @@ ok // "ml" label in MyFoods is not fully visible
 ok // Remove "Open calculator"
 ok // Move "My foods" to "text" menu
 ok // Add "Delete recent items..."
-// Replace "meal" with "Total"
+ng // Replace "meal" with "Total" --> Can't think of good name. "Food list" may be confused with the list of all foods, so stick with "meal".
 ok // "Delete meal items" crashes if another tab (Foods/recent) is active
 ok // Make e-mail clickable in About dialog
 ok // Disable search option spinner in Meal tab
@@ -59,3 +59,5 @@ ok // make consistent: remove, delete
 ok // add 'unit' or 'pc' as unit
 ok // add max to recent and meal list -> recent list now has max 100, meal list has no max because the list is not expected to grow very big
 // move long click / delete handler code to common class
+// add nevo copyright to about / food details screen
+// use latest nevo 2013 database

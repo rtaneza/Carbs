@@ -328,9 +328,14 @@ public class MainActivity extends ActionBarActivity implements
                 copyMealTotalToClipboard();
                 break;
                 
-            case R.id.menu_main_about:
+            case R.id.menu_help:
+                startHelpActivity();
+                break;
+                
+            case R.id.menu_about:
                 showAboutDialog();
                 break;
+                
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -687,6 +692,11 @@ public class MainActivity extends ActionBarActivity implements
     
     private void clearSearchText() {
         mSearchEditText.setText("");
+    }
+
+    private void startHelpActivity() {
+        Intent intent = new Intent(this, HelpActivity.class);
+        startActivity(intent);
     }
     
     private void showAboutDialog() {

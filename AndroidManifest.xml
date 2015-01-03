@@ -14,6 +14,7 @@
         android:label="@string/app_name"
         android:name="com.gmail.taneza.ronald.carbs.common.CarbsApp"
         android:theme="@style/AppTheme" >
+        
         <activity
             android:name="com.gmail.taneza.ronald.carbs.main.MainActivity"
             android:label="@string/app_name" 
@@ -24,6 +25,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
         <activity
             android:name="com.gmail.taneza.ronald.carbs.main.FoodDetailsActivity"
             android:label="@string/title_activity_food_details"
@@ -32,6 +34,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.gmail.taneza.ronald.carbs.main.MainActivity" />
         </activity>
+        
         <activity
             android:name="com.gmail.taneza.ronald.carbs.myfoods.MyFoodsActivity"
             android:label="@string/title_activity_my_foods"
@@ -47,6 +50,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.gmail.taneza.ronald.carbs.main.MainActivity" />
         </activity>
+        
         <activity
             android:name="com.gmail.taneza.ronald.carbs.myfoods.MyFoodDetailsActivity"
             android:label="@string/title_activity_my_food_details"
@@ -55,6 +59,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.gmail.taneza.ronald.carbs.myfoods.MyFoodsActivity" />
         </activity>
+        
+        <activity
+            android:name="com.gmail.taneza.ronald.carbs.main.HelpActivity"
+            android:label="@string/title_activity_help"
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:parentActivityName="com.gmail.taneza.ronald.carbs.main.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.gmail.taneza.ronald.carbs.main.MainActivity" />
+        </activity>
+        
     </application>
 
 </manifest>
