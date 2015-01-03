@@ -17,20 +17,16 @@
 package com.gmail.taneza.ronald.carbs.main;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import org.droidparts.widget.ClearableEditText;
 
 import android.annotation.TargetApi;
-import android.app.ActionBar.LayoutParams;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 import android.os.Bundle;
@@ -85,6 +81,8 @@ public class MainActivity extends ActionBarActivity implements
     public final static int REQUEST_CODE_EDIT_FOOD_IN_MEAL = 1;
     public final static int REQUEST_CODE_SHOW_MY_FOODS = 2;
     
+    public final static int RECENT_FOODS_LIST_MAX_SIZE = 100;
+
     private Language mLanguage;
     private FoodDbAdapter mFoodDbAdapter;
     private ArrayList<FoodItem> mFoodItemsList;
@@ -611,6 +609,11 @@ public class MainActivity extends ActionBarActivity implements
                 mRecentFoodsList.remove(i);
                 break;
             }
+        }
+        
+        // delete oldest item if the list is already full
+        if (mRecentFoodsList.size() >= RECENT_FOODS_LIST_MAX_SIZE) {
+            mRecentFoodsList.remove(RECENT_FOODS_LIST_MAX_SIZE - 1);
         }
         
         mRecentFoodsList.add(0, foodItem);

@@ -17,7 +17,6 @@
 package com.gmail.taneza.ronald.carbs.common;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import android.content.Context;
 import android.util.SparseBooleanArray;

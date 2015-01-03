@@ -56,4 +56,6 @@ Jan 2015
 // Add help info for export/import of My foods
 ok // In Meal/Recent food info, pressing 'cancel' still performs the same function as 'ok' or 'save'
 ok // make consistent: remove, delete
-// add 'unit' or 'pc' as unit
+ok // add 'unit' or 'pc' as unit
+ok // add max to recent and meal list -> recent list now has max 100, meal list has no max because the list is not expected to grow very big
+// move long click / delete handler code to common class
