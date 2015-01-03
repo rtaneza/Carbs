@@ -32,18 +32,15 @@ import com.gmail.taneza.ronald.carbs.common.FoodItem;
 public class FoodsFragment extends BaseFoodDbListFragment implements OnItemSelectedListener  { 
 
     public static final int SEARCH_ALL_FOODS = 0;
-    public static final int SEARCH_BUILTIN_FOODS = 1;
-    public static final int SEARCH_MY_FOODS = 2;
+    public static final int SEARCH_MY_FOODS = 1;
     
     private int mSearchOption = SEARCH_ALL_FOODS;
     private FoodSearchAdapter mFoodSearchAdapter;
     private FoodSearchAdapter mAllFoodsSearchAdapter;
-    private FoodSearchAdapter mBuiltinFoodsSearchAdapter;
     private FoodSearchAdapter mMyFoodsSearchAdapter;
     
     public FoodsFragment() {
         mAllFoodsSearchAdapter = new AllFoodsSearchAdapter();
-        mBuiltinFoodsSearchAdapter = new BuiltinFoodsSearchAdapter();
         mMyFoodsSearchAdapter = new MyFoodsSearchAdapter();
         updateFoodSearchAdapter();
     }
@@ -52,10 +49,6 @@ public class FoodsFragment extends BaseFoodDbListFragment implements OnItemSelec
         switch (mSearchOption) {
             case SEARCH_ALL_FOODS:
                 mFoodSearchAdapter = mAllFoodsSearchAdapter;
-                break;
-                
-            case SEARCH_BUILTIN_FOODS:
-                mFoodSearchAdapter = mBuiltinFoodsSearchAdapter;
                 break;
                 
             case SEARCH_MY_FOODS:
@@ -143,41 +136,6 @@ public class FoodsFragment extends BaseFoodDbListFragment implements OnItemSelec
         @Override
         public String getQueryString(String searchText) {
             return mFoodDbAdapter.getQueryStringAllFoods(searchText);
-        }
-
-        @Override
-        public FoodItem createFoodItemFromCursor(SQLiteCursor cursor) {
-            return new FoodItem(
-                    cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_TABLE_NAME)),
-                    cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.NEVO_COLUMN_PRODUCT_CODE)),
-                    cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.NEVO_COLUMN_WEIGHT_PER_UNIT)));
-        }
-    }
-
-    private class BuiltinFoodsSearchAdapter implements FoodSearchAdapter {
-        @Override
-        public String getFoodNameColumnName() {
-            return mFoodDbAdapter.getFoodNameColumnName();
-        }
-
-        @Override
-        public String getWeightPerUnitColumnName() {
-            return FoodDbAdapter.NEVO_COLUMN_WEIGHT_PER_UNIT;
-        }
-
-        @Override
-        public String getUnitTextColumnName() {
-            return FoodDbAdapter.NEVO_COLUMN_UNIT_TEXT;
-        }
-
-        @Override
-        public String getCarbsColumnName() {
-            return FoodDbAdapter.NEVO_COLUMN_CARBS_GRAMS_PER_UNIT;
-        }
-
-        @Override
-        public String getQueryString(String searchText) {
-            return mFoodDbAdapter.getQueryStringBuiltinFoods(searchText);
         }
 
         @Override
