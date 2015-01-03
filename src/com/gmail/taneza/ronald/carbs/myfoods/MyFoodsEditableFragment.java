@@ -31,10 +31,11 @@ import android.os.Parcelable;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.view.ActionMode;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.SparseBooleanArray;
-import android.view.ActionMode;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -113,7 +114,7 @@ public class MyFoodsEditableFragment extends ListFragment
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                     mCursorAdapter.clearSelection();
                     
-                    mActionMode = getActivity().startActionMode(new ActionBarCallBack());
+                    mActionMode = ((ActionBarActivity)getActivity()).startSupportActionMode(new ActionBarCallBack());
                     onItemClickInActionMode(parent, view, position, id);
                     
                     getListView().setOnItemClickListener(mOnItemClickListenerActionMode);
@@ -172,7 +173,7 @@ public class MyFoodsEditableFragment extends ListFragment
     }
     
     public void deleteMyFoods() {
-        mActionMode = getActivity().startActionMode(new ActionBarCallBack());
+        mActionMode = ((ActionBarActivity)getActivity()).startSupportActionMode(new ActionBarCallBack());
         mActionMode.setTitle(R.string.select_items_to_delete);
         getListView().setOnItemClickListener(mOnItemClickListenerActionMode);
     }

@@ -24,10 +24,11 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.view.ActionMode;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.SparseBooleanArray;
-import android.view.ActionMode;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -83,7 +84,7 @@ public abstract class BaseFoodListFragment extends BaseListFragment {
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                     mFoodItemArrayAdapter.clearSelection();
                     
-                    mActionMode = getActivity().startActionMode(new ActionBarCallBack());
+                    mActionMode = ((ActionBarActivity)getActivity()).startSupportActionMode(new ActionBarCallBack());
                     onItemClickInActionMode(parent, view, position, id);
                     
                     getListView().setOnItemClickListener(mOnItemClickListenerActionMode);
@@ -127,7 +128,7 @@ public abstract class BaseFoodListFragment extends BaseListFragment {
     }
     
     public void startDeleteItemsMode() {
-        mActionMode = getActivity().startActionMode(new ActionBarCallBack());
+        mActionMode = ((ActionBarActivity)getActivity()).startSupportActionMode(new ActionBarCallBack());
         mActionMode.setTitle(R.string.select_items_to_delete);
         getListView().setOnItemClickListener(mOnItemClickListenerActionMode);
     }
