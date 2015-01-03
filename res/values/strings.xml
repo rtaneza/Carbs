@@ -73,11 +73,14 @@
     <string name="delete_my_food_items">Delete my foods&#8230;</string>
     <string name="search_all_foods">All</string>
     <string name="search_my_foods">My foods</string>
-    <string name="select_items_to_delete">Select items to delete</string>    
-    <string name="about_contact_info">https://github.com/rtaneza/Carbs\n\nronald.taneza@gmail.com</string>
-    <string name="about_version_label">Version</string>
+    <string name="select_items_to_delete">Select items to delete</string>   
+    <string name="about_version_label">Version</string> 
+    <string name="about_info">
+    Food data: NEVO-online version 2011/3.0, RIVM, Bilthoven\n
+    \nhttps://github.com/rtaneza/Carbs\n
+    \nronald.taneza@gmail.com</string>
     <string name="title_activity_help">Help</string>
-    <string name="menu_help">Help</string>
+    <string name="menu_help">Help</string>    
     
     <string name="main_help_text">
     Carbs shows carbohydrate information of various foods.

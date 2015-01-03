@@ -44,6 +44,7 @@ import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.util.SparseBooleanArray;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -705,17 +706,19 @@ public class MainActivity extends ActionBarActivity implements
         StringBuilder sb = new StringBuilder();
         sb.append(String.format(Locale.getDefault(), "%s%n", getText(R.string.app_name)));
         sb.append(String.format(Locale.getDefault(), "%s: %s%n%n", getText(R.string.about_version_label), getVersion()));
-        sb.append(String.format(Locale.getDefault(), "%s", getText(R.string.about_contact_info)));
+        sb.append(String.format(Locale.getDefault(), "%s", getText(R.string.about_info)));
+
+        SpannableString aboutString = new SpannableString(sb.toString());
+        Linkify.addLinks(aboutString, Linkify.WEB_URLS | Linkify.EMAIL_ADDRESSES);
         
-        TextView message = new TextView(this);
-        SpannableString s = new SpannableString(sb.toString());
-        Linkify.addLinks(s, Linkify.WEB_URLS | Linkify.EMAIL_ADDRESSES);
-        message.setText(s);
-        message.setMovementMethod(LinkMovementMethod.getInstance());          
+        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        TextView aboutBodyView = (TextView) layoutInflater.inflate(R.layout.dialog_about, null);
+        aboutBodyView.setText(aboutString);
+        aboutBodyView.setMovementMethod(new LinkMovementMethod());
 
         new AlertDialog.Builder(this)
         .setTitle(R.string.about)
-        .setView(message)
+        .setView(aboutBodyView)
         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) { 
                 // do nothing

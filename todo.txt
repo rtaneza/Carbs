@@ -59,6 +59,7 @@ ok // make consistent: remove, delete
 ok // add 'unit' or 'pc' as unit
 ok // add max to recent and meal list -> recent list now has max 100, meal list has no max because the list is not expected to grow very big
 // move long click / delete handler code to common class
-// add nevo copyright to about / food details screen
+ok // add nevo copyright to about / food details screen
 // use latest nevo 2013 database
 // in MyFoods db table: rename QuantityPerUnit to QuantityPerUnit
+// add notices for open source licenses

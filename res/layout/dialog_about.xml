@@ -1,0 +1,7 @@
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/padding_horizontal"
+    android:paddingRight="@dimen/padding_horizontal"    
+    android:paddingTop="@dimen/padding_vertical_double"
+    android:paddingBottom="@dimen/padding_vertical_double"  />
