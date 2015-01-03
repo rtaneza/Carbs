@@ -53,11 +53,11 @@ import android.widget.TextView.OnEditorActionListener;
 import com.commonsware.cwac.loaderex.acl.SQLiteCursorLoader;
 import com.gmail.taneza.ronald.carbs.R;
 import com.gmail.taneza.ronald.carbs.common.CarbsApp;
-import com.gmail.taneza.ronald.carbs.common.CustomSimpleCursorAdapter;
 import com.gmail.taneza.ronald.carbs.common.FoodDbAdapter;
 import com.gmail.taneza.ronald.carbs.common.FoodItem;
 import com.gmail.taneza.ronald.carbs.common.FoodItemInfo;
-import com.gmail.taneza.ronald.carbs.common.FoodItemViewBinder;
+import com.gmail.taneza.ronald.carbs.main.FoodItemCursorAdapter;
+import com.gmail.taneza.ronald.carbs.main.FoodItemViewBinder;
 
 public class MyFoodsEditableFragment extends ListFragment 
     implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -65,7 +65,7 @@ public class MyFoodsEditableFragment extends ListFragment
     private ClearableEditText mSearchEditText;
     
     private MyFoodsActivityNotifier mMyFoodsActivityNotifier;
-    private CustomSimpleCursorAdapter mCursorAdapter;
+    private FoodItemCursorAdapter mCursorAdapter;
     private FoodDbAdapter mFoodDbAdapter;
 
     private ActionMode mActionMode;
@@ -251,7 +251,7 @@ public class MyFoodsEditableFragment extends ListFragment
         int[] to = new int[] { R.id.food_item_name, R.id.food_item_name_extra, R.id.food_item_carbs };
         
         // Create an empty adapter we will use to display the loaded data.
-        mCursorAdapter = new CustomSimpleCursorAdapter(getActivity(), R.layout.food_item, null, from, to, 0);
+        mCursorAdapter = new FoodItemCursorAdapter(getActivity(), R.layout.food_item, null, from, to, 0);
         
         // We set the view binder for the adapter to our own FoodItemViewBinder.
         mCursorAdapter.setViewBinder(new FoodItemViewBinder(

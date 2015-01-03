@@ -55,7 +55,6 @@ import android.widget.Toast;
 
 import com.gmail.taneza.ronald.carbs.R;
 import com.gmail.taneza.ronald.carbs.common.CarbsApp;
-import com.gmail.taneza.ronald.carbs.common.CustomViewPager;
 import com.gmail.taneza.ronald.carbs.common.FoodDbAdapter;
 import com.gmail.taneza.ronald.carbs.common.FoodItem;
 import com.gmail.taneza.ronald.carbs.common.FoodItemInfo;

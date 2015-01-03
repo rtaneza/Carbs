@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="total_carbs_text_color">#0075EB</color>
+    <!-- 
+      These color values are exactly the same as the holo values.
+      We use the hardcoded values to support older SDK versions.
+    -->        
+    <color name="list_background_default">#fff3f3f3</color>  <!-- background_holo_light -->
+    <color name="list_background_selected">#ff33b5e5</color> <!-- holo_blue_light -->
 </resources>

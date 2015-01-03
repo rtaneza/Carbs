@@ -19,6 +19,9 @@ package com.gmail.taneza.ronald.carbs.common;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import com.gmail.taneza.ronald.carbs.main.FoodItemBaseArrayAdapter;
+
+
 import android.widget.Filter;
 
 public class FoodItemFilter extends Filter {

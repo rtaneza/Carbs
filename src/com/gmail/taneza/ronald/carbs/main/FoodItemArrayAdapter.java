@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.gmail.taneza.ronald.carbs.common;
+package com.gmail.taneza.ronald.carbs.main;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -25,6 +25,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.gmail.taneza.ronald.carbs.R;
+import com.gmail.taneza.ronald.carbs.common.FoodDbAdapter;
+import com.gmail.taneza.ronald.carbs.common.FoodItem;
+import com.gmail.taneza.ronald.carbs.common.FoodItemInfo;
 
 public class FoodItemArrayAdapter extends FoodItemBaseArrayAdapter {
     

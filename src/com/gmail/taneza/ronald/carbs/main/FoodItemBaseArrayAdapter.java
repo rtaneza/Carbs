@@ -14,9 +14,15 @@
  * limitations under the License.
  */
 
-package com.gmail.taneza.ronald.carbs.common;
+package com.gmail.taneza.ronald.carbs.main;
 
 import java.util.ArrayList;
+
+import com.gmail.taneza.ronald.carbs.R;
+import com.gmail.taneza.ronald.carbs.common.CarbsApp;
+import com.gmail.taneza.ronald.carbs.common.FoodDbAdapter;
+import com.gmail.taneza.ronald.carbs.common.FoodItem;
+import com.gmail.taneza.ronald.carbs.common.FoodItemFilter;
 
 import android.content.Context;
 import android.util.SparseBooleanArray;
@@ -107,11 +113,11 @@ public abstract class FoodItemBaseArrayAdapter extends ArrayAdapter<FoodItem> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = getRowView(position, convertView, parent);
-
-        //TODO: make this theme-independent
-        v.setBackgroundColor(mContext.getResources().getColor(android.R.color.background_light)); //default color        
+    
         if (isPositionSelected(position)) {
-            v.setBackgroundColor(mContext.getResources().getColor(android.R.color.holo_blue_light));// this is a selected position so make it red
+            v.setBackgroundResource(R.color.list_background_selected);
+        } else {
+            v.setBackgroundResource(R.color.list_background_default);
         }
         
         return v;

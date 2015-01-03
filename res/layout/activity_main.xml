@@ -38,7 +38,7 @@
         
     </LinearLayout>
         
-    <com.gmail.taneza.ronald.carbs.common.CustomViewPager
+    <com.gmail.taneza.ronald.carbs.main.CustomViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

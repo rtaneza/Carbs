@@ -1,4 +1,7 @@
-package com.gmail.taneza.ronald.carbs.common;
+package com.gmail.taneza.ronald.carbs.main;
+
+import com.gmail.taneza.ronald.carbs.common.FoodDbAdapter;
+import com.gmail.taneza.ronald.carbs.common.FoodItemInfo;
 
 import android.database.Cursor;
 import android.view.View;

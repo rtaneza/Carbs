@@ -1,4 +1,7 @@
-package com.gmail.taneza.ronald.carbs.common;
+package com.gmail.taneza.ronald.carbs.main;
+
+import com.gmail.taneza.ronald.carbs.R;
+import com.gmail.taneza.ronald.carbs.common.CarbsApp;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -7,11 +10,11 @@ import android.util.SparseBooleanArray;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class CustomSimpleCursorAdapter extends SimpleCursorAdapter {
+public class FoodItemCursorAdapter extends SimpleCursorAdapter {
     private SparseBooleanArray mSelection;
     private int mNumSelected;
 
-    public CustomSimpleCursorAdapter(Context context, int layout, Cursor c,
+    public FoodItemCursorAdapter(Context context, int layout, Cursor c,
             String[] from, int[] to, int flags) {
         super(context, layout, c, from, to, flags);
         mSelection = new SparseBooleanArray();
@@ -59,10 +62,10 @@ public class CustomSimpleCursorAdapter extends SimpleCursorAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = super.getView(position, convertView, parent);
 
-        //TODO: make this theme-independent
-        v.setBackgroundColor(mContext.getResources().getColor(android.R.color.background_light)); //default color        
         if (isPositionSelected(position)) {
-            v.setBackgroundColor(mContext.getResources().getColor(android.R.color.holo_blue_light));// this is a selected position so make it red
+            v.setBackgroundResource(R.color.list_background_selected);
+        } else {
+            v.setBackgroundResource(R.color.list_background_default);
         }
         
         return v;

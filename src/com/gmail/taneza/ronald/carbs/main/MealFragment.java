@@ -28,8 +28,6 @@ import android.view.ViewGroup;
 import com.gmail.taneza.ronald.carbs.R;
 import com.gmail.taneza.ronald.carbs.common.FoodDbAdapter;
 import com.gmail.taneza.ronald.carbs.common.FoodItem;
-import com.gmail.taneza.ronald.carbs.common.FoodItemArrayAdapter;
-import com.gmail.taneza.ronald.carbs.common.FoodItemBaseArrayAdapter;
 
 public class MealFragment extends BaseFoodListFragment {
     

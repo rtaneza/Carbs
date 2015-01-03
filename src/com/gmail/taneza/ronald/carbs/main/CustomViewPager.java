@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package com.gmail.taneza.ronald.carbs.common;
+package com.gmail.taneza.ronald.carbs.main;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
+/*
+ * ViewPager that allows paging to be enabled or disabled.
+ */
 public class CustomViewPager extends ViewPager {
 
     private boolean mPagingEnabled;
