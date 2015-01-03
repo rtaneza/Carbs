@@ -4,7 +4,6 @@
     <!--  "&#8230;" is unicode for "..." -->
     <string name="app_name">Carbs</string>
     <string name="no_items">No items found</string>
-    <string name="meal_total_carbs">Total carbs in meal:</string>
     <string name="search_text_hint">Search</string>
     <string name="my_foods">My foods&#8230;</string>
     <string name="clear_recent_foods">Clear recent&#8230;</string>
@@ -51,7 +50,6 @@
     <string name="title_activity_my_foods">Carbs My foods</string>
     <string name="title_activity_my_food_details">Add my food</string>
     <string name="title_activity_my_food_edit">Edit my food</string>
-    <string name="title_activity_delete_items">Delete items</string>
     <string name="clear_recent_foods_confirmation">Are you sure you want to clear all items in the recent foods history?</string>
     <string name="clear_meal_confirmation">Are you sure you want to clear all items in the meal?</string>
     <string name="clear_my_foods_confirmation">Are you sure you want to clear all items in My Foods? These items will also be deleted from the Recent and Meal lists.</string>
@@ -72,13 +70,12 @@
     <string name="my_foods_import_finished">%1$d items imported.</string>
     <string name="delete_meal_items">Delete meal items&#8230;</string>
     <string name="delete_recent_items">Delete recent items&#8230;</string>
-    <string name="delete_items_no_items">No items</string>
     <string name="delete_my_food_items">Delete my foods&#8230;</string>
     <string name="search_all_foods">All</string>
     <string name="search_my_foods">My foods</string>
     <string name="select_items_to_delete">Select items to delete</string>    
     <string name="about_contact_info">https://github.com/rtaneza/Carbs\n\nronald.taneza@gmail.com</string>
-    <string name="about_version_label">Version</string>    
+    <string name="about_version_label">Version</string>
     
     <string-array name="weight_unit_text_array">
         <item>@string/unit_grams</item>

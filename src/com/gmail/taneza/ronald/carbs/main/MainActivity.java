@@ -670,7 +670,7 @@ public class MainActivity extends ActionBarActivity implements
 
     @SuppressWarnings("deprecation")
     private void copyMealTotalToClipboard() {
-        String mealTotalValue = String.format("%.1f", mTotalCarbsInGrams);
+        String mealTotalValue = String.format(Locale.getDefault(), "%.1f", mTotalCarbsInGrams);
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
             android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
