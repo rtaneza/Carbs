@@ -66,8 +66,8 @@ public class FoodsFragment extends BaseFoodDbListFragment implements OnItemSelec
     }
 
     @Override
-    public String getWeightPerUnitColumnName() {
-        return mFoodSearchAdapter.getWeightPerUnitColumnName();
+    public String getQuantityPerUnitColumnName() {
+        return mFoodSearchAdapter.getQuantityPerUnitColumnName();
     }
 
     @Override
@@ -119,8 +119,8 @@ public class FoodsFragment extends BaseFoodDbListFragment implements OnItemSelec
         }
 
         @Override
-        public String getWeightPerUnitColumnName() {
-            return FoodDbAdapter.NEVO_COLUMN_WEIGHT_PER_UNIT;
+        public String getQuantityPerUnitColumnName() {
+            return FoodDbAdapter.NEVO_COLUMN_QUANTITY_PER_UNIT;
         }
 
         @Override
@@ -143,7 +143,7 @@ public class FoodsFragment extends BaseFoodDbListFragment implements OnItemSelec
             return new FoodItem(
                     cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_TABLE_NAME)),
                     cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.NEVO_COLUMN_PRODUCT_CODE)),
-                    cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.NEVO_COLUMN_WEIGHT_PER_UNIT)));
+                    cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.NEVO_COLUMN_QUANTITY_PER_UNIT)));
         }
     }
 
@@ -154,8 +154,8 @@ public class FoodsFragment extends BaseFoodDbListFragment implements OnItemSelec
         }
 
         @Override
-        public String getWeightPerUnitColumnName() {
-            return FoodDbAdapter.MYFOODS_COLUMN_WEIGHT_PER_UNIT;
+        public String getQuantityPerUnitColumnName() {
+            return FoodDbAdapter.MYFOODS_COLUMN_QUANTITY_PER_UNIT;
         }
 
         @Override
@@ -178,7 +178,7 @@ public class FoodsFragment extends BaseFoodDbListFragment implements OnItemSelec
             return new FoodItem(
                     cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_TABLE_NAME)),
                     cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_ID)),
-                    cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_WEIGHT_PER_UNIT)));
+                    cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_QUANTITY_PER_UNIT)));
         }
     }
     

@@ -60,7 +60,7 @@ public class FoodDetailsActivity extends ActionBarActivity {
     public final static String ACTIVITY_MODE_MESSAGE = "com.gmail.taneza.ronald.carbs.ACTIVITY_MODE_MESSAGE";
     
     private FoodItemInfo mFoodItemInfo;
-    private EditText mWeightEditText;
+    private EditText mQuantityEditText;
     private TextView mNumCarbsTextView;
     private Mode mMode;
     private int mDeleteItemConfirmationStringId;
@@ -80,26 +80,26 @@ public class FoodDetailsActivity extends ActionBarActivity {
         Mode mode = Mode.values()[intent.getIntExtra(ACTIVITY_MODE_MESSAGE, Mode.NewFood.ordinal())];
 
         // Create a copy of the foodItemInfo returned by foodDbAdapter,
-        // because the user may modify the weight value, and then cancel his changes.
+        // because the user may modify the quantity value, and then cancel his changes.
         FoodDbAdapter foodDbAdapter = ((CarbsApp)getApplication()).getFoodDbAdapter();
         FoodItemInfo foodItemInfo = foodDbAdapter.getFoodItemInfo(foodItem);
-        mFoodItemInfo = new FoodItemInfo(foodItem, foodItemInfo.getName(), foodItemInfo.getWeightPerUnit(), foodItemInfo.getNumCarbsInGramsPerUnit(), foodItemInfo.getUnitText());
+        mFoodItemInfo = new FoodItemInfo(foodItem, foodItemInfo.getName(), foodItemInfo.getQuantityPerUnit(), foodItemInfo.getNumCarbsInGramsPerUnit(), foodItemInfo.getUnitText());
         
         TextView foodNameTextView = (TextView) findViewById(R.id.food_details_name);
         foodNameTextView.setText(mFoodItemInfo.getName());
         
         TextView foodNameExtraTextView = (TextView) findViewById(R.id.food_details_name_extra);
         foodNameExtraTextView.setText(String.format("(%.1f g carbs per %d %s)", 
-                mFoodItemInfo.getNumCarbsInGramsPerUnit(), mFoodItemInfo.getWeightPerUnit(), mFoodItemInfo.getUnitText()));
+                mFoodItemInfo.getNumCarbsInGramsPerUnit(), mFoodItemInfo.getQuantityPerUnit(), mFoodItemInfo.getUnitText()));
         
-        mWeightEditText = (EditText) findViewById(R.id.food_details_weight_edit);
-        mWeightEditText.setText(Integer.toString(mFoodItemInfo.getWeight()));
+        mQuantityEditText = (EditText) findViewById(R.id.food_details_quantity_edit);
+        mQuantityEditText.setText(Integer.toString(mFoodItemInfo.getQuantity()));
         // Request focus and show soft keyboard automatically
-        mWeightEditText.requestFocus();
+        mQuantityEditText.requestFocus();
         getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE); 
 
-        TextView weightUnitTextView = (TextView) findViewById(R.id.food_details_weight_unit);
-        weightUnitTextView.setText(mFoodItemInfo.getUnitText());
+        TextView quantityUnitTextView = (TextView) findViewById(R.id.food_details_quantity_unit);
+        quantityUnitTextView.setText(mFoodItemInfo.getUnitText());
         
         mNumCarbsTextView = (TextView) findViewById(R.id.food_details_carbs_text);
         updateCarbsText();
@@ -116,7 +116,7 @@ public class FoodDetailsActivity extends ActionBarActivity {
             mItemDeletedMessageId = R.string.food_deleted_from_recent;
         }
         
-        addWeightTextListener();
+        addQuantityTextListener();
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -153,8 +153,8 @@ public class FoodDetailsActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
     
-    private void addWeightTextListener() {
-        mWeightEditText.addTextChangedListener(new TextWatcher() {
+    private void addQuantityTextListener() {
+        mQuantityEditText.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
                 // Abstract Method of TextWatcher Interface.
             }
@@ -165,15 +165,15 @@ public class FoodDetailsActivity extends ActionBarActivity {
             }
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Integer weight = 0;
+                Integer quantity = 0;
                 try {
-                    weight = Integer.parseInt(mWeightEditText.getText().toString());
+                    quantity = Integer.parseInt(mQuantityEditText.getText().toString());
                 }
                 catch (NumberFormatException e) {
-                    // ignore invalid weight string
+                    // ignore invalid quantity string
                 }
 
-                mFoodItemInfo.setWeight(weight);
+                mFoodItemInfo.setQuantity(quantity);
                 updateCarbsText();
             }
         });

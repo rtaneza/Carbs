@@ -27,14 +27,14 @@ public class FoodItemInfo implements Parcelable {
     
     private FoodItem mFoodItem;
     private String mName;
-    private int mWeightPerUnit; // e.g. 100 g
+    private int mQuantityPerUnit; // e.g. 100 g
     private float mNumCarbsInGramsPerUnit; // e.g. 30 g
     private String mUnitText; // e.g. g or ml
     
-    public FoodItemInfo(FoodItem foodItem, String name, int weightPerUnit, float numCarbsInGramsPerUnit, String unitText) {
+    public FoodItemInfo(FoodItem foodItem, String name, int quantityPerUnit, float numCarbsInGramsPerUnit, String unitText) {
         mFoodItem = foodItem;
         mName = name;
-        mWeightPerUnit = weightPerUnit;
+        mQuantityPerUnit = quantityPerUnit;
         mNumCarbsInGramsPerUnit = numCarbsInGramsPerUnit;
         mUnitText = unitText;
     }
@@ -47,8 +47,8 @@ public class FoodItemInfo implements Parcelable {
         return mName;
     }
 
-    public int getWeightPerUnit() {
-        return mWeightPerUnit;
+    public int getQuantityPerUnit() {
+        return mQuantityPerUnit;
     }
 
     public float getNumCarbsInGramsPerUnit() {
@@ -60,19 +60,19 @@ public class FoodItemInfo implements Parcelable {
     }
     
     public float getNumCarbsInGrams() {
-        return (getNumCarbsInGramsPerUnit() * mFoodItem.getWeight()) / getWeightPerUnit();
+        return (getNumCarbsInGramsPerUnit() * mFoodItem.getQuantity()) / getQuantityPerUnit();
     }
 
     public String getTableName() {
         return mFoodItem.getTableName();
     }
     
-    public int getWeight() {
-        return mFoodItem.getWeight();
+    public int getQuantity() {
+        return mFoodItem.getQuantity();
     }
     
-    public void setWeight(int weight) {
-        mFoodItem.setWeight(weight);
+    public void setQuantity(int quantity) {
+        mFoodItem.setQuantity(quantity);
     }
     
     public Date getDateAdded() {
@@ -83,7 +83,7 @@ public class FoodItemInfo implements Parcelable {
     private FoodItemInfo(Parcel parcel) {
         mFoodItem = parcel.readParcelable(FoodItem.class.getClassLoader());
         mName = parcel.readString();
-        mWeightPerUnit = parcel.readInt();
+        mQuantityPerUnit = parcel.readInt();
         mNumCarbsInGramsPerUnit = parcel.readFloat();
         mUnitText = parcel.readString();
     }
@@ -110,7 +110,7 @@ public class FoodItemInfo implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeParcelable(mFoodItem, flags);
         dest.writeString(mName);
-        dest.writeInt(mWeightPerUnit);
+        dest.writeInt(mQuantityPerUnit);
         dest.writeFloat(mNumCarbsInGramsPerUnit);
         dest.writeString(mUnitText);
     }

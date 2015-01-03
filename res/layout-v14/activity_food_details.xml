@@ -42,8 +42,8 @@
     
     </LinearLayout>
     
-    <!-- weight -->
-    <LinearLayout android:id="@+id/food_details_weight_group"
+    <!-- quantity -->
+    <LinearLayout android:id="@+id/food_details_quantity_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/food_details_name_group"
@@ -51,15 +51,15 @@
         android:paddingTop="@dimen/padding_vertical"
         android:weightSum="1.0" >
         
-        <TextView android:id="@+id/food_details_weight_label"
-            android:text="@string/food_details_weight"
+        <TextView android:id="@+id/food_details_quantity_label"
+            android:text="@string/food_details_quantity"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.4" 
             android:paddingLeft="@dimen/padding_horizontal_half"
             android:paddingRight="@dimen/padding_horizontal_half"/>
         
-        <EditText android:id="@+id/food_details_weight_edit"
+        <EditText android:id="@+id/food_details_quantity_edit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.6"
@@ -68,7 +68,7 @@
             android:gravity="right"
             android:selectAllOnFocus="true" />
         
-        <TextView android:id="@+id/food_details_weight_unit"
+        <TextView android:id="@+id/food_details_quantity_unit"
             android:text="@string/unit_grams"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" 
@@ -81,7 +81,7 @@
     <LinearLayout android:id="@+id/food_details_carbs_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/food_details_weight_group"
+        android:layout_below="@+id/food_details_quantity_group"
         android:orientation="horizontal"
         android:paddingBottom="@dimen/padding_vertical"
         android:weightSum="1.0" >

@@ -39,14 +39,14 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     public static final String NEVO_TABLE_NAME = "Food";
     public static final String NEVO_COLUMN_DUTCH_NAME = "Product_omschrijving";
     public static final String NEVO_COLUMN_ENGLISH_NAME = "EnglishName";
-    public static final String NEVO_COLUMN_WEIGHT_PER_UNIT = "Hoeveelheid";
+    public static final String NEVO_COLUMN_QUANTITY_PER_UNIT = "Hoeveelheid";
     public static final String NEVO_COLUMN_UNIT_TEXT = "Meeteenheid";
     public static final String NEVO_COLUMN_CARBS_GRAMS_PER_UNIT = "_05001";
     public static final String NEVO_COLUMN_PRODUCT_CODE = "Productcode";
 
     public static final String MYFOODS_TABLE_NAME = "MyFoods";
     public static final String MYFOODS_COLUMN_NAME = "Name";
-    public static final String MYFOODS_COLUMN_WEIGHT_PER_UNIT = "WeightPerUnit";
+    public static final String MYFOODS_COLUMN_QUANTITY_PER_UNIT = "WeightPerUnit";
     public static final String MYFOODS_COLUMN_UNIT_TEXT = "UnitText";
     public static final String MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT = "CarbsGramsPerUnit";
     public static final String MYFOODS_COLUMN_ID = "Id";
@@ -78,7 +78,7 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
         // Cursor requires an "_id" column
         // todo: find out what "0" really means
         String [] foodSqlSelect = {"0 _id", COLUMN_TABLE_NAME, NEVO_COLUMN_DUTCH_NAME, NEVO_COLUMN_ENGLISH_NAME, 
-                NEVO_COLUMN_WEIGHT_PER_UNIT, NEVO_COLUMN_UNIT_TEXT, 
+                NEVO_COLUMN_QUANTITY_PER_UNIT, NEVO_COLUMN_UNIT_TEXT, 
                 NEVO_COLUMN_CARBS_GRAMS_PER_UNIT, NEVO_COLUMN_PRODUCT_CODE}; 
         String foodWhereClause = getFoodNameColumnName() + " like '%" + foodName + "%'";
         
@@ -90,7 +90,7 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
         SQLiteQueryBuilder myFoodsQb = new SQLiteQueryBuilder();
         // Both select statements must have the same number of columns, so we repeat the "Name" column here
         String [] myFoodsSqlSelect = {"0 _id", COLUMN_TABLE_NAME, MYFOODS_COLUMN_NAME, MYFOODS_COLUMN_NAME, 
-                MYFOODS_COLUMN_WEIGHT_PER_UNIT, MYFOODS_COLUMN_UNIT_TEXT, 
+                MYFOODS_COLUMN_QUANTITY_PER_UNIT, MYFOODS_COLUMN_UNIT_TEXT, 
                 MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT, MYFOODS_COLUMN_ID}; 
         String myFoodsWhereClause = MYFOODS_COLUMN_NAME + " like '%" + foodName + "%'";
         
@@ -113,7 +113,7 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
         // All sql queries in this class map the table name to COLUMN_TABLE_NAME.
         String [] foodSqlSelect = {"0 _id", String.format("\"%s\" AS %s", NEVO_TABLE_NAME, COLUMN_TABLE_NAME), 
                 NEVO_COLUMN_DUTCH_NAME, NEVO_COLUMN_ENGLISH_NAME, 
-                NEVO_COLUMN_WEIGHT_PER_UNIT, NEVO_COLUMN_UNIT_TEXT, 
+                NEVO_COLUMN_QUANTITY_PER_UNIT, NEVO_COLUMN_UNIT_TEXT, 
                 NEVO_COLUMN_CARBS_GRAMS_PER_UNIT, NEVO_COLUMN_PRODUCT_CODE}; 
         String foodWhereClause = getFoodNameColumnName() + " like '%" + foodName + "%'";
         
@@ -130,7 +130,7 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
 
         // All sql queries in this class map the table name to COLUMN_TABLE_NAME.
         String [] myFoodsSqlSelect = {"0 _id", String.format("\"%s\" AS %s", MYFOODS_TABLE_NAME, COLUMN_TABLE_NAME),
-                MYFOODS_COLUMN_NAME, MYFOODS_COLUMN_WEIGHT_PER_UNIT, MYFOODS_COLUMN_UNIT_TEXT, 
+                MYFOODS_COLUMN_NAME, MYFOODS_COLUMN_QUANTITY_PER_UNIT, MYFOODS_COLUMN_UNIT_TEXT, 
                 MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT, MYFOODS_COLUMN_ID}; 
         String myFoodsWhereClause = MYFOODS_COLUMN_NAME + " like '%" + foodName + "%'";
         
@@ -144,7 +144,7 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     
     public ArrayList<FoodItemInfo> getAllMyFoods() {
         String [] columns = {"0 _id", 
-                MYFOODS_COLUMN_NAME, MYFOODS_COLUMN_WEIGHT_PER_UNIT, MYFOODS_COLUMN_UNIT_TEXT, 
+                MYFOODS_COLUMN_NAME, MYFOODS_COLUMN_QUANTITY_PER_UNIT, MYFOODS_COLUMN_UNIT_TEXT, 
                 MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT, MYFOODS_COLUMN_ID};
         Cursor cursor = mDatabase.query(MYFOODS_TABLE_NAME, columns, null, null, null, null, MYFOODS_COLUMN_NAME);
         
@@ -154,10 +154,10 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
             FoodItem foodItem = new FoodItem(
                     MYFOODS_TABLE_NAME,
                     cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_ID)),
-                    cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_WEIGHT_PER_UNIT)));
+                    cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_QUANTITY_PER_UNIT)));
             FoodItemInfo foodItemInfo = new FoodItemInfo(foodItem, 
                     cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_NAME)),
-                    cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_WEIGHT_PER_UNIT)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_QUANTITY_PER_UNIT)),
                     cursor.getFloat(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT)),
                     cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_UNIT_TEXT)));
              
@@ -196,7 +196,7 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
         String tableName = foodItem.getTableName();
         
         if (tableName.equals(NEVO_TABLE_NAME)) {
-            String[] columns = { getFoodNameColumnName(), NEVO_COLUMN_WEIGHT_PER_UNIT, 
+            String[] columns = { getFoodNameColumnName(), NEVO_COLUMN_QUANTITY_PER_UNIT, 
                     NEVO_COLUMN_CARBS_GRAMS_PER_UNIT, NEVO_COLUMN_UNIT_TEXT };
             String selection = String.format(Locale.US, "%s = %d", NEVO_COLUMN_PRODUCT_CODE, foodItem.getId());
             Cursor cursor = mDatabase.query(tableName, columns, selection, null, null, null, getFoodNameColumnName());
@@ -204,7 +204,7 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
                 foodItemInfo = new FoodItemInfo(
                         foodItem,
                         cursor.getString(cursor.getColumnIndexOrThrow(getFoodNameColumnName())),
-                        cursor.getInt(cursor.getColumnIndexOrThrow(NEVO_COLUMN_WEIGHT_PER_UNIT)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(NEVO_COLUMN_QUANTITY_PER_UNIT)),
                         cursor.getFloat(cursor.getColumnIndexOrThrow(NEVO_COLUMN_CARBS_GRAMS_PER_UNIT)),
                         cursor.getString(cursor.getColumnIndexOrThrow(NEVO_COLUMN_UNIT_TEXT)));
             } else {
@@ -212,7 +212,7 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
             }
             
         } else if (tableName.equals(MYFOODS_TABLE_NAME)) {
-            String[] columns = { MYFOODS_COLUMN_NAME, MYFOODS_COLUMN_WEIGHT_PER_UNIT, 
+            String[] columns = { MYFOODS_COLUMN_NAME, MYFOODS_COLUMN_QUANTITY_PER_UNIT, 
                     MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT, MYFOODS_COLUMN_UNIT_TEXT };
             String selection = String.format(Locale.US, "%s = %d", MYFOODS_COLUMN_ID, foodItem.getId());
             Cursor cursor = mDatabase.query(tableName, columns, selection, null, null, null, MYFOODS_COLUMN_NAME);
@@ -220,7 +220,7 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
                 foodItemInfo = new FoodItemInfo(
                         foodItem,
                         cursor.getString(cursor.getColumnIndexOrThrow(MYFOODS_COLUMN_NAME)),
-                        cursor.getInt(cursor.getColumnIndexOrThrow(MYFOODS_COLUMN_WEIGHT_PER_UNIT)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(MYFOODS_COLUMN_QUANTITY_PER_UNIT)),
                         cursor.getFloat(cursor.getColumnIndexOrThrow(MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT)),
                         cursor.getString(cursor.getColumnIndexOrThrow(MYFOODS_COLUMN_UNIT_TEXT)));
             } else {
@@ -242,7 +242,7 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     public void addMyFoodItemInfo(FoodItemInfo foodItemInfo) {
         ContentValues values = new ContentValues();
         values.put(MYFOODS_COLUMN_NAME, foodItemInfo.getName());
-        values.put(MYFOODS_COLUMN_WEIGHT_PER_UNIT, foodItemInfo.getWeightPerUnit());
+        values.put(MYFOODS_COLUMN_QUANTITY_PER_UNIT, foodItemInfo.getQuantityPerUnit());
         values.put(MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT, foodItemInfo.getNumCarbsInGramsPerUnit());
         values.put(MYFOODS_COLUMN_UNIT_TEXT, foodItemInfo.getUnitText());
         
@@ -253,7 +253,7 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
         ContentValues values = new ContentValues();
         values.put(MYFOODS_COLUMN_ID, foodItemInfo.getFoodItem().getId());
         values.put(MYFOODS_COLUMN_NAME, foodItemInfo.getName());
-        values.put(MYFOODS_COLUMN_WEIGHT_PER_UNIT, foodItemInfo.getWeightPerUnit());
+        values.put(MYFOODS_COLUMN_QUANTITY_PER_UNIT, foodItemInfo.getQuantityPerUnit());
         values.put(MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT, foodItemInfo.getNumCarbsInGramsPerUnit());
         values.put(MYFOODS_COLUMN_UNIT_TEXT, foodItemInfo.getUnitText());
         
@@ -314,7 +314,7 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     }
 
     private void deleteMyFoodItemFromCache(FoodItem foodItem) {
-        // Delete all FoodItem's that have the same TableName and ID, regardless of the weight.
+        // Delete all FoodItem's that have the same TableName and ID, regardless of the quantity.
         Iterator<Entry<FoodItem, FoodItemInfo>> it = mFoodItemCache.entrySet().iterator();
         while (it.hasNext()) {
             FoodItem item = it.next().getKey();

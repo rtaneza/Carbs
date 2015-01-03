@@ -60,6 +60,7 @@ import com.gmail.taneza.ronald.carbs.common.FoodItem;
 import com.gmail.taneza.ronald.carbs.common.FoodItemInfo;
 import com.gmail.taneza.ronald.carbs.common.FoodItemListSerializer;
 import com.gmail.taneza.ronald.carbs.common.Language;
+import com.gmail.taneza.ronald.carbs.main.HelpActivity.Mode;
 import com.gmail.taneza.ronald.carbs.myfoods.MyFoodsActivity;
 
 public class MainActivity extends ActionBarActivity implements
@@ -696,6 +697,7 @@ public class MainActivity extends ActionBarActivity implements
 
     private void startHelpActivity() {
         Intent intent = new Intent(this, HelpActivity.class);
+        intent.putExtra(HelpActivity.HELP_ACTIVITY_MODE_MESSAGE, Mode.Main.ordinal());
         startActivity(intent);
     }
     

@@ -1,7 +1,7 @@
 
 ok // create separate activity for menu list
 ok // create recent food list
-ok // save last used weight per food
+ok // save last used quantity per food
 
 // better handling of remove: remove multiple items at once
 ok // move meal list to SharedPreferences
@@ -61,3 +61,4 @@ ok // add max to recent and meal list -> recent list now has max 100, meal list 
 // move long click / delete handler code to common class
 // add nevo copyright to about / food details screen
 // use latest nevo 2013 database
+// in MyFoods db table: rename QuantityPerUnit to QuantityPerUnit

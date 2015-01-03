@@ -45,7 +45,7 @@ public abstract class BaseFoodDbListFragment extends BaseListFragment
     protected abstract String getQueryString(String searchText);
     protected abstract FoodItem createFoodItemFromCursor(SQLiteCursor cursor);
     protected abstract String getFoodNameColumnName();
-    public abstract String getWeightPerUnitColumnName();
+    public abstract String getQuantityPerUnitColumnName();
     public abstract String getUnitTextColumnName();
     public abstract String getCarbsColumnName();
     
@@ -104,7 +104,7 @@ public abstract class BaseFoodDbListFragment extends BaseListFragment
         mCursorAdapter = new FoodItemCursorAdapter(getActivity(), R.layout.food_item, null, from, to, 0);
         
         // We set the view binder for the adapter to our own FoodItemViewBinder.
-        mCursorAdapter.setViewBinder(new FoodItemViewBinder(getWeightPerUnitColumnName(), getUnitTextColumnName()));
+        mCursorAdapter.setViewBinder(new FoodItemViewBinder(getQuantityPerUnitColumnName(), getUnitTextColumnName()));
         
         setListAdapter(mCursorAdapter);
         

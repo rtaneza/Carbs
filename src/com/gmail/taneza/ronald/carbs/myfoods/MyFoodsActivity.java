@@ -49,6 +49,8 @@ import com.gmail.taneza.ronald.carbs.common.CarbsApp;
 import com.gmail.taneza.ronald.carbs.common.FoodDbAdapter;
 import com.gmail.taneza.ronald.carbs.common.FoodItem;
 import com.gmail.taneza.ronald.carbs.common.FoodItemInfo;
+import com.gmail.taneza.ronald.carbs.main.HelpActivity;
+import com.gmail.taneza.ronald.carbs.main.HelpActivity.Mode;
 
 public class MyFoodsActivity extends ActionBarActivity
     implements MyFoodsActivityNotifier {
@@ -64,6 +66,7 @@ public class MyFoodsActivity extends ActionBarActivity
     private boolean mItemDeleted;
     private FoodDbAdapter mFoodDbAdapter;
     private String mSharedText;
+    private String[] mQuantityUnitsArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +76,8 @@ public class MyFoodsActivity extends ActionBarActivity
         mItemDeleted = false;
 
         mFoodDbAdapter = ((CarbsApp)getApplication()).getFoodDbAdapter();
+        
+        mQuantityUnitsArray = getResources().getStringArray(R.array.quantity_unit_text_array);
         
         setContentView(R.layout.activity_my_foods);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -148,6 +153,10 @@ public class MyFoodsActivity extends ActionBarActivity
                 exportMyFoods();
                 break;
                 
+            case R.id.menu_help:
+                startHelpActivity();
+                break;
+                
             case android.R.id.home:
                 finish();
                 return true;
@@ -175,6 +184,12 @@ public class MyFoodsActivity extends ActionBarActivity
         sendIntent.setType("text/plain");
         startActivity(sendIntent);
     }
+
+    private void startHelpActivity() {
+        Intent intent = new Intent(this, HelpActivity.class);
+        intent.putExtra(HelpActivity.HELP_ACTIVITY_MODE_MESSAGE, Mode.MyFoods.ordinal());
+        startActivity(intent);
+    }
     
     private String getMyFoodsCsv() {
         StringWriter sw = new StringWriter();
@@ -193,7 +208,7 @@ public class MyFoodsActivity extends ActionBarActivity
                 
             csvWriter.writeHeader(new String[] {
                 FoodDbAdapter.MYFOODS_COLUMN_NAME,
-                FoodDbAdapter.MYFOODS_COLUMN_WEIGHT_PER_UNIT,
+                FoodDbAdapter.MYFOODS_COLUMN_QUANTITY_PER_UNIT,
                 FoodDbAdapter.MYFOODS_COLUMN_UNIT_TEXT,
                 FoodDbAdapter.MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT });
 
@@ -201,7 +216,7 @@ public class MyFoodsActivity extends ActionBarActivity
             for (FoodItemInfo info : myFoodsList) {
                 csvWriter.write(new String[] {
                     info.getName(),
-                    String.format(Locale.US, "%d", info.getWeightPerUnit()),
+                    String.format(Locale.US, "%d", info.getQuantityPerUnit()),
                     info.getUnitText(),
                     String.format(Locale.US, "%.1f", info.getNumCarbsInGramsPerUnit()) });
             }
@@ -315,17 +330,17 @@ public class MyFoodsActivity extends ActionBarActivity
         
         try {
             String name = myFoodInfoLine.get(0);
-            int weightPerUnit = format.parse(myFoodInfoLine.get(1)).intValue();
+            int quantityPerUnit = format.parse(myFoodInfoLine.get(1)).intValue();
             String unitText = myFoodInfoLine.get(2);
             float carbsGramsPerUnit = format.parse(myFoodInfoLine.get(3)).floatValue();
             
-            if (name == null || weightPerUnit < 0 || unitText == null || !isValidUnitText(unitText) || carbsGramsPerUnit < 0) {
+            if (name == null || quantityPerUnit < 0 || unitText == null || !isValidUnitText(unitText) || carbsGramsPerUnit < 0) {
                 return null;
             }
         
-            FoodItem foodItem = new FoodItem(FoodDbAdapter.MYFOODS_TABLE_NAME, 0, MyFoodDetailsActivity.NEW_FOOD_DEFAULT_WEIGHT_PER_UNIT);
+            FoodItem foodItem = new FoodItem(FoodDbAdapter.MYFOODS_TABLE_NAME, 0, MyFoodDetailsActivity.NEW_FOOD_DEFAULT_QUANTITY_PER_UNIT);
             FoodItemInfo foodItemInfo = new FoodItemInfo(foodItem, 
-                    getUniqueFoodName(name), weightPerUnit, carbsGramsPerUnit, unitText);
+                    getUniqueFoodName(name), quantityPerUnit, carbsGramsPerUnit, unitText);
             
             return foodItemInfo;
             
@@ -351,8 +366,12 @@ public class MyFoodsActivity extends ActionBarActivity
     }
     
     private boolean isValidUnitText(String unitText) {
-        return (unitText.equals(getText(R.string.unit_grams)) ||
-                unitText.equals(getText(R.string.unit_ml)));
+        for (String unit : mQuantityUnitsArray) {
+            if (unitText.equals(unit)) {
+                return true;
+            }
+        }        
+        return false;
     }
 
 }

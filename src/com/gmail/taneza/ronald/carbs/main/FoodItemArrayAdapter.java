@@ -51,9 +51,9 @@ public class FoodItemArrayAdapter extends FoodItemBaseArrayAdapter {
         }
         
         TextView nameExtraTextView = (TextView) rowView.findViewById(R.id.meal_item_name_extra);
-        String foodTypeAndWeight = String.format(Locale.getDefault(), "%s(%d %s)", 
-                foodType, foodItemInfo.getWeight(), foodItemInfo.getUnitText());
-        nameExtraTextView.setText(foodTypeAndWeight);
+        String foodTypeAndQuantity = String.format(Locale.getDefault(), "%s(%d %s)", 
+                foodType, foodItemInfo.getQuantity(), foodItemInfo.getUnitText());
+        nameExtraTextView.setText(foodTypeAndQuantity);
         
         TextView carbsTextView = (TextView) rowView.findViewById(R.id.meal_item_carbs);
         carbsTextView.setText(String.format(Locale.getDefault(), "%.1f", 

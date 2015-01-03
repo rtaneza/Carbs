@@ -6,7 +6,7 @@ import com.gmail.taneza.ronald.carbs.common.FoodItem;
 public interface FoodSearchAdapter {
 
     public String getFoodNameColumnName();
-    public String getWeightPerUnitColumnName();
+    public String getQuantityPerUnitColumnName();
     public String getUnitTextColumnName();
     public String getCarbsColumnName();
 

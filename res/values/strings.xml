@@ -24,7 +24,7 @@
     <string name="language_option_dutch">Nederlands</string>
     <string name="title_activity_food_details">Food details</string>
     <string name="title_activity_food_details_edit">Edit food details</string>
-    <string name="food_details_weight">Weight:</string>
+    <string name="food_details_quantity">Quantity:</string>
     <string name="food_details_carbs">Carbs:</string>
     <string name="unit_grams">g</string>
     <string name="unit_ml">ml</string>
@@ -43,7 +43,7 @@
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>
     <string name="my_food_name_label">Name:</string>
-    <string name="my_food_weight_per_unit">Weight per unit:</string>
+    <string name="my_food_quantity_per_unit">Quantity per unit:</string>
     <string name="my_food_carbs_per_unit">Carbs per unit:</string>
     <string name="my_foods_add">Add food</string>
     <string name="my_food_name_exists_error">Name already exists</string>
@@ -78,7 +78,8 @@
     <string name="about_version_label">Version</string>
     <string name="title_activity_help">Help</string>
     <string name="menu_help">Help</string>
-    <string name="help_text">
+    
+    <string name="main_help_text">
     Carbs shows carbohydrate information of various foods.
     You can search the default food database or add your own food data.
     I wrote this app because I have Type 1 Diabetes and constantly need to count how much carbohydrates I eat.\n
@@ -90,29 +91,48 @@
     
     \nClick \"EN\" (English) or \"NL\" (Nederlands) to toggle how food names from the NEVO database are shown.\n
 
-    \nYou can search for food items using the Search textbox. Click on a food item to show the Food Details.\n
+    \nSearch for food items using the Search textbox. Click on a food item from the search results to show the Food Details.\n
     
-    \nIn the Food Details screen, you can enter the food\'s weight to show the calculated amount of carbohydrates.
+    \nIn the Food Details screen, enter the food\'s quantity. The amount of carbohydrates will then be automatically calculated.
     Click the \"Add to meal\" button to add the food to the Meal tab.\n
     
     \nThe Meal tab shows the list of foods you have added and the total amount of carbohydrates.
-    Click on any item on the Meal tab to edit the food\'s weight.\n
+    Click on any item on the Meal tab to edit the food\'s quantity.\n
     
     \nThe Recent tab shows the list of recently added foods. Click on any item on the Recent tab to show the Food Details.\n
     
-    \nClick \"Delete meal items...\" to select and delete meal items.\n
-    Click \"Clear meal...\" to delete all meal items.\n
-    Click \"Delete recent items...\" to select and delete items from the recent history.\n
-    Click \"Clear recent...\" to delete all items from the recent history.\n
+    \nYou can add and manage your own foods in the My Foods screen, which can be accessed by clicking the \"My Foods\" icon on the action bar.\n
     
-    \nYou can add your own foods by clicking the \"My Foods\" icon on the action bar.\n
+    \nClick \"Delete meal items...\" to select and delete meal items.
+    \nClick \"Clear meal...\" to delete all meal items.
+    \nClick \"Delete recent items...\" to select and delete items from the recent history.
+    \nClick \"Clear recent...\" to delete all items from the recent history.
     </string>
     
-    <string-array name="weight_unit_text_array">
+    <string name="my_foods_help_text">
+    You can add and manage your own foods in \"My Foods\".\n
+    
+    \nClick the \"Add\" icon to add a new food. 
+    In the Add my food screen, enter the food details and click the \"Add food\" button to add the food.\n
+        
+    \nClick \"Delete my foods...\" to select and delete items.
+    \nClick \"Clear my foods...\" to delete all items.\n
+    
+    \nThis app supports a basic mechanism for importing and exporting your list of foods.\n
+    
+    \nClick \"Export my foods...\" to export your list of foods to another location or application, e.g. clipboard, e-mail, notepad.
+    You can then copy or store this list for future import.\n
+    
+    \nTo import a list of foods, first copy the previously exported list to the clipboard.
+    \nThen click \"Import my foods from clipboard...\" to import the list into the Carbs MyFoods database.\n
+    </string>
+    
+    <string-array name="quantity_unit_text_array">
         <item>@string/unit_grams</item>
         <item>@string/unit_ml</item>
         <item>@string/unit_pc</item>
     </string-array>
+    
     <string-array name="search_options_array">
         <item>@string/search_all_foods</item>
         <item>@string/search_my_foods</item>

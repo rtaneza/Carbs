@@ -14,11 +14,10 @@
         android:scrollbars="vertical"
         android:fillViewport="true">
     
-        <TextView android:id="@id/android:empty"
+        <TextView android:id="@+id/help_text_view"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_weight="1.0"
-            android:text="@string/help_text" />
+            android:layout_weight="1.0" />
     
     </ScrollView>
       

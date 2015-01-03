@@ -48,7 +48,7 @@ public class FoodItemListSerializer {
             sb.append(delimeter);
             sb.append(String.format(Locale.US, "%d", foodItem.getId())); 
             sb.append(delimeter);
-            sb.append(String.format(Locale.US, "%d", foodItem.getWeight())); 
+            sb.append(String.format(Locale.US, "%d", foodItem.getQuantity())); 
             sb.append(delimeter);
             sb.append(String.format(Locale.US, "%d", foodItem.getTimeAddedMsec())); 
         }
@@ -87,19 +87,19 @@ public class FoodItemListSerializer {
             for (int i = 0; i < numFoodItems; i++) {
                 String tableName = null;
                 int id = -1;
-                int weight = -1;
+                int quantity = -1;
                 long timeAddedMsec = -1;
                 
                 tableName = itemArray[index++];
                 id = format.parse(itemArray[index++]).intValue();
-                weight = format.parse(itemArray[index++]).intValue();
+                quantity = format.parse(itemArray[index++]).intValue();
                 timeAddedMsec = format.parse(itemArray[index++]).longValue();
 
-                if (tableName == null || id <= 0 || weight < 0 || timeAddedMsec < 0) {
+                if (tableName == null || id <= 0 || quantity < 0 || timeAddedMsec < 0) {
                     return foodItemList;
                 }
                 
-                FoodItem foodItem = new FoodItem(tableName, id, weight, timeAddedMsec);
+                FoodItem foodItem = new FoodItem(tableName, id, quantity, timeAddedMsec);
                 foodItemList.add(foodItem);                
             }
             

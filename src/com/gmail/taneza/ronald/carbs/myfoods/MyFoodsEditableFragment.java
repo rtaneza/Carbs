@@ -168,7 +168,7 @@ public class MyFoodsEditableFragment extends ListFragment
     }
     
     public void addNewFood() {
-        FoodItem foodItem = new FoodItem(FoodDbAdapter.MYFOODS_TABLE_NAME, 0, MyFoodDetailsActivity.NEW_FOOD_DEFAULT_WEIGHT_PER_UNIT);
+        FoodItem foodItem = new FoodItem(FoodDbAdapter.MYFOODS_TABLE_NAME, 0, MyFoodDetailsActivity.NEW_FOOD_DEFAULT_QUANTITY_PER_UNIT);
         startMyFoodDetailsActivity(foodItem, MyFoodDetailsActivity.Mode.NewFood);
     }
     
@@ -213,7 +213,7 @@ public class MyFoodsEditableFragment extends ListFragment
         return new FoodItem(
                 cursor.getString(cursor.getColumnIndexOrThrow(FoodDbAdapter.COLUMN_TABLE_NAME)),
                 cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_ID)),
-                cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_WEIGHT_PER_UNIT)));
+                cursor.getInt(cursor.getColumnIndexOrThrow(FoodDbAdapter.MYFOODS_COLUMN_QUANTITY_PER_UNIT)));
     }
     
     private void startMyFoodDetailsActivity(FoodItem foodItem, MyFoodDetailsActivity.Mode mode) {
@@ -256,7 +256,7 @@ public class MyFoodsEditableFragment extends ListFragment
         
         // We set the view binder for the adapter to our own FoodItemViewBinder.
         mCursorAdapter.setViewBinder(new FoodItemViewBinder(
-                FoodDbAdapter.MYFOODS_COLUMN_WEIGHT_PER_UNIT, FoodDbAdapter.MYFOODS_COLUMN_UNIT_TEXT));
+                FoodDbAdapter.MYFOODS_COLUMN_QUANTITY_PER_UNIT, FoodDbAdapter.MYFOODS_COLUMN_UNIT_TEXT));
         
         setListAdapter(mCursorAdapter);
         

@@ -10,11 +10,11 @@ import android.support.v4.widget.SimpleCursorAdapter.ViewBinder;
 
 public class FoodItemViewBinder implements ViewBinder {
 
-    protected String mWeightPerUnitColumnName;
+    protected String mQuantityPerUnitColumnName;
     protected String mUnitTextColumnName;
     
-    public FoodItemViewBinder(String weightPerUnitColumnName, String unitTextColumnName) {
-        mWeightPerUnitColumnName = weightPerUnitColumnName;
+    public FoodItemViewBinder(String quantityPerUnitColumnName, String unitTextColumnName) {
+        mQuantityPerUnitColumnName = quantityPerUnitColumnName;
         mUnitTextColumnName = unitTextColumnName;
     }
     
@@ -29,10 +29,10 @@ public class FoodItemViewBinder implements ViewBinder {
                 foodType = String.format("%s ", FoodItemInfo.MY_FOOD_TEXT);
             }
             
-            int weightPerUnit = cursor.getInt(cursor.getColumnIndexOrThrow(mWeightPerUnitColumnName));
+            int quantityPerUnit = cursor.getInt(cursor.getColumnIndexOrThrow(mQuantityPerUnitColumnName));
             String unitText = cursor.getString(cursor.getColumnIndexOrThrow(mUnitTextColumnName));
             
-            textView.setText(String.format("%s(%d %s)", foodType, weightPerUnit, unitText));
+            textView.setText(String.format("%s(%d %s)", foodType, quantityPerUnit, unitText));
             
             return true;
         }

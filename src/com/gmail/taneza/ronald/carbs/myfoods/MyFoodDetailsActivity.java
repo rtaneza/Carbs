@@ -48,7 +48,7 @@ public class MyFoodDetailsActivity extends ActionBarActivity {
 
     public static final String NEW_FOOD_DEFAULT_NAME = "My food"; 
     public static final String NEW_FOOD_DEFAULT_UNIT_TEXT = "g"; 
-    public static final int NEW_FOOD_DEFAULT_WEIGHT_PER_UNIT = 100;
+    public static final int NEW_FOOD_DEFAULT_QUANTITY_PER_UNIT = 100;
     public static final int NEW_FOOD_DEFAULT_CARBS = 0;
     
     public enum Mode {
@@ -68,9 +68,9 @@ public class MyFoodDetailsActivity extends ActionBarActivity {
     private FoodDbAdapter mFoodDbAdapter;
     private FoodItem mFoodItem;
     private TextView mFoodNameTextView;
-    private EditText mWeightEditText;
+    private EditText mQuantityEditText;
     private TextView mNumCarbsTextView;
-    private Spinner mWeightUnitTextSpinner;
+    private Spinner mQuantityUnitTextSpinner;
     private Mode mMode;
     
     @Override
@@ -91,7 +91,7 @@ public class MyFoodDetailsActivity extends ActionBarActivity {
         Mode mode = Mode.values()[intent.getIntExtra(MY_FOOD_ACTIVITY_MODE_MESSAGE, Mode.NewFood.ordinal())];
         mMode = mode;
         if (mode == Mode.NewFood) {
-            foodItemInfo = new FoodItemInfo(mFoodItem, NEW_FOOD_DEFAULT_NAME, NEW_FOOD_DEFAULT_WEIGHT_PER_UNIT, NEW_FOOD_DEFAULT_CARBS, NEW_FOOD_DEFAULT_UNIT_TEXT);
+            foodItemInfo = new FoodItemInfo(mFoodItem, NEW_FOOD_DEFAULT_NAME, NEW_FOOD_DEFAULT_QUANTITY_PER_UNIT, NEW_FOOD_DEFAULT_CARBS, NEW_FOOD_DEFAULT_UNIT_TEXT);
         } else {
             foodItemInfo = mFoodDbAdapter.getFoodItemInfo(mFoodItem);
 
@@ -106,18 +106,18 @@ public class MyFoodDetailsActivity extends ActionBarActivity {
         mFoodNameTextView.requestFocus();
         getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE); 
         
-        mWeightEditText = (EditText) findViewById(R.id.my_food_weight_edit);
-        mWeightEditText.setText(Integer.toString(foodItemInfo.getWeightPerUnit()));
+        mQuantityEditText = (EditText) findViewById(R.id.my_food_quantity_edit);
+        mQuantityEditText.setText(Integer.toString(foodItemInfo.getQuantityPerUnit()));
 
-        mWeightUnitTextSpinner = (Spinner) findViewById(R.id.my_food_weight_unit_spinner);
+        mQuantityUnitTextSpinner = (Spinner) findViewById(R.id.my_food_quantity_unit_spinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this,
-                R.array.weight_unit_text_array, android.R.layout.simple_spinner_item);
+                R.array.quantity_unit_text_array, android.R.layout.simple_spinner_item);
         // Specify the layout to use when the list of choices appears
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
-        mWeightUnitTextSpinner.setAdapter(arrayAdapter);
-        mWeightUnitTextSpinner.setSelection(arrayAdapter.getPosition(foodItemInfo.getUnitText()));
+        mQuantityUnitTextSpinner.setAdapter(arrayAdapter);
+        mQuantityUnitTextSpinner.setSelection(arrayAdapter.getPosition(foodItemInfo.getUnitText()));
         
         mNumCarbsTextView = (TextView) findViewById(R.id.my_food_carbs);
         
@@ -210,9 +210,9 @@ public class MyFoodDetailsActivity extends ActionBarActivity {
         
         FoodItemInfo foodItemInfo = new FoodItemInfo(mFoodItem, 
                 foodName,
-                Integer.parseInt(mWeightEditText.getText().toString()),
+                Integer.parseInt(mQuantityEditText.getText().toString()),
                 Float.parseFloat(mNumCarbsTextView.getText().toString()),
-                mWeightUnitTextSpinner.getSelectedItem().toString());
+                mQuantityUnitTextSpinner.getSelectedItem().toString());
         
         Intent data = getIntent();
         data.putExtra(MY_FOOD_ITEM_INFO_RESULT, (Parcelable)foodItemInfo);

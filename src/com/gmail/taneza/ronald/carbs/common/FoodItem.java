@@ -28,20 +28,20 @@ public class FoodItem implements Parcelable {
     
     private String mTableName;
     private int mId;
-    private int mWeight;
+    private int mQuantity;
     private long mTimeAddedMsec;
     private boolean mChecked;
     
-    public FoodItem(String tableName, int id, int weight, long timeAddedMsec) {
+    public FoodItem(String tableName, int id, int quantity, long timeAddedMsec) {
         FoodItemListSerializer.verifyTableNameIsValidOrThrow(tableName);        
         mTableName = tableName;
         mId = id;
-        mWeight = weight;
+        mQuantity = quantity;
         mTimeAddedMsec = timeAddedMsec;
     }
 
-    public FoodItem(String tableName, int id, int weight) {
-        this(tableName, id, weight, (new Date()).getTime());
+    public FoodItem(String tableName, int id, int quantity) {
+        this(tableName, id, quantity, (new Date()).getTime());
     }
 
     public String getTableName() {
@@ -52,12 +52,12 @@ public class FoodItem implements Parcelable {
         return mId;
     }
     
-    public int getWeight() {
-        return mWeight;
+    public int getQuantity() {
+        return mQuantity;
     }
     
-    public void setWeight(int weight) {
-        mWeight = weight;
+    public void setQuantity(int quantity) {
+        mQuantity = quantity;
     }
     
     public long getTimeAddedMsec() {
@@ -75,7 +75,7 @@ public class FoodItem implements Parcelable {
     private FoodItem(Parcel parcel) {
         mTableName = parcel.readString();
         mId = parcel.readInt();
-        mWeight = parcel.readInt();
+        mQuantity = parcel.readInt();
         mTimeAddedMsec = parcel.readLong();
     }
 
@@ -101,7 +101,7 @@ public class FoodItem implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mTableName);
         dest.writeInt(mId);
-        dest.writeInt(mWeight);
+        dest.writeInt(mQuantity);
         dest.writeLong(mTimeAddedMsec);
     }
     
@@ -116,7 +116,7 @@ public class FoodItem implements Parcelable {
         return new EqualsBuilder()
             .append(mTableName, rhs.mTableName)
             .append(mId, rhs.mId)
-            .append(mWeight, rhs.mWeight)
+            .append(mQuantity, rhs.mQuantity)
             .append(mTimeAddedMsec, rhs.mTimeAddedMsec)
             .isEquals();
     }
@@ -132,7 +132,7 @@ public class FoodItem implements Parcelable {
         return new EqualsBuilder()
             .append(mTableName, rhs.mTableName)
             .append(mId, rhs.mId)
-            .append(mWeight, rhs.mWeight)
+            .append(mQuantity, rhs.mQuantity)
             .isEquals();
     }
     
@@ -141,7 +141,7 @@ public class FoodItem implements Parcelable {
         return new HashCodeBuilder(12127, 9847)
              .append(mTableName)
              .append(mId)
-             .append(mWeight)
+             .append(mQuantity)
              .append(mTimeAddedMsec)
             .toHashCode();
     }
