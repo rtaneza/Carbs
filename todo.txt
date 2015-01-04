@@ -3,7 +3,7 @@ ok // create separate activity for menu list
 ok // create recent food list
 ok // save last used quantity per food
 
-// better handling of remove: remove multiple items at once
+ok // better handling of remove: remove multiple items at once
 ok // move meal list to SharedPreferences
 ok // start calculator intent? to be able to add carbs manually
 ok // add my food list 
@@ -28,7 +28,7 @@ ok // Android API v8 Alert dialog has different button order: Remove|Cancel
 ok // Check for duplicate name when adding new MyFood
 ok // clear MyFoods table in production db
 ok // add capability to accept plain text data intent -> this should be imported to MyFoods list
-// Align buttons in FoodDetailsActivity -> especially with dutch text
+ok // Align buttons in FoodDetailsActivity -> especially with dutch text
 ng // translate confirmation and import messages to dutch
    -> just support english
 ng // Add search icon to search edit text
@@ -43,7 +43,7 @@ ok // Delete old "DeleteItems" activity and xml
 
 Aug 2014
 ok // "ml" label in MyFoods is not fully visible
-// white background on lists is not the same as the default background
+ok // white background on lists is not the same as the default background
 ok // Remove "Open calculator"
 ok // Move "My foods" to "text" menu
 ok // Add "Delete recent items..."
@@ -53,13 +53,14 @@ ok // Make e-mail clickable in About dialog
 ok // Disable search option spinner in Meal tab
 
 Jan 2015
-// Add help info for export/import of My foods
+ok // Add help info for export/import of My foods
 ok // In Meal/Recent food info, pressing 'cancel' still performs the same function as 'ok' or 'save'
 ok // make consistent: remove, delete
 ok // add 'unit' or 'pc' as unit
 ok // add max to recent and meal list -> recent list now has max 100, meal list has no max because the list is not expected to grow very big
 // move long click / delete handler code to common class
 ok // add nevo copyright to about / food details screen
-// use latest nevo 2013 database
-// in MyFoods db table: rename QuantityPerUnit to QuantityPerUnit
-// add notices for open source licenses
+ok // use latest nevo 2013 database
+ok // in MyFoods db table: rename QuantityPerUnit to QuantityPerUnit
+ok // add notices for open source licenses -> done in readme.md
+// Use the same Delete prompts for deleting multiple items and single items (in Details activity)
