@@ -76,7 +76,7 @@
     <string name="select_items_to_delete">Select items to delete</string>   
     <string name="about_version_label">Version</string> 
     <string name="about_info">
-    Food data: NEVO-online version 2011/3.0, RIVM, Bilthoven\n
+    Food data: NEVO-online version 2013/4.0, RIVM, Bilthoven\n
     \nhttps://github.com/rtaneza/Carbs\n
     \nronald.taneza@gmail.com</string>
     <string name="title_activity_help">Help</string>
@@ -87,9 +87,9 @@
     You can search the default food database or add your own food data.
     I wrote this app because I have Type 1 Diabetes and constantly need to count how much carbohydrates I eat.\n
 
-    \nThe default food data is taken from NEVO-online version 2011/3.0, RIVM, Bilthoven.
+    \nThe default food data is taken from NEVO-online version 2013/4.0, RIVM, Bilthoven.
     This is the Nederlands Voedingsstoffenbestand (NEVO), the Dutch Food Composition Database.
-    It contains 2080 food items and is managed by the Rijksinstituut voor Volksgezondheid en Milieu (RIVM),
+    It contains 2194 food items and is managed by the Rijksinstituut voor Volksgezondheid en Milieu (RIVM),
     the Dutch National Institute for Public Health and the Environment.\n      
     
     \nClick \"EN\" (English) or \"NL\" (Nederlands) to toggle how food names from the NEVO database are shown.\n

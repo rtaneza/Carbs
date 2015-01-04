@@ -148,5 +148,31 @@ Loempia bereid
 (100 g) [2013-09-087 1:03 PM] 
 
 
+-----
 
+How to convert a NEVO xls to an sqlite db:
+- Open xls and save as csv file, e.g. Nevo-Online versie 2013_4.csv
+- Prepare csv with english names:
+- Open English index NEVO online 2013.pdf. Save it as a text file, e.g. English index NEVO online 2013.txt
+- Check if format is still the same as the older one. If not, then update CreateEnglishNamesCsv accordingly.
+- Run CreateEnglishNamesCsv.exe to create NevoFoodListWithEnglishNames.csv from "English index NEVO online 2013c.txt" and "Nevo-Online versie 2013_4.csv"
+
+- Run SQLite Database Browser.exe
+- Create new db, e.g. CarbsFoods.db. Don't create any table (press cancel)
+- Click File -> Import -> Table from csv and select NevoFoodListWithEnglishNames.csv file
+- Table name: Nevo
+   Field separator: ,
+   Enable checkbox: extract field names from first line
+- Import will take a while. Afterwards, the db should contain the "Nevo" table
+
+- Create MyFoods table via Edit -> Create table
+- Table name: MyFoods
+- Add fields: 
+  Id: INTEGER PRIMARY KEY
+  Name: TEXT
+  QuantityPerUnit: NUMERIC
+  UnitText: TEXT
+  CarbsGramsPerUnit: NUMERIC
+
+- Save the db, then exit sqlite database browser
 

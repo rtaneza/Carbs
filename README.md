@@ -6,7 +6,7 @@ You can search the default food database or add your own food data.
 Food names can be switched between Dutch and English.
 I wrote this because I have Type 1 Diabetes and constantly need to count how much carbohydrates I eat.
 
-The food data is taken from NEVO-online version 2011/3.0, RIVM, Bilthoven. This is the [Nederlands Voedingsstoffenbestand (NEVO)](http://www.rivm.nl/Onderwerpen/Onderwerpen/N/Nederlands_Voedingsstoffenbestand), the Dutch Food Composition Database.
+The food data is taken from NEVO-online version 2013/4.0, RIVM, Bilthoven. This is the [Nederlands Voedingsstoffenbestand (NEVO)](http://www.rivm.nl/Onderwerpen/Onderwerpen/N/Nederlands_Voedingsstoffenbestand), the Dutch Food Composition Database.
 
 The latest version of this app is available at <https://github.com/rtaneza/Carbs>.
 

@@ -36,7 +36,7 @@ import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 public class FoodDbAdapter extends SQLiteAssetHelper {
     public static final String COLUMN_TABLE_NAME = "TableName";
 
-    public static final String NEVO_TABLE_NAME = "Food";
+    public static final String NEVO_TABLE_NAME = "Nevo";
     public static final String NEVO_COLUMN_DUTCH_NAME = "Product_omschrijving";
     public static final String NEVO_COLUMN_ENGLISH_NAME = "EnglishName";
     public static final String NEVO_COLUMN_QUANTITY_PER_UNIT = "Hoeveelheid";
@@ -46,12 +46,12 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
 
     public static final String MYFOODS_TABLE_NAME = "MyFoods";
     public static final String MYFOODS_COLUMN_NAME = "Name";
-    public static final String MYFOODS_COLUMN_QUANTITY_PER_UNIT = "WeightPerUnit";
+    public static final String MYFOODS_COLUMN_QUANTITY_PER_UNIT = "QuantityPerUnit";
     public static final String MYFOODS_COLUMN_UNIT_TEXT = "UnitText";
     public static final String MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT = "CarbsGramsPerUnit";
     public static final String MYFOODS_COLUMN_ID = "Id";
     
-    private static final String DATABASE_NAME = "NevoFoodListWithEnglishNamesAndMyFoods";
+    private static final String DATABASE_NAME = "CarbsFoods";
     private static final int DATABASE_VERSION = 1;
     
     private Language mLanguage;
@@ -198,7 +198,9 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
         if (tableName.equals(NEVO_TABLE_NAME)) {
             String[] columns = { getFoodNameColumnName(), NEVO_COLUMN_QUANTITY_PER_UNIT, 
                     NEVO_COLUMN_CARBS_GRAMS_PER_UNIT, NEVO_COLUMN_UNIT_TEXT };
-            String selection = String.format(Locale.US, "%s = %d", NEVO_COLUMN_PRODUCT_CODE, foodItem.getId());
+            // All fields in the Nevo table are string by default, even some contain numeric data, 
+            // so the Id has to be placed inside quotes.
+            String selection = String.format(Locale.US, "%s = '%d'", NEVO_COLUMN_PRODUCT_CODE, foodItem.getId());
             Cursor cursor = mDatabase.query(tableName, columns, selection, null, null, null, getFoodNameColumnName());
             if (cursor.moveToFirst()) {
                 foodItemInfo = new FoodItemInfo(
@@ -264,7 +266,7 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     }
     
     public void deleteMyFoodItem(FoodItem foodItem) {
-        String whereClause = String.format("%s = %s", MYFOODS_COLUMN_ID, foodItem.getId());
+        String whereClause = String.format("%s = %d", MYFOODS_COLUMN_ID, foodItem.getId());
         mDatabase.delete(MYFOODS_TABLE_NAME, whereClause, null);
         deleteMyFoodItemFromCache(foodItem);
     }
@@ -283,7 +285,7 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
             if (whereClause.length() > 0) {
                 whereClause.append(" OR ");
             }
-            whereClause.append(String.format("%s = %s", MYFOODS_COLUMN_ID, foodItem.getId()));
+            whereClause.append(String.format("%s = %d", MYFOODS_COLUMN_ID, foodItem.getId()));
             
             deleteMyFoodItemFromCache(foodItem);
         }
