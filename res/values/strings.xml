@@ -40,6 +40,7 @@
     <string name="delete_item_from_recent_foods_confirmation">Are you sure you want to delete this item from the history?</string>
     <string name="delete_item_from_my_foods">Are you sure you want to delete this item from the My Foods list? It will also be deleted from the Recent and Meal lists.</string>
     <string name="delete_selected_items">Are you sure you want to delete the selected items?</string>
+    <string name="delete_selected_items_from_my_foods">Are you sure you want to delete the selected items? They will also be deleted from the Recent and Meal lists.</string>
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>
     <string name="my_food_name_label">Name:</string>
@@ -84,27 +85,29 @@
     
     <string name="main_help_text">
     Carbs shows carbohydrate information of various foods.
-    You can search the default food database or add your own food data.
+    2000+ food items are available in the default food database. You can also add, import, and export your own food data.
     I wrote this app because I have Type 1 Diabetes and constantly need to count how much carbohydrates I eat.\n
 
     \nThe default food data is taken from NEVO-online version 2013/4.0, RIVM, Bilthoven.
     This is the Nederlands Voedingsstoffenbestand (NEVO), the Dutch Food Composition Database.
-    It contains 2194 food items and is managed by the Rijksinstituut voor Volksgezondheid en Milieu (RIVM),
+    It is managed by the Rijksinstituut voor Volksgezondheid en Milieu (RIVM),
     the Dutch National Institute for Public Health and the Environment.\n      
     
     \nClick \"EN\" (English) or \"NL\" (Nederlands) to toggle how food names from the NEVO database are shown.\n
 
-    \nSearch for food items using the Search textbox. Click on a food item from the search results to show the Food Details.\n
+    \nClick \"My Foods\" on the action bar to add and manage your own food data.\n
     
-    \nIn the Food Details screen, enter the food\'s quantity. The amount of carbohydrates will then be automatically calculated.
+    \nThe Foods tab shows the list of food items. You can search for food by name, either from all food data (default and My Foods)
+    or only from your own food data (My Foods). Click on a food item from the search results to show the Food Details.\n
+    
+    \nThe Food Details screen shows the food\'s carbohydrate information. 
+    Enter the food\'s quantity and the amount of carbohydrates will then be automatically calculated.
     Click the \"Add to meal\" button to add the food to the Meal tab.\n
     
+    \nThe Recent tab shows the list of recently added foods. Click on any item on the Recent tab to show the Food Details.\n
+       
     \nThe Meal tab shows the list of foods you have added and the total amount of carbohydrates.
     Click on any item on the Meal tab to edit the food\'s quantity.\n
-    
-    \nThe Recent tab shows the list of recently added foods. Click on any item on the Recent tab to show the Food Details.\n
-    
-    \nYou can add and manage your own foods in the My Foods screen, which can be accessed by clicking the \"My Foods\" icon on the action bar.\n
     
     \nClick \"Delete meal items...\" to select and delete meal items.
     \nClick \"Clear meal...\" to delete all meal items.

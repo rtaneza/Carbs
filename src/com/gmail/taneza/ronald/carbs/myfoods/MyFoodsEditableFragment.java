@@ -298,7 +298,7 @@ public class MyFoodsEditableFragment extends ListFragment
             switch (item.getItemId()) {
             case R.id.menu_food_list_delete:
                 new AlertDialog.Builder(getActivity())
-                .setMessage(R.string.delete_selected_items)
+                .setMessage(R.string.delete_selected_items_from_my_foods)
                 .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) { 
                         // continue with delete

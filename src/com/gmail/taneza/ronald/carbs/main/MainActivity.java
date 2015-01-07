@@ -114,7 +114,7 @@ public class MainActivity extends ActionBarActivity implements
               
         // Restore preferences
         SharedPreferences prefs = getPreferences(0);
-        mLanguage = Language.values()[prefs.getInt(PREF_LANGUAGE, Language.DUTCH.ordinal())];
+        mLanguage = Language.values()[prefs.getInt(PREF_LANGUAGE, Language.ENGLISH.ordinal())];
          
         mFoodItemsList = FoodItemListSerializer.getListFromString(prefs.getString(PREF_FOOD_ITEMS_LIST, ""));
         mRecentFoodsList = FoodItemListSerializer.getListFromString(prefs.getString(PREF_RECENT_FOODS_LIST, ""));
