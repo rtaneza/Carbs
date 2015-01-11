@@ -10,17 +10,28 @@ import android.support.v4.widget.SimpleCursorAdapter.ViewBinder;
 
 public class FoodItemViewBinder implements ViewBinder {
 
-    protected String mQuantityPerUnitColumnName;
-    protected String mUnitTextColumnName;
+    private String mTableName;
+    private String mFoodNameColumnName;
+    private String mQuantityPerUnitColumnName;
+    private String mUnitTextColumnName;
     
-    public FoodItemViewBinder(String quantityPerUnitColumnName, String unitTextColumnName) {
+    public FoodItemViewBinder(String tableName, String foodNameColumnName, String quantityPerUnitColumnName, String unitTextColumnName) {
+        mTableName = tableName;
+        mFoodNameColumnName = foodNameColumnName;
         mQuantityPerUnitColumnName = quantityPerUnitColumnName;
         mUnitTextColumnName = unitTextColumnName;
     }
     
     @Override
     public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
-        if (columnIndex == cursor.getColumnIndex(FoodDbAdapter.COLUMN_TABLE_NAME)) {
+        if (columnIndex == cursor.getColumnIndex(mFoodNameColumnName)) {
+            TextView textView = (TextView)view;            
+            String displayName = FoodDbAdapter.getDisplayName(cursor, mTableName, mFoodNameColumnName);
+            textView.setText(displayName);            
+            return true;
+        }
+        
+        else if (columnIndex == cursor.getColumnIndex(FoodDbAdapter.COLUMN_TABLE_NAME)) {
             TextView textView = (TextView)view;
             
             String foodType = "";

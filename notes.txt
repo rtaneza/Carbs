@@ -39,6 +39,10 @@ select 'MyFoods' as TableName, Name,CarbsGramsPerUnit from MyFoods where "Name" 
 
 08-08 23:05:16.143: I/Carbs(13689): Query string: SELECT 0 _id, '' AS TableName, Product_omschrijving, EnglishName, _05001, Productcode FROM Food WHERE (EnglishName like '%pans%') UNION ALL SELECT 0 _id, '*' AS TableName, Name, Name, CarbsGramsPerUnit, Id FROM MyFoods WHERE (Name like '%pans%') ORDER BY EnglishName
 
+
+select Product_omschrijving,Fabrikantnaam,_05001 from nevo where "Product_omschrijving" like '%volk%' OR "Fabrikantnaam" like '%volk%'
+
+
 --------
 My Foods:
 

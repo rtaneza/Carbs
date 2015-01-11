@@ -43,6 +43,7 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     public static final String NEVO_COLUMN_UNIT_TEXT = "Meeteenheid";
     public static final String NEVO_COLUMN_CARBS_GRAMS_PER_UNIT = "_05001";
     public static final String NEVO_COLUMN_PRODUCT_CODE = "Productcode";
+    public static final String NEVO_COLUMN_MANUFACTURER_NAME = "Fabrikantnaam";
 
     public static final String MYFOODS_TABLE_NAME = "MyFoods";
     public static final String MYFOODS_COLUMN_NAME = "Name";
@@ -71,32 +72,48 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
         mDatabase = getWritableDatabase();
     }
 
+    private String getNevoWhereClause(String foodName) {
+        String pattern = "'%" + foodName + "%'";
+        String whereClause = String.format(Locale.US, "%s like %s OR %s like %s",
+                getFoodNameColumnName(), pattern, NEVO_COLUMN_MANUFACTURER_NAME, pattern);
+        return whereClause;
+    }
+    
+    private String getMyFoodsWhereClause(String foodName) {
+        return MYFOODS_COLUMN_NAME + " like '%" + foodName + "%'";
+    }
+    
     @SuppressWarnings("deprecation")
     public String getQueryStringAllFoods(String foodName) {
-        SQLiteQueryBuilder foodQb = new SQLiteQueryBuilder();
-
-        // Cursor requires an "_id" column
-        // todo: find out what "0" really means
-        String [] foodSqlSelect = {"0 _id", COLUMN_TABLE_NAME, NEVO_COLUMN_DUTCH_NAME, NEVO_COLUMN_ENGLISH_NAME, 
+        // Cursor requires an "_id" column. 
+        // Our db doesn't have it, so this will return a value of 0 for the _id column.
+        String [] nevoSelectColumns = {"0 _id", COLUMN_TABLE_NAME, NEVO_COLUMN_DUTCH_NAME, NEVO_COLUMN_ENGLISH_NAME, 
+                NEVO_COLUMN_MANUFACTURER_NAME,
                 NEVO_COLUMN_QUANTITY_PER_UNIT, NEVO_COLUMN_UNIT_TEXT, 
                 NEVO_COLUMN_CARBS_GRAMS_PER_UNIT, NEVO_COLUMN_PRODUCT_CODE}; 
-        String foodWhereClause = getFoodNameColumnName() + " like '%" + foodName + "%'";
+        String nevoWhereClause = getNevoWhereClause(foodName);
         
+        SQLiteQueryBuilder foodQb = new SQLiteQueryBuilder();
         foodQb.setTables(NEVO_TABLE_NAME);
-        // This method was deprecated in API level 11, but we still would like to support older API versions.
-        String foodSubQuery = foodQb.buildUnionSubQuery(COLUMN_TABLE_NAME, foodSqlSelect, null, foodSqlSelect.length, 
-                NEVO_TABLE_NAME, foodWhereClause, null, null, null);
         
-        SQLiteQueryBuilder myFoodsQb = new SQLiteQueryBuilder();
-        // Both select statements must have the same number of columns, so we repeat the "Name" column here
-        String [] myFoodsSqlSelect = {"0 _id", COLUMN_TABLE_NAME, MYFOODS_COLUMN_NAME, MYFOODS_COLUMN_NAME, 
+        // This method was deprecated in API level 11, but we still would like to support older API versions.
+        String foodSubQuery = foodQb.buildUnionSubQuery(COLUMN_TABLE_NAME, nevoSelectColumns, null, nevoSelectColumns.length, 
+                NEVO_TABLE_NAME, nevoWhereClause, null, null, null);
+
+        // Both select statements must have the same number of columns, because they are used in a union query.
+        // So we repeat the MyFoods "Name" column here.
+        // There is no manufacturer name column in MyFoods, so always return an empty string for it.
+        String [] myFoodsSelectColumns = {"0 _id", COLUMN_TABLE_NAME, MYFOODS_COLUMN_NAME, MYFOODS_COLUMN_NAME, 
+                String.format("\"\" AS %s", NEVO_COLUMN_MANUFACTURER_NAME), 
                 MYFOODS_COLUMN_QUANTITY_PER_UNIT, MYFOODS_COLUMN_UNIT_TEXT, 
                 MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT, MYFOODS_COLUMN_ID}; 
-        String myFoodsWhereClause = MYFOODS_COLUMN_NAME + " like '%" + foodName + "%'";
-        
+        String myFoodsWhereClause = getMyFoodsWhereClause(foodName);
+
+        SQLiteQueryBuilder myFoodsQb = new SQLiteQueryBuilder();
         myFoodsQb.setTables(MYFOODS_TABLE_NAME);
+        
         // This method was deprecated in API level 11, but we still would like to support older API versions.
-        String myFoodsSubQuery = myFoodsQb.buildUnionSubQuery(COLUMN_TABLE_NAME, myFoodsSqlSelect, null, myFoodsSqlSelect.length, 
+        String myFoodsSubQuery = myFoodsQb.buildUnionSubQuery(COLUMN_TABLE_NAME, myFoodsSelectColumns, null, myFoodsSelectColumns.length, 
                 MYFOODS_TABLE_NAME, myFoodsWhereClause, null, null, null);
 
         SQLiteQueryBuilder unionQb = new SQLiteQueryBuilder();
@@ -108,17 +125,15 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
 
     @SuppressWarnings("deprecation")
     public String getQueryStringBuiltinFoods(String foodName) {
-        SQLiteQueryBuilder foodQb = new SQLiteQueryBuilder();
-
-        // All sql queries in this class map the table name to COLUMN_TABLE_NAME.
-        String [] foodSqlSelect = {"0 _id", String.format("\"%s\" AS %s", NEVO_TABLE_NAME, COLUMN_TABLE_NAME), 
-                NEVO_COLUMN_DUTCH_NAME, NEVO_COLUMN_ENGLISH_NAME, 
+        String [] selectColumns = {"0 _id", COLUMN_TABLE_NAME, NEVO_COLUMN_DUTCH_NAME, NEVO_COLUMN_ENGLISH_NAME, 
+                NEVO_COLUMN_MANUFACTURER_NAME,
                 NEVO_COLUMN_QUANTITY_PER_UNIT, NEVO_COLUMN_UNIT_TEXT, 
                 NEVO_COLUMN_CARBS_GRAMS_PER_UNIT, NEVO_COLUMN_PRODUCT_CODE}; 
-        String foodWhereClause = getFoodNameColumnName() + " like '%" + foodName + "%'";
-        
+        String whereClause = getNevoWhereClause(foodName);
+
+        SQLiteQueryBuilder foodQb = new SQLiteQueryBuilder();
         foodQb.setTables(NEVO_TABLE_NAME);
-        String queryString = foodQb.buildQuery(foodSqlSelect, foodWhereClause, null, null, null, getFoodNameColumnName(), null);
+        String queryString = foodQb.buildQuery(selectColumns, whereClause, null, null, null, getFoodNameColumnName(), null);
         
         //Log.i("Carbs", "BuiltinFoods query string: " + queryString);
         return queryString;
@@ -126,17 +141,17 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
 
     @SuppressWarnings("deprecation")
     public String getQueryStringMyFoods(String foodName) {
-        SQLiteQueryBuilder myFoodsQb = new SQLiteQueryBuilder();
-
         // All sql queries in this class map the table name to COLUMN_TABLE_NAME.
-        String [] myFoodsSqlSelect = {"0 _id", String.format("\"%s\" AS %s", MYFOODS_TABLE_NAME, COLUMN_TABLE_NAME),
+        String [] selectColumns = {"0 _id", String.format("\"%s\" AS %s", MYFOODS_TABLE_NAME, COLUMN_TABLE_NAME),
+                String.format("\"\" AS %s", NEVO_COLUMN_MANUFACTURER_NAME), 
                 MYFOODS_COLUMN_NAME, MYFOODS_COLUMN_QUANTITY_PER_UNIT, MYFOODS_COLUMN_UNIT_TEXT, 
                 MYFOODS_COLUMN_CARBS_GRAMS_PER_UNIT, MYFOODS_COLUMN_ID}; 
-        String myFoodsWhereClause = MYFOODS_COLUMN_NAME + " like '%" + foodName + "%'";
-        
+        String whereClause = getMyFoodsWhereClause(foodName);
+
+        SQLiteQueryBuilder myFoodsQb = new SQLiteQueryBuilder();
         myFoodsQb.setTables(MYFOODS_TABLE_NAME);
         // This method was deprecated in API level 11, but we still would like to support older API versions.
-        String queryString = myFoodsQb.buildQuery(myFoodsSqlSelect, myFoodsWhereClause, null, null, null, MYFOODS_COLUMN_NAME, null);
+        String queryString = myFoodsQb.buildQuery(selectColumns, whereClause, null, null, null, MYFOODS_COLUMN_NAME, null);
         
         //Log.i("Carbs", "MyFoods query string: " + queryString);
         return queryString;
@@ -184,6 +199,26 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
         }
     }
     
+    public static String getDisplayName(Cursor cursor, String tableName, String foodNameColumnName) {
+        if (tableName.equals(NEVO_TABLE_NAME)) {
+            // Displayed name = name + (manufacturer name)
+            String name = cursor.getString(cursor.getColumnIndexOrThrow(foodNameColumnName));
+            String manufacturerName = cursor.getString(cursor.getColumnIndexOrThrow(NEVO_COLUMN_MANUFACTURER_NAME));
+            StringBuilder displayName = new StringBuilder();
+            displayName.append(name);
+            if (!manufacturerName.trim().isEmpty()) {
+                displayName.append(String.format(Locale.US, " (%s)", manufacturerName));
+            }
+            return displayName.toString();
+        
+        } else if (tableName.equals(MYFOODS_TABLE_NAME)) {
+            return cursor.getString(cursor.getColumnIndexOrThrow(MYFOODS_COLUMN_NAME));
+        
+        } else {
+            throw new InvalidParameterException(String.format(Locale.US, "Invalid tableName: %s", tableName));
+        }
+    }
+    
     public FoodItemInfo getFoodItemInfo(FoodItem foodItem) {
         FoodItemInfo foodItemInfo;
         
@@ -196,16 +231,18 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
         String tableName = foodItem.getTableName();
         
         if (tableName.equals(NEVO_TABLE_NAME)) {
-            String[] columns = { getFoodNameColumnName(), NEVO_COLUMN_QUANTITY_PER_UNIT, 
+            String foodNameColumnName = getFoodNameColumnName();
+            String[] columns = { foodNameColumnName, NEVO_COLUMN_MANUFACTURER_NAME, NEVO_COLUMN_QUANTITY_PER_UNIT, 
                     NEVO_COLUMN_CARBS_GRAMS_PER_UNIT, NEVO_COLUMN_UNIT_TEXT };
             // All fields in the Nevo table are string by default, even some contain numeric data, 
             // so the Id has to be placed inside quotes.
             String selection = String.format(Locale.US, "%s = '%d'", NEVO_COLUMN_PRODUCT_CODE, foodItem.getId());
-            Cursor cursor = mDatabase.query(tableName, columns, selection, null, null, null, getFoodNameColumnName());
+            Cursor cursor = mDatabase.query(tableName, columns, selection, null, null, null, foodNameColumnName);
             if (cursor.moveToFirst()) {
+                String displayName = getDisplayName(cursor, tableName, foodNameColumnName);
                 foodItemInfo = new FoodItemInfo(
                         foodItem,
-                        cursor.getString(cursor.getColumnIndexOrThrow(getFoodNameColumnName())),
+                        displayName,
                         cursor.getInt(cursor.getColumnIndexOrThrow(NEVO_COLUMN_QUANTITY_PER_UNIT)),
                         cursor.getFloat(cursor.getColumnIndexOrThrow(NEVO_COLUMN_CARBS_GRAMS_PER_UNIT)),
                         cursor.getString(cursor.getColumnIndexOrThrow(NEVO_COLUMN_UNIT_TEXT)));

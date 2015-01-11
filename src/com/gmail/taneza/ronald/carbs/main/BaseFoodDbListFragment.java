@@ -96,7 +96,8 @@ public abstract class BaseFoodDbListFragment extends BaseListFragment
     }
     
     private void initListAdapter() {
-        String[] from = { getFoodNameColumnName(), FoodDbAdapter.COLUMN_TABLE_NAME, getCarbsColumnName() };
+        String foodNameColumnName = getFoodNameColumnName();
+        String[] from = { foodNameColumnName, FoodDbAdapter.COLUMN_TABLE_NAME, getCarbsColumnName() };
         int[] to = new int[] { R.id.food_item_name, R.id.food_item_name_extra, R.id.food_item_carbs };
         
         // Create an empty adapter we will use to display the loaded data.
@@ -104,7 +105,8 @@ public abstract class BaseFoodDbListFragment extends BaseListFragment
         mCursorAdapter = new FoodItemCursorAdapter(getActivity(), R.layout.food_item, null, from, to, 0);
         
         // We set the view binder for the adapter to our own FoodItemViewBinder.
-        mCursorAdapter.setViewBinder(new FoodItemViewBinder(getQuantityPerUnitColumnName(), getUnitTextColumnName()));
+        mCursorAdapter.setViewBinder(
+                new FoodItemViewBinder(FoodDbAdapter.NEVO_TABLE_NAME, foodNameColumnName, getQuantityPerUnitColumnName(), getUnitTextColumnName()));
         
         setListAdapter(mCursorAdapter);
         

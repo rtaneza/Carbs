@@ -255,7 +255,8 @@ public class MyFoodsEditableFragment extends ListFragment
         mCursorAdapter = new FoodItemCursorAdapter(getActivity(), R.layout.food_item, null, from, to, 0);
         
         // We set the view binder for the adapter to our own FoodItemViewBinder.
-        mCursorAdapter.setViewBinder(new FoodItemViewBinder(
+        mCursorAdapter.setViewBinder(
+                new FoodItemViewBinder(FoodDbAdapter.MYFOODS_TABLE_NAME, FoodDbAdapter.MYFOODS_COLUMN_NAME,
                 FoodDbAdapter.MYFOODS_COLUMN_QUANTITY_PER_UNIT, FoodDbAdapter.MYFOODS_COLUMN_UNIT_TEXT));
         
         setListAdapter(mCursorAdapter);
