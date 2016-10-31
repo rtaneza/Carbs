@@ -63,4 +63,4 @@ ok // add nevo copyright to about / food details screen
 ok // use latest nevo 2013 database
 ok // in MyFoods db table: rename QuantityPerUnit to QuantityPerUnit
 ok // add notices for open source licenses -> done in readme.md
-// Use the same Delete prompts for deleting multiple items and single items (in Details activity)
+ok // Use the same Delete prompts for deleting multiple items and single items (in Details activity)
