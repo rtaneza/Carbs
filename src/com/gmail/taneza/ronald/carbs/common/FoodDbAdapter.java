@@ -338,9 +338,9 @@ public class FoodDbAdapter extends SQLiteAssetHelper {
     // Returns true if MyFood table already contains item with 'foodName' and ID not equal to 'exceptId'
     public boolean myFoodNameExists(String foodName, int exceptId) {
         String[] columns = { MYFOODS_COLUMN_NAME, MYFOODS_COLUMN_ID };
-        String selection = MYFOODS_COLUMN_NAME + " like '" + foodName + "'";
-        
-        Cursor cursor = mDatabase.query(MYFOODS_TABLE_NAME, columns, selection, null, null, null, MYFOODS_COLUMN_NAME);
+        String selection = MYFOODS_COLUMN_NAME + " like ?";
+        String[] selectionArgs = { foodName };
+        Cursor cursor = mDatabase.query(MYFOODS_TABLE_NAME, columns, selection, selectionArgs, null, null, MYFOODS_COLUMN_NAME);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             int id = cursor.getInt(cursor.getColumnIndexOrThrow(MYFOODS_COLUMN_ID));
