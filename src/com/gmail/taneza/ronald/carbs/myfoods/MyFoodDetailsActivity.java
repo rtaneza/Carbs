@@ -203,15 +203,34 @@ public class MyFoodDetailsActivity extends ActionBarActivity {
         if (mMode == Mode.EditFood) {
             exceptId = mFoodItem.getId();
         }
+        
         if (mFoodDbAdapter.myFoodNameExists(foodName, exceptId)) {
             mFoodNameTextView.setError(getText(R.string.my_food_name_exists_error));
             return;
         }
         
+        int quantityPerUnit;
+        try {
+            quantityPerUnit = Integer.parseInt(mQuantityEditText.getText().toString());
+        }
+        catch (NumberFormatException e) {
+            mQuantityEditText.setError(getText(R.string.my_food_enter_a_number));
+            return;
+        }
+
+        Float numCarbsInGramsPerUnit;
+        try {
+            numCarbsInGramsPerUnit = Float.parseFloat(mNumCarbsTextView.getText().toString());
+        }
+        catch (NumberFormatException e) {
+            mNumCarbsTextView.setError(getText(R.string.my_food_enter_a_number));
+            return;
+        }
+        
         FoodItemInfo foodItemInfo = new FoodItemInfo(mFoodItem, 
                 foodName,
-                Integer.parseInt(mQuantityEditText.getText().toString()),
-                Float.parseFloat(mNumCarbsTextView.getText().toString()),
+                quantityPerUnit,
+                numCarbsInGramsPerUnit,
                 mQuantityUnitTextSpinner.getSelectedItem().toString());
         
         Intent data = getIntent();

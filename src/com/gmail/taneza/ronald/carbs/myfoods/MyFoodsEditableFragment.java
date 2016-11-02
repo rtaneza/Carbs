@@ -57,6 +57,7 @@ import com.gmail.taneza.ronald.carbs.common.CarbsApp;
 import com.gmail.taneza.ronald.carbs.common.FoodDbAdapter;
 import com.gmail.taneza.ronald.carbs.common.FoodItem;
 import com.gmail.taneza.ronald.carbs.common.FoodItemInfo;
+import com.gmail.taneza.ronald.carbs.common.SelectionClause;
 import com.gmail.taneza.ronald.carbs.main.FoodItemCursorAdapter;
 import com.gmail.taneza.ronald.carbs.main.FoodItemViewBinder;
 
@@ -148,8 +149,8 @@ public class MyFoodsEditableFragment extends ListFragment
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {        
         ClearableEditText searchEditText = (ClearableEditText) getActivity().findViewById(R.id.my_foods_search_text);
         String searchText = searchEditText.getText().toString();
-        String queryString = mFoodDbAdapter.getQueryStringMyFoods(searchText);
-        return new SQLiteCursorLoader(getActivity(), mFoodDbAdapter, queryString, null);
+        SelectionClause queryClause = mFoodDbAdapter.getQueryClauseMyFoods(searchText);
+        return new SQLiteCursorLoader(getActivity(), mFoodDbAdapter, queryClause.Selection, queryClause.SelectionArgs);
     }
     
     @Override

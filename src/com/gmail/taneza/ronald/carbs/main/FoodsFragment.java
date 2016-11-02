@@ -28,6 +28,7 @@ import android.widget.Spinner;
 import com.gmail.taneza.ronald.carbs.R;
 import com.gmail.taneza.ronald.carbs.common.FoodDbAdapter;
 import com.gmail.taneza.ronald.carbs.common.FoodItem;
+import com.gmail.taneza.ronald.carbs.common.SelectionClause;
 
 public class FoodsFragment extends BaseFoodDbListFragment implements OnItemSelectedListener  { 
 
@@ -92,8 +93,8 @@ public class FoodsFragment extends BaseFoodDbListFragment implements OnItemSelec
     }
     
     @Override
-    protected String getQueryString(String searchText) {
-        return mFoodSearchAdapter.getQueryString(searchText);
+    protected SelectionClause getQueryClause(String searchText) {
+        return mFoodSearchAdapter.getQueryClause(searchText);
     }
 
     @Override
@@ -134,8 +135,8 @@ public class FoodsFragment extends BaseFoodDbListFragment implements OnItemSelec
         }
 
         @Override
-        public String getQueryString(String searchText) {
-            return mFoodDbAdapter.getQueryStringAllFoods(searchText);
+        public SelectionClause getQueryClause(String searchText) {
+            return mFoodDbAdapter.getQueryClauseAllFoods(searchText);
         }
 
         @Override
@@ -169,8 +170,8 @@ public class FoodsFragment extends BaseFoodDbListFragment implements OnItemSelec
         }
 
         @Override
-        public String getQueryString(String searchText) {
-            return mFoodDbAdapter.getQueryStringMyFoods(searchText);
+        public SelectionClause getQueryClause(String searchText) {
+            return mFoodDbAdapter.getQueryClauseMyFoods(searchText);
         }
 
         @Override

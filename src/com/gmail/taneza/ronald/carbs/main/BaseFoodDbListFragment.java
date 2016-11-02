@@ -36,13 +36,14 @@ import com.commonsware.cwac.loaderex.acl.SQLiteCursorLoader;
 import com.gmail.taneza.ronald.carbs.R;
 import com.gmail.taneza.ronald.carbs.common.FoodDbAdapter;
 import com.gmail.taneza.ronald.carbs.common.FoodItem;
+import com.gmail.taneza.ronald.carbs.common.SelectionClause;
 
 public abstract class BaseFoodDbListFragment extends BaseListFragment 
     implements LoaderManager.LoaderCallbacks<Cursor> {
     
     protected SimpleCursorAdapter mCursorAdapter;
 
-    protected abstract String getQueryString(String searchText);
+    protected abstract SelectionClause getQueryClause(String searchText);
     protected abstract FoodItem createFoodItemFromCursor(SQLiteCursor cursor);
     protected abstract String getFoodNameColumnName();
     public abstract String getQuantityPerUnitColumnName();
@@ -65,8 +66,8 @@ public abstract class BaseFoodDbListFragment extends BaseListFragment
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {        
         ClearableEditText searchEditText = (ClearableEditText) getActivity().findViewById(R.id.search_text);
         String searchText = searchEditText.getText().toString();
-        String queryString = getQueryString(searchText);
-        return new SQLiteCursorLoader(getActivity(), mFoodDbAdapter, queryString, null);
+        SelectionClause clause = getQueryClause(searchText);
+        return new SQLiteCursorLoader(getActivity(), mFoodDbAdapter, clause.Selection, clause.SelectionArgs);
     }
     
     @Override

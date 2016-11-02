@@ -48,6 +48,7 @@
     <string name="my_food_carbs_per_unit">Carbs per unit:</string>
     <string name="my_foods_add">Add food</string>
     <string name="my_food_name_exists_error">Name already exists</string>
+    <string name="my_food_enter_a_number">Enter a number</string>
     <string name="title_activity_my_foods">Carbs My foods</string>
     <string name="title_activity_my_food_details">Add my food</string>
     <string name="title_activity_my_food_edit">Edit my food</string>
